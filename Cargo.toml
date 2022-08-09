@@ -1,0 +1,11 @@
+[package]
+name = "codetanks"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+api = { path = "api" }
+
+[[bin]]
+name = "codetanks"
+path = "src/main.rs"
