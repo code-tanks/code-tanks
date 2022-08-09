@@ -2,7 +2,7 @@ FROM rust:1.62.1 AS builder
 WORKDIR /codetanks
 
 COPY src/dummy.rs .
-COPY Cargo.toml
+COPY Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN cargo install --profile release --path .
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
