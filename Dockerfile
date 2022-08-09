@@ -8,7 +8,7 @@ RUN cargo install --profile release --path .
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY src src
 COPY api api
-RUN cargp install --profile release --path .
+RUN cargo install --profile release --path .
 
 FROM ubuntu:focal AS runner
 
