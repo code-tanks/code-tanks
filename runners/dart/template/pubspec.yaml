@@ -1,0 +1,14 @@
+name: my_tank
+description: My tank
+
+environment:
+  sdk: '>=2.8.1 <3.0.0'
+
+dependencies:
+  path: ^1.7.0
+  pedantic: any 
+  code_tanks:
+    path: ../../dart
+    # git:
+    #   url: https://github.com/Derrick56007/code_tanks.git
+    version: ^0.0.0
