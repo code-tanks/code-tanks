@@ -11,4 +11,16 @@ impl Default for EventSender {
     }
 }
 
-pub struct Event {}
+pub const EVENT_TYPES_LENGTH: usize = 2;
+
+#[derive(Debug)]
+pub struct Event {
+    pub event_type: EventType,
+}
+
+#[repr(u64)]
+#[derive(Debug)]
+pub enum EventType {
+    Scan,
+    Hit,
+}

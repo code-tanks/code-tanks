@@ -163,8 +163,14 @@ fn scanner(query: Query<(Entity, &Scanner, &Position, &Collider)>) {
     for (entity, scanner, position, collider) in &query {}
 }
 
-fn publish_events(query: Query<(Entity, &EventSender, &ClientConnection)>) {
-    for (entity, event_receiver, client_connection) in &query {}
+fn publish_events(mut query: Query<(&mut CommandReceiver, &EventSender, &ClientConnection)>) {
+    for (mut command_receiver, event_sender, client_connection) in &mut query {
+        let mut queue: Vec<GroupedCommand> = Vec::new();
+        for event in event_sender.queue.iter() {
+            queue.append(&mut client_connection.client.request_commands_by_event(event));
+        }
+        command_receiver.queue.splice(0..0, queue);
+    }
 }
 
 pub fn run_game(game: &mut Game) -> &mut Game {
@@ -199,7 +205,7 @@ pub fn run_game(game: &mut Game) -> &mut Game {
         SystemStage::single_threaded().with_system(publish_events),
     );
 
-    for _ in 0..2u8 {
+    for _ in 0..200u8 {
         // Run the schedule once. If your app has a "loop", you would run this once per loop
         schedule.run(&mut game.world);
     }
