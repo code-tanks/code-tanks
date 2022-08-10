@@ -1,4 +1,4 @@
 library code_tanks;
 
 export 'src/server.dart';
-export 'src/tank.dart';
+export 'src/base_tank.dart';

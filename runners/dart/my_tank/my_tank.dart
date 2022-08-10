@@ -6,7 +6,14 @@ class MyTank extends BaseTank {
   }
 
   @override
-  void run() {}
+  void run() {
+    // TODO: implement run
+  }
+  
+  @override
+  void onEvent(EventType e, Map info) {
+    // TODO: implement onEvent
+  }
 }
 
 BaseTank createTank() => MyTank();

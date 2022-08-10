@@ -78,7 +78,7 @@
 //   }
 // }
 
-// // enum GameEventType { scan, collision }
+enum EventType { scan, collision }
 
 // class GameEvent {
 //   final String eventName;
@@ -99,9 +99,21 @@
 // }
 
 abstract class BaseTank {
-//   final currentCommands = <Map>[];
+  final commands = [];
 
   void run();
+
+  void onEvent(EventType e, Map info);
+}
+
+class Command {
+  final CommandType commandType;
+  final int arg;
+
+  Command(this.commandType, this.arg);
+
+  Map<String, dynamic> toJson() =>
+      {'command_type': commandType.index, 'arg': arg};
 }
 
 enum CommandType {

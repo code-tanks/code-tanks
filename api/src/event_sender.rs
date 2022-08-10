@@ -1,4 +1,6 @@
 use bevy_ecs::prelude::*;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 #[derive(Component)]
 pub struct EventSender {
@@ -13,13 +15,14 @@ impl Default for EventSender {
 
 pub const EVENT_TYPES_LENGTH: usize = 2;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Event {
     pub event_type: EventType,
+    pub info: Value,
 }
 
 #[repr(u64)]
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum EventType {
     Scan,
     Hit,
