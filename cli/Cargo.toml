@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 dialoguer = "0.10.2"
+walkdir = "2"
 
 [[bin]]
 name = "ctcli"
