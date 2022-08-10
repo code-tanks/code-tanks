@@ -1,11 +1,11 @@
 [package]
-name = "codetanks"
+name = "ctcli"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-code_tanks_core = { path = "core" }
+dialoguer = "0.10.2"
 
 [[bin]]
-name = "codetanks"
+name = "ctcli"
 path = "src/main.rs"

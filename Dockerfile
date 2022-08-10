@@ -1,10 +1,8 @@
 FROM rust:1.62.1 AS builder
 WORKDIR /codetanks
 
-COPY Cargo.toml .
-COPY src src
-COPY api api
-RUN cargo install --profile release --path .
+COPY . .
+RUN cargo install --profile release --path . --bin codetanks
 
 FROM ubuntu:focal AS runner
 
