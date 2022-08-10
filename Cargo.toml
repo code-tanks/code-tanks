@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-api = { path = "api" }
+code_tanks_core = { path = "core" }
 
 [[bin]]
 name = "codetanks"
-path = "src/main.rs"
+path = "bin/main.rs"

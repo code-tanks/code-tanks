@@ -1,4 +1,4 @@
-use api::*;
+use code_tanks_core::*;
 
 fn main() {
     println!("hello");
