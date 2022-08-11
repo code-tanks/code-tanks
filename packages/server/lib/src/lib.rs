@@ -2,6 +2,7 @@ pub mod db;
 
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
+use std::process::Command;
 use std::thread;
 
 use db::*;
@@ -186,4 +187,22 @@ fn get_data_from_request(request: &String) -> String {
         };
     }
     response.trim_matches(char::from(0)).to_string()
+}
+
+pub fn add_build_job(url: &str) {
+    // curl -i -H 'content-type: application/json' -XPOST -d '{"input": [1,2,3]}' localhost:8023/queue/demo/job
+    Command::new("curl")
+        .arg("-H")
+        .arg("content-type: application/json")
+        .arg("-XPOST")
+        .arg("-d")
+        .arg(
+            serde_json::json!({
+                "input": url,
+            })
+            .to_string(),
+        )
+        .arg("mq:8023/queue/build/job")
+        .output()
+        .expect("failed to communicate with ocypod");
 }
