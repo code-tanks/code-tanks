@@ -139,8 +139,11 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
         CREATE TABLE IF NOT EXISTS build_jobs (
             id          TEXT PRIMARY KEY,
             url         VARCHAR NOT NULL,
-            code        VARCHAR NOT NULL
+            code        VARCHAR NOT NULL,
+            status      VARCHAR NOT NULL
         );
+
+        /* "completed" | "cancelled" | "timed_out" | "queued" | "running" | "failed" */
     "#).unwrap();
 
     pool
@@ -157,8 +160,8 @@ pub fn insert_tank(
                 WITH cte AS (
                     SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
                 )
-                INSERT INTO tanks (id, url, code)
-                SELECT id, base62_encode(('x'||lpad(SUBSTRING(id, 0, 11),16,'0'))::bit(64)::bigint), $1
+                INSERT INTO tanks (id, url, code, status)
+                SELECT id, base62_encode(('x'||lpad(SUBSTRING(id, 0, 11),16,'0'))::bit(64)::bigint), $1, 'queued'
                 FROM cte;
             ",
             &[&code_as_json_string, &post_fix],
