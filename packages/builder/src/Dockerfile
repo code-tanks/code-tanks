@@ -1,5 +1,5 @@
 FROM rust:1.62.1 AS builder
-WORKDIR /ctserver
+WORKDIR /ctbuilder
 
 COPY . .
 RUN cargo install --path .
@@ -10,8 +10,8 @@ RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
     curl
 
-WORKDIR /ctserver
+WORKDIR /ctbuilder
 
-COPY --from=builder /usr/local/cargo/bin/ctserver /usr/local/bin/ctserver
+COPY --from=builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
 
-CMD ["ctserver"]
+CMD ["ctbuilder"]

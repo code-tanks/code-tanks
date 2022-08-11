@@ -1,3 +1,4 @@
+version: "3.9"
 services:
   server:
     container_name: server
@@ -6,9 +7,6 @@ services:
     restart: unless-stopped
     ports:
       - 8089:8088
-    # depends_on:
-      # - db
-      # - redis
     environment:
       - DB_URL=postgres://postgres:example@db:5432
       - DB_HOST=db
@@ -20,7 +18,19 @@ services:
     command: ctserver
     links:
       - "db"
-      - "redis"
+      - "ocypod:mq"
+
+  builder:
+    container_name: builder
+    build:
+      context: packages/builder
+    command: ctbuilder
+    links:
+      - "db"
+      - "ocypod:mq"
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   db:
     container_name: db
@@ -34,16 +44,22 @@ services:
     volumes:
       - ./test/postgres:/var/lib/postgresql/data
 
-  redis:
-    container_name: redis
-    image: redis
-    restart: always
+  ocypod:
+    container_name: ocypod
+    image: davechallis/ocypod:latest
+    volumes:
+      - ./ocypod.toml:/etc/ocypod.toml:ro
+    command: /etc/ocypod.toml
+    ports:
+      - 8023:8023
+
+  ocypod-redis:
+    container_name: ocypod-redis
+    image: redis:6
     ports:
       - 6379:6379
-    command: redis-server --save 20 1 --loglevel warning
-    volumes: 
+    volumes:
       - ./test/redis:/data
-    user: redis
 
   pgAdmin:
     container_name: pgAdmin
@@ -53,6 +69,3 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
-
-networks:
-  codetanks:

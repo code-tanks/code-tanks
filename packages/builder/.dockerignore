@@ -36,5 +36,5 @@ build/
 
 # Directory created by dartdoc
 doc/api/
-Dockerfile
+./Dockerfile
 .dockerignore

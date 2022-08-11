@@ -96,7 +96,7 @@ fn handle_connection(
         _ => RequestType::NotFound,
     };
 
-    let mut url: String;
+    let url: String;
 
     let response = match request_type {
         RequestType::Root => Responses::ROOT_RESPONSE,
@@ -104,11 +104,13 @@ fn handle_connection(
         RequestType::NotFound => Responses::NOT_FOUND_RESPONSE,
         RequestType::Upload => {
             let data = get_data_from_request(&request);
-            println!("{}", data);
+            // println!("{}", data);
 
             let data = Value::String(data);
 
-            println!("{} {}", data, data.as_str().unwrap());
+            // let code = data.as_str().unwrap();
+
+            // println!("{} {}", data, data.as_str().unwrap());
 
             const POST_FIX_CHAR: &str = "0";
             let mut post_fix_count = 0;
@@ -118,15 +120,17 @@ fn handle_connection(
                 let existing = get_existing(db, data.to_string(), post_fix.to_string());
 
                 if existing.is_empty() {
+                    println!("generating short url...");
                     insert_tank(db, data.to_string(), post_fix.to_string());
                 } else {
                     let code_as_json_string: String = existing[0].get(2);
 
-                    println!("test {} {}", code_as_json_string, data.to_string());
+                    // println!("test {} {}", code_as_json_string, data.to_string());
 
                     if code_as_json_string == data.to_string() {
                         break;
                     } else {
+                        println!("regenerating");
                         post_fix_count = post_fix_count + 1;
                     }
                 }
@@ -136,6 +140,8 @@ fn handle_connection(
             let existing = get_existing(db, data.to_string(), post_fix.to_string());
 
             url = existing[0].get(1);
+
+            println!("found short url {}", url);
 
             Response {
                 status_line: StatusLines::OK,
