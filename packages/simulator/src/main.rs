@@ -1,4 +1,4 @@
-use code_tanks_core::*;
+use ctsimlib::*;
 
 fn main() {
     println!("hello");

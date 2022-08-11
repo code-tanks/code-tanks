@@ -1,0 +1,58 @@
+services:
+  server:
+    container_name: server
+    build:
+      context: packages/server
+    restart: unless-stopped
+    ports:
+      - 8089:8088
+    # depends_on:
+      # - db
+      # - redis
+    environment:
+      - DB_URL=postgres://postgres:example@db:5432
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=example
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    command: ctserver
+    links:
+      - "db"
+      - "redis"
+
+  db:
+    container_name: db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=example
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+    volumes:
+      - ./test/postgres:/var/lib/postgresql/data
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - ./test/redis:/data
+    user: redis
+
+  pgAdmin:
+    container_name: pgAdmin
+    image: dpage/pgadmin4
+    ports:
+      - 8081:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+
+networks:
+  codetanks:

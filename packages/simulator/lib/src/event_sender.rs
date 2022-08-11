@@ -7,8 +7,8 @@ pub struct EventSender {
     pub queue: Vec<Event>,
 }
 
-impl Default for EventSender {
-    fn default() -> EventSender {
+impl EventSender {
+    pub fn default() -> EventSender {
         EventSender { queue: Vec::new() }
     }
 }

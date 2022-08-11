@@ -5,12 +5,16 @@
         "dockerfile": "Dockerfile"
     },
     "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "rust-analyzer.linkedProjects": [
+            "packages/build_worker/Cargo.toml",
+            "packages/simulator/Cargo.toml",
+            "packages/server/Cargo.toml"
+        ]
     },
     "extensions": [
         "ms-vscode-remote.remote-containers",
-        "rust-lang.rust-analyzer",
-        "Dart-Code.dart-code"
+        "rust-lang.rust-analyzer"
     ],
     "runArgs": [
         "--network=host"

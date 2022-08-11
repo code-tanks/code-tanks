@@ -1,0 +1,181 @@
+pub mod db;
+
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+
+use db::*;
+use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
+use serde_json::Value;
+
+pub struct HttpServer {
+    pub port: u16,
+}
+
+impl HttpServer {
+    pub fn run(&mut self) {
+        let pool = get_db_pool();
+
+        for stream in TcpListener::bind(format!("0.0.0.0:{}", self.port))
+            .unwrap()
+            .incoming()
+        {
+            let stream = stream.unwrap();
+
+            let pool = pool.clone();
+
+            thread::spawn(move || {
+                let mut db = pool.get().unwrap();
+                handle_connection(stream, &mut db);
+            });
+        }
+    }
+}
+
+enum RequestType {
+    NotFound,
+    Root,
+    Ping,
+    Upload,
+}
+
+#[derive(PartialEq, Eq)]
+struct Path<'a>(&'a str);
+enum Paths {}
+impl Paths {
+    const DEFAULT: Path<'static> = Path("/");
+    const PING: Path<'static> = Path("/ping");
+    const UPLOAD: Path<'static> = Path("/upload");
+}
+
+struct Response<'a> {
+    status_line: StatusLine<'a>,
+    content: &'a str,
+}
+
+type StatusLine<'a> = &'a str;
+
+enum StatusLines {}
+
+impl StatusLines {
+    const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
+    const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
+}
+
+enum Responses {}
+impl Responses {
+    const ROOT_RESPONSE: Response<'static> = Response {
+        status_line: StatusLines::OK,
+        content: "\"hello\"",
+    };
+
+    const PING_RESPONSE: Response<'static> = Response {
+        status_line: StatusLines::OK,
+        content: "\"pong\"",
+    };
+
+    const NOT_FOUND_RESPONSE: Response<'static> = Response {
+        status_line: StatusLines::NOT_FOUND,
+        content: "\"404\"",
+    };
+}
+
+fn handle_connection(
+    mut stream: TcpStream,
+    db: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+) {
+    let mut buffer = [0; 20000];
+    stream.read(&mut buffer).unwrap();
+
+    let request = String::from_utf8(buffer.to_vec()).unwrap();
+    let path = get_path_from_request(&request);
+    let request_type = match Path(path) {
+        Paths::DEFAULT => RequestType::Root,
+        Paths::PING => RequestType::Ping,
+        Paths::UPLOAD => RequestType::Upload,
+        _ => RequestType::NotFound,
+    };
+
+    let mut url: String;
+
+    let response = match request_type {
+        RequestType::Root => Responses::ROOT_RESPONSE,
+        RequestType::Ping => Responses::PING_RESPONSE,
+        RequestType::NotFound => Responses::NOT_FOUND_RESPONSE,
+        RequestType::Upload => {
+            let data = get_data_from_request(&request);
+            println!("{}", data);
+
+            let data = Value::String(data);
+
+            println!("{} {}", data, data.as_str().unwrap());
+
+            const POST_FIX_CHAR: &str = "0";
+            let mut post_fix_count = 0;
+
+            loop {
+                let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
+                let existing = get_existing(db, data.to_string(), post_fix.to_string());
+
+                if existing.is_empty() {
+                    insert_tank(db, data.to_string(), post_fix.to_string());
+                } else {
+                    let code_as_json_string: String = existing[0].get(2);
+
+                    println!("test {} {}", code_as_json_string, data.to_string());
+
+                    if code_as_json_string == data.to_string() {
+                        break;
+                    } else {
+                        post_fix_count = post_fix_count + 1;
+                    }
+                }
+            }
+            let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
+
+            let existing = get_existing(db, data.to_string(), post_fix.to_string());
+
+            url = existing[0].get(1);
+
+            Response {
+                status_line: StatusLines::OK,
+                content: &url,
+            }
+            // println!("{}", data);
+        }
+    };
+    // println!("{}, {}", path, request_type as u32);
+
+    let response_string = format!(
+        "{}\r\nContent-Length: {}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{}",
+        response.status_line,
+        response.content.len(),
+        response.content
+    );
+
+    stream.write(response_string.as_bytes()).unwrap();
+    stream.flush().unwrap();
+}
+
+fn get_path_from_request(request: &String) -> &str {
+    let mut splits = request.split(" ");
+    splits.nth(1).unwrap()
+}
+
+fn get_data_from_request(request: &String) -> String {
+    let mut response = "".to_string();
+    let mut data_found = false;
+    for line in request.lines() {
+        if data_found {
+            if response.len() == 0 {
+                response = format!("{}", line)
+            } else if !line.starts_with('\0') {
+                response = format!("{}\n{}", response, line)
+            }
+        }
+        if line.len() == 0 {
+            data_found = true
+        };
+    }
+    response.trim_matches(char::from(0)).to_string()
+}

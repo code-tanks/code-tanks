@@ -2,7 +2,7 @@ FROM rust:1.62.1 AS builder
 WORKDIR /codetanks
 
 COPY . .
-RUN cargo install --profile release --path . --bin codetanks
+RUN cargo install --path .
 
 FROM ubuntu:focal AS runner
 

@@ -6,8 +6,8 @@ pub struct CommandReceiver {
     pub queue: Vec<GroupedCommand>,
 }
 
-impl Default for CommandReceiver {
-    fn default() -> CommandReceiver {
+impl CommandReceiver {
+    pub fn default() -> CommandReceiver {
         CommandReceiver { queue: Vec::new() }
     }
 }

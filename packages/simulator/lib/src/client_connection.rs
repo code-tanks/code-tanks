@@ -10,12 +10,8 @@ pub struct ClientConnection {
     pub client: Box<dyn Client + Send + Sync>,
 }
 
-pub trait Defaults {
-    fn dummy() -> ClientConnection;
-}
-
-impl Defaults for ClientConnection {
-    fn dummy() -> ClientConnection {
+impl ClientConnection {
+    pub fn dummy() -> ClientConnection {
         ClientConnection {
             client: Box::new(DummyClient {}),
         }
