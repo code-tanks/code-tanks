@@ -1,4 +1,4 @@
-FROM rust:alpine AS builder
+FROM rust:1.63.0-alpine AS builder
 WORKDIR /ctbuilder
 
 COPY . .
