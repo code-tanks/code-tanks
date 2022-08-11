@@ -24,9 +24,11 @@ impl HttpServer {
 
             let pool = pool.clone();
 
-            thread::spawn(move || {
-                let mut db = pool.get().unwrap();
-                handle_connection(stream, &mut db);
+            thread::scope(|s| {
+                s.spawn(|| {
+                    let mut db = pool.get().unwrap();
+                    handle_connection(stream, &mut db);
+                });
             });
         }
     }

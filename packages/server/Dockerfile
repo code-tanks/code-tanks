@@ -1,4 +1,4 @@
-FROM rust:1.62.1 AS builder
+FROM rust:1.63.0 AS builder
 WORKDIR /ctserver
 
 COPY . .

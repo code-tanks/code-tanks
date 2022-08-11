@@ -11,5 +11,5 @@ RUN useradd -ms /bin/bash developer
 USER developer
 WORKDIR /home/developer
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.62.1 -y
+RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.63.0 -y
 RUN rustup component add rust-analysis
