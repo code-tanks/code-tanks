@@ -84,17 +84,19 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
     let successful = err_raw.to_string() == "";
 
     println!("build={}, successful={}", url, successful);
-    println!("log");
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
 
     if successful {
-        println!("{}", result_raw.to_string());
         return BuildInfo {
             successful: true,
             log: result_raw.to_string(),
         };
     }
-    println!("{}", err_raw.to_string());
-    println!("");
 
     BuildInfo {
         successful: false,
