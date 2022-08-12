@@ -62,7 +62,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
     let output_raw = Command::new("docker")
         .arg("build")
         .arg("-t")
-        .arg(url)
+        .arg(format!("registry:5001/{}", url))
         .arg("--network")
         .arg("host")
         .arg("--build-arg")
@@ -173,7 +173,7 @@ pub fn remove_image(url: &str) -> bool {
     let output_raw = Command::new("docker")
         .arg("image")
         .arg("remove")
-        .arg(url)
+        .arg(format!("registry:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");
 
