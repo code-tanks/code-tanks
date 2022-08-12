@@ -78,10 +78,12 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    println!("out: {}", result_raw.to_string());
-    println!("err: {}", err_raw.to_string() != "");
+    // println!("out: {}", result_raw.to_string());
+    // println!("err: {}", err_raw.to_string() != "");
 
     let successful = err_raw.to_string() == "";
+
+    println!("build={}, successful={}", url, successful);
 
     if successful {
         return BuildInfo {
