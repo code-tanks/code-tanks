@@ -40,3 +40,24 @@ pub fn get_job() -> Result<Value, serde_json::Error> {
 
     serde_json::from_str(&result_raw.to_string())
 }
+
+pub fn build(url: &str, lang: &str) {
+    // Command::new("docker")
+    //     .arg("build")
+    //     .arg("-t")
+    //     .arg(url)
+    //     .arg("-f")
+    //     .arg(format!("{}.Dockerfile", lang))
+    //     .output()
+    //     .expect("failed to communicate with docker");
+
+    let output_raw = Command::new("docker")
+        .arg("run")
+        .arg("hello-world")
+        .output()
+        .expect("failed to communicate with docker");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+
+    println!("{}", result_raw.to_string());
+}
