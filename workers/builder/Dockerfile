@@ -2,7 +2,7 @@ FROM rust:1.63.0-alpine AS builder
 WORKDIR /ctbuilder
 
 COPY . .
-RUN cargo install --profile dev --path .
+RUN cargo --bin ctbuilder install --bin  --profile dev --path .
 
 FROM docker:dind AS runner
 

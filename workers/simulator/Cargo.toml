@@ -5,3 +5,11 @@ edition = "2021"
 
 [dependencies]
 ctsimlib = { path = "lib" }
+
+[[bin]]
+name = "ctsim"
+path = "src/main.rs"
+
+[[bin]]
+name = "test"
+path = "src/test.rs"

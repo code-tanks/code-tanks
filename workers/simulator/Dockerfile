@@ -2,7 +2,7 @@ FROM rust:1.63.0 AS builder
 WORKDIR /ctsim
 
 COPY . .
-RUN cargo install --path .
+RUN cargo --bin ctsim install --path .
 
 FROM ubuntu:focal AS runner
 
