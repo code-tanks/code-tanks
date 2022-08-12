@@ -80,14 +80,19 @@ pub fn insert_tank(
 ) {
     client
         .execute(
-            "
+            r#"
                 WITH cte AS (
                     SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
                 )
                 INSERT INTO tanks (id, url, code, status, log)
-                SELECT id, SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), $1, 'queued', 'waiting to build'
+                SELECT 
+                    id, 
+                    SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), 
+                    $1, 
+                    'queued', 
+                    '"waiting to build"'
                 FROM cte;
-            ",
+            "#,
             &[&code_as_json_string, &post_fix],
         )
         .unwrap();
@@ -131,6 +136,21 @@ pub fn get_code(
 }
 
 pub fn get_log(
+    client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+    url: &str,
+) -> Vec<Row> {
+    client
+        .query(
+            "
+                SELECT log FROM tanks
+                WHERE url = $1
+            ",
+            &[&url],
+        )
+        .unwrap()
+}
+
+pub fn get_entry(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
     url: &str,
 ) -> Vec<Row> {

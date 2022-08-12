@@ -116,6 +116,7 @@ fn handle_connection(
 
     let url: String;
     let code_json: Value;
+    let log_json: Value;
 
     let response = match path {
         Paths::ROOT => Responses::ROOT_RESPONSE,
@@ -174,32 +175,66 @@ fn handle_connection(
             // println!("{}", data);
         }
         _ => {
-            let url = &path[1..];
-
-            // get log for url
-            println!("{}", &url[(url.len() - Paths::LOG.len())..]);
-            if &url[(url.len() - Paths::LOG.len())..] == Paths::LOG {
-                println!("is log request!")
-            }
-
-            println!("{}", url);
-
-            let matches = get_code(db, url);
+            let url = &path[1..8];
 
             let mut res = Responses::NOT_FOUND_RESPONSE;
 
+            let matches = get_entry(db, url);
+
             if !matches.is_empty() {
-                let code_as_json_string: String = matches[0].get(1);
+                let is_log_request = &url[(url.len() - Paths::LOG.len())..] == Paths::LOG;
 
-                code_json = from_str(&code_as_json_string).unwrap();
+                if is_log_request {
+                    let log_as_json_string: String = matches[0].get(3);
 
-                // code = code_json.as_str().unwrap();
+                    log_json = from_str(&log_as_json_string).unwrap();
 
-                res = Response {
-                    status_line: StatusLines::OK,
-                    content: &code_json.as_str().unwrap(),
-                };
+                    // code = code_json.as_str().unwrap();
+
+                    res = Response {
+                        status_line: StatusLines::OK,
+                        content: &log_json.as_str().unwrap(),
+                    };
+                } else {
+                    let code_as_json_string: String = matches[0].get(3);
+
+                    code_json = from_str(&code_as_json_string).unwrap();
+
+                    // code = code_json.as_str().unwrap();
+
+                    res = Response {
+                        status_line: StatusLines::OK,
+                        content: &code_json.as_str().unwrap(),
+                    };
+                }
             }
+
+            // // get log for url
+            // println!("{}", &url[(url.len() - Paths::LOG.len())..]);
+            // if &url[(url.len() - Paths::LOG.len())..] == Paths::LOG {
+            //     println!("is log request!");
+
+            //     let log_matches = get_log(db, url);
+            // }
+
+            // println!("{}", url);
+
+            // let matches = get_code(db, url);
+
+            // let mut res = Responses::NOT_FOUND_RESPONSE;
+
+            // if !matches.is_empty() {
+            //     let code_as_json_string: String = matches[0].get(1);
+
+            //     code_json = from_str(&code_as_json_string).unwrap();
+
+            //     // code = code_json.as_str().unwrap();
+
+            //     res = Response {
+            //         status_line: StatusLines::OK,
+            //         content: &code_json.as_str().unwrap(),
+            //     };
+            // }
 
             res
         }
