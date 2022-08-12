@@ -149,9 +149,7 @@ fn handle_connection(
             println!("found short url {}", url);
 
             if needs_generation {
-                println!("1");
                 add_build_job(&url);
-                println!("2");
             }
 
             Response {
