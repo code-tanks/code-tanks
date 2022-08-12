@@ -22,6 +22,8 @@ services:
     links:
       - "db"
       - "ocypod:mq"
+      - "registry"
+
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -48,6 +50,7 @@ services:
     command: /etc/ocypod.toml
     ports:
       - 8023:8023
+    restart: always
 
   ocypod-redis:
     container_name: ocypod-redis
@@ -56,6 +59,16 @@ services:
       - 6379:6379
     volumes:
       - ./test/redis:/data
+    restart: always
+
+  registry:
+    container_name: registry
+    image: registry
+    restart: always
+    ports:
+      - 5000:5000
+    volumes:
+      - ./test/registry/:/var/lib/registry
 
   pgAdmin:
     container_name: pgAdmin

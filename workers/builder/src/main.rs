@@ -32,6 +32,8 @@ fn main() {
 
             let build_info = build(&url, &lang);
             upload_log(&mut client, &url, &build_info.log);
+            push_to_registry(&url);
+            remove_image(&url);
             update_job(id, build_info.successful);
         }
 

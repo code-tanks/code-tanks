@@ -83,7 +83,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 
     let successful = err_raw.to_string() == "";
 
-    println!("build={}, successful={}", url, successful);
+    println!("build, url={}, successful={}", url, successful);
     println!("stdout:");
     println!("{}", result_raw.to_string());
     println!("");
@@ -110,8 +110,8 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 //     // docker run --rm --net=FooAppNet --name=component2 component2-image
 // }
 
-pub fn update_job(id: u64, successful: bool) {
-    Command::new("curl")
+pub fn update_job(id: u64, successful: bool) -> bool {
+    let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPATCH")
@@ -123,4 +123,72 @@ pub fn update_job(id: u64, successful: bool) {
         .arg(format!("mq:8023/job/{}", id))
         .output()
         .expect("failed to communicate with ocypod");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    // println!("out: {}", result_raw.to_string());
+    // println!("err: {}", err_raw.to_string() != "");
+
+    let successful = err_raw.to_string() == "";
+
+    println!("update job, id={}, successful={}", id, successful);
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
+
+    successful
+}
+
+pub fn push_to_registry(url: &str) -> bool {
+    let output_raw = Command::new("docker")
+        .arg("push")
+        .arg(format!("registry:5000/{}", url))
+        .output()
+        .expect("failed to communicate with ocypod");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    // println!("out: {}", result_raw.to_string());
+    // println!("err: {}", err_raw.to_string() != "");
+
+    let successful = err_raw.to_string() == "";
+
+    println!("push_to_registry, url={}, successful={}", url, successful);
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
+
+    successful
+}
+
+pub fn remove_image(url: &str) -> bool {
+    let output_raw = Command::new("docker")
+        .arg("image")
+        .arg("remove")
+        .arg(url)
+        .output()
+        .expect("failed to communicate with docker");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    let successful = err_raw.to_string() == "";
+
+    println!("remove_image, url={}, successful={}", url, successful);
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
+
+    successful
 }
