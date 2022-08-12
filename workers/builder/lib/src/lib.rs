@@ -55,15 +55,6 @@ pub struct BuildInfo {
 }
 
 pub fn build(url: &str, lang: &str) -> BuildInfo {
-    // Command::new("docker")
-    //     .arg("build")
-    //     .arg("-t")
-    //     .arg(url)
-    //     .arg("-f")
-    //     .arg(format!("{}.Dockerfile", lang))
-    //     .output()
-    //     .expect("failed to communicate with docker");
-
     let output_raw = Command::new("docker")
         .arg("build")
         .arg("-t")

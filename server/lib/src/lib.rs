@@ -7,7 +7,6 @@ use std::thread;
 
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
-use serde_json::{from_str, json, Value};
 
 pub struct HttpServer {
     pub port: u16,
@@ -208,38 +207,9 @@ fn handle_connection(
                     };
                 }
             }
-
-            // // get log for url
-            // println!("{}", &url[(url.len() - Paths::LOG.len())..]);
-            // if &url[(url.len() - Paths::LOG.len())..] == Paths::LOG {
-            //     println!("is log request!");
-
-            //     let log_matches = get_log(db, url);
-            // }
-
-            // println!("{}", url);
-
-            // let matches = get_code(db, url);
-
-            // let mut res = Responses::NOT_FOUND_RESPONSE;
-
-            // if !matches.is_empty() {
-            //     let code_as_json_string: String = matches[0].get(1);
-
-            //     code_json = from_str(&code_as_json_string).unwrap();
-
-            //     // code = code_json.as_str().unwrap();
-
-            //     res = Response {
-            //         status_line: StatusLines::OK,
-            //         content: &code_json.as_str().unwrap(),
-            //     };
-            // }
-
             res
         }
     };
-    // println!("{}, {}", path, request_type as u32);
 
     let response_string = format!(
         "{}\r\nContent-Length: {}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{}",
@@ -285,12 +255,7 @@ pub fn add_build_job(url: &str) {
         .arg("content-type: application/json")
         .arg("-XPOST")
         .arg("-d")
-        .arg(
-            serde_json::json!({
-                "input": url,
-            })
-            .to_string(),
-        )
+        .arg(format!(r#"{{"input": "{}"}}"#, url))
         .arg("mq:8023/queue/build/job")
         .output()
         .expect("failed to communicate with ocypod");
