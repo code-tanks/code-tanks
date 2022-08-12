@@ -5,7 +5,7 @@ use ctbuilderlib::*;
 fn main() {
     println!("Started ctbuilder");
 
-    build("hello", "world");
+    build("hello", "world"); 
 
     if !get_queues().contains(&"build".to_string()) {
         create_build_queue();
