@@ -1,5 +1,11 @@
+use std::env;
+
 use ctbuilderlib::build;
 
 fn main() {
-    build("hello", "world");
+    let args: Vec<String> = env::args().collect();
+
+    println!("url={}, lang={}", &args[1], &args[2]);
+
+    build(&args[1], &args[2]);
 }
