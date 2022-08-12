@@ -216,7 +216,8 @@ fn get_path_from_request(request: &String) -> &str {
 }
 
 fn get_data_from_request(request: &String) -> String {
-    println!("raw data \n\n {} \n\n", request);
+    println!("raw data");
+    println!("{}", request);
 
     let mut response = "".to_string();
     let mut data_found = false;
