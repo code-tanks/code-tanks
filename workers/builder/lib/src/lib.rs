@@ -71,7 +71,7 @@ pub fn build(url: &str, lang: &str) {
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     println!("out: {}", result_raw.to_string());
-    println!("err: {}", err_raw.to_string());
+    println!("err: {}", err_raw.to_string() != "");
 }
 
 // pub fn simulate(urls: &[&str]) {
