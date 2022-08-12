@@ -2,6 +2,18 @@ use std::process::Command;
 
 use serde_json::Value;
 
+pub mod db;
+
+enum Langs {}
+
+impl Langs {
+    const DART: &'static str = "dart";
+}
+
+pub fn get_lang(url: &str) -> &'static str {
+    Langs::DART
+}
+
 pub fn get_queues() -> Vec<String> {
     let output_raw = Command::new("curl")
         .arg("mq:8023/queue")

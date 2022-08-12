@@ -1,25 +1,20 @@
 use std::{thread, time};
 
-use ctbuilderlib::*;
-
-enum Langs {}
-
-impl Langs {
-    const DART: &'static str = "dart";
-}
-
-fn get_lang(url: &str) -> &'static str {
-    Langs::DART
-}
+use ctbuilderlib::{
+    db::{get_client, upload_log},
+    *,
+};
 
 fn main() {
     println!("Started ctbuilder");
 
-    build("hello", "world");
+    // build("hello", "world");
 
     if !get_queues().contains(&"build".to_string()) {
         create_build_queue();
     }
+
+    let mut client = get_client();
 
     loop {
         let job = get_job();
@@ -35,6 +30,7 @@ fn main() {
             println!("");
 
             let build_info = build(&url, &lang);
+            upload_log(&mut client, &url, build_info.status, &build_info.log);
         }
 
         thread::sleep(time::Duration::from_millis(1000));

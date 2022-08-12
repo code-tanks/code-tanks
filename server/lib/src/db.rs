@@ -128,7 +128,7 @@ pub fn get_code(
         .query(
             "
                 SELECT code FROM tanks
-                WHERE url = $1
+                WHERE url = $1;
             ",
             &[&url],
         )
@@ -143,7 +143,7 @@ pub fn get_log(
         .query(
             "
                 SELECT log FROM tanks
-                WHERE url = $1
+                WHERE url = $1;
             ",
             &[&url],
         )
