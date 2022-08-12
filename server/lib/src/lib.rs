@@ -182,7 +182,7 @@ fn handle_connection(
             let matches = get_entry(db, url);
 
             if !matches.is_empty() {
-                let is_log_request = &url[(url.len() - Paths::LOG.len())..] == Paths::LOG;
+                let is_log_request = &path[(path.len() - Paths::LOG.len())..] == Paths::LOG;
 
                 if is_log_request {
                     res_log = matches[0].get(3);
