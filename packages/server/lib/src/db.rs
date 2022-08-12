@@ -143,7 +143,7 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             code        VARCHAR NOT NULL,
         );
 
-        /* "completed" | "cancelled" | "timed_out" | "queued" | "running" | "failed" */
+        /* completed|cancelled|timed_out|queued|running|failed */
     "#).unwrap();
 
     pool
