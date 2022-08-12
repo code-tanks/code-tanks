@@ -12,7 +12,7 @@ RUN apk update \
 
 WORKDIR /ctbuilder
 
-COPY Dockerfiles/* .
+COPY Dockerfiles Dockerfiles
 
 COPY --from=builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
 

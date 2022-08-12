@@ -60,7 +60,7 @@ pub fn build(url: &str, lang: &str) {
         .arg("--build-arg")
         .arg(format!("url={}", url))
         .arg("-f")
-        .arg(format!("{}.Dockerfile", lang))
+        .arg(format!("Dockerfiles/{}.Dockerfile", lang))
         .arg(".")
         .output()
         .expect("failed to communicate with docker");
