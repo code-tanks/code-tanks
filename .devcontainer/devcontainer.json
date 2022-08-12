@@ -7,9 +7,9 @@
     "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "rust-analyzer.linkedProjects": [
-            "apps/builder/Cargo.toml",
-            "apps/simulator/Cargo.toml",
-            "apps/server/Cargo.toml"
+            "server/Cargo.toml",
+            "workers/builder/Cargo.toml",
+            "workers/simulator/Cargo.toml"
         ]
     },
     "extensions": [

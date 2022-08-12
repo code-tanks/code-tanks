@@ -63,3 +63,9 @@ pub fn build(url: &str, lang: &str) {
 
     println!("{}", result_raw.to_string());
 }
+
+pub fn simulate(urls: &[&str]) {
+    // docker network create --driver bridge FooAppNet
+    // docker run --rm --net=FooAppNet --name=component1 -p 9000:9000 component1-image
+    // docker run --rm --net=FooAppNet --name=component2 component2-image
+}
