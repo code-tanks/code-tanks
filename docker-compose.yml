@@ -25,6 +25,8 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DB_URL=postgres://postgres:example@db:5432
 
   db:
     container_name: db

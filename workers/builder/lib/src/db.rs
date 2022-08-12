@@ -1,7 +1,9 @@
+use std::env;
+
 use postgres::{Client, NoTls};
 
 pub fn get_client() -> Client {
-    Client::connect("host=localhost user=postgres", NoTls).unwrap()
+    Client::connect(&env::var("DB_URL").unwrap(), NoTls).unwrap()
 }
 
 pub fn upload_log(client: &mut Client, url: &str, log: &str) {
