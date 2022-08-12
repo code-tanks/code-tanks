@@ -185,7 +185,7 @@ fn handle_connection(
                 let is_log_request = &path[(path.len() - Paths::LOG.len())..] == Paths::LOG;
 
                 if is_log_request {
-                    res_log = matches[0].get(3);
+                    res_log = matches[0].get(4);
 
                     // log_json = from_str(&log).unwrap();
 
