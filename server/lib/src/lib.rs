@@ -182,6 +182,11 @@ fn handle_connection(
 
             if !matches.is_empty() {
                 let is_log_request = &path[(path.len() - Paths::LOG.len())..] == Paths::LOG;
+                println!(
+                    "is log: {} {}",
+                    &path[(path.len() - Paths::LOG.len())..],
+                    is_log_request
+                );
 
                 if is_log_request {
                     res_log = matches[0].get(4);
