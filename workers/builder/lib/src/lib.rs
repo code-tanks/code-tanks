@@ -41,7 +41,12 @@ pub fn get_job() -> Result<Value, serde_json::Error> {
     serde_json::from_str(&result_raw.to_string())
 }
 
-pub fn build(url: &str, lang: &str) {
+pub struct BuildInfo {
+    pub successful: bool,
+    pub log: String,
+}
+
+pub fn build(url: &str, lang: &str) -> BuildInfo {
     // Command::new("docker")
     //     .arg("build")
     //     .arg("-t")
@@ -72,6 +77,17 @@ pub fn build(url: &str, lang: &str) {
 
     println!("out: {}", result_raw.to_string());
     println!("err: {}", err_raw.to_string() != "");
+
+    let successful = err_raw.to_string() == "";
+
+    BuildInfo {
+        successful,
+        log: if successful {
+            result_raw.to_string()
+        } else {
+            err_raw.to_string()
+        },
+    }
 }
 
 // pub fn simulate(urls: &[&str]) {

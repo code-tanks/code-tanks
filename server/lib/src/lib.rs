@@ -42,13 +42,14 @@ impl HttpServer {
 //     Upload,
 // }
 
-#[derive(PartialEq, Eq)]
-struct Path<'a>(&'a str);
+// #[derive(PartialEq, Eq)]
+// struct Path<'a>(&'a str);
 enum Paths {}
 impl Paths {
-    const ROOT: Path<'static> = Path("/");
-    const PING: Path<'static> = Path("/ping");
-    const UPLOAD: Path<'static> = Path("/upload");
+    const ROOT: &'static str = "/";
+    const PING: &'static str = "/ping";
+    const UPLOAD: &'static str = "/upload";
+    const LOG: &'static str = "/log";
 }
 
 struct Response<'a> {
@@ -116,7 +117,7 @@ fn handle_connection(
     let url: String;
     let code_json: Value;
 
-    let response = match Path(path) {
+    let response = match path {
         Paths::ROOT => Responses::ROOT_RESPONSE,
         Paths::PING => Responses::PING_RESPONSE,
         Paths::UPLOAD => {
@@ -174,6 +175,12 @@ fn handle_connection(
         }
         _ => {
             let url = &path[1..];
+
+            // get log for url
+            println!("{}", &url[(url.len() - Paths::LOG.len())..]);
+            if &url[(url.len() - Paths::LOG.len())..] == Paths::LOG {
+                println!("is log request!")
+            }
 
             println!("{}", url);
 

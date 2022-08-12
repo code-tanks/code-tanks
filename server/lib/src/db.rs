@@ -59,21 +59,15 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
         cost 5                      /* A made up number. Any advice? */
         ;
 
+        /* completed|cancelled|timed_out|queued|running|failed */
+
         CREATE TABLE IF NOT EXISTS tanks (
             id          TEXT PRIMARY KEY,
             url         VARCHAR NOT NULL,
             code        VARCHAR NOT NULL,
-            status      VARCHAR NOT NULL
+            status      VARCHAR NOT NULL,
+            log        VARCHAR NOT NULL
         );
-
-        /* completed|cancelled|timed_out|queued|running|failed */
-
-        CREATE TABLE IF NOT EXISTS build_jobs (
-            id          TEXT PRIMARY KEY,
-            url         VARCHAR NOT NULL,
-            code        VARCHAR NOT NULL
-        );
-
     "#).unwrap();
 
     pool
@@ -90,8 +84,8 @@ pub fn insert_tank(
                 WITH cte AS (
                     SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
                 )
-                INSERT INTO tanks (id, url, code, status)
-                SELECT id, SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), $1, 'queued'
+                INSERT INTO tanks (id, url, code, status, log)
+                SELECT id, SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), $1, 'queued', 'waiting to build'
                 FROM cte;
             ",
             &[&code_as_json_string, &post_fix],
