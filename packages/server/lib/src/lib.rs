@@ -117,6 +117,7 @@ fn handle_connection(
 
             const POST_FIX_CHAR: &str = "0";
             let mut post_fix_count = 0;
+            let mut needs_generation = false;
 
             loop {
                 let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
@@ -125,6 +126,7 @@ fn handle_connection(
                 if existing.is_empty() {
                     println!("generating short url...");
                     insert_tank(db, data.to_string(), post_fix.to_string());
+                    needs_generation = true;
                 } else {
                     let code_as_json_string: String = existing[0].get(2);
 
@@ -145,6 +147,10 @@ fn handle_connection(
             url = existing[0].get(1);
 
             println!("found short url {}", url);
+
+            if needs_generation {
+                add_build_job(&url);
+            }
 
             Response {
                 status_line: StatusLines::OK,
