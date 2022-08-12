@@ -62,20 +62,22 @@ pub fn build(url: &str, lang: &str) {
         .arg("-f")
         .arg(format!("Dockerfiles/{}.Dockerfile", lang))
         .arg(".")
-        .output()
-        .expect("failed to communicate with docker");
+        .status()
+        .expect("process failed to execute");
+    // .output()
+    // .expect("failed to communicate with docker");
 
     // docker build -t test --network host --build-arg url=ping -f dart.Dockerfile .
 
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    println!("out: {}", result_raw.to_string());
-    println!("err: {}", err_raw.to_string());
+    // println!("out: {}", result_raw.to_string());
+    // println!("err: {}", err_raw.to_string());
 }
 
-pub fn simulate(urls: &[&str]) {
-    // docker network create --driver bridge FooAppNet
-    // docker run --rm --net=FooAppNet --name=component1 -p 9000:9000 component1-image
-    // docker run --rm --net=FooAppNet --name=component2 component2-image
-}
+// pub fn simulate(urls: &[&str]) {
+//     // docker network create --driver bridge FooAppNet
+//     // docker run --rm --net=FooAppNet --name=component1 -p 9000:9000 component1-image
+//     // docker run --rm --net=FooAppNet --name=component2 component2-image
+// }
