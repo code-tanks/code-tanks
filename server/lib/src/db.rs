@@ -65,7 +65,6 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             id          TEXT PRIMARY KEY,
             url         VARCHAR NOT NULL,
             code        VARCHAR NOT NULL,
-            status      VARCHAR NOT NULL,
             log         VARCHAR NOT NULL
         );
     "#).unwrap();
@@ -89,7 +88,6 @@ pub fn insert_tank(
                     id, 
                     SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), 
                     $1, 
-                    'queued', 
                     'waiting to build'
                 FROM cte;
             "#,

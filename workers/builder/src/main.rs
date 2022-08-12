@@ -30,7 +30,7 @@ fn main() {
             println!("");
 
             let build_info = build(&url, &lang);
-            upload_log(&mut client, &url, build_info.status, &build_info.log);
+            upload_log(&mut client, &url, &build_info.log);
         }
 
         thread::sleep(time::Duration::from_millis(1000));
