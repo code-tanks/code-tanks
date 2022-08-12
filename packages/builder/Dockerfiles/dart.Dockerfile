@@ -12,7 +12,7 @@ RUN git clone -b dart-api --single-branch https://github.com/derrick56007/codeta
 
 RUN dart pub get
 
-RUN curl http://localhost:8089/url > tanks/my_tank.dart
+RUN curl http://localhost:8089/$url > tanks/my_tank.dart
 
 RUN dart compile exe bin/server.dart -o bin/server
 
