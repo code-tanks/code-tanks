@@ -189,7 +189,7 @@ fn handle_connection(
             let mut res = Responses::NOT_FOUND_RESPONSE;
 
             if !matches.is_empty() {
-                let code_as_json_string: String = matches[0].get(2);
+                let code_as_json_string: String = matches[0].get(1);
 
                 code_json = from_str(&code_as_json_string).unwrap();
 
