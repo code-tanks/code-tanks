@@ -127,7 +127,7 @@ fn handle_connection(
 
             // let code = data.as_str().unwrap();
 
-            // println!("{} {}", data, data.as_str().unwrap());
+            println!("{} {}", data, data.as_str().unwrap());
 
             const POST_FIX_CHAR: &str = "0";
             let mut post_fix_count = 0;
