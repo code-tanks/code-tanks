@@ -133,14 +133,14 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
         CREATE TABLE IF NOT EXISTS tanks (
             id          TEXT PRIMARY KEY,
             url         VARCHAR NOT NULL,
-            code        VARCHAR NOT NULL
+            code        VARCHAR NOT NULL,
+            status      VARCHAR NOT NULL
         );
 
         CREATE TABLE IF NOT EXISTS build_jobs (
             id          TEXT PRIMARY KEY,
             url         VARCHAR NOT NULL,
             code        VARCHAR NOT NULL,
-            status      VARCHAR NOT NULL
         );
 
         /* "completed" | "cancelled" | "timed_out" | "queued" | "running" | "failed" */
