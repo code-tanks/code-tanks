@@ -199,7 +199,7 @@ pub fn get_code(
     client
         .query(
             "
-                SELECT code FROM tanks
+                SELECT * FROM tanks
                 WHERE url = $1
             ",
             &[&url],

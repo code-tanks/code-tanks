@@ -177,17 +177,14 @@ fn handle_connection(
 
             println!("{}", url);
 
-            let contents = get_code(db, url);
+            let matches = get_code(db, url);
 
-            let mut res = Response {
-                status_line: StatusLines::OK,
-                content: &url,
-            };
+            let mut res = Responses::NOT_FOUND_RESPONSE;
 
-            if !contents.is_empty() {
-                let data: String = contents[0].get(0);
+            if !matches.is_empty() {
+                let code_as_json_string: String = matches[0].get(2);
 
-                code_json = json!(data);
+                code_json = json!(code_as_json_string);
 
                 // code = code_json.as_str().unwrap();
 
