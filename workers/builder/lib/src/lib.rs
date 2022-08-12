@@ -52,16 +52,26 @@ pub fn build(url: &str, lang: &str) {
     //     .expect("failed to communicate with docker");
 
     let output_raw = Command::new("docker")
-        .arg("run")
-        .arg("hello-world")
+        .arg("build")
+        .arg("-t")
+        .arg(url)
+        .arg("--network")
+        .arg("host")
+        .arg("--build-arg")
+        .arg(format!("url={}", url))
+        .arg("-f")
+        .arg(format!("{}.Dockerfile", lang))
+        .arg(".")
         .output()
         .expect("failed to communicate with docker");
 
     // docker build -t test --network host --build-arg url=ping -f dart.Dockerfile .
 
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    println!("{}", result_raw.to_string());
+    println!("out: {}", result_raw.to_string());
+    println!("err: {}", err_raw.to_string());
 }
 
 pub fn simulate(urls: &[&str]) {
