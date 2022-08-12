@@ -109,3 +109,18 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 //     // docker run --rm --net=FooAppNet --name=component1 -p 9000:9000 component1-image
 //     // docker run --rm --net=FooAppNet --name=component2 component2-image
 // }
+
+pub fn update_job(id: u64, successful: bool) {
+    Command::new("curl")
+        .arg("-H")
+        .arg("content-type: application/json")
+        .arg("-XPATCH")
+        .arg("-d")
+        .arg(format!(
+            r#"{{"status": "{}"}}"#,
+            if successful { "completed" } else { "failed" }
+        ))
+        .arg(format!("mq:8023/job/{}", id))
+        .output()
+        .expect("failed to communicate with ocypod");
+}

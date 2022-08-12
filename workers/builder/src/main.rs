@@ -23,6 +23,7 @@ fn main() {
             let job = job.unwrap();
 
             let url = job["input"].as_str().unwrap();
+            let id: u64 = job["id"].as_u64().unwrap();
 
             let lang = get_lang(&url);
 
@@ -31,6 +32,7 @@ fn main() {
 
             let build_info = build(&url, &lang);
             upload_log(&mut client, &url, &build_info.log);
+            update_job(id, build_info.successful);
         }
 
         thread::sleep(time::Duration::from_millis(1000));
