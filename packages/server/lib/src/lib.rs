@@ -7,7 +7,7 @@ use std::thread;
 
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
-use serde_json::{json, Value};
+use serde_json::{from_str, json, Value};
 
 pub struct HttpServer {
     pub port: u16,
@@ -184,7 +184,7 @@ fn handle_connection(
             if !matches.is_empty() {
                 let code_as_json_string: String = matches[0].get(2);
 
-                code_json = json!(code_as_json_string);
+                code_json = from_str(&code_as_json_string).unwrap();
 
                 // code = code_json.as_str().unwrap();
 
