@@ -6,7 +6,7 @@ RUN apt update \
 
 WORKDIR /app
 
-RUN git clone -b dart-template --single-branch https://github.com/derrick56007/codetanks.git /app
+RUN git clone -b dart-api --single-branch https://github.com/derrick56007/codetanks.git /app
 
 COPY pubspec.* ./
 RUN dart pub get
