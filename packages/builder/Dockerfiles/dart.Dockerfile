@@ -16,7 +16,9 @@ RUN dart pub get
 # COPY lib lib
 # COPY my_tank my_tank
 # Ensure packages are still up-to-date if anything has changed
-RUN dart pub get --offline
+# RUN dart pub get --offline
+RUN curl http://localhost:8089/ping
+
 RUN dart compile exe bin/server.dart -o bin/server
 
 # Build minimal serving image from AOT-compiled `/server` and required system
