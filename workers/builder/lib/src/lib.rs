@@ -146,7 +146,7 @@ pub fn update_job(id: u64, successful: bool) -> bool {
 pub fn push_to_registry(url: &str) -> bool {
     let output_raw = Command::new("docker")
         .arg("push")
-        .arg(format!("registry:5000/{}", url))
+        .arg(format!("registry:5001/{}", url))
         .output()
         .expect("failed to communicate with ocypod");
 

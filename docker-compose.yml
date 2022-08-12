@@ -66,7 +66,9 @@ services:
     image: registry
     restart: always
     ports:
-      - 5000:5000
+      - 5001:5001
+    environment:
+      - REGISTRY_HTTP_ADDR=0.0.0.0:5001
     volumes:
       - ./test/registry/:/var/lib/registry
 
