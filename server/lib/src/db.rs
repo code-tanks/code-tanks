@@ -83,8 +83,8 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
         *
         */
         declare
-            k_base          constant integer := 62;
-            k_alphabet      constant text := '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            k_base          constant integer := 36;
+            k_alphabet      constant text := '0123456789abcdefghijklmnopqrstuvwxyz';
             
             v_encoded_arr   text[];
             v_return_result bigint   := 0;

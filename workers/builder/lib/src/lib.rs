@@ -62,18 +62,16 @@ pub fn build(url: &str, lang: &str) {
         .arg("-f")
         .arg(format!("Dockerfiles/{}.Dockerfile", lang))
         .arg(".")
-        .status()
-        .expect("process failed to execute");
-    // .output()
-    // .expect("failed to communicate with docker");
+        .output()
+        .expect("failed to communicate with docker");
 
     // docker build -t test --network host --build-arg url=ping -f dart.Dockerfile .
 
-    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    // println!("out: {}", result_raw.to_string());
-    // println!("err: {}", err_raw.to_string());
+    println!("out: {}", result_raw.to_string());
+    println!("err: {}", err_raw.to_string());
 }
 
 // pub fn simulate(urls: &[&str]) {
