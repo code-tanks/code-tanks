@@ -2,7 +2,7 @@ FROM dart:stable AS build
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    git
+    git curl
 
 WORKDIR /app
 
