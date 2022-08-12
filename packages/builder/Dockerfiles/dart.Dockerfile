@@ -8,13 +8,13 @@ WORKDIR /app
 
 RUN git clone -b dart-api --single-branch https://github.com/derrick56007/codetanks.git /app
 
-COPY pubspec.* ./
+# COPY pubspec.* ./
 RUN dart pub get
 
 # Copy app source code and AOT compile it.
-COPY bin bin
-COPY lib lib
-COPY my_tank my_tank
+# COPY bin bin
+# COPY lib lib
+# COPY my_tank my_tank
 # Ensure packages are still up-to-date if anything has changed
 RUN dart pub get --offline
 RUN dart compile exe bin/server.dart -o bin/server
