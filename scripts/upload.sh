@@ -1,4 +1,4 @@
 #!/bin/bash
 
-curl -d "@$1" -X POST http://localhost:8089/upload
+curl --data-binary "@$1" -H 'Content-Type: text/plain' -X POST http://localhost:8089/upload
 echo ""
