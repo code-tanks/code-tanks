@@ -118,35 +118,35 @@ pub fn get_existing(
         .unwrap()
 }
 
-pub fn get_code(
-    client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    url: &str,
-) -> Vec<Row> {
-    client
-        .query(
-            "
-                SELECT code FROM tanks
-                WHERE url = $1;
-            ",
-            &[&url],
-        )
-        .unwrap()
-}
+// pub fn get_code(
+//     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+//     url: &str,
+// ) -> Vec<Row> {
+//     client
+//         .query(
+//             "
+//                 SELECT code FROM tanks
+//                 WHERE url = $1;
+//             ",
+//             &[&url],
+//         )
+//         .unwrap()
+// }
 
-pub fn get_log(
-    client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    url: &str,
-) -> Vec<Row> {
-    client
-        .query(
-            "
-                SELECT log FROM tanks
-                WHERE url = $1;
-            ",
-            &[&url],
-        )
-        .unwrap()
-}
+// pub fn get_log(
+//     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+//     url: &str,
+// ) -> Vec<Row> {
+//     client
+//         .query(
+//             "
+//                 SELECT log FROM tanks
+//                 WHERE url = $1;
+//             ",
+//             &[&url],
+//         )
+//         .unwrap()
+// }
 
 pub fn get_entry(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,

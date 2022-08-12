@@ -189,7 +189,7 @@ fn handle_connection(
                 );
 
                 if is_log_request {
-                    res_log = matches[0].get(4);
+                    res_log = matches[0].get(3);
 
                     // log_json = from_str(&log).unwrap();
 
@@ -200,7 +200,7 @@ fn handle_connection(
                         content: &res_log,
                     };
                 } else {
-                    res_code = matches[0].get(3);
+                    res_code = matches[0].get(2);
 
                     // code_json = from_str(&code_as_json_string).unwrap();
 
