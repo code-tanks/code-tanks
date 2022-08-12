@@ -2,7 +2,7 @@ FROM rust:1.63.0 AS builder
 WORKDIR /ctserver
 
 COPY . .
-RUN cargo --bin ctserver install --path . --debug
+RUN cargo install --bin ctserver --path . --debug
 
 FROM ubuntu:focal AS runner
 
