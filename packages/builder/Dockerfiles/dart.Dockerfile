@@ -17,7 +17,9 @@ RUN dart pub get
 # COPY my_tank my_tank
 # Ensure packages are still up-to-date if anything has changed
 # RUN dart pub get --offline
-RUN curl http://server:8089/ping
+COPY file tanks/my_tank.dart
+
+RUN curl http://localhost:8089/ping
 
 RUN dart compile exe bin/server.dart -o bin/server
 
