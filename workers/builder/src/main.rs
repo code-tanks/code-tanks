@@ -22,7 +22,7 @@ fn main() {
         if job.is_ok() {
             let job = job.unwrap();
 
-            let url = job["input"].to_string();
+            let url = job["input"].as_str().unwrap();
 
             let lang = get_lang(&url);
 
