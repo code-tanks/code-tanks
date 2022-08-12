@@ -57,6 +57,8 @@ pub fn build(url: &str, lang: &str) {
         .output()
         .expect("failed to communicate with docker");
 
+    // docker build -t test --network host --build-arg url=ping -f dart.Dockerfile .
+
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
 
     println!("{}", result_raw.to_string());

@@ -7,7 +7,7 @@ use std::thread;
 
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
-use serde_json::Value;
+use serde_json::{json, Value};
 
 pub struct HttpServer {
     pub port: u16,
@@ -35,18 +35,18 @@ impl HttpServer {
     }
 }
 
-enum RequestType {
-    NotFound,
-    Root,
-    Ping,
-    Upload,
-}
+// enum RequestType {
+//     NotFound,
+//     Root,
+//     Ping,
+//     Upload,
+// }
 
 #[derive(PartialEq, Eq)]
 struct Path<'a>(&'a str);
 enum Paths {}
 impl Paths {
-    const DEFAULT: Path<'static> = Path("/");
+    const ROOT: Path<'static> = Path("/");
     const PING: Path<'static> = Path("/ping");
     const UPLOAD: Path<'static> = Path("/upload");
 }
@@ -92,20 +92,34 @@ fn handle_connection(
 
     let request = String::from_utf8(buffer.to_vec()).unwrap();
     let path = get_path_from_request(&request);
-    let request_type = match Path(path) {
-        Paths::DEFAULT => RequestType::Root,
-        Paths::PING => RequestType::Ping,
-        Paths::UPLOAD => RequestType::Upload,
-        _ => RequestType::NotFound,
-    };
+    // let request_type = match Path(path) {
+    //     Paths::ROOT => RequestType::Root,
+    //     Paths::PING => RequestType::Ping,
+    //     Paths::UPLOAD => RequestType::Upload,
+    //     _ => {
+    //         let url = &path[1..];
+
+    //         let contents = get_code(db, url);
+
+    //         let mut res = RequestType::NotFound;
+
+    //         if !contents.is_empty() {
+    //             let data: String = contents[0].get(0);
+
+    //             let y = json!(data);
+    //         }
+
+    //         res
+    //     }
+    // };
 
     let url: String;
+    let code_json: Value;
 
-    let response = match request_type {
-        RequestType::Root => Responses::ROOT_RESPONSE,
-        RequestType::Ping => Responses::PING_RESPONSE,
-        RequestType::NotFound => Responses::NOT_FOUND_RESPONSE,
-        RequestType::Upload => {
+    let response = match Path(path) {
+        Paths::ROOT => Responses::ROOT_RESPONSE,
+        Paths::PING => Responses::PING_RESPONSE,
+        Paths::UPLOAD => {
             let data = get_data_from_request(&request);
             // println!("{}", data);
 
@@ -157,6 +171,33 @@ fn handle_connection(
                 content: &url,
             }
             // println!("{}", data);
+        }
+        _ => {
+            let url = &path[1..];
+
+            println!("{}", url);
+
+            let contents = get_code(db, url);
+
+            let mut res = Response {
+                status_line: StatusLines::OK,
+                content: &url,
+            };
+
+            if !contents.is_empty() {
+                let data: String = contents[0].get(0);
+
+                code_json = json!(data);
+
+                // code = code_json.as_str().unwrap();
+
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content: &code_json.as_str().unwrap(),
+                };
+            }
+
+            res
         }
     };
     // println!("{}, {}", path, request_type as u32);
