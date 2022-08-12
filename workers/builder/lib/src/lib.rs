@@ -41,8 +41,16 @@ pub fn get_job() -> Result<Value, serde_json::Error> {
     serde_json::from_str(&result_raw.to_string())
 }
 
+type BuildStatus = &'static str;
+enum BuildStatuses {}
+
+impl BuildStatuses {
+    const COMPLETED: &'static str = "completed";
+    const FAILED: &'static str = "failed";
+}
+
 pub struct BuildInfo {
-    pub successful: bool,
+    pub status: BuildStatus,
     pub log: String,
 }
 
@@ -80,13 +88,16 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 
     let successful = err_raw.to_string() == "";
 
+    if successful {
+        return BuildInfo {
+            status: BuildStatuses::COMPLETED,
+            log: result_raw.to_string(),
+        };
+    }
+
     BuildInfo {
-        successful,
-        log: if successful {
-            result_raw.to_string()
-        } else {
-            err_raw.to_string()
-        },
+        status: BuildStatuses::FAILED,
+        log: err_raw.to_string(),
     }
 }
 

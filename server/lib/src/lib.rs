@@ -125,7 +125,7 @@ fn handle_connection(
             let data = get_data_from_request(&request);
             // println!("{}", data);
 
-            let data = Value::String(data);
+            // let data = Value::String(data);
 
             // let code = data.as_str().unwrap();
 
