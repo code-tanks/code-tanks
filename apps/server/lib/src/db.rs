@@ -162,7 +162,7 @@ pub fn insert_tank(
                     SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
                 )
                 INSERT INTO tanks (id, url, code, status)
-                SELECT id, base62_encode(('x'||lpad(SUBSTRING(id, 0, 11),16,'0'))::bit(64)::bigint), $1, 'queued'
+                SELECT id, SUBSTRING(base62_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), $1, 'queued'
                 FROM cte;
             ",
             &[&code_as_json_string, &post_fix],
