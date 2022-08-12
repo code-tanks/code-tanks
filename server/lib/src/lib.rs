@@ -115,14 +115,14 @@ fn handle_connection(
     // };
 
     let url: String;
-    let code_json: Value;
-    let log_json: Value;
+    let res_code: String;
+    let res_log: String;
 
     let response = match path {
         Paths::ROOT => Responses::ROOT_RESPONSE,
         Paths::PING => Responses::PING_RESPONSE,
         Paths::UPLOAD => {
-            let data = get_data_from_request(&request);
+            let uploaded_code = get_data_from_request(&request);
             // println!("{}", data);
 
             // let data = Value::String(data);
@@ -137,18 +137,18 @@ fn handle_connection(
 
             loop {
                 let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
-                let existing = get_existing(db, data.to_string(), post_fix.to_string());
+                let existing = get_existing(db, uploaded_code.to_string(), post_fix.to_string());
 
                 if existing.is_empty() {
                     println!("generating short url...");
-                    insert_tank(db, data.to_string(), post_fix.to_string());
+                    insert_tank(db, uploaded_code.to_string(), post_fix.to_string());
                     needs_generation = true;
                 } else {
-                    let code_as_json_string: String = existing[0].get(2);
+                    let code: String = existing[0].get(2);
 
                     // println!("test {} {}", code_as_json_string, data.to_string());
 
-                    if code_as_json_string == data.to_string() {
+                    if code == uploaded_code {
                         break;
                     } else {
                         println!("regenerating");
@@ -158,7 +158,7 @@ fn handle_connection(
             }
             let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
 
-            let existing = get_existing(db, data.to_string(), post_fix.to_string());
+            let existing = get_existing(db, uploaded_code.to_string(), post_fix.to_string());
 
             url = existing[0].get(1);
 
@@ -185,26 +185,26 @@ fn handle_connection(
                 let is_log_request = &url[(url.len() - Paths::LOG.len())..] == Paths::LOG;
 
                 if is_log_request {
-                    let log_as_json_string: String = matches[0].get(3);
+                    res_log = matches[0].get(3);
 
-                    log_json = from_str(&log_as_json_string).unwrap();
+                    // log_json = from_str(&log).unwrap();
 
                     // code = code_json.as_str().unwrap();
 
                     res = Response {
                         status_line: StatusLines::OK,
-                        content: &log_json.as_str().unwrap(),
+                        content: &res_log,
                     };
                 } else {
-                    let code_as_json_string: String = matches[0].get(3);
+                    res_code = matches[0].get(3);
 
-                    code_json = from_str(&code_as_json_string).unwrap();
+                    // code_json = from_str(&code_as_json_string).unwrap();
 
                     // code = code_json.as_str().unwrap();
 
                     res = Response {
                         status_line: StatusLines::OK,
-                        content: &code_json.as_str().unwrap(),
+                        content: &res_code,
                     };
                 }
             }

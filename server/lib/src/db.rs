@@ -66,7 +66,7 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             url         VARCHAR NOT NULL,
             code        VARCHAR NOT NULL,
             status      VARCHAR NOT NULL,
-            log        VARCHAR NOT NULL
+            log         VARCHAR NOT NULL
         );
     "#).unwrap();
 
@@ -75,7 +75,7 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
 
 pub fn insert_tank(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    code_as_json_string: String,
+    code: String,
     post_fix: String,
 ) {
     client
@@ -90,17 +90,17 @@ pub fn insert_tank(
                     SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), 
                     $1, 
                     'queued', 
-                    '"waiting to build"'
+                    'waiting to build'
                 FROM cte;
             "#,
-            &[&code_as_json_string, &post_fix],
+            &[&code, &post_fix],
         )
         .unwrap();
 }
 
 pub fn get_existing(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    code_as_json_string: String,
+    code: String,
     post_fix: String,
 ) -> Vec<Row> {
     client
@@ -115,7 +115,7 @@ pub fn get_existing(
                 SELECT *
                 FROM matches;
             ",
-            &[&code_as_json_string, &post_fix],
+            &[&code, &post_fix],
         )
         .unwrap()
 }
