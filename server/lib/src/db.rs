@@ -83,7 +83,7 @@ pub fn insert_tank(
                 WITH cte AS (
                     SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
                 )
-                INSERT INTO tanks (id, url, code, status, log)
+                INSERT INTO tanks (id, url, code, log)
                 SELECT 
                     id, 
                     SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), 
