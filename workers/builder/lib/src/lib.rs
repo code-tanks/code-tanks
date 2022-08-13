@@ -110,7 +110,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 //     // docker run --rm --net=FooAppNet --name=component2 component2-image
 // }
 
-pub fn update_job(id: u64, successful: bool) -> bool {
+pub fn update_job(id: u64, successful: bool) {
     let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
@@ -127,20 +127,13 @@ pub fn update_job(id: u64, successful: bool) -> bool {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    // println!("out: {}", result_raw.to_string());
-    // println!("err: {}", err_raw.to_string() != "");
-
-    let successful = err_raw.to_string() == "";
-
-    println!("update job, id={}, successful={}", id, successful);
+    println!("update job, id={}", id);
     println!("stdout:");
     println!("{}", result_raw.to_string());
     println!("");
     println!("stderr:");
     println!("{}", err_raw.to_string());
     println!("");
-
-    successful
 }
 
 pub fn push_to_registry(url: &str) -> bool {
