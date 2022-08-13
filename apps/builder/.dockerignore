@@ -38,3 +38,5 @@ build/
 doc/api/
 ./Dockerfile
 .dockerignore
+
+.gitignore
