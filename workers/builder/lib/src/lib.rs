@@ -62,7 +62,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
     let output_raw = Command::new("docker")
         .arg("build")
         .arg("-t")
-        .arg(format!("registry:5001/{}", url))
+        .arg(format!("localhost:5001/{}", url))
         .arg("--network")
         .arg("host")
         .arg("--build-arg")
