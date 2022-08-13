@@ -1,13 +1,13 @@
 [package]
-name = "ctsim"
+name = "ctserver"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ctsimlib = { path = "lib" }
+r2d2_postgres = "0.18.1"
 
 [[bin]]
-name = "ctsim"
+name = "ctserver"
 path = "src/main.rs"
 
 [[bin]]

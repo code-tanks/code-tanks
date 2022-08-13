@@ -1,7 +1,0 @@
-[package]
-name = "ctserverlib"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-r2d2_postgres = "0.18.1"

@@ -69,7 +69,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
         .arg(format!("url={}", url))
         .arg("-f")
         .arg(format!("Dockerfiles/{}.Dockerfile", lang))
-        .arg(".")
+        .arg("Dockerfiles")
         .output()
         .expect("failed to communicate with docker");
 

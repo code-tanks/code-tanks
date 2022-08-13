@@ -1,4 +1,4 @@
-use ctserverlib::*;
+use ctserver::HttpServer;
 
 fn main() {
     println!("Running CodeTanks Server");

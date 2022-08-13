@@ -1,4 +1,4 @@
-use ctsimlib::*;
+use ctsim::{create_game, run_game};
 
 fn main() {
     println!("hello");
