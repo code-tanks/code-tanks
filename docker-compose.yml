@@ -22,7 +22,6 @@ services:
     links:
       - "db"
       - "ocypod:mq"
-      - "registry"
 
     restart: unless-stopped
     volumes:

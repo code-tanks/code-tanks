@@ -146,7 +146,7 @@ pub fn update_job(id: u64, successful: bool) -> bool {
 pub fn push_to_registry(url: &str) -> bool {
     let output_raw = Command::new("docker")
         .arg("push")
-        .arg(format!("registry:5001/{}", url))
+        .arg(format!("localhost:5001/{}", url))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -173,7 +173,7 @@ pub fn remove_image(url: &str) -> bool {
     let output_raw = Command::new("docker")
         .arg("image")
         .arg("remove")
-        .arg(format!("registry:5001/{}", url))
+        .arg(format!("localhost:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");
 
