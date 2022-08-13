@@ -3,9 +3,9 @@ WORKDIR /ctserver
 
 COPY dummy.rs .
 COPY Cargo.toml .
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-RUN cargo install --bin ctserver --path . --debug
-RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
+    && cargo install --bin ctserver --path . --debug \
+    && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY src src
 RUN cargo install --bin ctserver --path . --debug
 

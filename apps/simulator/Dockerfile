@@ -3,9 +3,9 @@ WORKDIR /ctsim
 
 COPY dummy.rs .
 COPY Cargo.toml .
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-RUN cargo install --bin ctsim --path .
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
+    && cargo install --bin ctsim --path . --debug \
+    && sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 COPY src src
 RUN cargo install --bin ctsim --path .
 
