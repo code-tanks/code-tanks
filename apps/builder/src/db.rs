@@ -6,7 +6,7 @@ pub fn get_client() -> Client {
     Client::connect(&env::var("DB_URL").unwrap(), NoTls).unwrap()
 }
 
-pub fn upload_log(client: &mut Client, url: &str, log: &str) {
+pub fn upload_log(client: &mut Client, url: &str, log: &str) -> bool {
     client
         .execute(
             r#"
@@ -16,5 +16,5 @@ pub fn upload_log(client: &mut Client, url: &str, log: &str) {
         "#,
             &[&url, &log],
         )
-        .unwrap();
+        .is_ok()
 }

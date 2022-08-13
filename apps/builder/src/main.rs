@@ -9,7 +9,7 @@ use ctbuilder::{
 fn main() {
     println!("Started ctbuilder");
 
-    //  build("hello", "world");
+    // build("hello", "world");
 
     if !get_queues().contains(&"build".to_string()) {
         create_build_queue();
@@ -32,10 +32,14 @@ fn main() {
             println!("");
 
             let build_info = build(&url, &lang);
-            upload_log(&mut client, &url, &build_info.log);
-            push_to_registry(&url);
+            let uploaded_log = upload_log(&mut client, &url, &build_info.log);
+            let pushed_to_registry = push_to_registry(&url);
             remove_image(&url);
-            update_job(id, build_info.successful);
+
+            update_job(
+                id,
+                build_info.successful && uploaded_log && pushed_to_registry,
+            );
         }
 
         thread::sleep(time::Duration::from_millis(1000));
