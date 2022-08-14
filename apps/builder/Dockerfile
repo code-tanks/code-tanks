@@ -1,67 +1,28 @@
 FROM rust:1.63.0 AS builder
 WORKDIR /ctbuilder
-RUN rustup target add x86_64-unknown-linux-musl
 
 COPY dummy.rs .
 COPY Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-    && cargo build --target x86_64-unknown-linux-musl --bin ctbuilder \
+    && cargo install --bin ctbuilder --path . --debug \
     && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY src src
-RUN cargo build --target x86_64-unknown-linux-musl --bin ctbuilder
-# FROM rust:1.63.0 AS builder
-# WORKDIR /ctbuilder
-# RUN rustup target add x86_64-unknown-linux-musl
+RUN cargo install --bin ctbuilder --path . --debug
 
-# COPY dummy.rs .
-# COPY Cargo.toml .
-# RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-#     && cargo install --bin ctbuilder --path . --debug \
-#     && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
-# COPY src src
-# RUN cargo install --bin ctbuilder --path . --debug
+FROM ubuntu:bionic AS runner
 
-# FROM ubuntu:bionic AS runner
+RUN apt update \
+    && DEBIAN_FRONTEND=noninteractive apt install -y \
+    curl jq
 
-# RUN apt update \
-#     && DEBIAN_FRONTEND=noninteractive apt install -y \
-#     curl jq
-
-# WORKDIR /ctbuilder
-
-# RUN curl -fsSL https://get.docker.com -o get-docker.sh
-# RUN sh get-docker.sh
-# RUN rm get-docker.sh
-
-# COPY Dockerfiles Dockerfiles
-
-# COPY --from=builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
-
-# CMD ["ctbuilder"]
-
-# FROM rust:alpine AS builder
-# WORKDIR /ctbuilder
-
-# COPY dummy.rs .
-# COPY Cargo.toml .
-# RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-#     && cargo install --bin ctbuilder --path . --debug \
-#     && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
-# COPY src src
-# RUN cargo install --bin ctbuilder --path . --debug
-
-FROM docker:dind AS runner
 WORKDIR /ctbuilder
 
-RUN apk update && apk upgrade && apk add --no-cache musl-dev curl jq gcc
-
-
-# RUN curl -fsSL https://get.docker.com -o get-docker.sh
-# RUN sh get-docker.sh
-# RUN rm get-docker.sh
+RUN curl -fsSL https://get.docker.com -o get-docker.sh
+RUN sh get-docker.sh
+RUN rm get-docker.sh
 
 COPY Dockerfiles Dockerfiles
 
-COPY --from=builder /ctbuilder/target/x86_64-unknown-linux-musl/debug/ctbuilder /usr/local/bin/ctbuilder
+COPY --from=builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
 
 CMD ["ctbuilder"]
