@@ -42,7 +42,7 @@ FROM docker:dind AS runner
 
 RUN apk update \
     && DEBIAN_FRONTEND=noninteractive apk add \
-    curl jq
+    curl jq musl-dev
 
 WORKDIR /ctbuilder
 
