@@ -60,8 +60,10 @@ pub fn get_job() -> Vec<String> {
 
     println!("stdout:");
     println!("{}", result_raw.to_string());
+    println!("");
     println!("stderr:");
     println!("{}", err_raw.to_string());
+    println!("");
 
     if err_raw.to_string() != "" {
         vec![]
