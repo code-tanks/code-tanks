@@ -58,22 +58,17 @@ pub fn get_job() -> Vec<String> {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
-    println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
-
-    if err_raw.to_string() != "" {
-        vec![]
-    } else {
-        result_raw
-            .to_string()
-            .split('\n')
-            .map(|f| f.to_string())
-            .collect::<Vec<String>>()
-    }
+    // println!("stdout:");
+    // println!("{}", result_raw.to_string());
+    // println!("");
+    // println!("stderr:");
+    // println!("{}", err_raw.to_string());
+    // println!("");
+    result_raw
+        .to_string()
+        .split('\n')
+        .map(|f| f.to_string())
+        .collect::<Vec<String>>()
 }
 
 pub struct BuildInfo {
