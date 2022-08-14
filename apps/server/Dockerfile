@@ -9,7 +9,7 @@ RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
 COPY src src
 RUN cargo install --bin ctserver --path . --debug
 
-FROM ubuntu:bionic AS runner
+FROM ubuntu:focal AS runner
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
