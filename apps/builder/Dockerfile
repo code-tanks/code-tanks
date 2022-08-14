@@ -1,5 +1,18 @@
+FROM rust:1.63.0 AS builder
+WORKDIR /ctbuilder
+RUN rustup target add x86_64-unknown-linux-musl
+
+COPY dummy.rs .
+COPY Cargo.toml .
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
+    && cargo build --target x86_64-unknown-linux-musl --bin ctbuilder --path . --debug \
+    && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+COPY src src
+RUN cargo build --target x86_64-unknown-linux-musl --bin ctbuilder --path . --debug
+
 # FROM rust:1.63.0 AS builder
 # WORKDIR /ctbuilder
+# RUN rustup target add x86_64-unknown-linux-musl
 
 # COPY dummy.rs .
 # COPY Cargo.toml .
@@ -27,16 +40,16 @@
 
 # CMD ["ctbuilder"]
 
-FROM rust:alpine AS builder
-WORKDIR /ctbuilder
+# FROM rust:alpine AS builder
+# WORKDIR /ctbuilder
 
-COPY dummy.rs .
-COPY Cargo.toml .
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-    && cargo install --bin ctbuilder --path . --debug \
-    && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
-COPY src src
-RUN cargo install --bin ctbuilder --path . --debug
+# COPY dummy.rs .
+# COPY Cargo.toml .
+# RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
+#     && cargo install --bin ctbuilder --path . --debug \
+#     && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+# COPY src src
+# RUN cargo install --bin ctbuilder --path . --debug
 
 FROM docker:dind AS runner
 WORKDIR /ctbuilder
@@ -50,6 +63,6 @@ RUN apk update && apk upgrade && apk add --no-cache musl-dev curl jq gcc
 
 COPY Dockerfiles Dockerfiles
 
-COPY --from=builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
+COPY --from=builder /ctbuilder/target/x86_64-unknown-linux-musl/release/ctbuilder /usr/local/bin/ctbuilder
 
 CMD ["ctbuilder"]
