@@ -5,10 +5,10 @@ RUN rustup target add x86_64-unknown-linux-musl
 COPY dummy.rs .
 COPY Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-    && cargo build --target x86_64-unknown-linux-musl --bin ctbuilder --debug \
+    && cargo build --target x86_64-unknown-linux-musl --bin ctbuilder --dev \
     && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY src src
-RUN cargo build --target x86_64-unknown-linux-musl --bin ctbuilder --debug
+RUN cargo build --target x86_64-unknown-linux-musl --bin ctbuilder --dev
 
 # FROM rust:1.63.0 AS builder
 # WORKDIR /ctbuilder
