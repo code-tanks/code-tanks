@@ -56,7 +56,7 @@ pub fn get_job() -> Vec<String> {
         .expect("failed to communicate with ocypod");
 
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     // println!("stdout:");
     // println!("{}", result_raw.to_string());
@@ -68,6 +68,7 @@ pub fn get_job() -> Vec<String> {
         .to_string()
         .split('\n')
         .map(|f| f.to_string())
+        .filter(|f| !f.is_empty())
         .collect::<Vec<String>>()
 }
 
