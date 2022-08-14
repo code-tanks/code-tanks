@@ -39,10 +39,10 @@ COPY src src
 RUN cargo install --bin ctbuilder --path . --debug
 
 FROM docker:dind AS runner
+WORKDIR /ctbuilder
 
 RUN apk update && apk upgrade && apk add musl-dev curl jq
 
-WORKDIR /ctbuilder
 
 # RUN curl -fsSL https://get.docker.com -o get-docker.sh
 # RUN sh get-docker.sh
