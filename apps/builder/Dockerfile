@@ -41,7 +41,7 @@ RUN cargo install --bin ctbuilder --path . --debug
 FROM docker:dind AS runner
 
 RUN apk update \
-    && DEBIAN_FRONTEND=noninteractive apk install -y \
+    && DEBIAN_FRONTEND=noninteractive apk install \
     curl jq
 
 WORKDIR /ctbuilder
