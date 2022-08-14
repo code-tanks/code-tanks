@@ -40,8 +40,7 @@ RUN cargo install --bin ctbuilder --path . --debug
 
 FROM docker:dind AS runner
 
-RUN apk update \
-    && DEBIAN_FRONTEND=noninteractive apk add --no-cache \
+RUN apk add --no-cache \
     curl jq musl-dev
 
 WORKDIR /ctbuilder
