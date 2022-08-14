@@ -1,7 +1,5 @@
 use std::process::Command;
 
-use serde_json::Value;
-
 pub mod db;
 
 enum Langs {}
@@ -14,16 +12,16 @@ pub fn get_lang(url: &str) -> &'static str {
     Langs::DART
 }
 
-pub fn get_queues() -> Vec<String> {
-    let output_raw = Command::new("curl")
-        .arg("mq:8023/queue")
-        .output()
-        .expect("failed to communicate with ocypod");
+// pub fn get_queues() -> Vec<String> {
+//     let output_raw = Command::new("curl")
+//         .arg("mq:8023/queue")
+//         .output()
+//         .expect("failed to communicate with ocypod");
 
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+//     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
 
-    serde_json::from_str(&result_raw.to_string()).unwrap()
-}
+//     serde_json::from_str(&result_raw.to_string()).unwrap()
+// }
 
 pub fn create_build_queue() {
     Command::new("curl")
@@ -31,12 +29,7 @@ pub fn create_build_queue() {
         .arg("content-type: application/json")
         .arg("-XPUT")
         .arg("-d")
-        .arg(
-            serde_json::json!({
-                "timeout": "10m",
-            })
-            .to_string(),
-        )
+        .arg(r#"{{"timeout": "10m"}}"#)
         .arg("mq:8023/queue/build")
         .output()
         .expect("failed to communicate with ocypod");
@@ -130,7 +123,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 // }
 
 pub fn update_job(id: &str, successful: bool) {
-    let output_raw = Command::new("curl")
+    Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPATCH")
@@ -143,16 +136,16 @@ pub fn update_job(id: &str, successful: bool) {
         .output()
         .expect("failed to communicate with ocypod");
 
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     println!("update job, id={}", id);
-    println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
-    println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    // println!("stdout:");
+    // println!("{}", result_raw.to_string());
+    // println!("");
+    // println!("stderr:");
+    // println!("{}", err_raw.to_string());
+    // println!("");
 }
 
 pub fn push_to_registry(url: &str) -> bool {

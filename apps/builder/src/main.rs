@@ -3,7 +3,7 @@ use std::{thread, time};
 use ctbuilder::{
     build, create_build_queue,
     db::{get_client, upload_log},
-    get_job, get_lang, get_queues, push_to_registry, remove_image, update_job,
+    get_job, get_lang, push_to_registry, remove_image, update_job,
 };
 
 fn main() {
