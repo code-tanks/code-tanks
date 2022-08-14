@@ -62,6 +62,6 @@ RUN apk update && apk upgrade && apk add --no-cache musl-dev curl jq gcc
 
 COPY Dockerfiles Dockerfiles
 
-COPY --from=builder /ctbuilder/target/x86_64-unknown-linux-musl/release/ctbuilder /usr/local/bin/ctbuilder
+COPY --from=builder /ctbuilder/target/x86_64-unknown-linux-musl/debug/ctbuilder /usr/local/bin/ctbuilder
 
 CMD ["ctbuilder"]
