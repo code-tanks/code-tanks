@@ -42,15 +42,36 @@ pub fn create_build_queue() {
         .expect("failed to communicate with ocypod");
 }
 
-pub fn get_job() -> Result<Value, serde_json::Error> {
-    let output_raw = Command::new("curl")
+pub struct Job {
+    pub id: u32,
+    pub url: String,
+}
+
+pub fn get_job() -> Vec<String> {
+    let output_raw = Command::new("bash")
+        .arg("-c")
+        .arg(r#"curl mq:8023/queue/build/job | jq --raw-output '.id,.input'"#)
         .arg("mq:8023/queue/build/job")
         .output()
         .expect("failed to communicate with ocypod");
 
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    serde_json::from_str(&result_raw.to_string())
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+
+    if err_raw.to_string() != "" {
+        vec![]
+    } else {
+        result_raw
+            .to_string()
+            .split('\n')
+            .map(|f| f.to_string())
+            .collect::<Vec<String>>()
+    }
 }
 
 pub struct BuildInfo {
@@ -110,7 +131,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 //     // docker run --rm --net=FooAppNet --name=component2 component2-image
 // }
 
-pub fn update_job(id: u64, successful: bool) {
+pub fn update_job(id: &str, successful: bool) {
     let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")

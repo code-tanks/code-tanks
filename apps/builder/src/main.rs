@@ -20,11 +20,9 @@ fn main() {
     loop {
         let job = get_job();
 
-        if job.is_ok() {
-            let job = job.unwrap();
-
-            let url = job["input"].as_str().unwrap();
-            let id: u64 = job["id"].as_u64().unwrap();
+        if !job.is_empty() {
+            let id = &job[0];
+            let url = &job[1];
 
             let lang = get_lang(&url);
 
@@ -37,7 +35,7 @@ fn main() {
             remove_image(&url);
 
             update_job(
-                id,
+                &id,
                 build_info.successful && uploaded_log && pushed_to_registry,
             );
         }
