@@ -9,7 +9,7 @@ RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
 COPY src src
 RUN cargo install --bin ctsim --path .
 
-FROM ubuntu:focal AS runner
+FROM ubuntu:bionic AS runner
 
 WORKDIR /ctsim
 
