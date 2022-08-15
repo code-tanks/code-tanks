@@ -1,6 +1,5 @@
 FROM ubuntu:latest
 
-ENV PATH "$PATH:/home/developer/flutter/bin"
 ENV PATH "$PATH:/home/developer/.cargo/bin"
 
 RUN apt update \

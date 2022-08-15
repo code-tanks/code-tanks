@@ -1,0 +1,11 @@
+[package]
+name = "ctsim"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy_ecs = "0.8.0"
+
+[[bin]]
+name = "ctsim"
+path = "bin/simulator.rs"

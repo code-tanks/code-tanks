@@ -1,0 +1,25 @@
+[package]
+name = "ctviewer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ctsim = { path = "../simulator" }
+bevy = "0.8.0"
+bevy_rapier2d = { version = "0.16.0", features = [ "debug-render", "enhanced-determinism", "wasm-bindgen" ] }
+serde = "1.0.143"
+
+[[bin]]
+name = "ctviewer"
+path = "bin/viewer.rs"
+
+# Enable a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
+
+[target.wasm32-unknown-unknown]
+runner = "wasm-server-runner"

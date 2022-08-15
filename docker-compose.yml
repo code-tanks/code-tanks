@@ -3,7 +3,8 @@ services:
   server:
     container_name: server
     build:
-      context: apps/server
+      dockerfile: server/Dockerfile
+      context: .
     restart: unless-stopped
     ports:
       - 8089:8088
@@ -17,7 +18,8 @@ services:
   builder:
     container_name: builder
     build:
-      context: apps/builder
+      dockerfile: builder/Dockerfile
+      context: .
     command: ctbuilder
     links:
       - "db"
