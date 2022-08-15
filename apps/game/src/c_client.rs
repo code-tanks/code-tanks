@@ -1,4 +1,4 @@
-use bevy_ecs::prelude::Component;
+use bevy::prelude::Component;
 
 use crate::{c_command::*, c_event::*};
 

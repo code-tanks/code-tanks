@@ -4,7 +4,7 @@ use std::{
 };
 
 // use serde::{Deserialize, Serialize};
-use bevy_ecs::prelude::*;
+use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct CommandSource {

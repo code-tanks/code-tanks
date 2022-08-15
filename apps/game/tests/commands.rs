@@ -1,4 +1,4 @@
-use ctsim::c_command::Commands;
+use ctgame::c_command::Commands;
 
 #[test]
 fn empty() {

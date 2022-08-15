@@ -37,7 +37,7 @@ use s_render::*;
 use s_request_commands::*;
 use s_save_commands::*;
 
-use bevy_ecs::prelude::*;
+use bevy::prelude::*;
 
 pub struct Game {
     pub world: World,

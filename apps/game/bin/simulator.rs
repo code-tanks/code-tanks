@@ -1,6 +1,6 @@
 use std::env;
 
-use ctsim::{create_game, run_game, run_view_game};
+use ctgame::{create_game, run_game, run_view_game};
 
 fn main() {
     let args: Vec<String> = env::args().collect();

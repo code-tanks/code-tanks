@@ -9,7 +9,7 @@
         "rust-analyzer.linkedProjects": [
             "apps/server/Cargo.toml",
             "apps/builder/Cargo.toml",
-            "apps/simulator/Cargo.toml"
+            "apps/game/Cargo.toml"
         ]
     },
     "extensions": [

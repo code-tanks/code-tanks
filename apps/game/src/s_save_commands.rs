@@ -1,6 +1,5 @@
+use bevy::prelude::Query;
 use std::{fs::OpenOptions, io::Write};
-
-use bevy_ecs::system::Query;
 
 use crate::{
     c_command::{CommandSource, Commands},

@@ -1,4 +1,4 @@
-use bevy_ecs::prelude::Component;
+use bevy::prelude::Component;
 // use serde::{Deserialize, Serialize};
 // use serde_json::Value;
 
