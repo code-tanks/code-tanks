@@ -6,8 +6,8 @@ use crate::{
     c_event::EventSink,
 };
 
-pub fn publish_events(mut query: Query<(&mut CommandSource, &EventSink, &Client)>) {
-    for (mut command_receiver, event_sender, client_connection) in &mut query {
+pub fn publish_events(mut query: Query<(&mut CommandSource, &EventSink, &mut Client)>) {
+    for (mut command_receiver, event_sender, mut client_connection) in &mut query {
         let mut queue: Vec<Command> = Vec::new();
         for event in event_sender.queue.iter() {
             queue.append(&mut client_connection.client.request_commands_by_event(event));

@@ -1,3 +1,5 @@
+use std::{fs::OpenOptions, io::Write};
+
 use bevy_ecs::system::Query;
 
 use crate::{
@@ -6,7 +8,7 @@ use crate::{
     c_velocity::{TankVelocity, Velocity},
 };
 
-pub fn apply_commands(
+pub fn save_commands(
     mut query: Query<(
         &mut CommandSource,
         &mut Velocity,
@@ -15,17 +17,16 @@ pub fn apply_commands(
     )>,
 ) {
     for (mut command_receiver, mut velocity, mut tank_velocity, position) in &mut query {
-        let grouped_commands = command_receiver.queue.remove(0);
+        let grouped_commands = command_receiver.queue[0];
 
-        println!("apply_commands {:?}", grouped_commands);
+        println!("save_commands {:?}", grouped_commands);
 
-        if Commands::MOVE_FORWARD & grouped_commands != 0 {
-            velocity.velocity = 1.0;
-        }
-        if Commands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
-            println!("derp");
-            tank_velocity.angular_velocity = 1.0;
-        }
+        let mut f = OpenOptions::new()
+            .append(true)
+            .open("./sim.ct")
+            .expect("Unable to open file");
+        f.write_all(format!("{}\n", grouped_commands).to_string().as_bytes())
+            .expect("Unable to write data");
 
         println!("commands remaining {:?}", command_receiver.queue);
     }

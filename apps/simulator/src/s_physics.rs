@@ -1,4 +1,4 @@
-use std::f32::consts::TAU;
+use std::f64::consts::TAU;
 
 use bevy_ecs::system::Query;
 

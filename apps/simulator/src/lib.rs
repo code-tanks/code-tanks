@@ -14,6 +14,7 @@ pub mod s_physics;
 pub mod s_publish_events;
 pub mod s_render;
 pub mod s_request_commands;
+pub mod s_save_commands;
 
 use c_client::*;
 use c_collider::*;
@@ -25,6 +26,7 @@ use c_render::*;
 use c_scanner::*;
 use c_tank::*;
 use c_velocity::*;
+
 use std::io::{self, prelude::*, BufReader};
 use std::{f32::consts::TAU, fs::File};
 
@@ -33,6 +35,7 @@ use s_physics::*;
 use s_publish_events::*;
 use s_render::*;
 use s_request_commands::*;
+use s_save_commands::*;
 
 use bevy_ecs::prelude::*;
 
@@ -75,7 +78,53 @@ pub fn create_game(urls: &[String]) -> Game {
     Game { world, entities }
 }
 
-pub fn create_view_game(file: &str) -> Game {
+pub fn run_game(game: &mut Game) -> &mut Game {
+    let mut schedule = Schedule::default();
+
+    let mut f = File::create("./sim.ct").expect("Unable to create file");
+    f.write_all(format!("{}\n", game.entities.len()).to_string().as_bytes())
+        .expect("Unable to write data");
+
+    // Add a Stage to our schedule. Each Stage in a schedule runs all of its systems
+    // before moving on to the next Stage
+    schedule.add_stage("render", SystemStage::single_threaded().with_system(render));
+
+    schedule.add_stage(
+        "request_commands",
+        SystemStage::single_threaded().with_system(request_commands),
+    );
+    schedule.add_stage(
+        "save_commands",
+        SystemStage::single_threaded().with_system(save_commands),
+    );
+    schedule.add_stage(
+        "apply_commands",
+        SystemStage::single_threaded().with_system(apply_commands),
+    );
+
+    schedule.add_stage(
+        "physics",
+        SystemStage::single_threaded().with_system(physics),
+    );
+
+    // schedule.add_stage(
+    //     "scanner",
+    //     SystemStage::single_threaded().with_system(scanner),
+    // );
+
+    schedule.add_stage(
+        "publish_events",
+        SystemStage::single_threaded().with_system(publish_events),
+    );
+
+    for _ in 0..2000 {
+        // Run the schedule once. If your app has a "loop", you would run this once per loop
+        schedule.run(&mut game.world);
+    }
+
+    game
+}
+pub fn run_view_game(file: &str) {
     let file = File::open(file).unwrap();
     let reader = BufReader::new(file);
 
@@ -90,15 +139,22 @@ pub fn create_view_game(file: &str) -> Game {
     let s: usize = lines[0].parse::<usize>().unwrap();
     println!("# players: {}", s);
 
+    let mut n_commands = 0;
+
     let mut world = World::default();
     let entities = (0..s)
         .map(|n| {
-            let c_lines = lines[(1 + n)..]
+            let c_lines: Vec<Command> = lines[(1 + n)..]
                 .iter()
                 .step_by(s)
-                .map(|f| f.to_string())
+                .map(|f| f.to_string().parse::<Command>().unwrap())
                 .collect();
             println!("{} lines: {:?}", n + 1, c_lines);
+            if n_commands == 0 && c_lines.len() > 0 {
+                n_commands = c_lines.len();
+            }
+            assert!(n_commands == c_lines.len());
+
             world
                 .spawn()
                 .insert(Render::as_tank())
@@ -125,14 +181,8 @@ pub fn create_view_game(file: &str) -> Game {
                 .id()
         })
         .collect();
-    Game { world, entities }
-}
+    let mut game = Game { world, entities };
 
-// fn scanner(query: Query<(Entity, &Scanner, &Position, &Collider)>) {
-//     for (entity, scanner, position, collider) in &query {}
-// }
-
-pub fn run_game(game: &mut Game) -> &mut Game {
     let mut schedule = Schedule::default();
 
     // Add a Stage to our schedule. Each Stage in a schedule runs all of its systems
@@ -164,10 +214,8 @@ pub fn run_game(game: &mut Game) -> &mut Game {
         SystemStage::single_threaded().with_system(publish_events),
     );
 
-    for _ in 0..200u8 {
+    for _ in 0..n_commands {
         // Run the schedule once. If your app has a "loop", you would run this once per loop
         schedule.run(&mut game.world);
     }
-
-    game
 }

@@ -27,6 +27,7 @@ impl CommandSource {
 pub type Command = u64;
 
 pub enum Commands {}
+
 impl Commands {
     pub const NONE: Command = 0b0;
     pub const MOVE_FORWARD: Command = 0b1;
@@ -36,17 +37,6 @@ impl Commands {
     pub const ROTATE_GUN_CLOCKWISE: Command = 0b10000;
     pub const ROTATE_GUN_COUNTER_CLOCKWISE: Command = 0b100000;
     pub const FIRE_WITH_POWER: Command = 0b100000000;
-
-    pub const ALL_COMMANDS: [Command; 8] = [
-        Commands::NONE,
-        Commands::MOVE_FORWARD,
-        Commands::MOVE_BACKWARD,
-        Commands::ROTATE_GUN_CLOCKWISE,
-        Commands::ROTATE_TANK_COUNTER_CLOCKWISE,
-        Commands::ROTATE_GUN_CLOCKWISE,
-        Commands::ROTATE_GUN_COUNTER_CLOCKWISE,
-        Commands::FIRE_WITH_POWER,
-    ];
 }
 
 // #[repr(usize)]

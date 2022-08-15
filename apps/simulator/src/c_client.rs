@@ -28,43 +28,39 @@ pub struct Client {
 // }
 
 pub trait ClientTrait {
-    fn request_commands(&self) -> Vec<Command>;
-    fn request_commands_by_event(&self, event: &Event) -> Vec<Command>;
+    fn request_commands(&mut self) -> Vec<Command>;
+    fn request_commands_by_event(&mut self, event: &Event) -> Vec<Command>;
 }
 
 pub struct DummyClient {}
 
 impl ClientTrait for DummyClient {
-    fn request_commands(&self) -> Vec<Command> {
-        let cmd: Command = Commands::MOVE_FORWARD;
-
-        vec![cmd]
+    fn request_commands(&mut self) -> Vec<Command> {
+        vec![Commands::MOVE_FORWARD | Commands::ROTATE_TANK_CLOCKWISE]
     }
 
-    fn request_commands_by_event(&self, event: &Event) -> Vec<Command> {
-        let cmd: Command = Commands::MOVE_FORWARD;
-
+    fn request_commands_by_event(&mut self, event: &Event) -> Vec<Command> {
         match event.event_type {
             EventType::Scan => {
-                vec![cmd]
+                vec![Commands::MOVE_FORWARD]
             }
             EventType::Hit => {
-                vec![cmd]
+                vec![Commands::MOVE_FORWARD]
             }
         }
     }
 }
 
 pub struct ReaderClient {
-    pub lines: Vec<String>,
+    pub lines: Vec<Command>,
 }
 
 impl ClientTrait for ReaderClient {
-    fn request_commands(&self) -> Vec<Command> {
-        todo!()
+    fn request_commands(&mut self) -> Vec<Command> {
+        vec![self.lines.remove(0)]
     }
 
-    fn request_commands_by_event(&self, event: &Event) -> Vec<Command> {
-        todo!()
+    fn request_commands_by_event(&mut self, _event: &Event) -> Vec<Command> {
+        vec![self.lines.remove(0)]
     }
 }
