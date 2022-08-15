@@ -1,26 +1,38 @@
-pub mod client_connection;
-pub mod collider;
-pub mod command_receiver;
-pub mod event_sender;
-pub mod health;
-pub mod position;
-pub mod render;
-pub mod scanner;
-pub mod tank_utilities;
-pub mod velocity;
+pub mod c_client;
+pub mod c_collider;
+pub mod c_command;
+pub mod c_event;
+pub mod c_health;
+pub mod c_position;
+pub mod c_render;
+pub mod c_scanner;
+pub mod c_tank;
+pub mod c_velocity;
 
-use std::f32::consts::TAU;
+pub mod s_apply_commands;
+pub mod s_physics;
+pub mod s_publish_events;
+pub mod s_render;
+pub mod s_request_commands;
 
-use client_connection::*;
-use collider::*;
-use command_receiver::*;
-use event_sender::*;
-use health::*;
-use position::*;
-use render::*;
-use scanner::*;
-use tank_utilities::*;
-use velocity::*;
+use c_client::*;
+use c_collider::*;
+use c_command::*;
+use c_event::*;
+use c_health::*;
+use c_position::*;
+use c_render::*;
+use c_scanner::*;
+use c_tank::*;
+use c_velocity::*;
+use std::io::{self, prelude::*, BufReader};
+use std::{f32::consts::TAU, fs::File};
+
+use s_apply_commands::*;
+use s_physics::*;
+use s_publish_events::*;
+use s_render::*;
+use s_request_commands::*;
 
 use bevy_ecs::prelude::*;
 
@@ -29,10 +41,11 @@ pub struct Game {
     pub entities: Vec<Entity>,
 }
 
-pub fn create_game() -> Game {
+pub fn create_game(urls: &[String]) -> Game {
     let mut world = World::default();
-    let entities = (1..4u8)
-        .map(|_| {
+    let entities = urls
+        .iter()
+        .map(|url| {
             world
                 .spawn()
                 .insert(Render::as_tank())
@@ -49,10 +62,12 @@ pub fn create_game() -> Game {
                     radar_angular_velocity: 0.0,
                 })
                 .insert(Collider::tank())
-                .insert(CommandReceiver::default())
-                .insert(ClientConnection::dummy())
+                .insert(CommandSource::default())
+                .insert(Client {
+                    client: Box::new(DummyClient {}),
+                })
                 .insert(Scanner {})
-                .insert(EventSender::default())
+                .insert(EventSink::default())
                 // .insert(TankUtilities {})
                 .id()
         })
@@ -60,118 +75,62 @@ pub fn create_game() -> Game {
     Game { world, entities }
 }
 
-fn render(query: Query<(Entity, &Render, &Position)>) {
-    for (entity, render, position) in &query {
-        println!(
-            "render {:?}, {:?}, {:?}",
-            entity.id(),
-            render.render_type,
-            position
-        );
-    }
+pub fn create_view_game(file: &str) -> Game {
+    let file = File::open(file).unwrap();
+    let reader = BufReader::new(file);
+
+    let lines: Vec<String> = reader
+        .lines()
+        .map(|l| l.expect("Could not parse line"))
+        .collect();
+    // while let Some(line) = reader.read_line(&mut buffer) {
+    //     println!("{}", line?.trim());
+    // }
+
+    let s: usize = lines[0].parse::<usize>().unwrap();
+    println!("# players: {}", s);
+
+    let mut world = World::default();
+    let entities = (0..s)
+        .map(|n| {
+            let c_lines = lines[(1 + n)..]
+                .iter()
+                .step_by(s)
+                .map(|f| f.to_string())
+                .collect();
+            println!("{} lines: {:?}", n + 1, c_lines);
+            world
+                .spawn()
+                .insert(Render::as_tank())
+                .insert(Health {})
+                .insert(Position {
+                    x: 0.0,
+                    y: 0.0,
+                    rotation: 0.0,
+                })
+                .insert(Velocity { velocity: 0.0 })
+                .insert(TankVelocity {
+                    angular_velocity: 0.0,
+                    gun_angular_velocity: 0.0,
+                    radar_angular_velocity: 0.0,
+                })
+                .insert(Collider::tank())
+                .insert(CommandSource::default())
+                .insert(Client {
+                    client: Box::new(ReaderClient { lines: c_lines }),
+                })
+                .insert(Scanner {})
+                .insert(EventSink::default())
+                // .insert(TankUtilities {})
+                .id()
+        })
+        .collect();
+    Game { world, entities }
 }
 
-fn request_commands(mut query: Query<(&mut CommandReceiver, &ClientConnection)>) {
-    for (mut command_receiver, client_connection) in &mut query {
-        if command_receiver.queue.is_empty() {
-            command_receiver
-                .queue
-                .append(&mut client_connection.client.request_commands());
-        }
-        println!("request_commands {:?}", command_receiver.queue);
-    }
-}
-
-fn apply_commands(
-    mut query: Query<(
-        &mut CommandReceiver,
-        &mut Velocity,
-        &mut TankVelocity,
-        &Position,
-    )>,
-) {
-    for (mut command_receiver, mut velocity, mut tank_velocity, position) in &mut query {
-        let grouped_commands = &mut command_receiver.queue[0];
-
-        println!("apply_commands {:?}", grouped_commands);
-
-        for command_type_as_usize in 0..COMMAND_TYPES_LENGTH {
-            if grouped_commands.command_array[command_type_as_usize] > 0 {
-                grouped_commands.command_array[command_type_as_usize] =
-                    grouped_commands.command_array[command_type_as_usize] - 1;
-
-                let command_type: CommandType =
-                    unsafe { ::std::mem::transmute(command_type_as_usize) };
-
-                match command_type {
-                    CommandType::None => {}
-                    CommandType::MoveForward => {
-                        println!("AheadBy");
-
-                        velocity.velocity = 1.0;
-                    }
-                    CommandType::MoveBackward => {
-                        velocity.velocity = -1.0;
-                    }
-                    CommandType::RotateTankClockwise => {
-                        tank_velocity.angular_velocity = 1.0;
-                    }
-                    CommandType::RotateTankCounterClockwise => {
-                        tank_velocity.angular_velocity = -1.0;
-                    }
-                    CommandType::RotateGunClockwise => {
-                        tank_velocity.angular_velocity = 1.0;
-                    }
-                    CommandType::RotateGunCounterClockwise => {
-                        tank_velocity.angular_velocity = 1.0;
-                    }
-                    CommandType::RotateRaderClockwise => {
-                        tank_velocity.angular_velocity = 1.0;
-                    }
-                    CommandType::RotateRaderCounterClockwise => {
-                        tank_velocity.angular_velocity = 1.0;
-                    }
-                    CommandType::FireWithPower => {}
-                }
-            }
-        }
-
-        if !grouped_commands.command_array.iter().any(|x| x > &0) {
-            command_receiver.queue.remove(0);
-        }
-        println!("commands remaining {:?}", command_receiver.queue);
-    }
-}
-
-fn physics(mut query: Query<(&mut Velocity, &mut Position, &Collider, &mut TankVelocity)>) {
-    for (mut velocity, mut position, collider, mut tank_velocity) in &mut query {
-        // physComp
-        // ..position.features[0] += physComp.velocity * -sin(physComp.rotation)
-        // ..position.features[1] += physComp.velocity * cos(physComp.rotation)
-        // ..rotation = (physComp.rotation + rotationDelta) % tau
-        // ..velocity *= 0
-        // ..angularVelocity *= 0;
-        position.x += velocity.velocity * -tank_velocity.angular_velocity.sin();
-        position.y += velocity.velocity * tank_velocity.angular_velocity.cos();
-        position.rotation = (position.rotation + tank_velocity.angular_velocity) % TAU;
-        velocity.velocity = 0.0;
-        tank_velocity.angular_velocity = 0.0;
-    }
-}
-
-fn scanner(query: Query<(Entity, &Scanner, &Position, &Collider)>) {
-    for (entity, scanner, position, collider) in &query {}
-}
-
-fn publish_events(mut query: Query<(&mut CommandReceiver, &EventSender, &ClientConnection)>) {
-    for (mut command_receiver, event_sender, client_connection) in &mut query {
-        let mut queue: Vec<GroupedCommand> = Vec::new();
-        for event in event_sender.queue.iter() {
-            queue.append(&mut client_connection.client.request_commands_by_event(event));
-        }
-        command_receiver.queue.splice(0..0, queue);
-    }
-}
+// fn scanner(query: Query<(Entity, &Scanner, &Position, &Collider)>) {
+//     for (entity, scanner, position, collider) in &query {}
+// }
 
 pub fn run_game(game: &mut Game) -> &mut Game {
     let mut schedule = Schedule::default();
@@ -195,10 +154,10 @@ pub fn run_game(game: &mut Game) -> &mut Game {
         SystemStage::single_threaded().with_system(physics),
     );
 
-    schedule.add_stage(
-        "scanner",
-        SystemStage::single_threaded().with_system(scanner),
-    );
+    // schedule.add_stage(
+    //     "scanner",
+    //     SystemStage::single_threaded().with_system(scanner),
+    // );
 
     schedule.add_stage(
         "publish_events",
@@ -211,4 +170,36 @@ pub fn run_game(game: &mut Game) -> &mut Game {
     }
 
     game
+}
+
+mod my_reader {
+    use std::{
+        fs::File,
+        io::{self, prelude::*},
+    };
+
+    pub struct BufReader {
+        reader: io::BufReader<File>,
+    }
+
+    impl BufReader {
+        pub fn open(path: impl AsRef<std::path::Path>) -> io::Result<Self> {
+            let file = File::open(path)?;
+            let reader = io::BufReader::new(file);
+
+            Ok(Self { reader })
+        }
+
+        pub fn read_line<'buf>(
+            &mut self,
+            buffer: &'buf mut String,
+        ) -> Option<io::Result<&'buf mut String>> {
+            buffer.clear();
+
+            self.reader
+                .read_line(buffer)
+                .map(|u| if u == 0 { None } else { Some(buffer) })
+                .transpose()
+        }
+    }
 }

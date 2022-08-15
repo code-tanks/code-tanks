@@ -1,21 +1,20 @@
-use serde::{Deserialize, Serialize};
+// use serde::{Deserialize, Serialize};
 use bevy_ecs::prelude::*;
 
 #[derive(Component)]
-pub struct CommandReceiver {
+pub struct CommandSource {
     pub queue: Vec<GroupedCommand>,
 }
 
-impl CommandReceiver {
-    pub fn default() -> CommandReceiver {
-        CommandReceiver { queue: Vec::new() }
+impl CommandSource {
+    pub fn default() -> CommandSource {
+        CommandSource { queue: Vec::new() }
     }
 }
 
-
 pub const COMMAND_TYPES_LENGTH: usize = 7;
 
-#[derive(Debug, Serialize, Deserialize)] 
+#[derive(Debug)]
 pub struct GroupedCommand {
     pub command_array: [u64; COMMAND_TYPES_LENGTH],
 }

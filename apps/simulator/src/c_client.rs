@@ -1,31 +1,44 @@
 use bevy_ecs::prelude::*;
 
 use crate::{
-    command_receiver::{CommandType, GroupedCommand, COMMAND_TYPES_LENGTH},
-    event_sender::*,
+    c_command::{CommandType, GroupedCommand, COMMAND_TYPES_LENGTH},
+    c_event::*,
+    my_reader::BufReader,
 };
 
 #[derive(Component)]
-pub struct ClientConnection {
-    pub client: Box<dyn Client + Send + Sync>,
+pub struct Client {
+    pub client: Box<dyn ClientTrait + Send + Sync>,
 }
 
-impl ClientConnection {
-    pub fn dummy() -> ClientConnection {
-        ClientConnection {
-            client: Box::new(DummyClient {}),
-        }
-    }
-}
+// impl Client {
+//     // pub fn dummy() -> ClientConnection {
+//     //     ClientConnection {
+//     //         client: Box::new(DummyClient {}),
+//     //     }
+//     // }
 
-pub trait Client {
+//     // pub fn url(url: &str) -> Client {
+//     //     Client {
+//     //         client: Box::new(DummyClient {}),
+//     //     }
+//     // }
+
+//     // pub fn reader(lines: Vec<String>) -> Client {
+//     //     Client {
+//     //         client: Box::new(ReaderClient { lines }),
+//     //     }
+//     // }
+// }
+
+pub trait ClientTrait {
     fn request_commands(&self) -> Vec<GroupedCommand>;
     fn request_commands_by_event(&self, event: &Event) -> Vec<GroupedCommand>;
 }
 
 pub struct DummyClient {}
 
-impl Client for DummyClient {
+impl ClientTrait for DummyClient {
     fn request_commands(&self) -> Vec<GroupedCommand> {
         let mut command_array: [u64; COMMAND_TYPES_LENGTH] =
             [CommandType::None as u64; COMMAND_TYPES_LENGTH];
@@ -58,5 +71,19 @@ impl Client for DummyClient {
                 }]
             }
         }
+    }
+}
+
+pub struct ReaderClient {
+    pub lines: Vec<String>,
+}
+
+impl ClientTrait for ReaderClient {
+    fn request_commands(&self) -> Vec<GroupedCommand> {
+        todo!()
+    }
+
+    fn request_commands_by_event(&self, event: &Event) -> Vec<GroupedCommand> {
+        todo!()
     }
 }
