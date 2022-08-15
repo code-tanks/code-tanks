@@ -1,10 +1,6 @@
-use bevy_ecs::prelude::*;
+use bevy_ecs::prelude::Component;
 
-use crate::{
-    c_command::{CommandType, GroupedCommand, COMMAND_TYPES_LENGTH},
-    c_event::*,
-    my_reader::BufReader,
-};
+use crate::{c_command::*, c_event::*};
 
 #[derive(Component)]
 pub struct Client {
@@ -32,43 +28,28 @@ pub struct Client {
 // }
 
 pub trait ClientTrait {
-    fn request_commands(&self) -> Vec<GroupedCommand>;
-    fn request_commands_by_event(&self, event: &Event) -> Vec<GroupedCommand>;
+    fn request_commands(&self) -> Vec<Command>;
+    fn request_commands_by_event(&self, event: &Event) -> Vec<Command>;
 }
 
 pub struct DummyClient {}
 
 impl ClientTrait for DummyClient {
-    fn request_commands(&self) -> Vec<GroupedCommand> {
-        let mut command_array: [u64; COMMAND_TYPES_LENGTH] =
-            [CommandType::None as u64; COMMAND_TYPES_LENGTH];
+    fn request_commands(&self) -> Vec<Command> {
+        let cmd: Command = Commands::MOVE_FORWARD;
 
-        command_array[CommandType::MoveForward as usize] = 1;
-        command_array[CommandType::RotateTankClockwise as usize] = 1;
-
-        vec![GroupedCommand {
-            command_array: command_array,
-        }]
+        vec![cmd]
     }
 
-    fn request_commands_by_event(&self, event: &Event) -> Vec<GroupedCommand> {
-        let mut command_array: [u64; COMMAND_TYPES_LENGTH] =
-            [CommandType::None as u64; COMMAND_TYPES_LENGTH];
+    fn request_commands_by_event(&self, event: &Event) -> Vec<Command> {
+        let cmd: Command = Commands::MOVE_FORWARD;
 
         match event.event_type {
             EventType::Scan => {
-                command_array[CommandType::MoveBackward as usize] = 1;
-
-                vec![GroupedCommand {
-                    command_array: command_array,
-                }]
+                vec![cmd]
             }
             EventType::Hit => {
-                command_array[CommandType::MoveBackward as usize] = 1;
-
-                vec![GroupedCommand {
-                    command_array: command_array,
-                }]
+                vec![cmd]
             }
         }
     }
@@ -79,11 +60,11 @@ pub struct ReaderClient {
 }
 
 impl ClientTrait for ReaderClient {
-    fn request_commands(&self) -> Vec<GroupedCommand> {
+    fn request_commands(&self) -> Vec<Command> {
         todo!()
     }
 
-    fn request_commands_by_event(&self, event: &Event) -> Vec<GroupedCommand> {
+    fn request_commands_by_event(&self, event: &Event) -> Vec<Command> {
         todo!()
     }
 }
