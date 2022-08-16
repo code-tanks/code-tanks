@@ -8,7 +8,7 @@ RUN cargo install --bin ctbuilder --path . --debug
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
 COPY simulator simulator
-COPY src src
+COPY builder/src src
 RUN cargo install --bin ctbuilder --path . --debug
 
 FROM ubuntu:focal AS runner
