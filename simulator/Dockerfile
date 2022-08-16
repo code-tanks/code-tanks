@@ -11,6 +11,10 @@ RUN cargo install --bin ctsim --path .
 
 FROM ubuntu:focal AS runner
 
+RUN apt update \
+    && DEBIAN_FRONTEND=noninteractive apt install -y \
+    curl
+
 WORKDIR /ctsim
 
 COPY --from=builder /usr/local/cargo/bin/ctsim /usr/local/bin/ctsim

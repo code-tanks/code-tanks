@@ -9,7 +9,29 @@ use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
 
 use crate::responses::{Response, StatusLines};
+pub fn create_build_queue() {
+    Command::new("curl")
+        .arg("-H")
+        .arg("content-type: application/json")
+        .arg("-XPUT")
+        .arg("-d")
+        .arg(r#"{{"timeout": "10m"}}"#)
+        .arg("mq:8023/queue/build")
+        .output()
+        .expect("failed to communicate with ocypod");
+}
 
+pub fn create_sim_queue() {
+    Command::new("curl")
+        .arg("-H")
+        .arg("content-type: application/json")
+        .arg("-XPUT")
+        .arg("-d")
+        .arg(r#"{{"timeout": "10m"}}"#)
+        .arg("mq:8023/queue/simulation")
+        .output()
+        .expect("failed to communicate with ocypod");
+}
 pub struct HttpServer {
     pub port: u16,
 }
@@ -231,9 +253,6 @@ fn get_path_from_request(request: &String) -> &str {
 }
 
 fn get_data_from_request(request: &String) -> String {
-    println!("raw data");
-    println!("{}", request);
-
     let mut response = "".to_string();
     let mut data_found = false;
     for line in request.lines() {

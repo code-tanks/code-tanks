@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-use ctsim::{
+use ctsimlib::{
     s_apply_commands::apply_commands,
     // s_physics::physics,
     s_publish_events::publish_events,

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-use ctsim::{
+use ctsimlib::{
     c_client::{Client, ReaderClient},
     // c_collider::CCollider,
     c_command::*,

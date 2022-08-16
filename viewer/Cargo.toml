@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ctsim = { path = "../simulator" }
+ctsimlib = { path = "../simulator" }
 bevy = "0.8.0"
 bevy_rapier2d = { version = "0.16.0", features = [ "debug-render", "enhanced-determinism", "wasm-bindgen" ] }
 serde = "1.0.143"
