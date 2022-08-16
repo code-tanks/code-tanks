@@ -2,12 +2,12 @@ FROM rust:1.63.0 AS builder_builder
 WORKDIR /ctbuilder
 
 COPY workers/dummy.rs .
+COPY simulator simulator
 COPY workers/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN cargo install --bin ctbuilder --path . --debug
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
-COPY simulator simulator
 COPY workers/src src
 RUN cargo install --bin ctbuilder --path . --debug
 
