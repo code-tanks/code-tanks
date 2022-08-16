@@ -1,7 +1,7 @@
 FROM rust:1.63.0 AS server_builder
 WORKDIR /ctserver
 
-COPY dummy.rs .
+COPY server/dummy.rs .
 COPY server/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
     && cargo install --bin ctserver --path . --debug \
@@ -15,7 +15,7 @@ WORKDIR /ctviewer
 RUN rustup target install wasm32-unknown-unknown
 RUN cargo install wasm-bindgen-cli
 
-COPY dummy.rs .
+COPY server/dummy.rs .
 COPY simulator simulator
 COPY viewer/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
