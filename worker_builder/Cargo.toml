@@ -1,0 +1,16 @@
+[package]
+name = "worker_builder"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ctsimlib = { path = "../simulator" }
+postgres = "0.19.3"
+
+[[bin]]
+name = "ctbuilder"
+path = "src/main.rs"
+
+[[bin]]
+name = "test"
+path = "src/test.rs"

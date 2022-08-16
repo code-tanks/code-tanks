@@ -8,7 +8,8 @@
         "terminal.integrated.defaultProfile.linux": "bash",
         "rust-analyzer.linkedProjects": [
             "server/Cargo.toml",
-            "workers/Cargo.toml",
+            "worker_builder/Cargo.toml",
+            "worker_simulator/Cargo.toml",
             "simulator/Cargo.toml",
             "viewer/Cargo.toml"
         ]

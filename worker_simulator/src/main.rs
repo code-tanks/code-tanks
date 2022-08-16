@@ -1,7 +1,7 @@
 use core::time;
 use std::thread;
 
-use ctbuilder::{create_sim_queue, db::get_client, get_sim_job};
+use worker_simulator::{create_sim_queue, db::get_client, get_sim_job};
 use ctsimlib::run_game;
 
 fn main() {
