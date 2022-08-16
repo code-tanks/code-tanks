@@ -5,7 +5,6 @@ ENV PATH "$PATH:/home/developer/.cargo/bin"
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    curl git build-essential pkg-config libssl-dev jq \
     g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
 RUN useradd -ms /bin/bash developer
