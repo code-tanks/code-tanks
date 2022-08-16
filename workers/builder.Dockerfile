@@ -5,7 +5,7 @@ ENV PATH "$PATH:/home/developer/.cargo/bin"
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    g++ pkg-config libx11-dev libasound2-dev libudev-dev
+    curl g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
 RUN useradd -ms /bin/bash developer
 USER developer
