@@ -25,7 +25,6 @@ use bevy::app::ScheduleRunnerSettings;
 
 use std::fs::File;
 use std::io::Write;
-use std::process::Command;
 use std::time::Duration;
 
 use s_apply_commands::*;

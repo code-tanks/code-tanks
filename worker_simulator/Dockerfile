@@ -7,6 +7,8 @@ RUN apt update \
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.63.0 -y
 
+WORKDIR /ctsim
+
 COPY worker_simulator/dummy.rs .
 COPY simulator simulator
 COPY worker_simulator/Cargo.toml .
@@ -24,7 +26,6 @@ RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
     curl jq
 
-
-COPY --from=builder /usr/local/cargo/bin/ctsim /usr/local/bin/ctsim
+COPY --from=builder /ctsim/.cargo/bin/ctsim /usr/local/bin/ctsim
 
 CMD ["ctsim"]
