@@ -3,7 +3,7 @@ FROM ubuntu:latest AS builder_builder
 
 WORKDIR /ctbuilder
 
-ENV PATH "$PATH:/ctbuilder/.cargo/bin"
+ENV PATH "$PATH:~/.cargo/bin"
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
