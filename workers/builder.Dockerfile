@@ -1,4 +1,13 @@
-FROM rust:1.63.0 AS builder_builder
+FROM ubuntu:latest
+
+ENV PATH "$PATH:/home/developer/.cargo/bin"
+
+RUN apt update \
+    && DEBIAN_FRONTEND=noninteractive apt install -y \
+    g++ pkg-config libx11-dev libasound2-dev libudev-dev
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.63.0 -y
+
 WORKDIR /ctbuilder
 
 COPY workers/dummy.rs .
