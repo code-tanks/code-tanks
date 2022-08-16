@@ -18,10 +18,10 @@ RUN cargo install wasm-bindgen-cli
 COPY dummy.rs .
 COPY simulator simulator
 COPY viewer/Cargo.toml .
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-    && sed -i 's#../simulator#simulator#' Cargo.toml \
-    && cargo build --bin ctviewer --target wasm32-unknown-unknown --release \
-    && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN sed -i 's#../simulator#simulator#' Cargo.toml
+RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --release
+RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY viewer/src src
 RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --release
 RUN wasm-bindgen --out-name ctviewer \
