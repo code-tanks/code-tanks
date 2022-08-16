@@ -181,7 +181,12 @@ fn handle_connection(
             res
         }
         (methods::POST, paths::RUN) => {
-            let url = &args.join("");
+            let url = &get_data_from_request(&request)
+                .split(" ")
+                .collect::<Vec<&str>>()
+                .join("");
+
+            println!("run: {}", url);
 
             let mut matches = get_simulation_by_url(db, url);
             if matches.is_empty() {

@@ -1,6 +1,3 @@
-#!/bin/sh
-
-IFS='/'
-src="$*"
-curl http://localhost:8089/run/$src
+#!/bin/bash
+curl -d "$*" -X POST http://localhost:8089/run
 echo ""
