@@ -14,7 +14,7 @@ COPY worker_simulator/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
 
-ENV PATH "$PATH:~/.cargo/bin"
+ENV PATH "/ctsim/.cargo/bin:$PATH"
 
 RUN cargo install --bin ctsim --path . --debug
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
