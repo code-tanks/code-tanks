@@ -1,4 +1,4 @@
-FROM ubuntu:latest AS builder_builder
+FROM ubuntu:latest AS builder
 
 ENV PATH "$PATH:/home/developer/.cargo/bin"
 
