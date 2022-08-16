@@ -14,3 +14,12 @@ path = "src/main.rs"
 [[bin]]
 name = "test"
 path = "src/test.rs"
+
+[profile.release]
+codegen-units = 1
+
+[profile.dev.package.bevy_rapier2d]
+opt-level = 3
+
+[profile.dev.package.bevy]
+opt-level = 3
