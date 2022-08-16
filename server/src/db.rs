@@ -192,7 +192,7 @@ pub fn upsert_simulation_by_url(
             "
                 INSERT INTO simulations (id, log)
                 VALUES ($1, 'waiting to build')
-                ON CONFLICT DO NOTHING/UPDATE;
+                ON CONFLICT (id) DO NOTHING;
             ",
             &[&url],
         )
