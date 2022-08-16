@@ -1,5 +1,5 @@
 FROM ubuntu:latest AS builder
-ENV PATH "$HOME/.cargo/bin:$PATH"
+ENV PATH "/root/.cargo/bin:$PATH"
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
