@@ -87,22 +87,30 @@ fn print_ball_altitude(
     keys: Res<Input<KeyCode>>,
 ) {
     for (transform, mut body, mut velocity) in &mut positions {
-        info!("Ball altitude: {}", transform.translation.y);
+        // info!("Ball altitude: {}", transform.translation.y);
 
-        let mut vector_direction = Vec2::ZERO;
+        let mut vel = Vec2::ZERO;
+        let mut ang = 0.0;
         if keys.pressed(KeyCode::W) {
-            vector_direction.y += 100.0;
+            let dir = transform.rotation * Vec3::X;
+
+            vel.x += 100.0 * dir.x;
+            vel.y += 100.0 * dir.y;
         }
         if keys.pressed(KeyCode::S) {
-            vector_direction.y -= 100.0;
+            let dir = transform.rotation * Vec3::X;
+            vel.x -= 100.0 * dir.x;
+            vel.y -= 100.0 * dir.y;
         }
         if keys.pressed(KeyCode::A) {
-            vector_direction.x -= 100.0;
+            ang += 0.125 * std::f32::consts::PI;
         }
         if keys.pressed(KeyCode::D) {
-            vector_direction.x += 100.0;
+            ang -= 0.125 * std::f32::consts::PI;
         }
-        velocity.linvel = vector_direction;
+        velocity.linvel = vel;
+
+        velocity.angvel = ang;
     }
 }
 #[derive(Debug, Deserialize, TypeUuid)]
@@ -210,7 +218,7 @@ fn setup_2(
             .insert(EventSink::default())
             .insert(GravityScale(0.0))
             .insert(RigidBody::Dynamic)
-            .insert(Collider::ball(50.0))
+            .insert(Collider::cuboid(30.0, 50.0))
             .insert(Restitution::coefficient(0.1))
             .insert(Damping {
                 linear_damping: 0.5,
@@ -221,7 +229,7 @@ fn setup_2(
                 angvel: 0.0,
             })
             .insert_bundle(TransformBundle::from(Transform::from_xyz(
-                100.0 * (n as f32) + 10.0,
+                150.0 * (n as f32) + 10.0,
                 300.0,
                 0.0,
             )))
