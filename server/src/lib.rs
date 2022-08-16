@@ -149,6 +149,8 @@ fn handle_connection(
         (Methods::GET, Paths::LOG) => {
             let mut res = Responses::NOT_FOUND_RESPONSE;
 
+            // handle error
+
             let matches = get_entry(db, args[0]);
 
             if !matches.is_empty() {
@@ -161,11 +163,11 @@ fn handle_connection(
             res
         }
         (Methods::GET, Paths::RAW) => {
-            let url = &path[1..8];
-
             let mut res = Responses::NOT_FOUND_RESPONSE;
 
-            let matches = get_entry(db, url);
+            // handle error
+
+            let matches = get_entry(db, args[0]);
 
             if !matches.is_empty() {
                 res_code = matches[0].get(2);
