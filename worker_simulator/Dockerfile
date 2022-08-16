@@ -26,6 +26,6 @@ RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
     curl jq
 
-COPY --from=builder /root/.cargo/bin/.cargo/bin/ctsim /usr/local/bin/ctsim
+COPY --from=builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
 
 CMD ["ctsim"]
