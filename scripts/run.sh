@@ -1,6 +1,5 @@
-#!/bin/bash
-old="$IFS"
+#!/bin/sh
+
 IFS='/'
-str="'$*'"
-curl http://localhost:8089/run/$str
+curl http://localhost:8089/run/"$*"
 echo ""
