@@ -13,7 +13,7 @@ FROM ubuntu:focal AS runner
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    curl
+    curl jq
 
 WORKDIR /ctsim
 
