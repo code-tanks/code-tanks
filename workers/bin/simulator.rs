@@ -1,7 +1,8 @@
 use core::time;
 use std::thread;
 
-use ctsimlib::{create_sim_queue, db::get_client, get_job, run_game};
+use ctbuilder::{create_sim_queue, db::get_client, get_sim_job};
+use ctsimlib::run_game;
 
 fn main() {
     println!("Started ctsim");
@@ -11,7 +12,7 @@ fn main() {
     let mut _client = get_client();
 
     loop {
-        let job = get_job();
+        let job = get_sim_job();
 
         if !job.is_empty() {
             let _id = &job[0];
