@@ -10,7 +10,7 @@
             "server/Cargo.toml",
             "builder/Cargo.toml",
             "simulator/Cargo.toml",
-            // "apps/game/viewer/Cargo.toml"
+            "viewer/Cargo.toml"
         ]
     },
     "extensions": [

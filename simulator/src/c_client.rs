@@ -57,10 +57,18 @@ pub struct ReaderClient {
 
 impl ClientTrait for ReaderClient {
     fn request_commands(&mut self) -> Vec<CCommand> {
-        vec![self.lines.remove(0)]
+        if self.lines.is_empty() {
+            vec![CCommands::NONE]
+        } else {
+            vec![self.lines.remove(0)]
+        }
     }
 
     fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
-        vec![self.lines.remove(0)]
+        if self.lines.is_empty() {
+            vec![CCommands::NONE]
+        } else {
+            vec![self.lines.remove(0)]
+        }
     }
 }

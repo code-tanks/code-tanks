@@ -4,7 +4,7 @@ use bevy::{
     reflect::TypeUuid,
     utils::BoxedFuture,
 };
-use bevy_rapier2d::prelude::*;
+use bevy_rapier2d::{prelude::*, rapier::prelude::RigidBodyBuilder};
 use ctsim::{
     c_client::{Client, ReaderClient},
     c_collider::CCollider,
@@ -74,17 +74,35 @@ fn setup_physics(mut commands: Commands) {
         .insert_bundle(TransformBundle::from(Transform::from_xyz(0.0, -100.0, 0.0)));
 
     /* Create the bouncing ball. */
-    commands
-        .spawn()
-        .insert(RigidBody::Dynamic)
-        .insert(Collider::ball(50.0))
-        .insert(Restitution::coefficient(0.7))
-        .insert_bundle(TransformBundle::from(Transform::from_xyz(0.0, 400.0, 0.0)));
+    // commands
+    //     .spawn()
+    //     .insert(RigidBody::Dynamic)
+    //     .insert(Collider::ball(50.0))
+    //     .insert(Restitution::coefficient(0.7))
+    //     .insert_bundle(TransformBundle::from(Transform::from_xyz(0.0, 400.0, 0.0)));
 }
 
-fn print_ball_altitude(positions: Query<&Transform, With<RigidBody>>) {
-    for transform in positions.iter() {
+fn print_ball_altitude(
+    mut positions: Query<(&Transform, &mut RigidBody, &mut Velocity)>,
+    keys: Res<Input<KeyCode>>,
+) {
+    for (transform, mut body, mut velocity) in &mut positions {
         info!("Ball altitude: {}", transform.translation.y);
+
+        let mut vector_direction = Vec2::ZERO;
+        if keys.pressed(KeyCode::W) {
+            vector_direction.y += 100.0;
+        }
+        if keys.pressed(KeyCode::S) {
+            vector_direction.y -= 100.0;
+        }
+        if keys.pressed(KeyCode::A) {
+            vector_direction.x -= 100.0;
+        }
+        if keys.pressed(KeyCode::D) {
+            vector_direction.x += 100.0;
+        }
+        velocity.linvel = vector_direction;
     }
 }
 #[derive(Debug, Deserialize, TypeUuid)]
@@ -189,7 +207,26 @@ fn setup_2(
                 client: Box::new(ReaderClient { lines: c_lines }),
             })
             .insert(Scanner {})
-            .insert(EventSink::default());
+            .insert(EventSink::default())
+            .insert(GravityScale(0.0))
+            .insert(RigidBody::Dynamic)
+            .insert(Collider::ball(50.0))
+            .insert(Restitution::coefficient(0.1))
+            .insert(Damping {
+                linear_damping: 0.5,
+                angular_damping: 0.5,
+            })
+            .insert(Velocity {
+                linvel: Vec2::new(0.0, 0.0),
+                angvel: 0.0,
+            })
+            .insert_bundle(TransformBundle::from(Transform::from_xyz(
+                100.0 * (n as f32) + 10.0,
+                300.0,
+                0.0,
+            )))
+            .insert(ColliderMassProperties::Mass(1.0))
+            .insert(ColliderMassProperties::Density(1.0));
     }
 
     state.printed = true;
