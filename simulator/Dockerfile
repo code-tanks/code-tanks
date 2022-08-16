@@ -1,16 +1,13 @@
 FROM rust:1.63.0 AS builder
 WORKDIR /ctsim
 
-RUN rustup target install wasm32-unknown-unknown
-RUN cargo install wasm-bindgen-cli
-
 COPY dummy.rs .
 COPY Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN cargo install --bin ctsim --path . --debug
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY src src
-RUN cargo install --bin ctsim --path .
+RUN cargo install --bin ctsim --path . --debug
 
 FROM ubuntu:focal AS runner
 
