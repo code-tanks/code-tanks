@@ -1,9 +1,14 @@
-use bevy_ecs::prelude::Query;
+use bevy::prelude::*;
 use std::{fs::OpenOptions, io::Write};
 
-use crate::c_command::CommandSource;
+use crate::{c_command::CommandSource, CState};
+use bevy::app::AppExit;
 
-pub fn save_commands(query: Query<&CommandSource>) {
+pub fn save_commands(
+    mut state: ResMut<CState>,
+    mut exit: EventWriter<AppExit>,
+    query: Query<&CommandSource>,
+) {
     for command_receiver in &query {
         let grouped_commands = command_receiver.queue[0];
 
@@ -17,5 +22,10 @@ pub fn save_commands(query: Query<&CommandSource>) {
             .expect("Unable to write data");
 
         println!("commands remaining {:?}", command_receiver.queue);
+    }
+    state.tick = state.tick + 1;
+
+    if state.tick > 200 {
+        exit.send(AppExit);
     }
 }

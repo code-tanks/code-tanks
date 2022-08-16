@@ -1,4 +1,4 @@
-use bevy_ecs::prelude::*;
+use bevy::prelude::*;
 
 #[derive(Component)]
-pub struct TankUtilities {}
+pub struct Tank {}

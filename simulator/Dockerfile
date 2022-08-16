@@ -1,18 +1,17 @@
 FROM rust:1.63.0 AS builder
-WORKDIR /ctgame
+WORKDIR /ctsim
 
 COPY dummy.rs .
 COPY Cargo.toml .
-RUN sed -i 's#bin/simulator.rs#dummy.rs#' Cargo.toml \
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
     && cargo install --bin ctsim --path . --debug \
-    && sed -i 's#dummy.rs#bin/simulator.rs#' Cargo.toml
-COPY bin/simulator.rs bin/simulator.rs
+    && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY src src
 RUN cargo install --bin ctsim --path .
 
 FROM ubuntu:focal AS runner
 
-WORKDIR /ctgame
+WORKDIR /ctsim
 
 COPY --from=builder /usr/local/cargo/bin/ctsim /usr/local/bin/ctsim
 

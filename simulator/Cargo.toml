@@ -4,8 +4,18 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy_ecs = "0.8.0"
+bevy = "0.8.0"
+bevy_rapier2d = { version = "0.16.0", features = [ "debug-render", "enhanced-determinism", "wasm-bindgen" ] }
 
 [[bin]]
 name = "ctsim"
-path = "bin/simulator.rs"
+path = "src/main.rs"
+
+[profile.release]
+codegen-units = 1
+
+[profile.dev.package.bevy_rapier2d]
+opt-level = 3
+
+[profile.dev.package.bevy]
+opt-level = 3

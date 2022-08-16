@@ -1,4 +1,4 @@
-use bevy_ecs::prelude::Query;
+use bevy::prelude::Query;
 
 use crate::{c_client::Client, c_command::CommandSource};
 

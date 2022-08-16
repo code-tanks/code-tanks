@@ -1,9 +1,9 @@
 #!/bin/bash
 
-mkdir ./target/debug/web/
-cp -r ./web/* ./target/debug/web/
-cargo build --bin ctviewer --target wasm32-unknown-unknown
+mkdir ./target/release/web/
+cp -r ./web/* ./target/release/web/
+cargo build --bin ctviewer --target wasm32-unknown-unknown --release
 wasm-bindgen --out-name ctviewer \
-  --out-dir target/debug/web/build \
-  --target web target/wasm32-unknown-unknown/debug/ctviewer.wasm \
-  && basic-http-server ./target/debug/web
+  --out-dir target/release/web/build \
+  --target web target/wasm32-unknown-unknown/release/ctviewer.wasm \
+  && basic-http-server ./target/release/web
