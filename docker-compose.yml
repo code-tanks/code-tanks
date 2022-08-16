@@ -24,10 +24,22 @@ services:
     links:
       - "db"
       - "ocypod:mq"
-
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DB_URL=postgres://postgres:example@db:5432
+
+  simulator:
+    container_name: simulator
+    build:
+      dockerfile: worker_simulator/Dockerfile
+      context: .
+    command: ctsim
+    links:
+      - "db"
+      - "ocypod:mq"
+    restart: unless-stopped
     environment:
       - DB_URL=postgres://postgres:example@db:5432
 
