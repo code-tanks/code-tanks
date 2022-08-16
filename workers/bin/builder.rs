@@ -3,7 +3,7 @@ use std::{thread, time};
 use ctbuilder::{
     build, create_build_queue,
     db::{get_client, upload_log},
-    get_job, get_lang, push_to_registry, remove_image, update_job,
+    get_build_job, get_lang, push_to_registry, remove_image, update_job,
 };
 
 fn main() {
@@ -18,7 +18,7 @@ fn main() {
     let mut client = get_client();
 
     loop {
-        let job = get_job();
+        let job = get_build_job();
 
         if !job.is_empty() {
             let id = &job[0];

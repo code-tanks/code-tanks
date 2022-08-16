@@ -18,7 +18,8 @@ services:
   builder:
     container_name: builder
     build:
-      context: builder
+      dockerfile: workers/builder.Dockerfile
+      context: .
     command: ctbuilder
     links:
       - "db"

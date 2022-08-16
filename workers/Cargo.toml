@@ -4,11 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+ctsimlib = { path = "../simulator" }
 postgres = "0.19.3"
 
 [[bin]]
 name = "ctbuilder"
-path = "src/main.rs"
+path = "bin/builder.rs"
+
+[[bin]]
+name = "ctsim"
+path = "bin/simulator.rs"
 
 [[bin]]
 name = "test"
