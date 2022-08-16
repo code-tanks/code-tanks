@@ -33,22 +33,14 @@ impl HttpServer {
         }
     }
 }
-
-// enum RequestType {
-//     NotFound,
-//     Root,
-//     Ping,
-//     Upload,
-// }
-
-// #[derive(PartialEq, Eq)]
-// struct Path<'a>(&'a str);
 enum Paths {}
 impl Paths {
-    const ROOT: &'static str = "/";
-    const PING: &'static str = "/ping";
-    const UPLOAD: &'static str = "/upload";
-    const LOG: &'static str = "/log";
+    const ROOT: &'static str = "";
+    const PING: &'static str = "ping";
+    const UPLOAD: &'static str = "upload";
+    const LOG: &'static str = "log";
+    const RAW: &'static str = "raw";
+    // const SIM: &'static str = "sim";
 }
 
 struct Response<'a> {
@@ -63,6 +55,12 @@ enum StatusLines {}
 impl StatusLines {
     const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
     const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
+}
+
+enum Methods {}
+impl Methods {
+    const POST: &'static str = "POST";
+    const GET: &'static str = "GET";
 }
 
 enum Responses {}
@@ -91,27 +89,23 @@ fn handle_connection(
     stream.read(&mut buffer).unwrap();
 
     let request = String::from_utf8(buffer.to_vec()).unwrap();
-    let header = get_header_from_request(&request);
-    let path = get_path_from_request(&request);
-    println!("{} {}", header, path);
+    let method = get_header_from_request(&request);
+    let path = &get_path_from_request(&request)[1..];
+    let args: Vec<&str> = path.split("/").collect();
+    let path = args[0];
+    let args = &args[1..];
+
+    println!("{} {} {:?}", method, path, args);
 
     let url: String;
     let res_code: String;
     let res_log: String;
 
-    let response = match path {
-        Paths::ROOT => Responses::ROOT_RESPONSE,
-        Paths::PING => Responses::PING_RESPONSE,
-        Paths::UPLOAD => {
+    let response = match (method, path) {
+        (Methods::GET, Paths::ROOT) => Responses::ROOT_RESPONSE,
+        (Methods::GET, Paths::PING) => Responses::PING_RESPONSE,
+        (Methods::POST, Paths::UPLOAD) => {
             let uploaded_code = get_data_from_request(&request);
-            // println!("{}", data);
-
-            // let data = Value::String(data);
-
-            // let code = data.as_str().unwrap();
-
-            // println!("{} {}", data, data.as_str().unwrap());
-
             const POST_FIX_CHAR: &str = "0";
             let mut post_fix_count = 0;
             let mut needs_generation = false;
@@ -126,8 +120,6 @@ fn handle_connection(
                     needs_generation = true;
                 } else {
                     let code: String = existing[0].get(2);
-
-                    // println!("test {} {}", code_as_json_string, data.to_string());
 
                     if code == uploaded_code {
                         break;
@@ -153,9 +145,22 @@ fn handle_connection(
                 status_line: StatusLines::OK,
                 content: &url,
             }
-            // println!("{}", data);
         }
-        _ => {
+        (Methods::GET, Paths::LOG) => {
+            let mut res = Responses::NOT_FOUND_RESPONSE;
+
+            let matches = get_entry(db, args[0]);
+
+            if !matches.is_empty() {
+                res_log = matches[0].get(3);
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content: &res_log,
+                };
+            }
+            res
+        }
+        (Methods::GET, Paths::RAW) => {
             let url = &path[1..8];
 
             let mut res = Responses::NOT_FOUND_RESPONSE;
@@ -163,39 +168,16 @@ fn handle_connection(
             let matches = get_entry(db, url);
 
             if !matches.is_empty() {
-                let is_log_request = &path[(path.len() - Paths::LOG.len())..] == Paths::LOG;
-                println!(
-                    "is log: {} {}",
-                    &path[(path.len() - Paths::LOG.len())..],
-                    is_log_request
-                );
+                res_code = matches[0].get(2);
 
-                if is_log_request {
-                    res_log = matches[0].get(3);
-
-                    // log_json = from_str(&log).unwrap();
-
-                    // code = code_json.as_str().unwrap();
-
-                    res = Response {
-                        status_line: StatusLines::OK,
-                        content: &res_log,
-                    };
-                } else {
-                    res_code = matches[0].get(2);
-
-                    // code_json = from_str(&code_as_json_string).unwrap();
-
-                    // code = code_json.as_str().unwrap();
-
-                    res = Response {
-                        status_line: StatusLines::OK,
-                        content: &res_code,
-                    };
-                }
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content: &res_code,
+                };
             }
             res
         }
+        _ => Responses::NOT_FOUND_RESPONSE,
     };
 
     let response_string = format!(
