@@ -8,6 +8,8 @@ use std::thread;
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
 
+use crate::responses::{Response, StatusLines};
+
 pub struct HttpServer {
     pub port: u16,
 }
@@ -33,49 +35,48 @@ impl HttpServer {
         }
     }
 }
-enum Paths {}
-impl Paths {
-    const ROOT: &'static str = "";
-    const PING: &'static str = "ping";
-    const UPLOAD: &'static str = "upload";
-    const LOG: &'static str = "log";
-    const RAW: &'static str = "raw";
+// enum Paths {}
+mod paths {
+    pub const ROOT: &'static str = "";
+    pub const PING: &'static str = "ping";
+    pub const UPLOAD: &'static str = "upload";
+    pub const LOG: &'static str = "log";
+    pub const RAW: &'static str = "raw";
+    pub const RUN: &'static str = "run";
     // const SIM: &'static str = "sim";
 }
 
-struct Response<'a> {
-    status_line: StatusLine<'a>,
-    content: &'a str,
+// enum Methods {}
+mod methods {
+    pub const POST: &'static str = "POST";
+    pub const GET: &'static str = "GET";
 }
 
-type StatusLine<'a> = &'a str;
+// enum Responses {}
+mod responses {
+    type StatusLine<'a> = &'a str;
 
-enum StatusLines {}
+    pub enum StatusLines {}
 
-impl StatusLines {
-    const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
-    const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
-}
-
-enum Methods {}
-impl Methods {
-    const POST: &'static str = "POST";
-    const GET: &'static str = "GET";
-}
-
-enum Responses {}
-impl Responses {
-    const ROOT_RESPONSE: Response<'static> = Response {
+    impl StatusLines {
+        pub const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
+        pub const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
+    }
+    pub struct Response<'a> {
+        pub status_line: StatusLine<'a>,
+        pub content: &'a str,
+    }
+    pub const ROOT_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::OK,
         content: "\"hello\"",
     };
 
-    const PING_RESPONSE: Response<'static> = Response {
+    pub const PING_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::OK,
         content: "\"pong\"",
     };
 
-    const NOT_FOUND_RESPONSE: Response<'static> = Response {
+    pub const NOT_FOUND_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::NOT_FOUND,
         content: "\"404\"",
     };
@@ -102,9 +103,9 @@ fn handle_connection(
     let res_log: String;
 
     let response = match (method, path) {
-        (Methods::GET, Paths::ROOT) => Responses::ROOT_RESPONSE,
-        (Methods::GET, Paths::PING) => Responses::PING_RESPONSE,
-        (Methods::POST, Paths::UPLOAD) => {
+        (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
+        (methods::GET, paths::PING) => responses::PING_RESPONSE,
+        (methods::POST, paths::UPLOAD) => {
             let uploaded_code = get_data_from_request(&request);
             const POST_FIX_CHAR: &str = "0";
             let mut post_fix_count = 0;
@@ -146,12 +147,12 @@ fn handle_connection(
                 content: &url,
             }
         }
-        (Methods::GET, Paths::LOG) => {
-            let mut res = Responses::NOT_FOUND_RESPONSE;
+        (methods::GET, paths::LOG) => {
+            let mut res = responses::NOT_FOUND_RESPONSE;
 
             // handle error
 
-            let matches = get_entry(db, args[0]);
+            let matches = get_tank_by_url(db, args[0]);
 
             if !matches.is_empty() {
                 res_log = matches[0].get(3);
@@ -162,12 +163,12 @@ fn handle_connection(
             }
             res
         }
-        (Methods::GET, Paths::RAW) => {
-            let mut res = Responses::NOT_FOUND_RESPONSE;
+        (methods::GET, paths::RAW) => {
+            let mut res = responses::NOT_FOUND_RESPONSE;
 
             // handle error
 
-            let matches = get_entry(db, args[0]);
+            let matches = get_tank_by_url(db, args[0]);
 
             if !matches.is_empty() {
                 res_code = matches[0].get(2);
@@ -179,7 +180,28 @@ fn handle_connection(
             }
             res
         }
-        _ => Responses::NOT_FOUND_RESPONSE,
+        (methods::POST, paths::RUN) => {
+            let url = &args.join("");
+
+            let mut matches = get_simulation_by_url(db, url);
+            if matches.is_empty() {
+                upsert_simulation_by_url(db, url);
+                matches = get_simulation_by_url(db, url);
+            }
+
+            let mut res = responses::NOT_FOUND_RESPONSE;
+            if !matches.is_empty() {
+                res_code = matches[0].get(1);
+
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content: &res_code,
+                };
+            }
+
+            res
+        }
+        _ => responses::NOT_FOUND_RESPONSE,
     };
 
     let response_string = format!(

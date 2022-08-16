@@ -67,6 +67,11 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             code        VARCHAR NOT NULL,
             log         VARCHAR NOT NULL
         );
+
+        CREATE TABLE IF NOT EXISTS simulations (
+            id          VARCHAR PRIMARY KEY,
+            log         VARCHAR NOT NULL
+        );        
     "#).unwrap();
 
     pool
@@ -148,7 +153,7 @@ pub fn get_existing(
 //         .unwrap()
 // }
 
-pub fn get_entry(
+pub fn get_tank_by_url(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
     url: &str,
 ) -> Vec<Row> {
@@ -161,4 +166,35 @@ pub fn get_entry(
             &[&url],
         )
         .unwrap()
+}
+
+pub fn get_simulation_by_url(
+    client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+    url: &str,
+) -> Vec<Row> {
+    client
+        .query(
+            "
+                SELECT * FROM simulations
+                WHERE id = $1
+            ",
+            &[&url],
+        )
+        .unwrap()
+}
+
+pub fn upsert_simulation_by_url(
+    client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+    url: &str,
+) {
+    client
+        .execute(
+            "
+                INSERT INTO simulations (id, log)
+                VALUES ($1, 'waiting to build')
+                ON CONFLICT DO NOTHING/UPDATE;
+            ",
+            &[&url],
+        )
+        .unwrap();
 }
