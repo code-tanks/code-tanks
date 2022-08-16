@@ -91,27 +91,9 @@ fn handle_connection(
     stream.read(&mut buffer).unwrap();
 
     let request = String::from_utf8(buffer.to_vec()).unwrap();
+    let header = get_header_from_request(&request);
     let path = get_path_from_request(&request);
-    // let request_type = match Path(path) {
-    //     Paths::ROOT => RequestType::Root,
-    //     Paths::PING => RequestType::Ping,
-    //     Paths::UPLOAD => RequestType::Upload,
-    //     _ => {
-    //         let url = &path[1..];
-
-    //         let contents = get_code(db, url);
-
-    //         let mut res = RequestType::NotFound;
-
-    //         if !contents.is_empty() {
-    //             let data: String = contents[0].get(0);
-
-    //             let y = json!(data);
-    //         }
-
-    //         res
-    //     }
-    // };
+    println!("{} {}", header, path);
 
     let url: String;
     let res_code: String;
@@ -225,6 +207,11 @@ fn handle_connection(
 
     stream.write(response_string.as_bytes()).unwrap();
     stream.flush().unwrap();
+}
+
+fn get_header_from_request(request: &String) -> &str {
+    let mut splits = request.split(" ");
+    splits.nth(0).unwrap()
 }
 
 fn get_path_from_request(request: &String) -> &str {
