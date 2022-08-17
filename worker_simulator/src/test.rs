@@ -1,8 +1,9 @@
+use std::env;
+
+use ctsimlib::run_game;
 
 fn main() {
-    // let args: Vec<String> = env::args().collect();
+    let args = &env::args().collect::<Vec<String>>()[1..];
 
-    // println!("url={}, lang={}", &args[1], &args[2]);
-
-    // build(&args[1], &args[2]);
+    run_game(args);
 }

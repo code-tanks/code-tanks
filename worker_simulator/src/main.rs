@@ -1,8 +1,8 @@
 use core::time;
 use std::thread;
 
-use worker_simulator::{create_sim_queue, db::get_client, get_sim_job};
 use ctsimlib::run_game;
+use worker_simulator::{create_sim_queue, db::get_client, get_sim_job};
 
 fn main() {
     println!("Started ctsim");

@@ -19,7 +19,9 @@
         "rust-lang.rust-analyzer"
     ],
     "runArgs": [
-        "--network=host"
+        "--network=host",
+        "--volume=/var/lib/docker",
+        "--privileged"
     ],
     "remoteUser": "developer",
     "postCreateCommand": "git config --global --add safe.directory /home/developer/workspace",

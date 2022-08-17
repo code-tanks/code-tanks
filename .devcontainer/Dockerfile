@@ -7,6 +7,10 @@ RUN apt update \
     curl git build-essential pkg-config libssl-dev jq \
     g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
+RUN curl -fsSL https://get.docker.com -o get-docker.sh
+RUN sh get-docker.sh
+RUN rm get-docker.sh
+
 RUN useradd -ms /bin/bash developer
 USER developer
 WORKDIR /home/developer
