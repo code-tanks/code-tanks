@@ -31,7 +31,9 @@ RUN curl -fsSL https://get.docker.com -o get-docker.sh
 RUN sh get-docker.sh
 RUN rm get-docker.sh
 
-COPY scripts .
+WORKDIR /ctsim
+
+COPY worker_simulator/scripts scripts
 
 COPY --from=builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
 
