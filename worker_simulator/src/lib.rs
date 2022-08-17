@@ -9,7 +9,7 @@ pub fn create_sim_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{{"timeout": "10m"}}"#)
-        .arg("ocypod8023/queue/simulation")
+        .arg("ocypod:8023/queue/simulation")
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -17,8 +17,8 @@ pub fn create_sim_queue() {
 pub fn get_sim_job() -> Vec<String> {
     let output_raw = Command::new("bash")
         .arg("-c")
-        .arg(r#"curl ocypod8023/queue/simulator/job | jq --raw-output '.id,.input'"#)
-        .arg("ocypod8023/queue/build/job")
+        .arg(r#"curl ocypod:8023/queue/simulator/job | jq --raw-output '.id,.input'"#)
+        .arg("ocypod:8023/queue/build/job")
         .output()
         .expect("failed to communicate with ocypod");
 
