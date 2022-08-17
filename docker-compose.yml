@@ -11,19 +11,13 @@ services:
     environment:
       - DB_URL=postgres://postgres:example@db:5432
     command: ctserver
-    links:
-      - "db"
-      - "ocypod:mq"
-
+  
   builder:
     container_name: builder
     build:
       dockerfile: worker_builder/Dockerfile
       context: .
     command: ctbuilder
-    links:
-      - "db"
-      - "ocypod:mq"
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -36,16 +30,11 @@ services:
       dockerfile: worker_simulator/Dockerfile
       context: .
     command: ctsim
-    links:
-      - "db"
-      - "ocypod:mq"
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock    
     environment:
       - DB_URL=postgres://postgres:example@db:5432
-    networks:
-      - simulator
 
   db:
     container_name: db
@@ -97,6 +86,3 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
-
-networks:
-  simulator:

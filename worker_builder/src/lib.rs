@@ -14,7 +14,7 @@ pub fn get_lang(_url: &str) -> &'static str {
 
 // pub fn get_queues() -> Vec<String> {
 //     let output_raw = Command::new("curl")
-//         .arg("mq:8023/queue")
+//         .arg("ocypod8023/queue")
 //         .output()
 //         .expect("failed to communicate with ocypod");
 
@@ -30,7 +30,7 @@ pub fn create_build_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{{"timeout": "10m"}}"#)
-        .arg("mq:8023/queue/build")
+        .arg("ocypod8023/queue/build")
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -43,8 +43,8 @@ pub struct Job {
 pub fn get_build_job() -> Vec<String> {
     let output_raw = Command::new("bash")
         .arg("-c")
-        .arg(r#"curl mq:8023/queue/build/job | jq --raw-output '.id,.input'"#)
-        .arg("mq:8023/queue/build/job")
+        .arg(r#"curl ocypod8023/queue/build/job | jq --raw-output '.id,.input'"#)
+        .arg("ocypod8023/queue/build/job")
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -132,7 +132,7 @@ pub fn update_job(id: &str, successful: bool) {
             r#"{{"status": "{}"}}"#,
             if successful { "completed" } else { "failed" }
         ))
-        .arg(format!("mq:8023/job/{}", id))
+        .arg(format!("ocypod8023/job/{}", id))
         .output()
         .expect("failed to communicate with ocypod");
 

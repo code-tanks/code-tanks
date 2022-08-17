@@ -16,7 +16,7 @@ pub fn create_build_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{{"timeout": "10m"}}"#)
-        .arg("mq:8023/queue/build")
+        .arg("ocypod8023/queue/build")
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -28,7 +28,7 @@ pub fn create_sim_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{{"timeout": "10m"}}"#)
-        .arg("mq:8023/queue/simulation")
+        .arg("ocypod8023/queue/simulation")
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -278,7 +278,7 @@ pub fn add_build_job(url: &str) {
         .arg("-XPOST")
         .arg("-d")
         .arg(format!(r#"{{"input": "{}"}}"#, url))
-        .arg("mq:8023/queue/build/job")
+        .arg("ocypod8023/queue/build/job")
         .output()
         .expect("failed to communicate with ocypod");
 }
