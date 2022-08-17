@@ -12,7 +12,7 @@ name = "ctsim"
 path = "src/main.rs"
 
 [[bin]]
-name = "test"
+name = "cttest"
 path = "src/test.rs"
 
 [profile.release]
