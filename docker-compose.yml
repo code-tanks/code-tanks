@@ -44,6 +44,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock    
     environment:
       - DB_URL=postgres://postgres:example@db:5432
+    networks:
+      - simulator
 
   db:
     container_name: db
@@ -95,3 +97,6 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
+
+networks:
+  simulator:
