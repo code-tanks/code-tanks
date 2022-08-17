@@ -1,4 +1,4 @@
-FROM ubuntu:latest AS builder
+FROM ubuntu:focal AS builder
 ENV PATH "/root/.cargo/bin:$PATH"
 
 RUN apt update \
