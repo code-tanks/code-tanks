@@ -23,7 +23,7 @@ RUN curl -fsSL https://get.docker.com -o get-docker.sh
 RUN sh get-docker.sh
 RUN rm get-docker.sh
 
-COPY workers/Dockerfiles Dockerfiles
+COPY worker_builder/Dockerfiles Dockerfiles
 
 COPY --from=builder_builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
 
