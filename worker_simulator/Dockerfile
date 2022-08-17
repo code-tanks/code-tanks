@@ -14,10 +14,11 @@ COPY simulator simulator
 COPY worker_simulator/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
-
+RUN cargo install --bin test --path . --profile dev
 RUN cargo install --bin ctsim --path . --profile dev
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY worker_simulator/src src
+RUN cargo install --bin test --path . --profile dev
 RUN cargo install --bin ctsim --path . --profile dev
 
 FROM ubuntu:focal AS runner
@@ -35,6 +36,7 @@ WORKDIR /ctsim
 
 COPY worker_simulator/scripts scripts
 
+COPY --from=builder /root/.cargo/bin/test /usr/local/bin/test
 COPY --from=builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
 
 CMD ["ctsim"]
