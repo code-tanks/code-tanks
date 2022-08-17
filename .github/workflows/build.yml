@@ -28,3 +28,5 @@ jobs:
           file: server/Dockerfile
           push: true
           tags: derrick56007/codetanks_server:latest
+          cache-from: type=registry,ref=derrick56007/codetanks_server:buildcache
+          cache-to: type=registry,ref=derrick56007/codetanks_server:buildcache,mode=max
