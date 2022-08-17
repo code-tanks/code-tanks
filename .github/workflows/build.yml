@@ -27,9 +27,9 @@ jobs:
           context: .
           file: worker_builder/Dockerfile
           push: true
-          tags: derrick56007/codetanks_worker_builder:latest
-          cache-from: type=registry,ref=derrick56007/codetanks_worker_builder:buildcache
-          cache-to: type=registry,ref=derrick56007/codetanks_worker_builder:buildcache,mode=max
+          tags: ghcr.io/derrick56007/codetanks_worker_builder:latest
+          cache-from: type=registry,ref=ghcr.io/derrick56007/codetanks_worker_builder:buildcache
+          cache-to: type=registry,ref=ghcr.io/derrick56007/codetanks_worker_builder:buildcache,mode=max
 
   build_worker_simulator:
     runs-on: ubuntu-latest
@@ -52,9 +52,9 @@ jobs:
           context: .
           file: worker_simulator/Dockerfile
           push: true
-          tags: derrick56007/codetanks_worker_simulator:latest
-          cache-from: type=registry,ref=derrick56007/codetanks_worker_simulator:buildcache
-          cache-to: type=registry,ref=derrick56007/codetanks_worker_simulator:buildcache,mode=max
+          tags: ghcr.io/derrick56007/codetanks_worker_simulator:latest
+          cache-from: type=registry,ref=ghcr.io/derrick56007/codetanks_worker_simulator:buildcache
+          cache-to: type=registry,ref=ghcr.io/derrick56007/codetanks_worker_simulator:buildcache,mode=max
 
   build_server:
     runs-on: ubuntu-latest
@@ -77,6 +77,6 @@ jobs:
           context: .
           file: server/Dockerfile
           push: true
-          tags: derrick56007/codetanks_server:latest
-          cache-from: type=registry,ref=derrick56007/codetanks_server:buildcache
-          cache-to: type=registry,ref=derrick56007/codetanks_server:buildcache,mode=max
+          tags: ghcr.io/derrick56007/codetanks_server:latest
+          cache-from: type=registry,ref=ghcr.io/derrick56007/codetanks_server:buildcache
+          cache-to: type=registry,ref=ghcr.io/derrick56007/codetanks_server:buildcache,mode=max
