@@ -27,6 +27,10 @@ RUN apt update \
     curl git build-essential pkg-config libssl-dev jq \
     g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
+RUN curl -fsSL https://get.docker.com -o get-docker.sh
+RUN sh get-docker.sh
+RUN rm get-docker.sh
+
 COPY --from=builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
 
 CMD ["ctsim"]
