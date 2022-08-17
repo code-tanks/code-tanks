@@ -17,7 +17,6 @@ Cargo.lock
 build/
 .dart_tool/
 .git/
-.github/
 .packages
 
 temp/
