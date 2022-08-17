@@ -4,6 +4,7 @@ use ctsimlib::run_game;
 use worker_simulator::run_tank;
 
 fn main() {
+    println!("Running test");
     let args = &env::args().collect::<Vec<String>>()[1..];
 
     let game_url = args.join("");
