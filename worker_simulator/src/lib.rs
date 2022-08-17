@@ -39,18 +39,18 @@ pub fn get_sim_job() -> Vec<String> {
         .collect::<Vec<String>>()
 }
 
-pub fn run_tank(url: &str, game_url: &str, post_fix: u32) -> &String {
+pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
     let _output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
         .arg("--name")
-        .arg(tank_id)
+        .arg(&tank_id)
         .arg("--label")
         .arg("com.docker.compose.project=codetanks")
         .arg(format!("localhost:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");
 
-    &tank_id
+    tank_id
 }
