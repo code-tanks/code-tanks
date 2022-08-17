@@ -24,7 +24,7 @@ FROM ubuntu:focal AS runner
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    curl jq libasound2-dev
+    curl jq g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
 COPY --from=builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
 
