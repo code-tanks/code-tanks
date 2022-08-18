@@ -40,6 +40,9 @@ pub struct DockerClient {
 
 impl ClientTrait for DockerClient {
     fn request_commands(&mut self) -> Vec<CCommand> {
+        println!(
+                r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
+                self.tank_id);
         let output_raw = Command::new("bash")
             .arg("-c")
             .arg(format!(
@@ -50,11 +53,26 @@ impl ClientTrait for DockerClient {
             .output()
             .expect("failed to communicate with ocypod");
 
-        let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+        // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
         // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
         // let mut res: Vec<CCommand> = vec![];
- 
+        let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+        let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    
+        // println!("out: {}", result_raw.to_string());
+        // println!("err: {}", err_raw.to_string() != "");
+    
+        let successful = err_raw.to_string() == "";
+    
+        println!("tank_id={}, successful={}", self.tank_id, successful);
+        println!("stdout:");
+        println!("{}", result_raw.to_string());
+        println!("");
+        println!("stderr:");
+        println!("{}", err_raw.to_string());
+        println!("");
+    
         // if err_raw.to_string() == "" {
             // res = 
             result_raw
