@@ -40,7 +40,7 @@ use bevy::prelude::*;
 #[derive(Default)]
 pub struct CState {
     pub tick: u32,
-    pub tanks: Vec<String>,
+    pub tank_ids: Vec<String>,
 }
 
 pub fn run_game(tank_ids: &[String]) {
@@ -55,7 +55,7 @@ pub fn run_game(tank_ids: &[String]) {
         .add_plugins(MinimalPlugins)
         .insert_resource(CState {
             tick: 0,
-            tanks: tank_ids.to_vec(),
+            tank_ids: tank_ids.to_vec(),
         })
         .add_startup_system(setup_walls)
         .add_startup_system(setup_tanks)

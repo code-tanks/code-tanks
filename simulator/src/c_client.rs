@@ -1,3 +1,5 @@
+use std::process::Command;
+
 use bevy::prelude::*;
 
 use crate::{c_command::*, c_event::*};
@@ -42,7 +44,7 @@ impl ClientTrait for DockerClient {
             .arg("-c")
             .arg(format!(
                 r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
-                tank_id,
+                self.tank_id,
             ))
             .arg("ocypod:8023/queue/build/job")
             .output()
@@ -69,16 +71,16 @@ impl ClientTrait for DockerClient {
         res
     }
 
-    fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand> {
+    fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
         let output_raw = Command::new("bash")
-        .arg("-c")
-        .arg(format!(
-            r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
-            tank_id,
-        ))
-        .arg("ocypod:8023/queue/build/job")
-        .output()
-        .expect("failed to communicate with ocypod");
+            .arg("-c") 
+            .arg(format!( 
+                r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
+                self.tank_id,  
+            ))
+            .arg("ocypod:8023/queue/build/job")
+            .output()
+            .expect("failed to communicate with ocypod");
 
         let result_raw = String::from_utf8_lossy(&output_raw.stdout);
         let err_raw = String::from_utf8_lossy(&output_raw.stderr);

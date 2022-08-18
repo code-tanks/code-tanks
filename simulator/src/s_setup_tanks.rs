@@ -1,7 +1,9 @@
 use bevy::prelude::*;
 
 use crate::{
-    c_client::{Client, DummyClient},
+    c_client::{Client, DockerClient
+        // , DummyClient
+    },
     c_command::CommandSource,
     c_event::EventSink,
     c_health::Health,
@@ -11,7 +13,7 @@ use crate::{
 };
 
 pub fn setup_tanks(state: Res<CState>, mut commands: Commands) {
-    for _url in state.tanks.iter() {
+    for tank_id in state.tank_ids.iter() {
         commands
             .spawn()
             .insert(Render::as_tank())
@@ -31,7 +33,9 @@ pub fn setup_tanks(state: Res<CState>, mut commands: Commands) {
             .insert(CommandSource::default())
             .insert(Client {
                 // client: Box::new(DummyClient {}),
-                client: Box::new(DockerClient {}),
+                client: Box::new(DockerClient {
+                    tank_id: tank_id.to_string(),
+                }),
             })
             .insert(Scanner {})
             .insert(EventSink::default());
