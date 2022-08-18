@@ -85,7 +85,7 @@ mod paths {
     pub const LOG: &'static str = "log";
     pub const RAW: &'static str = "raw";
     pub const RUN: &'static str = "run";
-    // const SIM: &'static str = "sim";
+    pub const SIM: &'static str = "sim";
 }
 
 // enum Methods {}
@@ -247,6 +247,23 @@ fn handle_connection(
                 };
             }
 
+            res
+        }
+        (methods::GET, paths::SIM) => {
+            let mut res = responses::NOT_FOUND_RESPONSE;
+
+            // handle error
+
+            let matches = get_simulation_by_url(db, &args.join(" "));
+
+            if !matches.is_empty() {
+                res_code = matches[0].get(2);
+
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content: &res_code,
+                };
+            }
             res
         }
         _ => responses::NOT_FOUND_RESPONSE,
