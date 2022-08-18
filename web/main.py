@@ -8,8 +8,8 @@ app = FastAPI()
 def root():
     return "pong"
 
-@app.get('/')
-def index():
+@app.get('/{game_id}')
+def index(game_id: str):
   return FileResponse('/ctweb/web/index.html')
 
 @app.get('/ctviewer.js')
