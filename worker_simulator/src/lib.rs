@@ -42,8 +42,9 @@ pub fn get_sim_job() -> Vec<String> {
 }
 
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
+    // docker run -d --network=codetanks_default -p  8080:8080 --name tank_id --label com.docker.compose.project=codetanks localhost:5001/url
     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
-    let _output_raw = Command::new("docker")
+    let output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
         .arg("--network=codetanks_default")
@@ -56,17 +57,26 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
         .arg(format!("localhost:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
     tank_id
 }
 
 pub fn remove_tank(tank_id: &str) {
-    let _output_raw = Command::new("docker")
+    let output_raw = Command::new("docker")
         .arg("rm")
         .arg("-f")
         .arg(&tank_id)
         .output()
         .expect("failed to communicate with docker");
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
 }
 
 pub fn run_docker_game(args: &[String]) {
