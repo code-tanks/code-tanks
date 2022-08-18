@@ -47,10 +47,10 @@ def f1(game_id: str):
         
         return Response(content=f.read().replace('sim.txt', game_id), media_type="text/javascript")
 
-@app.get('/ctviewer_bg.wasm')
-def f2():
+@app.get('/{game_id}/ctviewer_bg.wasm')
+def f2(game_id: str):
   return FileResponse('/ctweb/web/ctviewer_bg.wasm')
 
-@app.get('/ctviewer_bg.wasm.d.ts')
-def f3():
+@app.get('/{game_id}/ctviewer_bg.wasm.d.ts')
+def f3(game_id: str):
   return FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
