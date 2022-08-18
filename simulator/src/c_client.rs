@@ -51,25 +51,27 @@ impl ClientTrait for DockerClient {
             .expect("failed to communicate with ocypod");
 
         let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-        let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+        // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-        let mut res: Vec<CCommand> = vec![];
-
-        if err_raw.to_string() == "" {
-            res = result_raw
+        // let mut res: Vec<CCommand> = vec![];
+ 
+        // if err_raw.to_string() == "" {
+            // res = 
+            result_raw
                 .to_string()
                 .split('\n')
                 .map(|f| f.to_string())
                 .filter(|f| !f.is_empty())
                 .filter_map(|f| f.parse::<CCommand>().ok())
-                .collect::<Vec<CCommand>>();
-        } else {
-            println!("stderr:");
-            println!("{}", err_raw.to_string());
-            println!("");
-        }
+                .collect::<Vec<CCommand>>()
+        //         ;
+        // } else {
+        //     println!("stderr:");
+        //     println!("{}", err_raw.to_string());
+        //     println!("");
+        // }
 
-        res
+        // res
     }
 
     fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
@@ -84,25 +86,27 @@ impl ClientTrait for DockerClient {
             .expect("failed to communicate with ocypod");
 
         let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-        let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+        // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-        let mut res: Vec<CCommand> = vec![];
+        // let mut res: Vec<CCommand> = vec![];
 
-        if err_raw.to_string() == "" {
-            res = result_raw
+        // if err_raw.to_string() == "" {
+        //     res = 
+            result_raw
                 .to_string()
                 .split('\n')
                 .map(|f| f.to_string())
                 .filter(|f| !f.is_empty())
                 .filter_map(|f| f.parse::<CCommand>().ok())
-                .collect::<Vec<CCommand>>();
-        } else {
-            println!("stderr:");
-            println!("{}", err_raw.to_string());
-            println!("");
-        }
+                .collect::<Vec<CCommand>>()
+        //         ;
+        // } else {
+        //     println!("stderr:");
+        //     println!("{}", err_raw.to_string());
+        //     println!("");
+        // }
 
-        res
+        // res
     }
 }
 
