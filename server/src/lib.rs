@@ -309,7 +309,7 @@ fn handle_connection(
             let s = fs::read_to_string(format!("/ctserver/ctviewer/{}", args.join("/")));
 
             if s.is_ok() && !args.is_empty() {
-                let ext = args.last().unwrap();
+                let ext = args.last().unwrap().split(".").last().unwrap();
 
                 let mut ct = ContentTypes::JSON;
 
