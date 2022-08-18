@@ -10,4 +10,4 @@ async def root():
 
 @app.get('/')
 def index():
-  return FileResponse('./ctweb/web/index.html')
+  return FileResponse('/ctweb/web/index.html')
