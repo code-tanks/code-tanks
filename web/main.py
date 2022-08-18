@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
@@ -7,4 +8,6 @@ app = FastAPI()
 async def root():
     return "pong"
 
-app.mount("/", StaticFiles(directory="/ctweb/web"), name="static")
+@app.get('/')
+def index():
+  return FileResponse('./ctweb/web/index.html')
