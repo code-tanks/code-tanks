@@ -306,7 +306,7 @@ fn handle_connection(
         (methods::GET, paths::VIEWER) => {
             let mut res = responses::NOT_FOUND_RESPONSE;
 
-            let s = fs::read_to_string(format!("/ctserver/ctviewer/{}", args.join("/")));
+            let s = fs::read_to_string(format!("/ctserver/web/ctviewer/{}", args.join("/")));
 
             if s.is_ok() && !args.is_empty() {
                 let ext = args.last().unwrap().split(".").last().unwrap();
