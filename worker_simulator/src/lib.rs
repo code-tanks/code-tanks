@@ -10,7 +10,7 @@ pub fn create_sim_queue() {
         .arg("content-type: application/json")
         .arg("-XPUT")
         .arg("-d")
-        .arg(r#"{{"timeout": "10m"}}"#)
+        .arg(r#"{"timeout": "10m"}"#)
         .arg("ocypod:8023/queue/simulator")
         .output()
         .expect("failed to communicate with ocypod");
