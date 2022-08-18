@@ -1,3 +1,5 @@
+use std::env;
+
 use bevy::prelude::*;
 
 use ctsimlib::{
@@ -11,7 +13,8 @@ use ctsimlib::{
 use crate::{CState, CustomAsset};
 
 pub fn load_tanks(mut state: ResMut<CState>, asset_server: Res<AssetServer>) {
-    state.handle = asset_server.load("./sim.txt");
+    // state.handle = asset_server.load("./sim.txt");
+    state.handle = asset_server.load(&env::var("SIM").unwrap());
 }
 pub fn setup_tanks(
     mut state: ResMut<CState>,
