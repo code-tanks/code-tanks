@@ -112,6 +112,7 @@ mod responses {
     impl ContentTypes {
         pub const JSON: ContentType<'static> = "application/json";
         pub const HTML: ContentType<'static> = "text/html";
+        pub const JS: ContentType<'static> = "text/javascript";
     }
 
     pub struct Response<'a> {
@@ -303,16 +304,27 @@ fn handle_connection(
             }
         }
         (methods::GET, paths::VIEWER) => {
-            let default = fs::read_to_string("/ctserver/web/index.html").unwrap();
+            let mut res = responses::NOT_FOUND_RESPONSE;
 
-            res_file = fs::read_to_string(format!("/ctserver/ctviewer/{}", args.join("/")))
-                .unwrap_or(default);
+            let s = fs::read_to_string(format!("/ctserver/ctviewer/{}", args.join("/")));
 
-            Response {
-                status_line: StatusLines::OK,
-                content_type: ContentTypes::HTML,
-                content: &res_file,
+            if s.is_ok() && !args.is_empty() {
+                let ext = args.last().unwrap();
+
+                let mut ct = ContentTypes::JSON;
+
+                if ext == "js" {
+                    ct = ContentTypes::JS;
+                }
+
+                res_file = s.unwrap();
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content_type: ct,
+                    content: &res_file,
+                }
             }
+            res
         }
         _ => responses::NOT_FOUND_RESPONSE,
     };
