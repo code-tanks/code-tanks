@@ -30,7 +30,8 @@ pub fn setup_tanks(state: Res<CState>, mut commands: Commands) {
             // .insert(CCollider::tank())
             .insert(CommandSource::default())
             .insert(Client {
-                client: Box::new(DummyClient {}),
+                // client: Box::new(DummyClient {}),
+                client: Box::new(DockerClient {}),
             })
             .insert(Scanner {})
             .insert(EventSink::default());

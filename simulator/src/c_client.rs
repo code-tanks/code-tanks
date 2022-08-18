@@ -32,6 +32,76 @@ pub trait ClientTrait {
     fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand>;
 }
 
+pub struct DockerClient {
+    pub tank_id: String,
+}
+
+impl ClientTrait for DockerClient {
+    fn request_commands(&mut self) -> Vec<CCommand> {
+        let output_raw = Command::new("bash")
+            .arg("-c")
+            .arg(format!(
+                r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
+                tank_id,
+            ))
+            .arg("ocypod:8023/queue/build/job")
+            .output()
+            .expect("failed to communicate with ocypod");
+
+        let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+        let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+        let mut res: Vec<CCommand> = vec![];
+
+        if err_raw.to_string() == "" {
+            println!("stderr:");
+            println!("{}", err_raw.to_string());
+            println!("");
+            res = result_raw
+                .to_string()
+                .split('\n')
+                .map(|f| f.to_string())
+                .filter(|f| !f.is_empty())
+                .filter_map(|f| f.parse::<CCommand>().ok())
+                .collect::<Vec<CCommand>>();
+        }
+
+        res
+    }
+
+    fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand> {
+        let output_raw = Command::new("bash")
+        .arg("-c")
+        .arg(format!(
+            r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
+            tank_id,
+        ))
+        .arg("ocypod:8023/queue/build/job")
+        .output()
+        .expect("failed to communicate with ocypod");
+
+        let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+        let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+        let mut res: Vec<CCommand> = vec![];
+
+        if err_raw.to_string() == "" {
+            println!("stderr:");
+            println!("{}", err_raw.to_string());
+            println!("");
+            res = result_raw
+                .to_string()
+                .split('\n')
+                .map(|f| f.to_string())
+                .filter(|f| !f.is_empty())
+                .filter_map(|f| f.parse::<CCommand>().ok())
+                .collect::<Vec<CCommand>>();
+        }
+
+        res
+    }
+}
+
 pub struct DummyClient {}
 
 impl ClientTrait for DummyClient {

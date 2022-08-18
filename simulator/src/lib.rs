@@ -12,9 +12,9 @@ pub mod c_tank;
 
 pub mod s_apply_commands;
 pub mod s_physics;
-pub mod s_publish_events;
 pub mod s_render;
 pub mod s_request_commands;
+pub mod s_request_commands_by_event;
 pub mod s_save_commands;
 pub mod s_setup_tanks;
 pub mod s_walls;
@@ -29,8 +29,8 @@ use std::time::Duration;
 
 use s_apply_commands::*;
 
-use s_publish_events::*;
 use s_request_commands::*;
+use s_request_commands_by_event::*;
 use s_save_commands::*;
 use s_setup_tanks::*;
 use s_walls::*;
@@ -43,9 +43,9 @@ pub struct CState {
     pub tanks: Vec<String>,
 }
 
-pub fn run_game(args: &[String]) {
+pub fn run_game(tank_ids: &[String]) {
     let mut f = File::create("./sim.txt").expect("Unable to create file");
-    f.write_all(format!("{}\n", args.join(",")).as_bytes())
+    f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
         .expect("Unable to write data");
 
     App::new()
@@ -55,7 +55,7 @@ pub fn run_game(args: &[String]) {
         .add_plugins(MinimalPlugins)
         .insert_resource(CState {
             tick: 0,
-            tanks: args.to_vec(),
+            tanks: tank_ids.to_vec(),
         })
         .add_startup_system(setup_walls)
         .add_startup_system(setup_tanks)
@@ -73,7 +73,7 @@ pub fn run_game(args: &[String]) {
         )
         .add_stage(
             "publish_events",
-            SystemStage::single_threaded().with_system(publish_events),
+            SystemStage::single_threaded().with_system(request_commands_by_event),
         )
         .run();
 }

@@ -1,6 +1,6 @@
 use std::process::Command;
 
-use ctsimlib::run_game;
+use ctsimlib::{c_command::CCommand, run_game};
 
 pub mod db;
 
