@@ -6,15 +6,15 @@ pub fn get_client() -> Client {
     Client::connect(&env::var("DB_URL").unwrap(), NoTls).unwrap()
 }
 
-pub fn upload_log(client: &mut Client, url: &str, log: &str) -> bool {
+pub fn upload_sim(client: &mut Client, game_id: &str, sim: &str) -> bool {
     client
         .execute(
             r#"
-            UPDATE tanks
+            UPDATE simulations
             SET log = $2
-            WHERE url = $1;           
+            WHERE id = $1;           
         "#,
-            &[&url, &log],
+            &[&game_id, &sim],
         )
         .is_ok()
 }

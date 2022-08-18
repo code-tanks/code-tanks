@@ -123,7 +123,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
 //     // docker run --rm --net=FooAppNet --name=component2 component2-image
 // }
 
-pub fn update_job(id: &str, successful: bool) {
+pub fn update_build_job(id: &str, successful: bool) {
     Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")

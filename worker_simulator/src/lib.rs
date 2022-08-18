@@ -84,3 +84,29 @@ pub fn run_docker_game(args: &[String]) {
         remove_tank(tank_id);
     }
 }
+
+pub fn update_sim_job(id: &str, successful: bool) {
+    Command::new("curl")
+        .arg("-H")
+        .arg("content-type: application/json")
+        .arg("-XPATCH")
+        .arg("-d")
+        .arg(format!(
+            r#"{{"status": "{}"}}"#,
+            if successful { "completed" } else { "failed" }
+        ))
+        .arg(format!("ocypod:8023/job/{}", id))
+        .output()
+        .expect("failed to communicate with ocypod");
+
+    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    println!("update job, id={}", id);
+    // println!("stdout:");
+    // println!("{}", result_raw.to_string());
+    // println!("");
+    // println!("stderr:");
+    // println!("{}", err_raw.to_string());
+    // println!("");
+}

@@ -3,7 +3,7 @@ use std::{thread, time};
 use worker_builder::{
     build, create_build_queue,
     db::{get_client, upload_log},
-    get_build_job, get_lang, push_to_registry, remove_image, update_job,
+    get_build_job, get_lang, push_to_registry, remove_image, update_build_job,
 };
 
 fn main() {
@@ -34,7 +34,7 @@ fn main() {
             let pushed_to_registry = push_to_registry(&url);
             remove_image(&url);
 
-            update_job(
+            update_build_job(
                 &id,
                 build_info.successful && uploaded_log && pushed_to_registry,
             );
