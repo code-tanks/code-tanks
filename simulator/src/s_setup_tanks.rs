@@ -5,11 +5,6 @@ use crate::{
         Client,
         DockerClient, // , DummyClient
     },
-    c_command::CommandSource,
-    c_event::EventSink,
-    c_health::Health,
-    c_render::Render,
-    c_scanner::Scanner,
     c_tank::create_tank,
     CState,
 };
@@ -45,11 +40,15 @@ pub fn setup_tanks(state: Res<CState>, mut commands: Commands) {
     // }
 
     for (i, tank_id) in state.tank_ids.iter().enumerate() {
-        create_tank(commands, i).insert(Client {
-            // client: Box::new(DummyClient {}),
-            client: Box::new(DockerClient {
-                tank_id: tank_id.to_string(),
-            }),
-        });
+        create_tank(
+            &mut commands,
+            i,
+            Client {
+                // client: Box::new(DummyClient {}),
+                client: Box::new(DockerClient {
+                    tank_id: tank_id.to_string(),
+                }),
+            },
+        );
     }
 }

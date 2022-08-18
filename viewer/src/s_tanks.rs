@@ -1,14 +1,9 @@
 use bevy::prelude::*;
-use bevy_rapier2d::prelude::*;
+
 use ctsimlib::{
     c_client::{Client, ReaderClient},
     // c_collider::CCollider,
     c_command::*,
-    c_event::EventSink,
-    c_health::Health,
-    // c_position::Position,
-    c_render::Render,
-    c_scanner::Scanner,
     c_tank::create_tank,
     // c_velocity::{CVelocity, TankVelocity},
 };
@@ -99,9 +94,13 @@ pub fn setup_tanks(
         //     .insert(ColliderMassProperties::Mass(1.0))
         //     .insert(ColliderMassProperties::Density(1.0));
 
-        create_tank(commands, n).insert(Client {
-            client: Box::new(ReaderClient { lines: c_lines }),
-        });
+        create_tank(
+            &mut commands,
+            n,
+            Client {
+                client: Box::new(ReaderClient { lines: c_lines }),
+            },
+        );
     }
 
     state.printed = true;

@@ -1,15 +1,15 @@
-use bevy::{ecs::system::EntityCommands, prelude::*};
+use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::{
-    c_command::CommandSource, c_event::EventSink, c_health::Health, c_render::Render,
-    c_scanner::Scanner,
+    c_client::Client, c_command::CommandSource, c_event::EventSink, c_health::Health,
+    c_render::Render, c_scanner::Scanner,
 };
 
 #[derive(Component)]
 pub struct Tank {}
 
-pub fn create_tank(mut commands: Commands, n: usize) -> EntityCommands {
+pub fn create_tank(commands: &mut Commands, n: usize, client: Client) {
     commands
         .spawn()
         .insert(Render::as_tank())
@@ -48,4 +48,5 @@ pub fn create_tank(mut commands: Commands, n: usize) -> EntityCommands {
         )))
         .insert(ColliderMassProperties::Mass(1.0))
         .insert(ColliderMassProperties::Density(1.0))
+        .insert(client);
 }
