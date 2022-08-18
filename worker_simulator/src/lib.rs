@@ -1,4 +1,5 @@
-use std::process::Command;
+use core::time;
+use std::{process::Command, thread};
 
 use ctsimlib::run_game;
 
@@ -89,6 +90,8 @@ pub fn run_docker_game(args: &[String]) {
     // for tank_id in tank_ids.iter() {
     //     remove_tank(tank_id);
     // }
+    thread::sleep(time::Duration::from_millis(5000));
+
     run_game(&tank_ids);
     for tank_id in tank_ids.iter() {
         remove_tank(tank_id);
