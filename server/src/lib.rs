@@ -322,7 +322,7 @@ pub fn add_sim_job(url: &str) {
         .arg("-XPOST")
         .arg("-d")
         .arg(format!(r#"{{"input": "{}"}}"#, url))
-        .arg("ocypod:8023/queue/simulation/job")
+        .arg("ocypod:8023/queue/simulator/job")
         .output()
         .expect("failed to communicate with ocypod");
 
