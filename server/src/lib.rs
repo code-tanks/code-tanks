@@ -113,6 +113,7 @@ mod responses {
         pub const JSON: ContentType<'static> = "application/json";
         pub const HTML: ContentType<'static> = "text/html";
         pub const JS: ContentType<'static> = "text/javascript";
+        pub const WASM: ContentType<'static> = "application/wasm";
     }
 
     pub struct Response<'a> {
@@ -315,6 +316,8 @@ fn handle_connection(
 
                 if ext == "js" {
                     ct = ContentTypes::JS;
+                } else if ext == "wasm" {
+                    ct == ContentTypes::WASM;
                 }
 
                 res_file = s.unwrap();
