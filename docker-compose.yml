@@ -42,6 +42,8 @@ services:
       dockerfile: web/Dockerfile
       context: .
     restart: unless-stopped
+    ports:
+      - 8088:8080
 
   db:
     container_name: db
