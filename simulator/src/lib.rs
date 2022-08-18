@@ -45,7 +45,7 @@ pub struct CState {
 
 pub fn run_game(args: &[String]) {
     let mut f = File::create("./sim.txt").expect("Unable to create file");
-    f.write_all(format!("{}\n", args.len()).to_string().as_bytes())
+    f.write_all(format!("{}\n", args.join(",")).as_bytes())
         .expect("Unable to write data");
 
     App::new()

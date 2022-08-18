@@ -35,16 +35,19 @@ pub fn setup_tanks(
     //     info!("{}", line?.trim());
     // }
 
-    let s: usize = lines[0].parse::<usize>().unwrap();
-    info!("# players: {}", s);
+    let tank_ids = lines[0]
+        .split(",")
+        .map(|f| f.to_string())
+        .collect::<Vec<String>>();
+    info!("players: {:?}", tank_ids);
 
     let mut n_commands = 0;
 
     // let mut world = World::default();
-    for n in 0..s {
+    for n in 0..tank_ids.len() {
         let c_lines: Vec<CCommand> = lines[(1 + n)..]
             .iter()
-            .step_by(s)
+            .step_by(tank_ids.len())
             .map(|f| f.to_string().parse::<CCommand>().unwrap())
             .collect();
         // info!("{} lines: {:?}", n + 1, c_lines);
