@@ -45,7 +45,7 @@ def index(game_id: str):
 def f1(game_id: str):
     with open('/ctweb/web/ctviewer.js') as f:
         
-        return Response(content=f.read().replace('sim.txt', game_id), media_type="text/javascript")
+        return Response(content=f.read().replace('sim.txt', f"{game_id}/sim.txt"), media_type="text/javascript")
 
 @app.get('/{game_id}/ctviewer_bg.wasm')
 def f2(game_id: str):
