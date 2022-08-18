@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths:
-      - server
-      - simulator
-      - viewer
-      - worker_builder
-      - worker_simulator
+      - server/**
+      - simulator/**
+      - viewer/**
+      - worker_builder/**
+      - worker_simulator/**
       - .github/workflows/build.yml
 
 jobs:
