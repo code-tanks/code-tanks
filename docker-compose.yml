@@ -38,7 +38,7 @@ services:
 
   web:
     container_name: web
-    builder:
+    build:
       dockerfile: web/Dockerfile
       context: .
     restart: unless-stopped
