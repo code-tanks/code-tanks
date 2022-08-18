@@ -317,7 +317,7 @@ fn handle_connection(
                 if ext == "js" {
                     ct = ContentTypes::JS;
                 } else if ext == "wasm" {
-                    ct == ContentTypes::WASM;
+                    ct = ContentTypes::WASM;
                 }
 
                 res_file = s.unwrap();
