@@ -3,12 +3,12 @@ pub mod db;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::process::Command;
-use std::{fs, thread};
+use std::thread;
 
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
 
-use crate::responses::{ContentTypes, Response, StatusLines};
+use crate::responses::{Response, StatusLines};
 pub fn create_build_queue() {
     let output_raw = Command::new("curl")
         .arg("-H")
@@ -86,8 +86,6 @@ mod paths {
     pub const RAW: &'static str = "raw";
     pub const RUN: &'static str = "run";
     pub const SIM: &'static str = "sim";
-    pub const VIEW: &'static str = "view";
-    pub const VIEWER: &'static str = "ctviewer";
 }
 
 // enum Methods {}
@@ -106,36 +104,22 @@ mod responses {
         pub const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
         pub const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
     }
-
-    type ContentType<'a> = &'a str;
-    pub enum ContentTypes {}
-    impl ContentTypes {
-        pub const JSON: ContentType<'static> = "application/json";
-        pub const HTML: ContentType<'static> = "text/html";
-        pub const JS: ContentType<'static> = "text/javascript";
-        pub const WASM: ContentType<'static> = "application/wasm";
-    }
-
     pub struct Response<'a> {
         pub status_line: StatusLine<'a>,
-        pub content_type: ContentType<'a>,
         pub content: &'a str,
     }
     pub const ROOT_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::OK,
-        content_type: ContentTypes::JSON,
         content: "\"hello\"",
     };
 
     pub const PING_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::OK,
-        content_type: ContentTypes::JSON,
         content: "\"pong\"",
     };
 
     pub const NOT_FOUND_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::NOT_FOUND,
-        content_type: ContentTypes::JSON,
         content: "\"404\"",
     };
 }
@@ -152,18 +136,13 @@ fn handle_connection(
     let path = &get_path_from_request(&request)[1..];
     let args: Vec<&str> = path.split("/").collect();
     let path = args[0];
-    let args = &args[1..]
-        .iter()
-        .map(|f| f.to_string())
-        .filter(|f| !f.is_empty())
-        .collect::<Vec<String>>();
+    let args = &args[1..];
 
     println!("{} {} {:?}", method, path, args);
 
     let url: String;
     let res_code: String;
     let res_log: String;
-    let res_file: String;
 
     let response = match (method, path) {
         (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
@@ -207,7 +186,6 @@ fn handle_connection(
 
             Response {
                 status_line: StatusLines::OK,
-                content_type: ContentTypes::JSON,
                 content: &url,
             }
         }
@@ -216,13 +194,12 @@ fn handle_connection(
 
             // handle error
 
-            let matches = get_tank_by_url(db, &args[0]);
+            let matches = get_tank_by_url(db, args[0]);
 
             if !matches.is_empty() {
                 res_log = matches[0].get(3);
                 res = Response {
                     status_line: StatusLines::OK,
-                    content_type: ContentTypes::JSON,
                     content: &res_log,
                 };
             }
@@ -233,14 +210,13 @@ fn handle_connection(
 
             // handle error
 
-            let matches = get_tank_by_url(db, &args[0]);
+            let matches = get_tank_by_url(db, args[0]);
 
             if !matches.is_empty() {
                 res_code = matches[0].get(2);
 
                 res = Response {
                     status_line: StatusLines::OK,
-                    content_type: ContentTypes::JSON,
                     content: &res_code,
                 };
             }
@@ -267,7 +243,6 @@ fn handle_connection(
 
                 res = Response {
                     status_line: StatusLines::OK,
-                    content_type: ContentTypes::JSON,
                     content: &res_code,
                 };
             }
@@ -286,49 +261,8 @@ fn handle_connection(
 
                 res = Response {
                     status_line: StatusLines::OK,
-                    content_type: ContentTypes::JSON,
                     content: &res_code,
                 };
-            }
-            res
-        }
-        (methods::GET, paths::VIEW) => {
-            // let default = ;
-
-            res_file = fs::read_to_string("/ctserver/web/index.html").unwrap();
-            //     fs::read_to_string(format!("/ctserver/web/{}", args.join("/"))).unwrap_or(default);
-
-            Response {
-                status_line: StatusLines::OK,
-                content_type: ContentTypes::HTML,
-                content: &res_file,
-            }
-        }
-        (methods::GET, paths::VIEWER) => {
-            let mut res = responses::NOT_FOUND_RESPONSE;
-
-            let s = fs::read_to_string(format!("/ctserver/web/ctviewer/{}", args.join("/")));
-
-            fs::read_to_string(format!("/ctserver/web/ctviewer/{}", args.join("/"))).unwrap();
-
-            if s.is_ok() && !args.is_empty() {
-                let ext = args.last().unwrap().split(".").last().unwrap();
-                println!("ext {}", ext);
-
-                let mut ct = ContentTypes::JSON;
-
-                if ext == "js" {
-                    ct = ContentTypes::JS;
-                } else if ext == "wasm" {
-                    ct = ContentTypes::WASM;
-                }
-
-                res_file = s.unwrap();
-                res = Response {
-                    status_line: StatusLines::OK,
-                    content_type: ct,
-                    content: &res_file,
-                }
             }
             res
         }
@@ -336,10 +270,9 @@ fn handle_connection(
     };
 
     let response_string = format!(
-        "{}\r\nContent-Length: {}\r\nContent-Type: {}; charset=UTF-8\r\n\r\n{}",
+        "{}\r\nContent-Length: {}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{}",
         response.status_line,
         response.content.len(),
-        response.content_type,
         response.content
     );
 
