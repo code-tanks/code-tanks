@@ -46,6 +46,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     let _output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
+        .arg("--network=codetanks_default")
         .arg("--name")
         .arg(&tank_id)
         .arg("--label")

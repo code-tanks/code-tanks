@@ -56,9 +56,6 @@ impl ClientTrait for DockerClient {
         let mut res: Vec<CCommand> = vec![];
 
         if err_raw.to_string() == "" {
-            println!("stderr:");
-            println!("{}", err_raw.to_string());
-            println!("");
             res = result_raw
                 .to_string()
                 .split('\n')
@@ -66,6 +63,10 @@ impl ClientTrait for DockerClient {
                 .filter(|f| !f.is_empty())
                 .filter_map(|f| f.parse::<CCommand>().ok())
                 .collect::<Vec<CCommand>>();
+        } else {
+            println!("stderr:");
+            println!("{}", err_raw.to_string());
+            println!("");
         }
 
         res
@@ -88,9 +89,6 @@ impl ClientTrait for DockerClient {
         let mut res: Vec<CCommand> = vec![];
 
         if err_raw.to_string() == "" {
-            println!("stderr:");
-            println!("{}", err_raw.to_string());
-            println!("");
             res = result_raw
                 .to_string()
                 .split('\n')
@@ -98,6 +96,10 @@ impl ClientTrait for DockerClient {
                 .filter(|f| !f.is_empty())
                 .filter_map(|f| f.parse::<CCommand>().ok())
                 .collect::<Vec<CCommand>>();
+        } else {
+            println!("stderr:");
+            println!("{}", err_raw.to_string());
+            println!("");
         }
 
         res
