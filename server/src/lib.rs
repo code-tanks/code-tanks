@@ -10,7 +10,7 @@ use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionM
 
 use crate::responses::{Response, StatusLines};
 pub fn create_build_queue() {
-    Command::new("curl")
+    let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPUT")
@@ -19,11 +19,21 @@ pub fn create_build_queue() {
         .arg("ocypod:8023/queue/build")
         .output()
         .expect("failed to communicate with ocypod");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
 }
 
 pub fn create_sim_queue() {
     // curl -H "content-type: application/json" -XPUT -d '{"timeout": "10m"}' ocypod:8023/queue/simulator
-    Command::new("curl")
+    let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPUT")
@@ -32,6 +42,15 @@ pub fn create_sim_queue() {
         .arg("ocypod:8023/queue/simulator")
         .output()
         .expect("failed to communicate with ocypod");
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
 }
 pub struct HttpServer {
     pub port: u16,
