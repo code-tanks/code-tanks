@@ -86,13 +86,13 @@ pub fn run_docker_game(args: &[String]) {
         .enumerate()
         .map(|(i, url)| run_tank(url, &game_url, i))
         .collect::<Vec<String>>();
-    for tank_id in tank_ids.iter() {
-        remove_tank(tank_id);
-    }
+    // for tank_id in tank_ids.iter() {
+    //     remove_tank(tank_id);
+    // }
     run_game(&tank_ids);
-    for tank_id in tank_ids.iter() {
-        remove_tank(tank_id);
-    }
+    // for tank_id in tank_ids.iter() {
+    //     remove_tank(tank_id);
+    // }
 }
 
 pub fn update_sim_job(id: &str, successful: bool) {
