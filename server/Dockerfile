@@ -39,4 +39,6 @@ WORKDIR /ctserver
 COPY --from=server_builder /usr/local/cargo/bin/ctserver /usr/local/bin/ctserver
 COPY --from=viewer_builder /ctviewer/target/release/web /ctserver/web
 
+COPY viewer/web/* /ctserver/web
+
 CMD ["ctserver"]
