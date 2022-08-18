@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, Response
 
 app = FastAPI()
 
@@ -43,12 +43,14 @@ def index(game_id: str):
 
 @app.get('/{game_id}/ctviewer.js')
 def f1(game_id: str):
-  return FileResponse('/ctweb/web/ctviewer.js')
+    with open('/ctweb/web/ctviewer.js') as f:
+        
+        return Response(content=f.read().replace('sim.txt', game_id), media_type="text/javascript")
 
-@app.get('/{game_id}/ctviewer_bg.wasm')
-def f2(game_id: str):
+@app.get('/ctviewer_bg.wasm')
+def f2():
   return FileResponse('/ctweb/web/ctviewer_bg.wasm')
 
-@app.get('/{game_id}/ctviewer_bg.wasm.d.ts')
-def f3(game_id: str):
+@app.get('/ctviewer_bg.wasm.d.ts')
+def f3():
   return FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
