@@ -8,7 +8,7 @@ use std::{fs, thread};
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
 
-use crate::responses::{Response, StatusLines};
+use crate::responses::{ContentTypes, Response, StatusLines};
 pub fn create_build_queue() {
     let output_raw = Command::new("curl")
         .arg("-H")
@@ -105,22 +105,34 @@ mod responses {
         pub const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
         pub const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
     }
+
+    type ContentType<'a> = &'a str;
+    pub enum ContentTypes {}
+    impl ContentTypes {
+        pub const JSON: ContentType<'static> = "application/json";
+        pub const HTML: ContentType<'static> = "text/html";
+    }
+
     pub struct Response<'a> {
         pub status_line: StatusLine<'a>,
+        pub content_type: ContentType<'a>,
         pub content: &'a str,
     }
     pub const ROOT_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::OK,
+        content_type: ContentTypes::JSON,
         content: "\"hello\"",
     };
 
     pub const PING_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::OK,
+        content_type: ContentTypes::JSON,
         content: "\"pong\"",
     };
 
     pub const NOT_FOUND_RESPONSE: Response<'static> = Response {
         status_line: StatusLines::NOT_FOUND,
+        content_type: ContentTypes::JSON,
         content: "\"404\"",
     };
 }
@@ -192,6 +204,7 @@ fn handle_connection(
 
             Response {
                 status_line: StatusLines::OK,
+                content_type: ContentTypes::JSON,
                 content: &url,
             }
         }
@@ -206,6 +219,7 @@ fn handle_connection(
                 res_log = matches[0].get(3);
                 res = Response {
                     status_line: StatusLines::OK,
+                    content_type: ContentTypes::JSON,
                     content: &res_log,
                 };
             }
@@ -223,6 +237,7 @@ fn handle_connection(
 
                 res = Response {
                     status_line: StatusLines::OK,
+                    content_type: ContentTypes::JSON,
                     content: &res_code,
                 };
             }
@@ -249,6 +264,7 @@ fn handle_connection(
 
                 res = Response {
                     status_line: StatusLines::OK,
+                    content_type: ContentTypes::JSON,
                     content: &res_code,
                 };
             }
@@ -267,6 +283,7 @@ fn handle_connection(
 
                 res = Response {
                     status_line: StatusLines::OK,
+                    content_type: ContentTypes::JSON,
                     content: &res_code,
                 };
             }
@@ -280,6 +297,7 @@ fn handle_connection(
 
             Response {
                 status_line: StatusLines::OK,
+                content_type: ContentTypes::HTML,
                 content: &res_file,
             }
         }
@@ -287,9 +305,10 @@ fn handle_connection(
     };
 
     let response_string = format!(
-        "{}\r\nContent-Length: {}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{}",
+        "{}\r\nContent-Length: {}\r\nContent-Type: {}; charset=UTF-8\r\n\r\n{}",
         response.status_line,
         response.content.len(),
+        response.content_type,
         response.content
     );
 
