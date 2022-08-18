@@ -257,7 +257,7 @@ fn handle_connection(
             let matches = get_simulation_by_url(db, &args.join(" "));
 
             if !matches.is_empty() {
-                res_code = matches[0].get(2);
+                res_code = matches[0].get(1);
 
                 res = Response {
                     status_line: StatusLines::OK,
