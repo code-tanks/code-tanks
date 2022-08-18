@@ -293,7 +293,7 @@ fn get_data_from_request(request: &String) -> String {
 
 pub fn add_build_job(url: &str) {
     // curl -i -H 'content-type: application/json' -XPOST -d '{"input": [1,2,3]}' localhost:8023/queue/demo/job
-    Command::new("curl")
+    let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPOST")
@@ -302,11 +302,21 @@ pub fn add_build_job(url: &str) {
         .arg("ocypod:8023/queue/build/job")
         .output()
         .expect("failed to communicate with ocypod");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
 }
 
 pub fn add_sim_job(url: &str) {
     // curl -i -H 'content-type: application/json' -XPOST -d '{"input": [1,2,3]}' localhost:8023/queue/demo/job
-    Command::new("curl")
+    let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPOST")
@@ -315,4 +325,14 @@ pub fn add_sim_job(url: &str) {
         .arg("ocypod:8023/queue/simulation/job")
         .output()
         .expect("failed to communicate with ocypod");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    println!("stdout:");
+    println!("{}", result_raw.to_string());
+    println!("");
+    println!("stderr:");
+    println!("{}", err_raw.to_string());
+    println!("");
 }
