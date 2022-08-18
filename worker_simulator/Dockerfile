@@ -33,8 +33,6 @@ RUN rm get-docker.sh
 
 WORKDIR /ctsim
 
-COPY worker_simulator/scripts scripts
-
 COPY --from=builder /root/.cargo/bin/cttest /usr/local/bin/cttest
 COPY --from=builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
 

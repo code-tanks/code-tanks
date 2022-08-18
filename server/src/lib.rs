@@ -212,6 +212,7 @@ fn handle_connection(
 
             let mut matches = get_simulation_by_url(db, url);
             if matches.is_empty() {
+                add_sim_job(&get_data_from_request(&request));
                 upsert_simulation_by_url(db, url);
                 matches = get_simulation_by_url(db, url);
             }
@@ -279,6 +280,19 @@ pub fn add_build_job(url: &str) {
         .arg("-d")
         .arg(format!(r#"{{"input": "{}"}}"#, url))
         .arg("ocypod:8023/queue/build/job")
+        .output()
+        .expect("failed to communicate with ocypod");
+}
+
+pub fn add_sim_job(url: &str) {
+    // curl -i -H 'content-type: application/json' -XPOST -d '{"input": [1,2,3]}' localhost:8023/queue/demo/job
+    Command::new("curl")
+        .arg("-H")
+        .arg("content-type: application/json")
+        .arg("-XPOST")
+        .arg("-d")
+        .arg(format!(r#"{{"input": "{}"}}"#, url))
+        .arg("ocypod:8023/queue/simulation/job")
         .output()
         .expect("failed to communicate with ocypod");
 }

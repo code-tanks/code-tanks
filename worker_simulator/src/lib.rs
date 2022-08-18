@@ -1,5 +1,7 @@
 use std::process::Command;
 
+use ctsimlib::run_game;
+
 pub mod db;
 
 pub fn create_sim_queue() {
@@ -53,4 +55,28 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
         .expect("failed to communicate with docker");
 
     tank_id
+}
+
+pub fn remove_tank(tank_id: &str) {
+    let _output_raw = Command::new("docker")
+        .arg("rm")
+        .arg(&tank_id)
+        .output()
+        .expect("failed to communicate with docker");
+}
+
+pub fn run_docker_game(args: &[String]) {
+    let game_url = args.join("");
+    let tank_ids = args
+        .iter()
+        .enumerate()
+        .map(|(i, url)| run_tank(url, &game_url, i))
+        .collect::<Vec<String>>();
+    for tank_id in tank_ids.iter() {
+        remove_tank(tank_id);
+    }
+    run_game(&tank_ids);
+    for tank_id in tank_ids.iter() {
+        remove_tank(tank_id);
+    }
 }
