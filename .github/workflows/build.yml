@@ -3,13 +3,14 @@ name: build
 on:
   push:
     branches:
-      - "main"
+      - main
     paths:
       - server
       - simulator
       - viewer
       - worker_builder
       - worker_simulator
+      - .github/workflows/build.yml
 
 jobs:
   build_worker_builder:

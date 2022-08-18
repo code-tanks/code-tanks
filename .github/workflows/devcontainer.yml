@@ -1,14 +1,15 @@
-name: dev_container
+name: devcontainer
 
 on:
   push:
     branches:
-      - "main"
+      - main
     paths:
       - .devcontainer/Dockerfile
+      - .github/devcontainer.yml
 
 jobs:
-  build_dev_container:
+  build_devcontainer:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,6 +30,6 @@ jobs:
           context: .devcontainer/
           file: .devcontainer/Dockerfile
           push: true
-          tags: ghcr.io/derrick56007/codetanks_dev_container:latest
-          cache-from: type=registry,ref=ghcr.io/derrick56007/codetanks_dev_container:buildcache
-          cache-to: type=registry,ref=ghcr.io/derrick56007/codetanks_dev_container:buildcache,mode=max
+          tags: ghcr.io/derrick56007/codetanks_devcontainer:latest
+          cache-from: type=registry,ref=ghcr.io/derrick56007/codetanks_devcontainer:buildcache
+          cache-to: type=registry,ref=ghcr.io/derrick56007/codetanks_devcontainer:buildcache,mode=max
