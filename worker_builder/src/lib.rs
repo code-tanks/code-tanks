@@ -73,7 +73,7 @@ pub struct BuildInfo {
 pub fn build(url: &str, lang: &str) -> BuildInfo {
     let output_raw = Command::new("docker")
         .arg("build")
-        .arg("--no-cache")
+        // .arg("--no-cache")
         .arg("-t")
         .arg(format!("localhost:5001/{}", url))
         .arg("--network")
