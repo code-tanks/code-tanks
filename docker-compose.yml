@@ -36,6 +36,13 @@ services:
     environment:
       - DB_URL=postgres://postgres:example@db:5432
 
+  web:
+    container_name: web
+    builder:
+      dockerfile: web/Dockerfile
+      context: .
+    restart: unless-stopped
+
   db:
     container_name: db
     image: postgres
