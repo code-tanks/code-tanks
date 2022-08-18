@@ -8,7 +8,7 @@ app = FastAPI()
 def root():
     return "pong"
 
-@app.get('/{game_id}')
+@app.get('/{game_id}', response_class=HTMLResponse)
 def index(game_id: str):
     return f"""
         <html>
