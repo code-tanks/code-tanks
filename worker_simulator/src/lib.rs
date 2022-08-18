@@ -63,6 +63,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
 pub fn remove_tank(tank_id: &str) {
     let _output_raw = Command::new("docker")
         .arg("rm")
+        .arg("-f")
         .arg(&tank_id)
         .output()
         .expect("failed to communicate with docker");
