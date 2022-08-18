@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - .devcontainer/Dockerfile
-      - .github/devcontainer.yml 
+      - .github/workflows/devcontainer.yml
 
 jobs:
   build_devcontainer:
