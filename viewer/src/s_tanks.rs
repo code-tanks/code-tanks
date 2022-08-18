@@ -11,7 +11,7 @@ use ctsimlib::{
 use crate::{CState, CustomAsset};
 
 pub fn load_tanks(mut state: ResMut<CState>, asset_server: Res<AssetServer>) {
-    state.handle = asset_server.load("sim.txt");
+    state.handle = asset_server.load("./sim.txt");
 }
 pub fn setup_tanks(
     mut state: ResMut<CState>,
