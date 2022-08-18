@@ -1,9 +1,10 @@
 {
     "name": "codetanks-devcontainer",
-    "build": {
-        "context": ".",
-        "dockerfile": "Dockerfile"
-    },
+    "image": "ghcr.io/derrick56007/codetanks_devcontainer:latest",
+    // "build": {
+    //     "context": ".",
+    //     "dockerfile": "Dockerfile"
+    // },
     "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "rust-analyzer.linkedProjects": [
