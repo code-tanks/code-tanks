@@ -87,6 +87,7 @@ mod paths {
     pub const RUN: &'static str = "run";
     pub const SIM: &'static str = "sim";
     pub const VIEW: &'static str = "view";
+    pub const VIEWER: &'static str = "ctviewer";
 }
 
 // enum Methods {}
@@ -290,10 +291,22 @@ fn handle_connection(
             res
         }
         (methods::GET, paths::VIEW) => {
+            // let default = ;
+
+            res_file = fs::read_to_string("/ctserver/web/index.html").unwrap();
+            //     fs::read_to_string(format!("/ctserver/web/{}", args.join("/"))).unwrap_or(default);
+
+            Response {
+                status_line: StatusLines::OK,
+                content_type: ContentTypes::HTML,
+                content: &res_file,
+            }
+        }
+        (methods::GET, paths::VIEWER) => {
             let default = fs::read_to_string("/ctserver/web/index.html").unwrap();
 
-            res_file =
-                fs::read_to_string(format!("/ctserver/web/{}", args.join("/"))).unwrap_or(default);
+            res_file = fs::read_to_string(format!("/ctserver/ctviewer/{}", args.join("/")))
+                .unwrap_or(default);
 
             Response {
                 status_line: StatusLines::OK,
