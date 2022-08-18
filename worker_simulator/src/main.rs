@@ -25,7 +25,7 @@ fn main() {
                 .collect::<Vec<String>>();
             run_docker_game(args);
             let sim = fs::read_to_string("./sim.txt").expect("Unable to read file");
-            let uploaded_sim = upload_sim(&mut client, &args.join(""), &sim);
+            let uploaded_sim = upload_sim(&mut client, &args.join(""), &sim, true);
             update_sim_job(id, uploaded_sim);
         }
 

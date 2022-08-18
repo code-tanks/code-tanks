@@ -30,8 +30,9 @@ fn main() {
             println!("");
 
             let build_info = build(&url, &lang);
-            let uploaded_log = upload_log(&mut client, &url, &build_info.log);
             let pushed_to_registry = push_to_registry(&url);
+            let uploaded_log =
+                upload_log(&mut client, &url, &build_info.log, build_info.successful);
             remove_image(&url);
 
             update_build_job(

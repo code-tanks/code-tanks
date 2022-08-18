@@ -65,12 +65,14 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             id          TEXT PRIMARY KEY,
             url         VARCHAR NOT NULL,
             code        VARCHAR NOT NULL,
-            log         VARCHAR NOT NULL
+            log         VARCHAR NOT NULL,
+            successful  BOOL NOT NULL
         );
 
         CREATE TABLE IF NOT EXISTS simulations (
             id          VARCHAR PRIMARY KEY,
-            log         VARCHAR NOT NULL
+            log         VARCHAR NOT NULL,
+            successful  BOOL NOT NULL
         );        
     "#).unwrap();
 
@@ -88,12 +90,13 @@ pub fn insert_tank(
                 WITH cte AS (
                     SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
                 )
-                INSERT INTO tanks (id, url, code, log)
+                INSERT INTO tanks (id, url, code, log, successful)
                 SELECT 
                     id, 
                     SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), 
                     $1, 
-                    'waiting to build'
+                    'waiting to build',
+                    false
                 FROM cte;
             "#,
             &[&code, &post_fix],
@@ -190,8 +193,8 @@ pub fn upsert_simulation_by_url(
     client
         .execute(
             "
-                INSERT INTO simulations (id, log)
-                VALUES ($1, 'waiting to build')
+                INSERT INTO simulations (id, log, successful)
+                VALUES ($1, 'waiting to build', false)
                 ON CONFLICT (id) DO NOTHING;
             ",
             &[&url],
