@@ -309,7 +309,7 @@ fn handle_connection(
 
             let s = fs::read_to_string(format!("/ctserver/web/ctviewer/{}", args.join("/")));
 
-            println!("{}", format!("/ctserver/web/ctviewer/{}", args.join("/")));
+            fs::read_to_string(format!("/ctserver/web/ctviewer/{}", args.join("/"))).unwrap();
 
             if s.is_ok() && !args.is_empty() {
                 let ext = args.last().unwrap().split(".").last().unwrap();
