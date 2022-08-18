@@ -3,7 +3,7 @@ name: dev_container
 on:
   push:
     branches:
-      - main
+      - "main"
     paths:
       - .devcontainer/Dockerfile
 
