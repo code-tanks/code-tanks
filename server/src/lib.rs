@@ -3,7 +3,7 @@ pub mod db;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::process::Command;
-use std::thread;
+use std::{fs, thread};
 
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
@@ -86,6 +86,7 @@ mod paths {
     pub const RAW: &'static str = "raw";
     pub const RUN: &'static str = "run";
     pub const SIM: &'static str = "sim";
+    pub const VIEW: &'static str = "view";
 }
 
 // enum Methods {}
@@ -136,13 +137,18 @@ fn handle_connection(
     let path = &get_path_from_request(&request)[1..];
     let args: Vec<&str> = path.split("/").collect();
     let path = args[0];
-    let args = &args[1..];
+    let args = &args[1..]
+        .iter()
+        .map(|f| f.to_string())
+        .filter(|f| !f.is_empty())
+        .collect::<Vec<String>>();
 
     println!("{} {} {:?}", method, path, args);
 
     let url: String;
     let res_code: String;
     let res_log: String;
+    let res_file: String;
 
     let response = match (method, path) {
         (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
@@ -194,7 +200,7 @@ fn handle_connection(
 
             // handle error
 
-            let matches = get_tank_by_url(db, args[0]);
+            let matches = get_tank_by_url(db, &args[0]);
 
             if !matches.is_empty() {
                 res_log = matches[0].get(3);
@@ -210,7 +216,7 @@ fn handle_connection(
 
             // handle error
 
-            let matches = get_tank_by_url(db, args[0]);
+            let matches = get_tank_by_url(db, &args[0]);
 
             if !matches.is_empty() {
                 res_code = matches[0].get(2);
@@ -265,6 +271,17 @@ fn handle_connection(
                 };
             }
             res
+        }
+        (methods::GET, paths::VIEW) => {
+            let default = fs::read_to_string("/ctserver/web/index.html").unwrap();
+
+            res_file =
+                fs::read_to_string(format!("/ctserver/web/{}", args.join("/"))).unwrap_or(default);
+
+            Response {
+                status_line: StatusLines::OK,
+                content: &res_file,
+            }
         }
         _ => responses::NOT_FOUND_RESPONSE,
     };
