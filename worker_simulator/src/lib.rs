@@ -47,6 +47,8 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
         .arg("run")
         .arg("-d")
         .arg("--network=codetanks_default")
+        .arg("-p")
+        .arg("8080:8080")
         .arg("--name")
         .arg(&tank_id)
         .arg("--label")
