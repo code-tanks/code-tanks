@@ -67,8 +67,8 @@ services:
       - 8023:8023
     restart: always
 
-  ocypod-redis:
-    container_name: ocypod-redis
+  redis:
+    container_name: redis
     image: redis:6
     ports:
       - 6379:6379
