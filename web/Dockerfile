@@ -21,7 +21,7 @@ FROM python:3.10
 
 WORKDIR /ctweb
 
-RUN pip install fastapi "uvicorn[standard]"
+RUN pip install fastapi "uvicorn[standard]" requests
 
 COPY --from=viewer_builder /ctviewer/target/release/web /ctweb/web
 
