@@ -35,6 +35,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock    
     environment:
       - DB_URL=postgres://postgres:example@db:5432
+    networks:
+      - dps
 
   web:
     container_name: web
