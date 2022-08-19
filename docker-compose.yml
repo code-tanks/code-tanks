@@ -95,3 +95,10 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
+
+  dps:
+    image: defreitas/dns-proxy-server
+    environment:
+      - MG_REGISTER_CONTAINER_NAMES=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
