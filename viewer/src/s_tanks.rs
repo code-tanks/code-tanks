@@ -1,5 +1,3 @@
-use std::env;
-
 use crate::{CState, CustomAsset};
 use bevy::prelude::*;
 use ctsimlib::{
@@ -10,7 +8,6 @@ use ctsimlib::{
     // c_velocity::{CVelocity, TankVelocity},
 };
 use wasm_bindgen::prelude::*;
-use web_sys::*;
 
 #[wasm_bindgen]
 pub fn get_sim_file() -> String {
