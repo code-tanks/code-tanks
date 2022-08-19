@@ -106,3 +106,7 @@ services:
       - MG_DPS_NETWORK_AUTO_CONNECT=1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  dps:
+    external: false      
