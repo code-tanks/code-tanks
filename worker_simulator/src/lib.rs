@@ -64,24 +64,25 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     println!("run stdout:");
     println!("{}", result_raw.to_string());
 
-    let output_raw = Command::new("bash")
-        .arg("-c")
-        .arg(format!(r#"docker port {} 8080 | cut -d: -f2"#, tank_id))
-        .output()
-        .expect("failed to communicate with docker");
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-    let port = result_raw
-        .to_string()
-        .split("\n")
-        .map(|f| f.to_string())
-        .collect::<Vec<String>>();
+    // let output_raw = Command::new("bash")
+    //     .arg("-c")
+    //     .arg(format!(r#"docker port {} 8080 | cut -d: -f2"#, tank_id))
+    //     .output()
+    //     .expect("failed to communicate with docker");
+    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    // // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    // let port = result_raw
+    //     .to_string()
+    //     .split("\n")
+    //     .map(|f| f.to_string())
+    //     .collect::<Vec<String>>();
 
-    let port = port.first().unwrap();
+    // let port = port.first().unwrap();
 
-    println!("port stdout:");
-    println!("{}", port);
-    format!("{}:{}", tank_id, port)
+    // println!("port stdout:");
+    // println!("{}", port);
+    // format!("{}:{}", tank_id, port)
+    tank_id
 }
 
 pub fn remove_tank(tank_id: &str) {
