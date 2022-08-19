@@ -19,12 +19,11 @@ pub fn get_sim_file() -> String {
 
 pub fn load_tanks(mut state: ResMut<CState>, asset_server: Res<AssetServer>) {
     // state.handle = asset_server.load("./sim.txt");
-    let file = "./sim.txt";
+    let file = format!("./sim/{}", get_sim_file());
 
-    println!("pathname {}", get_sim_file());
-    info!("pathname {}", get_sim_file());
+    println!("sime file: {}", file);
 
-    state.handle = asset_server.load(&env::var("SIM").unwrap());
+    state.handle = asset_server.load(&file);
 }
 pub fn setup_tanks(
     mut state: ResMut<CState>,
