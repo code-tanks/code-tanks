@@ -14,7 +14,16 @@ use web_sys::*;
 
 #[wasm_bindgen]
 pub fn get_sim_file() -> String {
-    web_sys::window().unwrap().location().pathname().unwrap()
+    web_sys::window()
+        .unwrap()
+        .location()
+        .pathname()
+        .unwrap()
+        .split("/")
+        .filter(|f| !f.is_empty())
+        .map(|f| f.to_string())
+        .collect::<Vec<String>>()
+        .join("-")
 }
 
 pub fn load_tanks(mut state: ResMut<CState>, asset_server: Res<AssetServer>) {

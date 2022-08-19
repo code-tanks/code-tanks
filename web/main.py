@@ -54,3 +54,7 @@ def f2(game_id: str):
 @app.get('/{game_id}/ctviewer_bg.wasm.d.ts')
 def f3(game_id: str):
   return FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
+
+@app.get('/sim/{game_id}')
+def f4(game_id: str):
+    return "hi"
