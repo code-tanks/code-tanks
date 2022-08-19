@@ -60,6 +60,6 @@ def f4(game_id: str):
 
     print(game_id)
     
-    r = requests.get(f'localhost:8089/sim/{game_id}')
+    r = requests.get(f'server:8089/sim/{game_id}')
 
     return Response(content=r.text, media_type="text/plain")
