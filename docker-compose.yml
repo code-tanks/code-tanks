@@ -109,4 +109,4 @@ services:
 
 networks:
   dps:
-    external: false      
+    external: true      
