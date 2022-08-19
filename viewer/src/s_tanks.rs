@@ -27,7 +27,8 @@ pub fn load_tanks(mut state: ResMut<CState>, asset_server: Res<AssetServer>) {
     // state.handle = asset_server.load("./sim.txt");
     let file = format!("./sim/{}", get_sim_file());
 
-    println!("sime file: {}", file);
+    println!("sim file: {}", file);
+    info!("sim file: {}", file);
 
     state.handle = asset_server.load(&file);
 }
