@@ -97,6 +97,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin
 
   dps:
+    container_name: dps
     image: defreitas/dns-proxy-server
     environment:
       - MG_REGISTER_CONTAINER_NAMES=1
