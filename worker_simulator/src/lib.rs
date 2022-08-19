@@ -81,7 +81,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
 
     println!("port stdout:");
     println!("{}", port);
-    tank_id
+    format!("{}:{}", tank_id, port)
 }
 
 pub fn remove_tank(tank_id: &str) {

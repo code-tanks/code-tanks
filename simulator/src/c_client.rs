@@ -41,12 +41,12 @@ pub struct DockerClient {
 impl ClientTrait for DockerClient {
     fn request_commands(&mut self) -> Vec<CCommand> {
         println!(
-                r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
+                r#"curl {}/request_commands | jq --raw-output '.[]'"#,
                 self.tank_id);
         let output_raw = Command::new("bash")
             .arg("-c")
             .arg(format!(
-                r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
+                r#"curl {}/request_commands | jq --raw-output '.[]'"#,
                 self.tank_id,
             ))
             .arg("ocypod:8023/queue/build/job")
@@ -96,7 +96,7 @@ impl ClientTrait for DockerClient {
         let output_raw = Command::new("bash")
             .arg("-c") 
             .arg(format!( 
-                r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
+                r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST {}/request_commands_by_event | jq --raw-output '.[]'"#,
                 self.tank_id,  
             ))
             .arg("ocypod:8023/queue/build/job")
