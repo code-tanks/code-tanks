@@ -252,6 +252,8 @@ fn handle_connection(
         (methods::GET, paths::SIM) => {
             let mut res = responses::NOT_FOUND_RESPONSE;
 
+            println!("get sim: {:?}", args);
+
             // handle error
 
             let matches = get_simulation_by_url(db, &args.join(" "));
