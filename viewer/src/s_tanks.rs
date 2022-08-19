@@ -1,7 +1,7 @@
 use std::env;
 
+use crate::{CState, CustomAsset};
 use bevy::prelude::*;
-
 use ctsimlib::{
     c_client::{Client, ReaderClient},
     // c_collider::CCollider,
@@ -9,11 +9,21 @@ use ctsimlib::{
     c_tank::create_tank,
     // c_velocity::{CVelocity, TankVelocity},
 };
+use wasm_bindgen::prelude::*;
+use web_sys::*;
 
-use crate::{CState, CustomAsset};
+#[wasm_bindgen]
+pub fn get_sim_file() -> String {
+    web_sys::window().unwrap().location().pathname().unwrap()
+}
 
 pub fn load_tanks(mut state: ResMut<CState>, asset_server: Res<AssetServer>) {
     // state.handle = asset_server.load("./sim.txt");
+    let file = "./sim.txt";
+
+    println!("pathname {}", get_sim_file());
+    info!("pathname {}", get_sim_file());
+
     state.handle = asset_server.load(&env::var("SIM").unwrap());
 }
 pub fn setup_tanks(
