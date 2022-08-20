@@ -14,15 +14,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: ubuntu
+    services:
+      image: ghcr.io/derrick56007/codetanks_server:latest
+      ports:
+        - 8089:8088
+      environment:
+        - DB_URL=postgres://postgres:example@db:5432
+      command: ctserver
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Build the stack
-        run: docker-compose up -d
-      - name: Test
         run: |
-          docker ps -a
-          ./scripts/create_dart_starter.sh dart
           curl localhost:8089/ping
-          curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST localhost:8089/upload
+# ./scripts/create_dart_starter.sh dart
+# curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST localhost:8089/upload
