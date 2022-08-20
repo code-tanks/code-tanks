@@ -21,4 +21,4 @@ jobs:
       - name: Test
         run: |
           ./scripts/create_dart_starter.sh dart
-          ./scripts/upload.sh dart/examples/do_nothing_tank.dart
+          curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST http://server:8089/upload
