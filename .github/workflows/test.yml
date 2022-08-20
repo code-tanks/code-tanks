@@ -21,7 +21,6 @@ jobs:
           - 8089:8088
         env:
           DB_URL: postgres://postgres:example@db:5432
-        command: ctserver
 
     steps:
       - name: Test
