@@ -1,10 +1,14 @@
 name: test
 
+# on:
+#   workflow_run:
+#     workflows: ["build"]
+#     types:
+#       - completed
 on:
-  workflow_run:
-    workflows: ["build"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -14,3 +18,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Build the stack
         run: docker-compose up -d
+      - name: Test
+        run: |
+          ./scripts/create_dart_starter.sh dart
+          ./scripts/upload.sh dart/examples/do_nothing_tank.dart
