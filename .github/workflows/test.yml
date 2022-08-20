@@ -25,7 +25,7 @@ jobs:
           docker compose up -d db ocypod-redis registry pgAdmin
           docker run -d -p 8023:8023 -v $PWD/ocypod.toml --name ocypod --network=codetanks_default davechallis/ocypod:latest /etc/ocypod.toml
           sleep 10
-          docker compose up -d
+          docker compose up -d server builder simulator web
           sleep 5
           docker ps -a
           docker logs ocypod
