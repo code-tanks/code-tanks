@@ -39,15 +39,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Test
         run: |
-          docker run -d -p 8088:8088 -e DB_URL=postgres://postgres:example@db:5432 ghcr.io/derrick56007/codetanks_server:latest
-          apt update && apt install -y curl
-          curl localhost:8088/ping
-  vm:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - run: |
+          apt update && apt install -y curl git build-essential pkg-config libssl-dev
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sh get-docker.sh
           docker run -d -p 8088:8088 -e DB_URL=postgres://postgres:example@db:5432 ghcr.io/derrick56007/codetanks_server:latest
           curl localhost:8088/ping
 # ./scripts/create_dart_starter.sh dart
