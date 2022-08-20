@@ -1,14 +1,15 @@
-// use bevy::prelude::{Entity, Query};
+use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 
-// use crate::{c_position::Position, c_render::Render};
+use crate::c_render::Render;
 
-// pub fn render(query: Query<(Entity, &Render, &Position)>) {
-//     for (entity, render, position) in &query {
-//         println!(
-//             "render {:?}, {:?}, {:?}",
-//             entity.id(),
-//             render.render_type,
-//             position
-//         );
-//     }
-// }
+pub fn render(query: Query<(Entity, &Render, &Transform, &Collider)>) {
+    for (entity, render, transform, collider) in &query {
+        // println!(
+        //     "render {:?}, {:?}, {:?}",
+        //     entity.id(),
+        //     render.render_type,
+        //     position
+        // );
+    }
+}

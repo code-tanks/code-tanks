@@ -9,7 +9,12 @@ use crate::{
     CState,
 };
 
-pub fn setup_tanks(state: Res<CState>, mut commands: Commands) {
+pub fn setup_tanks(
+    state: Res<CState>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    // mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+) {
     // for tank_id in state.tank_ids.iter() {
     //     commands
     //         .spawn()
@@ -38,6 +43,9 @@ pub fn setup_tanks(state: Res<CState>, mut commands: Commands) {
     //         .insert(EventSink::default());
     //     // .insert(TankUtilities {})
     // }
+    // let texture_handle = asset_server.load("spritesheet.png");
+    // let texture_atlas = TextureAtlas:: //::from_grid(texture_handle, Vec2::new(24.0, 24.0), 3, 1);
+    // let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
     for (i, tank_id) in state.tank_ids.iter().enumerate() {
         create_tank(
@@ -49,6 +57,7 @@ pub fn setup_tanks(state: Res<CState>, mut commands: Commands) {
                     tank_id: tank_id.to_string(),
                 }),
             },
+            &asset_server, // &texture_atlas_handle,
         );
     }
 }

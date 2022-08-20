@@ -1,17 +1,11 @@
 pub mod c_client;
-// pub mod c_collider;
 pub mod c_command;
 pub mod c_event;
 pub mod c_health;
-// pub mod c_position;
 pub mod c_render;
-pub mod c_scanner;
 pub mod c_tank;
 
-// pub mod c_velocity;
-
 pub mod s_apply_commands;
-pub mod s_physics;
 pub mod s_render;
 pub mod s_request_commands;
 pub mod s_request_commands_by_event;
@@ -20,8 +14,6 @@ pub mod s_setup_tanks;
 pub mod s_walls;
 
 use bevy::app::ScheduleRunnerSettings;
-
-// use c_velocity::*;
 
 use std::fs::File;
 use std::io::Write;
@@ -76,4 +68,12 @@ pub fn run_game(tank_ids: &[String]) {
             SystemStage::single_threaded().with_system(request_commands_by_event),
         )
         .run();
+}
+
+mod collision_mask {
+    // pub const NONE: u32 = 0b0000;
+    pub const TANK: u32 = 0b0001;
+    pub const WALL: u32 = 0b0010;
+    // pub const BULLET: u32 = 0b0100;
+    pub const ALL: u32 = 0b1111;
 }
