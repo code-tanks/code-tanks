@@ -15,12 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu
     services:
-      image: ghcr.io/derrick56007/codetanks_server:latest
-      ports:
-        - 8089:8088
-      env:
-        DB_URL: postgres://postgres:example@db:5432
-      command: ctserver
+      server:
+        image: ghcr.io/derrick56007/codetanks_server:latest
+        ports:
+          - 8089:8088
+        env:
+          DB_URL: postgres://postgres:example@db:5432
+        command: ctserver
 
     steps:
       - name: Test
