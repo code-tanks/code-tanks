@@ -18,8 +18,8 @@ jobs:
       image: ghcr.io/derrick56007/codetanks_server:latest
       ports:
         - 8089:8088
-      environment:
-        - DB_URL=postgres://postgres:example@db:5432
+      env:
+        DB_URL: postgres://postgres:example@db:5432
       command: ctserver
 
     steps:
