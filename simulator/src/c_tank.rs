@@ -41,7 +41,7 @@ pub fn create_tank(
             angvel: 0.0,
         })
         .insert_bundle(SpriteBundle {
-            texture: asset_server.load("branding/icon.png"),
+            texture: asset_server.load("tankBody_red.png"),
             transform: Transform::from_xyz(150.0 * (n as f32) + 10.0, 300.0, 0.0),
             ..Default::default()
         })
