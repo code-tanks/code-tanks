@@ -25,8 +25,9 @@ jobs:
           docker compose up -d db ocypod ocypod-redis registry pgAdmin
           sleep 10
           docker compose up -d
+          sleep 5
           docker ps -a
           docker logs server
-          curl localhost:8088/ping
+          curl localhost:8089/ping
 # ./scripts/create_dart_starter.sh dart
 # curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST localhost:8089/upload
