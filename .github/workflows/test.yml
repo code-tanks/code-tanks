@@ -27,6 +27,7 @@ jobs:
           docker compose up -d
           sleep 5
           docker ps -a
+          docker logs ocypod
           docker logs server
           curl localhost:8089/ping
 # ./scripts/create_dart_starter.sh dart
