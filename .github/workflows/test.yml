@@ -1,17 +1,10 @@
 name: test
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - server/**
-      - simulator/**
-      - viewer/**
-      - worker_builder/**
-      - worker_simulator/**
-      - web/**
-      - .github/workflows/test.yml
+  workflow_run:
+    workflows: ["build"]
+    types:
+      - completed
 
 jobs:
   test:

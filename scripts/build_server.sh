@@ -2,5 +2,5 @@
 
 git pull
 
-docker compose up -d db ocypod ocypod-redis registry pgAdmin
-docker compose up -d --build --force-recreate --remove-orphans server
+docker build -t ghcr.io/derrick56007/codetanks_worker_server:latest -f server/Dockerfile .
+docker compose up -d --force-recreate --remove-orphans server

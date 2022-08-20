@@ -2,5 +2,7 @@
 
 git pull
 
-docker compose up -d db ocypod ocypod-redis registry pgAdmin
-docker compose up -d --build --force-recreate --remove-orphans server builder simulator
+./scripts/build_builder.sh
+./scripts/build_server.sh
+./scripts/build_simulator.sh
+./scripts/build_web.sh
