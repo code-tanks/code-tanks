@@ -23,7 +23,7 @@ jobs:
           curl -fsSL https://get.docker.com -o get-docker.sh
           sh get-docker.sh
           docker compose up -d db ocypod-redis registry pgAdmin
-          docker run -d -p 8023:8023 -v $PWD/ocypod.toml --name ocypod --network=codetanks_default davechallis/ocypod:latest /etc/ocypod.toml
+          docker run -d -p 8023:8023 -v /__w/codetanks/codetanks/ocypod.toml/ocypod.toml --name ocypod --network=codetanks_default davechallis/ocypod:latest /etc/ocypod.toml
           sleep 10
           docker compose up -d server builder simulator web
           sleep 5
