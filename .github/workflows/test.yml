@@ -43,6 +43,7 @@ jobs:
           curl -fsSL https://get.docker.com -o get-docker.sh
           sh get-docker.sh
           docker run -d -p 8088:8088 -e DB_URL=postgres://postgres:example@db:5432 ghcr.io/derrick56007/codetanks_server:latest
+          docker ps -a
           curl localhost:8088/ping
 # ./scripts/create_dart_starter.sh dart
 # curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST localhost:8089/upload
