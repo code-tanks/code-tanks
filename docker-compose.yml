@@ -76,8 +76,8 @@ services:
     image: redis:6
     ports:
       - 6379:6379
-    volumes:
-      - ./test/redis:/data
+    # volumes:
+    #   - ./test/redis:/data
     restart: always
 
   registry:
