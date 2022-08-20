@@ -47,7 +47,7 @@ jobs:
           curl -fsSL https://get.docker.com -o get-docker.sh
           sh get-docker.sh
           bash -c "ls -d $PWD/*"
-          docker run --name ocypod -d -p 8023:8023 -v ${pwd}/ocypod.toml:/etc/ocypod.toml:ro davechallis/ocypod:latest /etc/ocypod.toml
+          docker run --name ocypod -d -p 8023:8023 -v $PWD/ocypod.toml:/etc/ocypod.toml:ro davechallis/ocypod:latest /etc/ocypod.toml
           sleep 3
           docker run --name server -d -p 8088:8088 -e DB_URL=postgres://postgres:example@db:5432 ghcr.io/derrick56007/codetanks_server:latest
           sleep 3
