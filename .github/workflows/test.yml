@@ -21,7 +21,12 @@ jobs:
           - 8089:8088
         env:
           DB_URL: postgres://postgres:example@db:5432
-
+      db:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        ports:
+          - 5432:5432
     steps:
       - name: Test
         run: |
