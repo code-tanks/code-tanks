@@ -16,11 +16,11 @@ jobs:
     container: ubuntu
     services:
       server:
-        image: ghcr.io/derrick56007/codetanks_server:latest
-        ports:
-          - 8088:8088
-        env:
-          DB_URL: postgres://postgres:example@db:5432
+        # image: ghcr.io/derrick56007/codetanks_server:latest
+        # ports:
+        #   - 8088:8088
+        # env:
+        #   DB_URL: postgres://postgres:example@db:5432
       db:
         image: postgres
         env:
@@ -35,8 +35,11 @@ jobs:
           --health-retries 5
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Test
         run: |
+          docker run -d -p 8088:8088 -e DB_URL=postgres://postgres:example@db:5432 ghcr.io/derrick56007/codetanks_server:latest
           apt update && apt install -y curl
           curl localhost:8088/ping
 # ./scripts/create_dart_starter.sh dart
