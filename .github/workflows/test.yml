@@ -22,4 +22,4 @@ jobs:
         run: |
           docker ps -a
           ./scripts/create_dart_starter.sh dart
-          curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST http://server:8089/upload
+          curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST localhost:8089/upload
