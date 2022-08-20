@@ -14,30 +14,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: ubuntu
-    services:
-      # server:
-        # image: ghcr.io/derrick56007/codetanks_server:latest
-        # ports:
-        #   - 8088:8088
-        # env:
-        #   DB_URL: postgres://postgres:example@db:5432
-      db:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: example
-        ports:
-          - 5432:5432
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      ocypod-redis:
-        image: redis:6
-        ports:
-          - 6379:6379
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -46,13 +22,11 @@ jobs:
           apt update && apt install -y curl git build-essential pkg-config libssl-dev
           curl -fsSL https://get.docker.com -o get-docker.sh
           sh get-docker.sh
-          bash -c "ls -d $PWD/*"
-          docker run --name ocypod -d -p 8023:8023 -v $PWD/ocypod.toml:/etc/ocypod.toml:ro davechallis/ocypod:latest /etc/ocypod.toml
-          sleep 3
-          docker run --name server -d -p 8088:8088 -e DB_URL=postgres://postgres:example@db:5432 ghcr.io/derrick56007/codetanks_server:latest
-          sleep 3
+          docker compose up -d db ocypod ocypod-redis registry pgAdmin
+          sleep 10
+          docker compose up -d
           docker ps -a
           docker logs server
-          curl server:8088/ping
+          curl localhost:8088/ping
 # ./scripts/create_dart_starter.sh dart
 # curl --data-binary "@dart/examples/do_nothing_tank.dart" -H 'Content-Type: text/plain' -X POST localhost:8089/upload
