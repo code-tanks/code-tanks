@@ -2,11 +2,9 @@ pub mod c_client;
 pub mod c_command;
 pub mod c_event;
 pub mod c_health;
-pub mod c_render;
 pub mod c_tank;
 
 pub mod s_apply_commands;
-pub mod s_render;
 pub mod s_request_commands;
 pub mod s_request_commands_by_event;
 pub mod s_save_commands;
@@ -44,8 +42,8 @@ pub fn run_game(tank_ids: &[String]) {
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
             1.0 / 60.0,
         )))
-        // .add_plugins(MinimalPlugins)
-        .add_plugins(DefaultPlugins)
+        .add_plugins(MinimalPlugins)
+        // .add_plugins(DefaultPlugins)
         .insert_resource(CState {
             tick: 0,
             tank_ids: tank_ids.to_vec(),
@@ -71,7 +69,7 @@ pub fn run_game(tank_ids: &[String]) {
         .run();
 }
 
-mod collision_mask {
+pub mod collision_mask {
     // pub const NONE: u32 = 0b0000;
     pub const TANK: u32 = 0b0001;
     pub const WALL: u32 = 0b0010;

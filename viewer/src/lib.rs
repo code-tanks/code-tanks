@@ -1,4 +1,5 @@
 pub mod s_graphics;
+pub mod s_load_tanks;
 pub mod s_tanks;
 
 use bevy::{

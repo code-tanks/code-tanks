@@ -7,6 +7,7 @@ use ctsimlib::{
 
 use ctviewer::*;
 use s_graphics::*;
+use s_load_tanks::*;
 use s_tanks::*;
 
 fn main() {
