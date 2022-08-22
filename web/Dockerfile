@@ -26,7 +26,7 @@ RUN pip install fastapi "uvicorn[standard]" requests
 COPY --from=viewer_builder /ctviewer/target/release/web /ctweb/web
 
 # COPY web/web/* /ctweb/web
-COPY web/images/* /ctweb/assets
+COPY web/assets/* /ctweb/assets
 COPY web/main.py .
 
 CMD ["uvicorn", "main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8080"]
