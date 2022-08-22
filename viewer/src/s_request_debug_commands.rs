@@ -9,16 +9,20 @@ pub fn request_debug_commands(mut query: Query<&mut CommandSource>, keys: Res<In
         // let mut vel = Vec2::ZERO;
         // let mut ang = 0.0;
         if keys.pressed(KeyCode::W) {
-            grouped_commands = grouped_commands & CCommands::MOVE_FORWARD;
+            info!("W pressed");
+            grouped_commands = grouped_commands | CCommands::MOVE_FORWARD;
         }
         if keys.pressed(KeyCode::S) {
-            grouped_commands = grouped_commands & CCommands::MOVE_BACKWARD;
+            info!("S pressed");
+            grouped_commands = grouped_commands | CCommands::MOVE_BACKWARD;
         }
         if keys.pressed(KeyCode::A) {
-            grouped_commands = grouped_commands & CCommands::ROTATE_TANK_COUNTER_CLOCKWISE;
+            info!("A pressed");
+            grouped_commands = grouped_commands | CCommands::ROTATE_TANK_COUNTER_CLOCKWISE;
         }
         if keys.pressed(KeyCode::D) {
-            grouped_commands = grouped_commands & CCommands::ROTATE_TANK_CLOCKWISE;
+            info!("D pressed");
+            grouped_commands = grouped_commands | CCommands::ROTATE_TANK_CLOCKWISE;
         }
 
         command_source.queue.insert(0, grouped_commands);
