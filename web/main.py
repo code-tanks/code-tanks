@@ -62,3 +62,5 @@ def f4(game_id: str):
     r = requests.get(f'http://172.17.0.1:8089/sim/{game_id}')
 
     return Response(content=r.text, media_type="text/plain")
+
+app.mount("/assets", StaticFiles(directory="/ctweb/assets"), name="assets")
