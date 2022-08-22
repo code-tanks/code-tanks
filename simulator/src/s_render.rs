@@ -3,8 +3,8 @@ use bevy_rapier2d::prelude::*;
 
 use crate::c_render::Render;
 
-pub fn render(query: Query<(Entity, &Render, &Transform, &Collider)>) {
-    for (entity, render, transform, collider) in &query {
+pub fn render(query: Query<(Entity, &Render, &Transform)>) {
+    for (entity, render, transform) in &query {
         // println!(
         //     "render {:?}, {:?}, {:?}",
         //     entity.id(),

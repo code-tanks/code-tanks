@@ -40,15 +40,27 @@ pub fn create_tank(
             linvel: Vec2::new(0.0, 0.0),
             angvel: 0.0,
         })
-        .insert_bundle(SpriteBundle {
-            texture: asset_server.load("tankBody_red.png"),
-            transform: Transform::from_xyz(150.0 * (n as f32) + 10.0, 300.0, 0.0),
-            ..Default::default()
+        // .insert_bundle(SpriteBundle {
+        //     // texture: asset_server.load("tankBody_red.png"),
+        //     sprite
+        //     transform: Transform::from_xyz(150.0 * (n as f32) + 10.0, 300.0, 0.0),
+        //     ..Default::default()
+        // })
+        .insert(client)
+        .insert_bundle(SpatialBundle {
+            transform: Transform::from_xyz(10.0, 20.0, 30.0),
+            visibility: Visibility { is_visible: true },
+            ..default()
         })
-        // .insert_bundle(TransformBundle::from(Transform::from_xyz(
-        //     150.0 * (n as f32) + 10.0,
-        //     300.0,
-        //     0.0,
-        // )))
-        .insert(client);
+        .with_children(|parent| {
+            parent.spawn_bundle(SpriteBundle {
+                texture: asset_server.load("tankBody_red.png"),
+                ..default()
+            });
+        });
+    // .insert_bundle(TransformBundle::from(Transform::from_xyz(
+    //     150.0 * (n as f32) + 10.0,
+    //     300.0,
+    //     0.0,
+    // )))
 }
