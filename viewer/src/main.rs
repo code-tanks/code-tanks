@@ -9,6 +9,7 @@ use ctviewer::*;
 use s_graphics::*;
 use s_load_tanks::*;
 use s_tanks::*;
+use s_request_debug_commands::*;
 
 fn main() {
     App::new()
@@ -26,6 +27,10 @@ fn main() {
         .add_stage(
             "request_commands",
             SystemStage::single_threaded().with_system(request_commands),
+        )
+        .add_stage(
+            "request_debug_commands",
+            SystemStage::single_threaded().with_system(request_debug_commands),
         )
         .add_stage(
             "apply_commands",

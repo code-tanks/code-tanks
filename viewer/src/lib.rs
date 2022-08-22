@@ -1,6 +1,7 @@
 pub mod s_graphics;
 pub mod s_load_tanks;
 pub mod s_tanks;
+pub mod s_request_debug_commands;
 
 use bevy::{
     asset::{AssetLoader, LoadContext, LoadedAsset},
