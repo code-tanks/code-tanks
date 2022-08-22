@@ -36,6 +36,7 @@ pub fn setup_tanks(
     mut state: ResMut<CState>,
     mut commands: Commands,
     custom_assets: ResMut<Assets<CustomAsset>>,
+    asset_server: Res<AssetServer>,
 ) {
     let custom_asset = custom_assets.get(&state.handle);
     if state.printed || custom_asset.is_none() {
@@ -119,6 +120,7 @@ pub fn setup_tanks(
             Client {
                 client: Box::new(ReaderClient { lines: c_lines }),
             },
+            &asset_server,
         );
     }
 
