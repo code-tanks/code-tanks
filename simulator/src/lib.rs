@@ -44,7 +44,8 @@ pub fn run_game(tank_ids: &[String]) {
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
             1.0 / 60.0,
         )))
-        .add_plugins(MinimalPlugins)
+        // .add_plugins(MinimalPlugins)
+        .add_plugins(DefaultPlugins)
         .insert_resource(CState {
             tick: 0,
             tank_ids: tank_ids.to_vec(),
