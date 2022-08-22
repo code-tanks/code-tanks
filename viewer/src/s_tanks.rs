@@ -142,9 +142,9 @@ pub fn setup_tanks(
             })
             .with_children(|parent| {
                 parent.spawn_bundle(SpriteBundle {
-                    transform: Transform::from_rotation(Quat::from_rotation_z(
-                        0.5 * std::f32::consts::PI,
-                    )),
+                    // transform: Transform::from_rotation(Quat::from_rotation_z(
+                    //     0.5 * std::f32::consts::PI,
+                    // )),
                     texture: asset_server.load("tankBody_red.png"),
                     ..default()
                 });

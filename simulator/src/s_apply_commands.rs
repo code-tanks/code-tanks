@@ -21,13 +21,13 @@ pub fn apply_commands(
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;
         if CCommands::MOVE_FORWARD & grouped_commands != 0 {
-            let dir = transform.rotation * Vec3::X;
+            let dir = transform.rotation * Vec3::Y;
 
             vel.x += 100.0 * dir.x;
             vel.y += 100.0 * dir.y;
         }
         if CCommands::MOVE_BACKWARD & grouped_commands != 0 {
-            let dir = transform.rotation * Vec3::X;
+            let dir = transform.rotation * Vec3::Y;
             vel.x -= 100.0 * dir.x;
             vel.y -= 100.0 * dir.y;
         }
