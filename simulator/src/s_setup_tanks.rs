@@ -5,6 +5,7 @@ use crate::{
         Client,
         DockerClient, // , DummyClient
     },
+    c_tank::Tank,
     CState,
 };
 use bevy_rapier2d::prelude::*;
@@ -64,6 +65,7 @@ pub fn setup_tanks(
         commands
             .spawn()
             // .insert(Render::as_tank())
+            .insert(Tank { cooldown: 0 })
             .insert(Health {})
             .insert(CommandSource::default())
             .insert(EventSink::default())

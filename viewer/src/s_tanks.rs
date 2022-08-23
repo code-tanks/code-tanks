@@ -8,6 +8,7 @@ use ctsimlib::{
     c_event::EventSink,
     // c_velocity::{CVelocity, TankVelocity},
     c_health::Health,
+    c_tank::Tank,
     collision_mask,
 };
 
@@ -104,6 +105,7 @@ pub fn setup_tanks(
         commands
             .spawn()
             // .insert(Render::as_tank())
+            .insert(Tank { cooldown: 0 })
             .insert(Health {})
             .insert(CommandSource::default())
             .insert(EventSink::default())
