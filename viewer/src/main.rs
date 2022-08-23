@@ -1,8 +1,11 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use ctsimlib::{
-    s_apply_commands::apply_commands, s_physics::physics, s_request_commands::request_commands,
-    s_request_commands_by_event::request_commands_by_event, s_walls::setup_walls,
+    s_apply_commands::apply_commands,
+    s_physics::{physics, physics2},
+    s_request_commands::request_commands,
+    s_request_commands_by_event::request_commands_by_event,
+    s_walls::setup_walls,
 };
 
 use ctviewer::*;
@@ -39,6 +42,10 @@ fn main() {
         .add_stage(
             "physics",
             SystemStage::single_threaded().with_system(physics),
+        )
+        .add_stage(
+            "physics2",
+            SystemStage::single_threaded().with_system(physics2),
         )
         .add_stage(
             "publish_events",
