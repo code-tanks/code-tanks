@@ -6,7 +6,7 @@ use crate::{
         DockerClient, // , DummyClient
     },
     c_tank::Tank,
-    CState,
+    CCollider, CState, CollisionType,
 };
 use bevy_rapier2d::prelude::*;
 
@@ -65,6 +65,9 @@ pub fn setup_tanks(
         commands
             .spawn()
             // .insert(Render::as_tank())
+            .insert(CCollider {
+                collision_type: CollisionType::Tank,
+            })
             .insert(ActiveEvents::COLLISION_EVENTS)
             .insert(Sleeping::disabled())
             .insert(Ccd::enabled())

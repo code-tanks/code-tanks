@@ -86,3 +86,14 @@ pub mod collision_mask {
     pub const BULLET: u32 = 0b0100;
     pub const ALL: u32 = 0b1111;
 }
+
+#[derive(Component)]
+pub struct CCollider {
+    pub collision_type: CollisionType,
+}
+
+pub enum CollisionType {
+    Bullet,
+    Tank,
+    Wall,
+}

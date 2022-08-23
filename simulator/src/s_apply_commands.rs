@@ -4,7 +4,7 @@ use bevy_rapier2d::prelude::*;
 use crate::{
     c_command::{CCommands, CommandSource},
     c_tank::{Bullet, Tank},
-    collision_mask,
+    collision_mask, CCollider, CollisionType,
 };
 
 pub fn apply_commands(
@@ -49,6 +49,9 @@ pub fn apply_commands(
                 let t = transform.rotation * Vec3::Y;
                 commands
                     .spawn()
+                    .insert(CCollider {
+                        collision_type: CollisionType::Bullet,
+                    })
                     .insert(ActiveEvents::COLLISION_EVENTS)
                     .insert(Sensor)
                     .insert(Bullet {})

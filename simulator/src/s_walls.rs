@@ -1,12 +1,15 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::collision_mask;
+use crate::{collision_mask, CCollider, CollisionType};
 
 pub fn setup_walls(mut commands: Commands) {
     /* Create the ground. */
     commands
         .spawn()
+        .insert(CCollider {
+            collision_type: CollisionType::Wall,
+        })
         .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(RigidBody::Fixed)
         .insert(Collider::cuboid(500.0, 50.0))

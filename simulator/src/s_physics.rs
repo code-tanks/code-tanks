@@ -5,6 +5,7 @@ use crate::{
     c_event::EventSink,
     c_health::Health,
     c_tank::{Bullet, Tank},
+    CCollider, CollisionType,
 };
 
 pub fn physics(
@@ -26,22 +27,36 @@ pub fn physics(
 pub fn physics2(
     mut contact_events: EventReader<CollisionEvent>,
     query_tank: Query<(Entity, &EventSink, &Health), With<Tank>>,
-    query_bullet: Query<&Bullet>,
+    query_collider: Query<&CCollider>,
     // mut commands: Commands,
 ) {
     for contact_event in contact_events.iter() {
         for (entity, _event_sink, _health) in query_tank.iter() {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
-                if h1 == &entity || h2 == &entity {
-                    if let Ok(a) = query_bullet.get(*h1) {
-                        continue;
-                    }
-                    if let Ok(_) = query_bullet.get(*h2) {
-                        continue;
-                    }
-                    info!("HIT {:?}", entity);
+                if h1 == &entity {
+                    hit(
+                        &entity,
+                        h2,
+                        query_collider
+                            .get_component::<CCollider>(h2)
+                            .unwrap()
+                            .collision_type,
+                    );
+                } else if h2 == &entity {
+                    hit(
+                        &entity,
+                        h1,
+                        query_collider
+                            .get_component::<CCollider>(h1)
+                            .unwrap()
+                            .collision_type,
+                    );
                 }
             }
         }
     }
+}
+
+fn hit(tank: &Entity, b: &Entity, collision_type: CollisionType) {
+    info!("HIT {:?}, by {:?} of type {:?}", tank, b, collision_type);
 }
