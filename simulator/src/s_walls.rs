@@ -7,6 +7,7 @@ pub fn setup_walls(mut commands: Commands) {
     /* Create the ground. */
     commands
         .spawn()
+        .insert(RigidBody::Fixed)
         .insert(Collider::cuboid(500.0, 50.0))
         .insert(CollisionGroups::new(
             collision_mask::WALL,
