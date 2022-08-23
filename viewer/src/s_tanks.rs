@@ -10,6 +10,8 @@ use ctsimlib::{
     c_health::Health,
     c_tank::Tank,
     collision_mask,
+    CCollider,
+    CollisionType,
 };
 
 pub fn setup_tanks(

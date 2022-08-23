@@ -37,8 +37,8 @@ pub fn physics2(
                     hit(
                         &entity,
                         h2,
-                        query_collider
-                            .get_component::<CCollider>(h2)
+                        &query_collider
+                            .get_component::<CCollider>(*h2)
                             .unwrap()
                             .collision_type,
                     );
@@ -46,8 +46,8 @@ pub fn physics2(
                     hit(
                         &entity,
                         h1,
-                        query_collider
-                            .get_component::<CCollider>(h1)
+                        &query_collider
+                            .get_component::<CCollider>(*h1)
                             .unwrap()
                             .collision_type,
                     );
@@ -57,6 +57,6 @@ pub fn physics2(
     }
 }
 
-fn hit(tank: &Entity, b: &Entity, collision_type: CollisionType) {
+fn hit(tank: &Entity, b: &Entity, collision_type: &CollisionType) {
     info!("HIT {:?}, by {:?} of type {:?}", tank, b, collision_type);
 }
