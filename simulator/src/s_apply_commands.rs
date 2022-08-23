@@ -3,7 +3,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{
     c_command::{CCommands, CommandSource},
-    c_tank::Tank,
+    c_tank::{Bullet, Tank},
     collision_mask,
 };
 
@@ -49,6 +49,7 @@ pub fn apply_commands(
                 let t = transform.rotation * Vec3::Y;
                 commands
                     .spawn()
+                    .insert(Bullet {})
                     .insert(GravityScale(0.0))
                     .insert(RigidBody::Dynamic)
                     .insert(ColliderMassProperties::Mass(1.0))

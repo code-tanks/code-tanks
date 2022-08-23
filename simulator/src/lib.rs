@@ -5,6 +5,7 @@ pub mod c_health;
 pub mod c_tank;
 
 pub mod s_apply_commands;
+pub mod s_physics;
 pub mod s_request_commands;
 pub mod s_request_commands_by_event;
 pub mod s_save_commands;
@@ -19,6 +20,7 @@ use std::time::Duration;
 
 use s_apply_commands::*;
 
+use s_physics::*;
 use s_request_commands::*;
 use s_request_commands_by_event::*;
 use s_save_commands::*;
@@ -61,6 +63,10 @@ pub fn run_game(tank_ids: &[String]) {
         .add_stage(
             "apply_commands",
             SystemStage::single_threaded().with_system(apply_commands),
+        )
+        .add_stage(
+            "physics",
+            SystemStage::single_threaded().with_system(physics),
         )
         .add_stage(
             "publish_events",

@@ -8,3 +8,6 @@ pub struct Tank {
 impl Tank {
     pub const MAX_COOLDOWN: u32 = 60;
 }
+
+#[derive(Component)]
+pub struct Bullet {}
