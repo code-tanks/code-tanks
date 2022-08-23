@@ -26,7 +26,7 @@ impl CCommands {
     pub const MOVE_BACKWARD: CCommand = 0b10;
     pub const ROTATE_TANK_CLOCKWISE: CCommand = 0b100;
     pub const ROTATE_TANK_COUNTER_CLOCKWISE: CCommand = 0b1000;
-    pub const FIRE: CCommand = 0b100000000;
+    pub const FIRE: CCommand = 0b10000;
 }
 
 impl CCommands {
