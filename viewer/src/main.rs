@@ -1,15 +1,15 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use ctsimlib::{
-    s_apply_commands::apply_commands, s_request_commands::request_commands,
+    s_apply_commands::apply_commands, s_physics::physics, s_request_commands::request_commands,
     s_request_commands_by_event::request_commands_by_event, s_walls::setup_walls,
 };
 
 use ctviewer::*;
 use s_graphics::*;
 use s_load_tanks::*;
-use s_tanks::*;
 use s_request_debug_commands::*;
+use s_tanks::*;
 
 fn main() {
     App::new()
