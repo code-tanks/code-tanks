@@ -73,6 +73,6 @@ pub mod collision_mask {
     // pub const NONE: u32 = 0b0000;
     pub const TANK: u32 = 0b0001;
     pub const WALL: u32 = 0b0010;
-    // pub const BULLET: u32 = 0b0100;
+    pub const BULLET: u32 = 0b0100;
     pub const ALL: u32 = 0b1111;
 }

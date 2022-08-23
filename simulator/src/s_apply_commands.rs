@@ -53,7 +53,7 @@ pub fn apply_commands(
                 .insert(Collider::cuboid(5.0, 5.0))
                 .insert(Restitution::coefficient(0.1))
                 .insert(CollisionGroups::new(
-                    collision_mask::TANK,
+                    collision_mask::BULLET,
                     collision_mask::ALL,
                 ))
                 .insert(Damping {
@@ -67,7 +67,7 @@ pub fn apply_commands(
                 .insert_bundle(SpatialBundle {
                     // transform: transform + t,
                     transform: Transform::from_translation(
-                        transform.translation + t * Vec3::new(20.0, 20.0, 20.0),
+                        transform.translation + t * Vec3::new(30.0, 30.0, 30.0),
                     ),
                     // transform: Transform::from_xyz(10.0, 20.0, 30.0),
                     visibility: Visibility { is_visible: true },
