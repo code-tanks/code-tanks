@@ -64,7 +64,7 @@ pub fn apply_commands(
                         angular_damping: 0.0,
                     })
                     .insert(Velocity {
-                        linvel: Vec2::new(t.x * 40.0, t.y * 40.0),
+                        linvel: Vec2::new(t.x * 100.0, t.y * 100.0),
                         angvel: 0.0,
                     })
                     .insert_bundle(SpatialBundle {
