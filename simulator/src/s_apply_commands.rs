@@ -49,6 +49,7 @@ pub fn apply_commands(
                 let t = transform.rotation * Vec3::Y;
                 commands
                     .spawn()
+                    .insert(Health {})
                     .insert(Sensor)
                     .insert(Bullet {})
                     .insert(GravityScale(0.0))
