@@ -50,6 +50,7 @@ pub fn apply_commands(
                 commands
                     .spawn()
                     .insert(Bullet {})
+                    .insert(Sensor(true))
                     .insert(GravityScale(0.0))
                     .insert(RigidBody::Dynamic)
                     .insert(ColliderMassProperties::Mass(1.0))
