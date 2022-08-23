@@ -40,3 +40,4 @@ doc/api/
 .dockerignore
 
 .gitignore
+test/
