@@ -3,7 +3,6 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{
     c_command::{CCommands, CommandSource},
-    c_health::Health,
     c_tank::{Bullet, Tank},
     collision_mask,
 };
@@ -51,7 +50,6 @@ pub fn apply_commands(
                 commands
                     .spawn()
                     .insert(ActiveEvents::COLLISION_EVENTS)
-                    .insert(Health {})
                     .insert(Sensor)
                     .insert(Bullet {})
                     .insert(GravityScale(0.0))
