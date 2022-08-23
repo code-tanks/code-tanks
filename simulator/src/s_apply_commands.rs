@@ -38,10 +38,10 @@ pub fn apply_commands(
             vel.y -= 100.0 * dir.y;
         }
         if CCommands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
-            ang -= 0.25 * std::f32::consts::PI;
+            ang -= 0.3 * std::f32::consts::PI;
         }
         if CCommands::ROTATE_TANK_COUNTER_CLOCKWISE & grouped_commands != 0 {
-            ang += 0.25 * std::f32::consts::PI;
+            ang += 0.3 * std::f32::consts::PI;
         }
 
         if CCommands::FIRE & grouped_commands != 0 {
