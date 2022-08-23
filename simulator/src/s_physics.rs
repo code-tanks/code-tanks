@@ -9,6 +9,7 @@ pub fn physics(
     mut collision_events: EventReader<CollisionEvent>,
 ) {
     for collision_event in collision_events.iter() {
+        info!("{:?}", collision_event);
         for (entity, health, event_sink, bullet) in query.iter() {
             if let CollisionEvent::Started(a, b, _event_flag) = collision_event {
                 if a == &entity {
