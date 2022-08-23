@@ -23,8 +23,8 @@ pub fn apply_commands(
     for (mut command_receiver, transform, _body, mut velocity, mut tank) in &mut query {
         let grouped_commands = command_receiver.queue.remove(0);
 
-        println!("apply_commands {:?}", grouped_commands);
-        info!("apply_commands {:?}", grouped_commands);
+        // println!("apply_commands {:?}", grouped_commands);
+        // info!("apply_commands {:?}", grouped_commands);
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;
         if CCommands::MOVE_FORWARD & grouped_commands != 0 {
@@ -91,7 +91,7 @@ pub fn apply_commands(
 
         velocity.angvel = ang;
 
-        println!("commands remaining {:?}", command_receiver.queue);
-        info!("commands remaining {:?}", command_receiver.queue);
+        // println!("commands remaining {:?}", command_receiver.queue);
+        // info!("commands remaining {:?}", command_receiver.queue);
     }
 }
