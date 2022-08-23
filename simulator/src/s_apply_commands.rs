@@ -77,6 +77,8 @@ pub fn apply_commands(
                         ..default()
                     });
                 tank.cooldown = Tank::MAX_COOLDOWN;
+            } else {
+                tank.cooldown = tank.cooldown - 1;
             }
         }
 
