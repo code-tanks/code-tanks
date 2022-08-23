@@ -45,12 +45,19 @@ pub fn physics(
 pub fn physics2(
     mut contact_events: EventReader<CollisionEvent>,
     query_tank: Query<(Entity, &EventSink, &Health), With<Tank>>,
+    query_bullet: Query<Entity, With<Bullet>>,
     // mut commands: Commands,
 ) {
     for contact_event in contact_events.iter() {
         for (entity, _event_sink, _health) in query_tank.iter() {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
                 if h1 == &entity || h2 == &entity {
+                    if let Ok(_) = query_bullet.get(*h1) {
+                        continue;
+                    }
+                    if let Ok(_) = query_bullet.get(*h2) {
+                        continue;
+                    }
                     info!("HIT {:?}", entity);
                 }
             }
