@@ -50,6 +50,7 @@ pub fn apply_commands(
                 let t = transform.rotation * Vec3::Y;
                 commands
                     .spawn()
+                    .insert(ActiveEvents::COLLISION_EVENTS)
                     .insert(Health {})
                     .insert(Sensor)
                     .insert(Bullet {})
