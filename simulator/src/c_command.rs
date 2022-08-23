@@ -3,7 +3,6 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-// use serde::{Deserialize, Serialize};
 use bevy::prelude::*;
 
 #[derive(Component)]
@@ -17,13 +16,6 @@ impl CommandSource {
     }
 }
 
-// pub const COMMAND_TYPES_LENGTH: usize = 7;
-
-// #[derive(Debug)]
-// pub struct GroupedCommand {
-//     pub command_array: [bool; COMMAND_TYPES_LENGTH],
-// }
-
 pub type CCommand = u64;
 
 pub enum CCommands {}
@@ -34,24 +26,8 @@ impl CCommands {
     pub const MOVE_BACKWARD: CCommand = 0b10;
     pub const ROTATE_TANK_CLOCKWISE: CCommand = 0b100;
     pub const ROTATE_TANK_COUNTER_CLOCKWISE: CCommand = 0b1000;
-    pub const ROTATE_GUN_CLOCKWISE: CCommand = 0b10000;
-    pub const ROTATE_GUN_COUNTER_CLOCKWISE: CCommand = 0b100000;
-    pub const FIRE_WITH_POWER: CCommand = 0b100000000;
+    pub const FIRE: CCommand = 0b100000000;
 }
-
-// #[repr(usize)]
-// pub enum CommandType {
-//     None = 00000000,
-//     MoveForward,
-//     MoveBackward,
-//     RotateTankClockwise,
-//     RotateTankCounterClockwise,
-//     RotateGunClockwise,
-//     RotateGunCounterClockwise,
-//     RotateRaderClockwise,
-//     RotateRaderCounterClockwise,
-//     FireWithPower,
-// }
 
 impl CCommands {
     pub fn all_commands_from_file(file: &str) -> Vec<Vec<CCommand>> {

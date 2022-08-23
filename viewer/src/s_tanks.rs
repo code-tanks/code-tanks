@@ -111,7 +111,7 @@ pub fn setup_tanks(
             .insert(RigidBody::Dynamic)
             .insert(ColliderMassProperties::Mass(1.0))
             .insert(ColliderMassProperties::Density(1.0))
-            .insert(Collider::cuboid(30.0, 50.0))
+            .insert(Collider::cuboid(19.0, 23.0))
             .insert(Restitution::coefficient(0.1))
             .insert(CollisionGroups::new(
                 collision_mask::TANK,
@@ -142,10 +142,10 @@ pub fn setup_tanks(
             })
             .with_children(|parent| {
                 parent.spawn_bundle(SpriteBundle {
-                    // transform: Transform::from_rotation(Quat::from_rotation_z(
-                    //     0.5 * std::f32::consts::PI,
-                    // )),
-                    texture: asset_server.load("tankBody_red.png"),
+                    transform: Transform::from_rotation(Quat::from_rotation_z(
+                        std::f32::consts::PI,
+                    )),
+                    texture: asset_server.load("tank_red.png"),
                     ..default()
                 });
             });
