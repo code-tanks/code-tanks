@@ -66,7 +66,9 @@ pub fn apply_commands(
                 })
                 .insert_bundle(SpatialBundle {
                     // transform: transform + t,
-                    transform: Transform::from_translation(transform.translation + t),
+                    transform: Transform::from_translation(
+                        transform.translation + t * Vec3::new(20.0, 20.0, 20.0),
+                    ),
                     // transform: Transform::from_xyz(10.0, 20.0, 30.0),
                     visibility: Visibility { is_visible: true },
                     ..default()
