@@ -24,6 +24,10 @@ pub fn request_debug_commands(mut query: Query<&mut CommandSource>, keys: Res<In
             info!("D pressed");
             grouped_commands = grouped_commands | CCommands::ROTATE_TANK_CLOCKWISE;
         }
+        if keys.pressed(KeyCode::Space) {
+            info!("Space pressed");
+            grouped_commands = grouped_commands | CCommands::FIRE;
+        }
 
         command_source.queue.insert(0, grouped_commands);
         // velocity.linvel = vel;
