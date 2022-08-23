@@ -106,6 +106,8 @@ pub fn setup_tanks(
             .spawn()
             // .insert(Render::as_tank())
             .insert(ActiveEvents::COLLISION_EVENTS)
+            .insert(Sleeping::disabled())
+            .insert(Ccd::enabled())
             .insert(Tank { cooldown: 0 })
             .insert(Health {})
             .insert(CommandSource::default())
