@@ -37,6 +37,10 @@ fn main() {
             SystemStage::single_threaded().with_system(apply_commands),
         )
         .add_stage(
+            "physics",
+            SystemStage::single_threaded().with_system(physics),
+        )
+        .add_stage(
             "publish_events",
             SystemStage::single_threaded().with_system(request_commands_by_event),
         )
