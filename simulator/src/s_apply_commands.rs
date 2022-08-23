@@ -50,7 +50,7 @@ pub fn apply_commands(
                 .insert(RigidBody::Dynamic)
                 .insert(ColliderMassProperties::Mass(1.0))
                 .insert(ColliderMassProperties::Density(1.0))
-                .insert(Collider::cuboid(5.0, 5.0))
+                .insert(Collider::ball(5.0))
                 .insert(Restitution::coefficient(0.1))
                 .insert(CollisionGroups::new(
                     collision_mask::BULLET,
@@ -67,7 +67,7 @@ pub fn apply_commands(
                 .insert_bundle(SpatialBundle {
                     // transform: transform + t,
                     transform: Transform::from_translation(
-                        transform.translation + t * Vec3::new(30.0, 30.0, 30.0),
+                        transform.translation + t * Vec3::new(50.0, 50.0, 50.0),
                     ),
                     // transform: Transform::from_xyz(10.0, 20.0, 30.0),
                     visibility: Visibility { is_visible: true },
