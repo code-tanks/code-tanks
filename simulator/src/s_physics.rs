@@ -7,7 +7,7 @@ pub fn physics(
     rapier_context: Res<RapierContext>,
     query_bullet: Query<Entity, With<Bullet>>,
     query_collidable: Query<
-        (Entity, Option<&Health>, Option<&EventSink>),
+        (Entity, &Transform, Option<&Health>, Option<&EventSink>),
         (With<Collider>, Without<Bullet>),
     >,
     // query: Query<(Entity, &Health, Option<&EventSink>, Option<&Bullet>)>,
@@ -25,14 +25,31 @@ pub fn physics(
     //         }
     //     }
     // }
-    for (collidable, _health, _event_sink) in query_collidable.iter() {
+    for (a, a_transform, a_health, a_event_sink) in query_collidable.iter() {
         for bullet in query_bullet.iter() {
             /* Find the intersection pair, if it exists, between two colliders. */
-            if rapier_context.intersection_pair(collidable, bullet) == Some(true) {
+            if rapier_context.intersection_pair(a, bullet) == Some(true) {
                 commands.entity(bullet).despawn();
             }
         }
+        for (b, b_transform, b_health, b_event_sink) in query_collidable.iter() {
+            if rapier_context.intersection_pair(a, b) == Some(true) {
+                hit(a, b, a_transform, b_transform, a_health, a_event_sink);
+                hit(b, a, b_transform, a_transform, b_health, b_event_sink);
+            }
+        }
     }
+}
+
+fn hit(
+    a: Entity,
+    _b: Entity,
+    a_transform: &Transform,
+    _b_transform: &Transform,
+    _health: Option<&Health>,
+    _event_sink: Option<&EventSink>,
+) {
+    info!("HIT {:?} {:?}", a, a_transform);
 }
 
 // fn check(
