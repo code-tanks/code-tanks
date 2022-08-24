@@ -45,7 +45,7 @@ pub fn apply_commands(
         }
 
         if CCommands::FIRE & grouped_commands != 0 {
-            if tank.cooldown == 0 {
+            if tank.cooldown <= 0 {
                 let t = transform.rotation * Vec3::Y;
                 commands
                     .spawn()
@@ -83,10 +83,9 @@ pub fn apply_commands(
                         ..default()
                     });
                 tank.cooldown = Tank::MAX_COOLDOWN;
-            } else {
-                tank.cooldown = tank.cooldown - 1;
             }
         }
+        tank.cooldown = tank.cooldown - 1;
 
         velocity.linvel = vel;
 
