@@ -29,16 +29,12 @@ fn main() {
             println!("{:?}", job);
             println!("");
 
-            let build_info = build(&url, &lang);
+            let build_log = build(&url, &lang);
             let pushed_to_registry = push_to_registry(&url);
-            let uploaded_log =
-                upload_log(&mut client, &url, &build_info.log, build_info.successful);
+            let uploaded_log = upload_log(&mut client, &url, &build_log, pushed_to_registry);
             remove_image(&url);
 
-            update_build_job(
-                &id,
-                build_info.successful && uploaded_log && pushed_to_registry,
-            );
+            update_build_job(&id, uploaded_log && pushed_to_registry);
         }
 
         thread::sleep(time::Duration::from_millis(1000));

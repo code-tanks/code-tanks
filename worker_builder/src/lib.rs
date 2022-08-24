@@ -65,12 +65,12 @@ pub fn get_build_job() -> Vec<String> {
         .collect::<Vec<String>>()
 }
 
-pub struct BuildInfo {
-    pub successful: bool,
-    pub log: String,
-}
+// pub struct BuildInfo {
+//     pub successful: bool,
+//     pub log: String,
+// }
 
-pub fn build(url: &str, lang: &str) -> BuildInfo {
+pub fn build(url: &str, lang: &str) -> String {
     let output_raw = Command::new("docker")
         .arg("build")
         // .arg("--no-cache")
@@ -94,9 +94,9 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
     // println!("out: {}", result_raw.to_string());
     // println!("err: {}", err_raw.to_string() != "");
 
-    let successful = result_raw.to_string() == "";
+    // let successful = result_raw.to_string() == "";
 
-    println!("build, url={}, successful={}", url, successful);
+    println!("build, url={}", url);
     println!("stdout:");
     println!("{}", result_raw.to_string());
     println!("");
@@ -104,17 +104,18 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
     println!("{}", err_raw.to_string());
     println!("");
 
-    if successful {
-        return BuildInfo {
-            successful: true,
-            log: result_raw.to_string(),
-        };
-    }
+    // if successful {
+    //     return BuildInfo {
+    //         successful: true,
+    //         log: result_raw.to_string(),
+    //     };
+    // }
 
-    BuildInfo {
-        successful: false,
-        log: err_raw.to_string(),
-    }
+    // BuildInfo {
+    //     successful: false,
+    //     log: err_raw.to_string(),
+    // }
+    err_raw.to_string()
 }
 
 // pub fn simulate(urls: &[&str]) {
