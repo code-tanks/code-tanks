@@ -164,41 +164,49 @@ pub fn setup_tanks(
                     texture: asset_server.load("tank_red.png"),
                     ..default()
                 });
-                let vertices = vec![
-                    [-0.8660, 0.5000, 0f32],
-                    [0.8660, 0.5000, 0f32],
-                    [-1.0000, 0.0000, 0f32],
-                    [1.0000, 0.0000, 0f32],
-                    [-0.8660, -0.5000, 0f32],
-                    [0.8660, -0.5000, 0f32],
-                ];
-                let normals = vec![
-                    [0f32, 0f32, 1f32],
-                    [0f32, 0f32, 1f32],
-                    [0f32, 0f32, 1f32],
-                    [0f32, 0f32, 1f32],
-                    [0f32, 0f32, 1f32],
-                    [0f32, 0f32, 1f32],
-                ];
-                let uvs = vec![
-                    [0.0000, 0.0000],
-                    [0.0000, 0.0000],
-                    [0.0000, 0.0000],
-                    [0.0000, 0.0000],
-                    [0.0000, 0.0000],
-                    [0.0000, 0.0000],
-                ];
-                let indices = Indices::U16(vec![1, 0, 2, 3, 1, 2, 3, 2, 4, 3, 4, 5]);
+                // let vertices = vec![
+                //     [-0.8660, 0.5000, 0f32],
+                //     [0.8660, 0.5000, 0f32],
+                //     [-1.0000, 0.0000, 0f32],
+                //     [1.0000, 0.0000, 0f32],
+                //     [-0.8660, -0.5000, 0f32],
+                //     [0.8660, -0.5000, 0f32],
+                // ];
+                // let normals = vec![
+                //     [0f32, 0f32, 1f32],
+                //     [0f32, 0f32, 1f32],
+                //     [0f32, 0f32, 1f32],
+                //     [0f32, 0f32, 1f32],
+                //     [0f32, 0f32, 1f32],
+                //     [0f32, 0f32, 1f32],
+                // ];
+                // let uvs = vec![
+                //     [0.0000, 0.0000],
+                //     [0.0000, 0.0000],
+                //     [0.0000, 0.0000],
+                //     [0.0000, 0.0000],
+                //     [0.0000, 0.0000],
+                //     [0.0000, 0.0000],
+                // ];
+                // let indices = Indices::U16(vec![1, 0, 2, 3, 1, 2, 3, 2, 4, 3, 4, 5]);
+
+                // let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
+                // mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vertices);
+                // mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
+                // mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
+                // mesh.set_indices(Some(indices));
 
                 let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
-                mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vertices);
-                mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
-                mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
-                mesh.set_indices(Some(indices));
+                mesh.insert_attribute(
+                    Mesh::ATTRIBUTE_POSITION,
+                    vec![[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0]],
+                );
+                mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![[0.0, 0.0, 0.0, 1.0]; 3]);
+                mesh.set_indices(Some(Indices::U32(vec![0, 1, 2])));
 
                 parent.spawn_bundle(MaterialMesh2dBundle {
                     mesh: meshes.add(mesh).into(),
-                    transform: Transform::default().with_scale(Vec3::splat(128.)),
+                    // transform: Transform::default().with_scale(Vec3::splat(128.)),
                     material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
                     ..default()
                 });
