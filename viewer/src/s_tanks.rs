@@ -199,7 +199,7 @@ pub fn setup_tanks(
                 let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
                 mesh.insert_attribute(
                     Mesh::ATTRIBUTE_POSITION,
-                    vec![[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0]],
+                    vec![[0.0, 0.0, 0.0], [0.0, 50.0, 0.0], [50.0, 0.0, 0.0]],
                 );
                 mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![[0.0, 0.0, 0.0, 1.0]; 3]);
                 mesh.set_indices(Some(Indices::U32(vec![0, 1, 2])));
@@ -207,7 +207,7 @@ pub fn setup_tanks(
                 parent.spawn_bundle(MaterialMesh2dBundle {
                     mesh: meshes.add(mesh).into(),
                     // transform: Transform::default().with_scale(Vec3::splat(128.)),
-                    material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
+                    material: materials.add(Color::GREEN.into()),
                     ..default()
                 });
             });
