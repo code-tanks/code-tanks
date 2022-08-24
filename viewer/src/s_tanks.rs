@@ -1,10 +1,19 @@
 use crate::{CState, CustomAsset};
 use bevy::{
-    prelude::*,
-    render::{mesh::Indices, render_resource::PrimitiveTopology},
-    sprite::MaterialMesh2dBundle,
+    prelude::{
+        default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Color, Commands, Quat,
+        Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
+    },
+    sprite::SpriteBundle,
 };
-use bevy_rapier2d::prelude::*;
+use bevy_prototype_lyon::{
+    prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
+    shapes,
+};
+use bevy_rapier2d::prelude::{
+    ActiveEvents, Ccd, Collider, ColliderMassProperties, CollisionGroups, Damping, GravityScale,
+    Restitution, RigidBody, Sleeping, Velocity,
+};
 use ctsimlib::{
     c_client::{Client, ReaderClient},
     // c_collider::CCollider,
@@ -18,16 +27,13 @@ use ctsimlib::{
     CollisionType,
 };
 
-use bevy_prototype_lyon::prelude::*;
-
+// use bevy_prototype_lyon::prelude::*;
 
 pub fn setup_tanks(
     mut state: ResMut<CState>,
     mut commands: Commands,
     custom_assets: ResMut<Assets<CustomAsset>>,
     asset_server: Res<AssetServer>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     let custom_asset = custom_assets.get(&state.handle);
     if state.printed || custom_asset.is_none() {
@@ -222,7 +228,7 @@ pub fn setup_tanks(
                     feature: shapes::RegularPolygonFeature::Radius(200.0),
                     ..shapes::RegularPolygon::default()
                 };
-            
+
                 // parent.spawn_bundle(Camera2dBundle::default());
                 parent.spawn_bundle(GeometryBuilder::build_as(
                     &shape,
