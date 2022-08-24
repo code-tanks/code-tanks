@@ -1,8 +1,8 @@
 use crate::{CState, CustomAsset};
 use bevy::{
     prelude::{
-        default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Color, Commands, Quat,
-        Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
+        default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Color, Commands,
+        Component, Quat, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
     },
     sprite::SpriteBundle,
 };
@@ -121,7 +121,7 @@ pub fn setup_tanks(
         //     },
         //     &asset_server,
         // );
-        commands
+        let tank = commands
             .spawn()
             // .insert(Render::as_tank())
             .insert(ActiveEvents::COLLISION_EVENTS)
@@ -224,22 +224,28 @@ pub fn setup_tanks(
                 //     ..default()
                 // });
 
-                let shape = shapes::Rectangle {
-                    extents: Vec2::new(50.0, 3.0),
-                    origin: RectangleOrigin::default(),
-                };
-
                 // parent.spawn_bundle(Camera2dBundle::default());
-                parent.spawn_bundle(GeometryBuilder::build_as(
-                    &shape,
-                    DrawMode::Outlined {
-                        fill_mode: FillMode::color(Color::CYAN),
-                        outline_mode: StrokeMode::new(Color::BLACK, 1.0),
-                    },
-                    Transform::from_xyz(0.0, 0.0, 1.0),
-                ));
-            });
+            })
+            .id();
+        let shape = shapes::Rectangle {
+            extents: Vec2::new(50.0, 3.0),
+            origin: RectangleOrigin::default(),
+        };
+
+        commands
+            .spawn_bundle(GeometryBuilder::build_as(
+                &shape,
+                DrawMode::Outlined {
+                    fill_mode: FillMode::color(Color::CYAN),
+                    outline_mode: StrokeMode::new(Color::BLACK, 1.0),
+                },
+                Transform::from_xyz(0.0, 60.0 * (n as f32), 1.0),
+            ))
+            .insert(HealthBar {});
     }
 
     state.printed = true;
 }
+
+#[derive(Component)]
+pub struct HealthBar {}
