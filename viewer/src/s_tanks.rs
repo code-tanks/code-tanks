@@ -46,7 +46,7 @@ pub fn update_health(
                             / (Health::MAX_HEALTH as f32),
                         3.0,
                     ),
-                    origin: RectangleOrigin::default(),
+                    origin: RectangleOrigin::BottomLeft,
                 };
 
                 *path = ShapePath::build_as(&polygon);
@@ -206,7 +206,7 @@ pub fn setup_tanks(
                 });
                 let shape = shapes::Rectangle {
                     extents: Vec2::new(50.0, 3.0),
-                    origin: RectangleOrigin::default(),
+                    origin: RectangleOrigin::BottomLeft,
                 };
 
                 parent
