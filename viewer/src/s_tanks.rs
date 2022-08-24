@@ -8,7 +8,7 @@ use bevy::{
 };
 use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
-    shapes,
+    shapes::{self, RectangleOrigin},
 };
 use bevy_rapier2d::prelude::{
     ActiveEvents, Ccd, Collider, ColliderMassProperties, CollisionGroups, Damping, GravityScale,
@@ -223,10 +223,10 @@ pub fn setup_tanks(
                 //     material: materials.add(Color::GREEN.into()),
                 //     ..default()
                 // });
-                let shape = shapes::RegularPolygon {
-                    sides: 6,
-                    feature: shapes::RegularPolygonFeature::Radius(200.0),
-                    ..shapes::RegularPolygon::default()
+
+                let shape = shapes::Rectangle {
+                    extents: Vec2::new(50.0, 3.0),
+                    origin: RectangleOrigin::default(),
                 };
 
                 // parent.spawn_bundle(Camera2dBundle::default());
@@ -234,7 +234,7 @@ pub fn setup_tanks(
                     &shape,
                     DrawMode::Outlined {
                         fill_mode: FillMode::color(Color::CYAN),
-                        outline_mode: StrokeMode::new(Color::BLACK, 10.0),
+                        outline_mode: StrokeMode::new(Color::BLACK, 1.0),
                     },
                     Transform::default(),
                 ));
