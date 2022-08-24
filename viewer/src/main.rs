@@ -14,10 +14,14 @@ use s_load_tanks::*;
 use s_request_debug_commands::*;
 use s_tanks::*;
 
+use bevy_prototype_lyon::prelude::*;
+
+
 fn main() {
     App::new()
         .insert_resource(Msaa { samples: 4 })
         .add_plugins(DefaultPlugins)
+        .add_plugin(ShapePlugin)
         .init_resource::<CState>()
         .add_asset::<CustomAsset>()
         .init_asset_loader::<CustomAssetLoader>()

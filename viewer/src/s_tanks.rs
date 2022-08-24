@@ -18,6 +18,9 @@ use ctsimlib::{
     CollisionType,
 };
 
+use bevy_prototype_lyon::prelude::*;
+
+
 pub fn setup_tanks(
     mut state: ResMut<CState>,
     mut commands: Commands,
@@ -198,22 +201,37 @@ pub fn setup_tanks(
                 // mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
                 // mesh.set_indices(Some(indices));
 
-                let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
-                mesh.insert_attribute(
-                    Mesh::ATTRIBUTE_POSITION,
-                    vec![[0.0, 0.0, 0.0], [0.0, 50.0, 0.0], [50.0, 50.0, 0.0]],
-                );
-                mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, vec![[0.0, 0.0, 1.0]; 3]);
-                mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[1.0, 1.0]; 3]);
-                mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![[1.0, 1.0, 1.0, 1.0]; 3]);
-                mesh.set_indices(Some(Indices::U32(vec![0, 1, 2])));
+                // let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
+                // mesh.insert_attribute(
+                //     Mesh::ATTRIBUTE_POSITION,
+                //     vec![[0.0, 0.0, 0.0], [0.0, 50.0, 0.0], [50.0, 50.0, 0.0]],
+                // );
+                // mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, vec![[0.0, 0.0, 1.0]; 3]);
+                // mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[1.0, 1.0]; 3]);
+                // mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![[1.0, 1.0, 1.0, 1.0]; 3]);
+                // mesh.set_indices(Some(Indices::U32(vec![0, 1, 2])));
 
-                parent.spawn_bundle(MaterialMesh2dBundle {
-                    mesh: meshes.add(mesh).into(),
-                    transform: Transform::default().with_scale(Vec3::splat(128.)),
-                    material: materials.add(Color::GREEN.into()),
-                    ..default()
-                });
+                // parent.spawn_bundle(MaterialMesh2dBundle {
+                //     mesh: meshes.add(mesh).into(),
+                //     transform: Transform::default().with_scale(Vec3::splat(128.)),
+                //     material: materials.add(Color::GREEN.into()),
+                //     ..default()
+                // });
+                let shape = shapes::RegularPolygon {
+                    sides: 6,
+                    feature: shapes::RegularPolygonFeature::Radius(200.0),
+                    ..shapes::RegularPolygon::default()
+                };
+            
+                // parent.spawn_bundle(Camera2dBundle::default());
+                parent.spawn_bundle(GeometryBuilder::build_as(
+                    &shape,
+                    DrawMode::Outlined {
+                        fill_mode: FillMode::color(Color::CYAN),
+                        outline_mode: StrokeMode::new(Color::BLACK, 10.0),
+                    },
+                    Transform::default(),
+                ));
             });
     }
 
