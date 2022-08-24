@@ -3,7 +3,6 @@ use bevy::{
     prelude::{
         default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Children, Color,
         Commands, Component, Quat, Query, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
-        With,
     },
     sprite::SpriteBundle,
 };
@@ -36,10 +35,7 @@ pub fn update_health(q_parent: Query<(&Health, &Children)>, mut q_child: Query<&
             let mut path = q_child.get_mut(child).unwrap();
 
             let polygon = shapes::Rectangle {
-                extents: Vec2::new(
-                    50.0 * (health.val as f32) / (Health::MAX_HEALTH as f32),
-                    3.0,
-                ),
+                extents: Vec2::new((health.val as f32) / (Health::MAX_HEALTH as f32), 3.0),
                 origin: RectangleOrigin::default(),
             };
 
@@ -153,9 +149,7 @@ pub fn setup_tanks(
             .insert(Sleeping::disabled())
             .insert(Ccd::enabled())
             .insert(Tank { cooldown: 0 })
-            .insert(Health {
-                val: 50,
-            })
+            .insert(Health { val: 50 })
             .insert(CommandSource::default())
             .insert(EventSink::default())
             .insert(GravityScale(0.0))
@@ -211,7 +205,7 @@ pub fn setup_tanks(
                             fill_mode: FillMode::color(Color::CYAN),
                             outline_mode: StrokeMode::new(Color::BLACK, 1.0),
                         },
-                        Transform::from_xyz(0.0, 60.0 * (n as f32), 1.0),
+                        Transform::from_xyz(0.0, 0.0, 1.0),
                     ))
                     .insert(HealthBar {});
                 // let vertices = vec![
