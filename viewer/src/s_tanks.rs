@@ -47,6 +47,8 @@ pub fn setup_tanks(
 
     let mut n_commands = 0;
 
+    commands.spawn_bundle(Camera2dBundle::default());
+
     // let mut world = World::default();
     for n in 0..tank_ids.len() {
         let c_lines: Vec<CCommand> = lines[(1 + n)..]
