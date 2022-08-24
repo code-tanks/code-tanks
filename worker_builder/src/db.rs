@@ -14,7 +14,7 @@ pub fn upload_log(client: &mut Client, url: &str, log: &str, successful: bool) -
             SET log = $2, successful = $3
             WHERE url = $1;           
         "#,
-            &[&url, &log, &(successful as i8)],
+            &[&url, &log, &successful],
         )
         .is_ok()
 }
