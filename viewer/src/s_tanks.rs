@@ -35,7 +35,11 @@ pub fn update_health(q_parent: Query<(&Health, &Children)>, mut q_child: Query<&
             let mut path = q_child.get_mut(child).unwrap();
 
             let polygon = shapes::Rectangle {
-                extents: Vec2::new((health.val as f32) / (Health::MAX_HEALTH as f32), 3.0),
+                extents: Vec2::new(
+                    25.0 + 0.0 * (Health::MAX_HEALTH as f32) * (health.val as f32)
+                        / (Health::MAX_HEALTH as f32),
+                    3.0,
+                ),
                 origin: RectangleOrigin::default(),
             };
 
