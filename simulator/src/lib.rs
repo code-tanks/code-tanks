@@ -13,6 +13,7 @@ pub mod s_setup_tanks;
 pub mod s_walls;
 
 use bevy::app::ScheduleRunnerSettings;
+use bevy_rapier2d::prelude::*;
 
 use std::fs::File;
 use std::io::Write;
@@ -50,6 +51,7 @@ pub fn run_game(tank_ids: &[String]) {
             tick: 0,
             tank_ids: tank_ids.to_vec(),
         })
+        .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_startup_system(setup_walls)
         .add_startup_system(setup_tanks)
         .add_stage(
