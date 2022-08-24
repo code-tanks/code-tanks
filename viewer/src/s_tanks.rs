@@ -84,7 +84,7 @@ pub fn setup_tanks(
 
     let mut n_commands = 0;
 
-    commands.spawn_bundle(Camera2dBundle::default());
+    // commands.spawn_bundle(Camera2dBundle::default());
 
     // let mut world = World::default();
     for n in 0..tank_ids.len() {
@@ -159,7 +159,7 @@ pub fn setup_tanks(
             .insert(Sleeping::disabled())
             .insert(Ccd::enabled())
             .insert(Tank { cooldown: 0 })
-            .insert(Health { val: 50 })
+            .insert(Health { val: Health::MAX_HEALTH })
             .insert(CommandSource::default())
             .insert(EventSink::default())
             .insert(GravityScale(0.0))
