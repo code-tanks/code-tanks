@@ -94,7 +94,7 @@ pub fn build(url: &str, lang: &str) -> BuildInfo {
     // println!("out: {}", result_raw.to_string());
     // println!("err: {}", err_raw.to_string() != "");
 
-    let successful = err_raw.to_string() == "";
+    let successful = result_raw.to_string() == "";
 
     println!("build, url={}, successful={}", url, successful);
     println!("stdout:");
