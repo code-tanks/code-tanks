@@ -236,7 +236,7 @@ pub fn setup_tanks(
                         fill_mode: FillMode::color(Color::CYAN),
                         outline_mode: StrokeMode::new(Color::BLACK, 1.0),
                     },
-                    Transform::default(),
+                    Transform::from_xyz(0.0, 0.0, 1.0),
                 ));
             });
     }
