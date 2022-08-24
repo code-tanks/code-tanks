@@ -42,8 +42,7 @@ pub fn update_health(
                 let mut path = p.unwrap();
                 let polygon = shapes::Rectangle {
                     extents: Vec2::new(
-                        25.0 + 0.0 * (Health::MAX_HEALTH as f32) * (health.val as f32)
-                            / (Health::MAX_HEALTH as f32),
+                        38.0 * (health.val as f32) / (Health::MAX_HEALTH as f32),
                         3.0,
                     ),
                     origin: RectangleOrigin::BottomLeft,
@@ -205,7 +204,7 @@ pub fn setup_tanks(
                     ..default()
                 });
                 let shape = shapes::Rectangle {
-                    extents: Vec2::new(50.0, 3.0),
+                    extents: Vec2::new(38.0, 3.0),
                     origin: RectangleOrigin::BottomLeft,
                 };
 
@@ -216,7 +215,7 @@ pub fn setup_tanks(
                             fill_mode: FillMode::color(Color::GREEN),
                             outline_mode: StrokeMode::new(Color::BLACK, 1.0),
                         },
-                        Transform::from_xyz(0.0, 0.0, 1.0),
+                        Transform::from_xyz(-19.0, -23.0, 1.0),
                     ))
                     .insert(HealthBar {});
                 // let vertices = vec![
