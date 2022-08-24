@@ -56,6 +56,10 @@ fn main() {
             "publish_events",
             SystemStage::single_threaded().with_system(request_commands_by_event),
         )
+        .add_stage(
+            "update_health",
+            SystemStage::single_threaded().with_system(update_health)
+        )
         .run();
 }
 
