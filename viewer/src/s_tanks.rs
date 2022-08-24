@@ -203,12 +203,11 @@ pub fn setup_tanks(
                         [0.0, 0.0, 0.0],
                         [0.0, 50.0, 0.0],
                         [50.0, 50.0, 0.0],
-                        [50.0, 0.0, 0.0],
                     ],
                 );
-                mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, vec![[0.0, 0.0, 1.0]; 4]);
-                mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[1.0, 1.0]; 4]);
-                mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![[1.0, 0.0, 0.0, 1.0]; 4]);
+                mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, vec![[0.0, 0.0, 1.0]; 3]);
+                mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[1.0, 1.0]; 3]);
+                mesh.insert_attribute(Mesh::ATTRIBUTE_COLOR, vec![[1, 1, 1]; 3]);
                 mesh.set_indices(Some(Indices::U32(vec![0, 1, 2, 4])));
 
                 parent.spawn_bundle(MaterialMesh2dBundle {
