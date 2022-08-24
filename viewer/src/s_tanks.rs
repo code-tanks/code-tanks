@@ -2,7 +2,7 @@ use crate::{CState, CustomAsset};
 use bevy::{
     prelude::{
         default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Color, Commands,
-        Component, Quat, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
+        Component, Entity, Quat, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
     },
     sprite::SpriteBundle,
 };
@@ -241,11 +241,13 @@ pub fn setup_tanks(
                 },
                 Transform::from_xyz(0.0, 60.0 * (n as f32), 1.0),
             ))
-            .insert(HealthBar {});
+            .insert(HealthBar { e: tank });
     }
 
     state.printed = true;
 }
 
 #[derive(Component)]
-pub struct HealthBar {}
+pub struct HealthBar {
+    pub e: Entity,
+}
