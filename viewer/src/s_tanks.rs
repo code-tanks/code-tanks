@@ -213,7 +213,7 @@ pub fn setup_tanks(
                     .spawn_bundle(GeometryBuilder::build_as(
                         &shape,
                         DrawMode::Outlined {
-                            fill_mode: FillMode::color(Color::CYAN),
+                            fill_mode: FillMode::color(Color::GREEN),
                             outline_mode: StrokeMode::new(Color::BLACK, 1.0),
                         },
                         Transform::from_xyz(0.0, 0.0, 1.0),
