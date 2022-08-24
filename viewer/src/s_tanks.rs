@@ -1,13 +1,14 @@
 use crate::{CState, CustomAsset};
 use bevy::{
     prelude::{
-        default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Color, Commands,
-        Component, Entity, Quat, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
+        default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Children, Color,
+        Commands, Component, Quat, Query, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
+        With,
     },
     sprite::SpriteBundle,
 };
 use bevy_prototype_lyon::{
-    prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
+    prelude::{DrawMode, FillMode, GeometryBuilder, Path, ShapePath, StrokeMode},
     shapes::{self, RectangleOrigin},
 };
 use bevy_rapier2d::prelude::{
@@ -26,6 +27,27 @@ use ctsimlib::{
     CCollider,
     CollisionType,
 };
+
+pub fn update_health(q_parent: Query<(&Health, &Children)>, mut q_child: Query<&mut Path>) {
+    for (health, children) in q_parent.iter() {
+        // `children` is a collection of Entity IDs
+        for &child in children.iter() {
+            // get the health of each child unit
+            let mut path = q_child.get_mut(child).unwrap();
+
+            let polygon = shapes::Rectangle {
+                extents: Vec2::new(
+                    50.0 * (health.val as f32) / (Health::MAX_HEALTH as f32),
+                    3.0,
+                ),
+                origin: RectangleOrigin::default(),
+            };
+
+            *path = ShapePath::build_as(&polygon);
+            // do something
+        }
+    }
+}
 
 // use bevy_prototype_lyon::prelude::*;
 
@@ -121,7 +143,7 @@ pub fn setup_tanks(
         //     },
         //     &asset_server,
         // );
-        let tank = commands
+        commands
             .spawn()
             // .insert(Render::as_tank())
             .insert(ActiveEvents::COLLISION_EVENTS)
@@ -131,7 +153,9 @@ pub fn setup_tanks(
             .insert(Sleeping::disabled())
             .insert(Ccd::enabled())
             .insert(Tank { cooldown: 0 })
-            .insert(Health {})
+            .insert(Health {
+                val: 50,
+            })
             .insert(CommandSource::default())
             .insert(EventSink::default())
             .insert(GravityScale(0.0))
@@ -175,6 +199,21 @@ pub fn setup_tanks(
                     texture: asset_server.load("tank_red.png"),
                     ..default()
                 });
+                let shape = shapes::Rectangle {
+                    extents: Vec2::new(50.0, 3.0),
+                    origin: RectangleOrigin::default(),
+                };
+
+                parent
+                    .spawn_bundle(GeometryBuilder::build_as(
+                        &shape,
+                        DrawMode::Outlined {
+                            fill_mode: FillMode::color(Color::CYAN),
+                            outline_mode: StrokeMode::new(Color::BLACK, 1.0),
+                        },
+                        Transform::from_xyz(0.0, 60.0 * (n as f32), 1.0),
+                    ))
+                    .insert(HealthBar {});
                 // let vertices = vec![
                 //     [-0.8660, 0.5000, 0f32],
                 //     [0.8660, 0.5000, 0f32],
@@ -225,29 +264,11 @@ pub fn setup_tanks(
                 // });
 
                 // parent.spawn_bundle(Camera2dBundle::default());
-            })
-            .id();
-        let shape = shapes::Rectangle {
-            extents: Vec2::new(50.0, 3.0),
-            origin: RectangleOrigin::default(),
-        };
-
-        commands
-            .spawn_bundle(GeometryBuilder::build_as(
-                &shape,
-                DrawMode::Outlined {
-                    fill_mode: FillMode::color(Color::CYAN),
-                    outline_mode: StrokeMode::new(Color::BLACK, 1.0),
-                },
-                Transform::from_xyz(0.0, 60.0 * (n as f32), 1.0),
-            ))
-            .insert(HealthBar { e: tank });
+            });
     }
 
     state.printed = true;
 }
 
 #[derive(Component)]
-pub struct HealthBar {
-    pub e: Entity,
-}
+pub struct HealthBar {}

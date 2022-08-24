@@ -72,7 +72,9 @@ pub fn setup_tanks(
             .insert(Sleeping::disabled())
             .insert(Ccd::enabled())
             .insert(Tank { cooldown: 0 })
-            .insert(Health {})
+            .insert(Health {
+                val: Health::MAX_HEALTH,
+            })
             .insert(CommandSource::default())
             .insert(EventSink::default())
             .insert(GravityScale(0.0))
