@@ -145,7 +145,7 @@ pub fn setup_tanks(
                 client: Box::new(ReaderClient { lines: c_lines }),
             })
             .insert_bundle(SpatialBundle {
-                transform: Transform::from_xyz(150.0 * (n as f32) + 10.0, 300.0, 0.0),
+                transform: Transform::from_xyz(150.0 * (n as f32) + 10.0, 0.0, 0.0),
                 // transform: Transform::from_xyz(10.0, 20.0, 30.0),
                 visibility: Visibility { is_visible: true },
                 ..default()

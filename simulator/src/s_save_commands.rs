@@ -25,7 +25,7 @@ pub fn save_commands(
     }
     state.tick = state.tick + 1;
 
-    if state.tick > 200 {
+    if state.tick > 2000 {
         exit.send(AppExit);
     }
 }

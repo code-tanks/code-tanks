@@ -5,6 +5,7 @@ use crate::{collision_mask, CCollider, CollisionType};
 
 pub fn setup_walls(mut commands: Commands) {
     /* Create the ground. */
+
     commands
         .spawn()
         .insert(CCollider {
@@ -17,7 +18,7 @@ pub fn setup_walls(mut commands: Commands) {
             collision_mask::WALL,
             collision_mask::ALL,
         ))
-        .insert_bundle(TransformBundle::from(Transform::from_xyz(0.0, -100.0, 0.0)));
+        .insert_bundle(TransformBundle::from(Transform::from_xyz(0.0, -300.0, 0.0)));
 
     /* Create the bouncing ball. */
     // commands
