@@ -1,5 +1,9 @@
 use crate::{CState, CustomAsset};
-use bevy::prelude::*;
+use bevy::{
+    prelude::*,
+    render::{mesh::Indices, render_resource::PrimitiveTopology},
+    sprite::MaterialMesh2dBundle,
+};
 use bevy_rapier2d::prelude::*;
 use ctsimlib::{
     c_client::{Client, ReaderClient},
@@ -19,6 +23,8 @@ pub fn setup_tanks(
     mut commands: Commands,
     custom_assets: ResMut<Assets<CustomAsset>>,
     asset_server: Res<AssetServer>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     let custom_asset = custom_assets.get(&state.handle);
     if state.printed || custom_asset.is_none() {
@@ -156,6 +162,44 @@ pub fn setup_tanks(
                         std::f32::consts::PI,
                     )),
                     texture: asset_server.load("tank_red.png"),
+                    ..default()
+                });
+                let vertices = vec![
+                    [-0.8660, 0.5000, 0f32],
+                    [0.8660, 0.5000, 0f32],
+                    [-1.0000, 0.0000, 0f32],
+                    [1.0000, 0.0000, 0f32],
+                    [-0.8660, -0.5000, 0f32],
+                    [0.8660, -0.5000, 0f32],
+                ];
+                let normals = vec![
+                    [0f32, 0f32, 1f32],
+                    [0f32, 0f32, 1f32],
+                    [0f32, 0f32, 1f32],
+                    [0f32, 0f32, 1f32],
+                    [0f32, 0f32, 1f32],
+                    [0f32, 0f32, 1f32],
+                ];
+                let uvs = vec![
+                    [0.0000, 0.0000],
+                    [0.0000, 0.0000],
+                    [0.0000, 0.0000],
+                    [0.0000, 0.0000],
+                    [0.0000, 0.0000],
+                    [0.0000, 0.0000],
+                ];
+                let indices = Indices::U16(vec![1, 0, 2, 3, 1, 2, 3, 2, 4, 3, 4, 5]);
+
+                let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
+                mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vertices);
+                mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
+                mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
+                mesh.set_indices(Some(indices));
+
+                parent.spawn_bundle(MaterialMesh2dBundle {
+                    mesh: meshes.add(mesh).into(),
+                    transform: Transform::default().with_scale(Vec3::splat(128.)),
+                    material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
                     ..default()
                 });
             });
