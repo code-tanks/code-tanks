@@ -11,14 +11,18 @@ use crate::{
 pub fn physics(
     rapier_context: Res<RapierContext>,
     query_bullet: Query<Entity, With<Bullet>>,
-    query_collidable: Query<Entity, (With<Collider>, Without<Bullet>)>,
+    mut query_collidable: Query<(Entity, Option<&mut Health>), (With<Collider>, Without<Bullet>)>,
     mut commands: Commands,
 ) {
-    for a in query_collidable.iter() {
+    for (a, mut health) in &mut query_collidable {
         for bullet in query_bullet.iter() {
             /* Find the intersection pair, if it exists, between two colliders. */
             if rapier_context.intersection_pair(a, bullet) == Some(true) {
                 commands.entity(bullet).despawn();
+
+                if health.is_some() {
+                    health.val = health.val - 10;
+                }
             }
         }
     }
