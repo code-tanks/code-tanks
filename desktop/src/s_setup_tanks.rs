@@ -93,7 +93,7 @@ pub fn setup_tanks(
             .insert(RigidBody::Dynamic)
             .insert(ColliderMassProperties::Mass(1.0))
             .insert(ColliderMassProperties::Density(1.0))
-            .insert(Collider::cuboid(30.0, 50.0))
+            .insert(Collider::cuboid(19.0, 23.0))
             .insert(Restitution::coefficient(0.1))
             .insert(CollisionGroups::new(
                 collision_mask::TANK,
