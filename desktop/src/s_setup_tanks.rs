@@ -1,7 +1,7 @@
 use bevy::{
     prelude::{
-        default, AssetServer, BuildChildren, Color, Commands, Quat, Res, SpatialBundle, Transform,
-        Vec2, Visibility,
+        default, AssetServer, BuildChildren, Color, Commands, Quat, Res, ResMut, SpatialBundle,
+        Transform, Vec2, Visibility,
     },
     sprite::SpriteBundle,
 };
@@ -20,7 +20,7 @@ use crate::{c_client::Client, c_tank::Tank, CCollider, CState, CollisionType, Lo
 use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, collision_mask};
 
 pub fn setup_tanks(
-    state: Res<CState>,
+    mut state: ResMut<CState>,
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     // asset_server: Res<AssetServer>,
@@ -57,7 +57,8 @@ pub fn setup_tanks(
     // let texture_handle = asset_server.load("spritesheet.png");
     // let texture_atlas = TextureAtlas:: //::from_grid(texture_handle, Vec2::new(24.0, 24.0), 3, 1);
     // let texture_atlas_handle = texture_atlases.add(texture_atlas);
-    if state.tick > 0 {
+    state.tick = state.tick + 1;
+    if state.tick > 1 {
         return;
     }
 
