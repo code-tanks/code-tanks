@@ -32,12 +32,12 @@ pub fn physics(
 
 pub fn physics2(
     mut contact_events: EventReader<CollisionEvent>,
-    query_tank: Query<(Entity, &EventSink, &Health), With<Tank>>,
+    mut query_tank: Query<(Entity, &mut EventSink, &mut Health), With<Tank>>,
     query_collider: Query<&CCollider>,
     // mut commands: Commands,
 ) {
     for contact_event in contact_events.iter() {
-        for (entity, _event_sink, _health) in query_tank.iter() {
+        for (entity, mut event_sink, mut health) in &mut query_tank {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
                 if h1 == &entity {
                     hit(
@@ -47,6 +47,8 @@ pub fn physics2(
                             .get_component::<CCollider>(*h2)
                             .unwrap()
                             .collision_type,
+                        &mut event_sink,
+                        &mut health,
                     );
                 } else if h2 == &entity {
                     hit(
@@ -56,6 +58,8 @@ pub fn physics2(
                             .get_component::<CCollider>(*h1)
                             .unwrap()
                             .collision_type,
+                        &mut event_sink,
+                        &mut health,
                     );
                 }
             }
@@ -63,6 +67,17 @@ pub fn physics2(
     }
 }
 
-fn hit(tank: &Entity, b: &Entity, collision_type: &CollisionType) {
+fn hit(
+    tank: &Entity,
+    b: &Entity,
+    collision_type: &CollisionType,
+    _event_sink: &mut EventSink,
+    health: &mut Health,
+) {
     info!("HIT {:?}, by {:?} of type {:?}", tank, b, collision_type);
+    health.val = health.val - 10;
+
+    if health.val < 0 {
+        health.val = 0;
+    }
 }
