@@ -3,6 +3,7 @@ pub mod c_command;
 pub mod c_event;
 pub mod c_health;
 pub mod c_tank;
+pub mod c_healthbar;
 
 pub mod s_apply_commands;
 pub mod s_physics;

@@ -2,7 +2,7 @@ use crate::{CState, CustomAsset};
 use bevy::{
     prelude::{
         default, info, AssetServer, Assets, BuildChildren, Children, Color,
-        Commands, Component, Quat, Query, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
+        Commands, Quat, Query, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
         With,
     },
     sprite::SpriteBundle,
@@ -26,6 +26,7 @@ use ctsimlib::{
     collision_mask,
     CCollider,
     CollisionType,
+    c_healthbar::HealthBar,
 };
 
 pub fn update_health(
@@ -273,6 +274,3 @@ pub fn setup_tanks(
 
     state.printed = true;
 }
-
-#[derive(Component)]
-pub struct HealthBar {}
