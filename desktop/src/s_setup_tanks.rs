@@ -15,14 +15,7 @@ use bevy_rapier2d::prelude::{
 };
 use ctsimlib::c_healthbar::HealthBar;
 
-use crate::{
-    c_client::{
-        Client,
-        DockerClient, // , DummyClient
-    },
-    c_tank::Tank,
-    CCollider, CState, CollisionType, LocalClient,
-};
+use crate::{c_client::Client, c_tank::Tank, CCollider, CState, CollisionType, LocalClient};
 
 use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, collision_mask};
 
@@ -64,6 +57,9 @@ pub fn setup_tanks(
     // let texture_handle = asset_server.load("spritesheet.png");
     // let texture_atlas = TextureAtlas:: //::from_grid(texture_handle, Vec2::new(24.0, 24.0), 3, 1);
     // let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    if state.tick > 0 {
+        return;
+    }
 
     for (i, tank_id) in state.tank_ids.iter().enumerate() {
         // create_tank(
