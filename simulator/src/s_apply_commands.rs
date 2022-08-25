@@ -85,7 +85,9 @@ pub fn apply_commands(
                 tank.cooldown = Tank::MAX_COOLDOWN;
             }
         }
-        tank.cooldown = tank.cooldown - 1;
+        if tank.cooldown > 0 {
+            tank.cooldown = tank.cooldown - 1;
+        }
 
         velocity.linvel = vel;
 
