@@ -21,6 +21,11 @@ pub fn apply_commands(
     )>,
 ) {
     for (mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
+        let mut vel = Vec2::ZERO;
+        let mut ang = 0.0;
+        velocity.linvel = vel;
+        velocity.angvel = ang;
+
         if health.val == 0 {
             continue;
         }
@@ -28,8 +33,7 @@ pub fn apply_commands(
 
         // println!("apply_commands {:?}", grouped_commands);
         // info!("apply_commands {:?}", grouped_commands);
-        let mut vel = Vec2::ZERO;
-        let mut ang = 0.0;
+
         if CCommands::MOVE_FORWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
 
