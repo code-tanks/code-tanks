@@ -2,6 +2,7 @@
 
 mkdir ./target/release/web/
 cp -r ./web/* ./target/release/web/
+cp -r ../web/assets/* ./web/assets/
 cargo build --bin ctviewer --target wasm32-unknown-unknown --release
 wasm-bindgen --out-name ctviewer \
   --out-dir target/release/web/build \
