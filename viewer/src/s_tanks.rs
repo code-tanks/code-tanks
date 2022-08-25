@@ -1,7 +1,7 @@
 use crate::{CState, CustomAsset};
 use bevy::{
     prelude::{
-        default, info, AssetServer, Assets, BuildChildren, Camera2dBundle, Children, Color,
+        default, info, AssetServer, Assets, BuildChildren, Children, Color,
         Commands, Component, Quat, Query, Res, ResMut, SpatialBundle, Transform, Vec2, Visibility,
         With,
     },
