@@ -1,9 +1,18 @@
-use bevy::{prelude::{Res, Commands, AssetServer, Vec2, SpatialBundle, Transform, Visibility, default, BuildChildren, Quat, Color}, sprite::SpriteBundle};
+use bevy::{
+    prelude::{
+        default, AssetServer, BuildChildren, Color, Commands, Quat, Res, SpatialBundle, Transform,
+        Vec2, Visibility,
+    },
+    sprite::SpriteBundle,
+};
 use bevy_prototype_lyon::{
-    prelude::{DrawMode, GeometryBuilder, FillMode, StrokeMode},
+    prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
     shapes::{self, RectangleOrigin},
 };
-use bevy_rapier2d::prelude::{ActiveEvents, Sleeping, Ccd, GravityScale, RigidBody, ColliderMassProperties, Collider, Restitution, CollisionGroups, Damping, Velocity};
+use bevy_rapier2d::prelude::{
+    ActiveEvents, Ccd, Collider, ColliderMassProperties, CollisionGroups, Damping, GravityScale,
+    Restitution, RigidBody, Sleeping, Velocity,
+};
 use ctsimlib::c_healthbar::HealthBar;
 
 use crate::{
@@ -12,7 +21,7 @@ use crate::{
         DockerClient, // , DummyClient
     },
     c_tank::Tank,
-    CCollider, CState, CollisionType,
+    CCollider, CState, CollisionType, LocalClient,
 };
 
 use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, collision_mask};
@@ -108,8 +117,9 @@ pub fn setup_tanks(
             //     ..Default::default()
             // })
             .insert(Client {
-                client: Box::new(DockerClient {
+                client: Box::new(LocalClient {
                     tank_id: tank_id.to_string(),
+                    port: i,
                 }),
             })
             .insert_bundle(SpatialBundle {

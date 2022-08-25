@@ -49,7 +49,7 @@ impl ClientTrait for DockerClient {
                 r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
                 self.tank_id,
             ))
-            .arg("ocypod:8023/queue/build/job")
+            // .arg("ocypod:8023/queue/build/job")
             .output()
             .expect("failed to communicate with ocypod");
 
@@ -99,7 +99,7 @@ impl ClientTrait for DockerClient {
                 r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
                 self.tank_id,  
             ))
-            .arg("ocypod:8023/queue/build/job")
+            // .arg("ocypod:8023/queue/build/job")
             .output()
             .expect("failed to communicate with ocypod");
 
