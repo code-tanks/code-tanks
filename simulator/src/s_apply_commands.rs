@@ -3,6 +3,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{
     c_command::{CCommands, CommandSource},
+    c_health::Health,
     c_tank::{Bullet, Tank},
     collision_mask, CCollider, CollisionType,
 };
@@ -12,14 +13,17 @@ pub fn apply_commands(
     mut query: Query<(
         &mut CommandSource,
         &Transform,
-        &RigidBody,
         &mut Velocity, // &mut CVelocity,
         // &mut TankVelocity,
         // &Position,
         &mut Tank,
+        &Health,
     )>,
 ) {
-    for (mut command_receiver, transform, _body, mut velocity, mut tank) in &mut query {
+    for (mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
+        if health.val == 0 {
+            continue;
+        }
         let grouped_commands = command_receiver.queue.remove(0);
 
         // println!("apply_commands {:?}", grouped_commands);
