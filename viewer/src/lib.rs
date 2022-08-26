@@ -1,7 +1,5 @@
-pub mod s_graphics;
 pub mod s_load_tanks;
-pub mod s_tanks;
-pub mod s_request_debug_commands;
+pub mod s_setup_web_tanks;
 
 use bevy::{
     asset::{AssetLoader, LoadContext, LoadedAsset},
@@ -38,7 +36,7 @@ impl AssetLoader for CustomAssetLoader {
 }
 
 #[derive(Default)]
-pub struct CState {
+pub struct CustomAssetState {
     pub handle: Handle<CustomAsset>,
     pub printed: bool,
 }

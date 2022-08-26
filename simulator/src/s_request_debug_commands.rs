@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-use ctsimlib::c_command::{CCommands, CommandSource};
+
+use crate::c_command::{CCommands, CommandSource};
 
 pub fn request_debug_commands(mut query: Query<&mut CommandSource>, keys: Res<Input<KeyCode>>) {
     for mut command_source in &mut query {

@@ -1,11 +1,11 @@
 use bevy::prelude::*;
 use std::{fs::OpenOptions, io::Write};
 
-use crate::{c_command::CommandSource, CState};
+use crate::{c_command::CommandSource, TickState};
 use bevy::app::AppExit;
 
 pub fn save_commands(
-    mut state: ResMut<CState>,
+    mut state: ResMut<TickState>,
     mut exit: EventWriter<AppExit>,
     query: Query<&CommandSource>,
 ) {

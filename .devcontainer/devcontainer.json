@@ -13,7 +13,8 @@
             "worker_simulator/Cargo.toml",
             "simulator/Cargo.toml",
             "viewer/Cargo.toml",
-            "desktop/Cargo.toml"
+            "desktop/Cargo.toml",
+            "simulator_graphics/Cargo.toml"
         ]
     },
     "extensions": [

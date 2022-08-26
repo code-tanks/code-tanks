@@ -1,21 +1,21 @@
 [package]
-name = "ctviewer"
+name = "ctsimlibgraphics"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 ctsimlib = { path = "../simulator" }
-ctsimlibgraphics = { path = "../simulator_graphics" }
-serde = "1.0.143"
-wasm-bindgen = "0.2.82"
-web-sys = { version = "0.3.59", features = [ "Window", "Location" ] }
 bevy = "0.8.0"
 bevy_rapier2d = { version = "0.16.0", features = [ "debug-render", "enhanced-determinism", "wasm-bindgen" ] }
 bevy_prototype_lyon = "0.6.0"
 
 [[bin]]
-name = "ctviewer"
+name = "ctsimlibgraphics"
 path = "src/main.rs"
+
+[[bin]]
+name = "test"
+path = "src/test.rs"
 
 [profile.release]
 codegen-units = 1
@@ -25,6 +25,3 @@ opt-level = 3
 
 [profile.dev.package.bevy]
 opt-level = 3
-
-[target.wasm32-unknown-unknown]
-runner = "wasm-server-runner"

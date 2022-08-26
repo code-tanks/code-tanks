@@ -5,28 +5,26 @@ use ctsimlib::{
     s_physics::{physics, physics2},
     s_request_commands::request_commands,
     s_request_commands_by_event::request_commands_by_event,
+    s_request_debug_commands::request_debug_commands,
     s_walls::setup_walls,
 };
 
-use ctviewer::*;
-use s_graphics::*;
+use ctsimlibgraphics::{s_graphics::setup_graphics, s_update_health::update_health};
+use ctviewer::{s_setup_web_tanks::setup_web_tanks, *};
 use s_load_tanks::*;
-use s_request_debug_commands::*;
-use s_tanks::*;
 
 use bevy_prototype_lyon::prelude::*;
-
 
 fn main() {
     App::new()
         .insert_resource(Msaa { samples: 4 })
         .add_plugins(DefaultPlugins)
         .add_plugin(ShapePlugin)
-        .init_resource::<CState>()
+        .init_resource::<CustomAssetState>()
         .add_asset::<CustomAsset>()
         .init_asset_loader::<CustomAssetLoader>()
         .add_startup_system(load_tanks)
-        .add_system(setup_tanks)
+        .add_system(setup_web_tanks)
         // .add_system(print_on_load)
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugin(RapierDebugRenderPlugin::default())
@@ -58,7 +56,7 @@ fn main() {
         )
         .add_stage(
             "update_health",
-            SystemStage::single_threaded().with_system(update_health)
+            SystemStage::single_threaded().with_system(update_health),
         )
         .run();
 }

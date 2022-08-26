@@ -13,14 +13,15 @@ use bevy_rapier2d::prelude::{
     ActiveEvents, Ccd, Collider, ColliderMassProperties, CollisionGroups, Damping, GravityScale,
     Restitution, RigidBody, Sleeping, Velocity,
 };
-use ctsimlib::c_healthbar::HealthBar;
+use ctsimlib::{
+    c_client::Client, c_command::CommandSource, c_event::EventSink, c_health::Health,
+    c_healthbar::HealthBar, c_tank::Tank, *,
+};
 
-use crate::{c_client::Client, c_tank::Tank, CCollider, CState, CollisionType, LocalClient};
+use ctsimlib::c_client::LocalClient;
 
-use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, collision_mask};
-
-pub fn setup_tanks(
-    mut state: ResMut<CState>,
+pub fn setup_desktop_tanks(
+    mut state: ResMut<TickState>,
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     // asset_server: Res<AssetServer>,
