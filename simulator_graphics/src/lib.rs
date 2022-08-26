@@ -14,11 +14,8 @@ use bevy_rapier2d::prelude::{
     Restitution, RigidBody, Sleeping, Velocity,
 };
 use ctsimlib::{
-    // c_client::{Client, ClientTrait, ReaderClient},
-    // c_collider::CCollider,
     c_command::*,
     c_event::EventSink,
-    // c_velocity::{CVelocity, TankVelocity},
     c_health::Health,
     c_healthbar::HealthBar,
     c_tank::Tank,
@@ -38,7 +35,6 @@ pub fn create_tank(
 ) {
     commands
         .spawn()
-        // .insert(Render::as_tank())
         .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(CCollider {
             collision_type: CollisionType::Tank,
@@ -69,16 +65,9 @@ pub fn create_tank(
             linvel: Vec2::new(0.0, 0.0),
             angvel: 0.0,
         })
-        // .insert_bundle(SpriteBundle {
-        //     // texture: asset_server.load("tankBody_red.png"),
-        //     sprite
-        //     transform: Transform::from_xyz(150.0 * (n as f32) + 10.0, 300.0, 0.0),
-        //     ..Default::default()
-        // })
         .insert(client)
         .insert_bundle(SpatialBundle {
             transform: Transform::from_xyz(x, y, 0.0),
-            // transform: Transform::from_xyz(10.0, 20.0, 30.0),
             visibility: Visibility { is_visible: true },
             ..default()
         })

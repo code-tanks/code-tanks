@@ -8,8 +8,9 @@ use ctsimlib::{
     s_physics::{physics, physics2},
     s_request_commands::request_commands,
     s_request_commands_by_event::request_commands_by_event,
+    s_request_debug_commands::request_debug_commands,
     s_walls::setup_walls,
-    *, s_request_debug_commands::request_debug_commands,
+    *,
 };
 use ctsimlibgraphics::{s_graphics::setup_graphics, s_update_health::update_health};
 use s_setup_desktop_tanks::setup_desktop_tanks;
@@ -71,16 +72,11 @@ pub fn run_game(args: &[String]) {
         .insert_resource(Msaa { samples: 4 })
         .add_plugins(DefaultPlugins)
         .add_plugin(ShapePlugin)
-        // .init_resource::<CState>()
         .insert_resource(TickState {
             tick: 0,
             tank_ids: tank_ids.to_vec(),
         })
-        // .add_asset::<CustomAsset>()
-        // .init_asset_loader::<CustomAssetLoader>()
-        // .add_startup_system(load_tanks)
         .add_system(setup_desktop_tanks)
-        // .add_system(print_on_load)
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugin(RapierDebugRenderPlugin::default())
         .add_startup_system(setup_graphics)

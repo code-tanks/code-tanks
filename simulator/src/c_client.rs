@@ -9,26 +9,6 @@ pub struct Client {
     pub client: Box<dyn ClientTrait + Send + Sync>,
 }
 
-// impl Client {
-//     // pub fn dummy() -> ClientConnection {
-//     //     ClientConnection {
-//     //         client: Box::new(DummyClient {}),
-//     //     }
-//     // }
-
-//     // pub fn url(url: &str) -> Client {
-//     //     Client {
-//     //         client: Box::new(DummyClient {}),
-//     //     }
-//     // }
-
-//     // pub fn reader(lines: Vec<String>) -> Client {
-//     //     Client {
-//     //         client: Box::new(ReaderClient { lines }),
-//     //     }
-//     // }
-// }
-
 pub trait ClientTrait {
     fn request_commands(&mut self) -> Vec<CCommand>;
     fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand>;
@@ -233,7 +213,6 @@ impl ClientTrait for LocalClient {
                 r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST localhost:808{}/request_commands_by_event | jq --raw-output '.[]'"#,
                 self.port,  
             ))
-            // .arg("ocypod:8023/queue/build/job")
             .output()
             .expect("failed to communicate with ocypod");
 

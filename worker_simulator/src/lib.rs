@@ -26,14 +26,7 @@ pub fn get_sim_job() -> Vec<String> {
         .expect("failed to communicate with ocypod");
 
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    // println!("stdout:");
-    // println!("{}", result_raw.to_string());
-    // println!("");
-    // println!("stderr:");
-    // println!("{}", err_raw.to_string());
-    // println!("");
     result_raw
         .to_string()
         .split('\n')
@@ -59,44 +52,19 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     println!("run stdout:");
     println!("{}", result_raw.to_string());
-
-    // let output_raw = Command::new("bash")
-    //     .arg("-c")
-    //     .arg(format!(r#"docker port {} 8080 | cut -d: -f2"#, tank_id))
-    //     .output()
-    //     .expect("failed to communicate with docker");
-    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-    // let port = result_raw
-    //     .to_string()
-    //     .split("\n")
-    //     .map(|f| f.to_string())
-    //     .collect::<Vec<String>>();
-
-    // let port = port.first().unwrap();
-
-    // println!("port stdout:");
-    // println!("{}", port);
-    // format!("{}:{}", tank_id, port)
     tank_id
 }
 
 pub fn remove_tank(tank_id: &str) {
-    let output_raw = Command::new("docker")
+    Command::new("docker")
         .arg("rm")
         .arg("-f")
         .arg(&tank_id)
         .output()
         .expect("failed to communicate with docker");
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-
-    println!("stdout:");
-    println!("{}", result_raw.to_string());
 }
 
 pub fn run_docker_game(args: &[String]) {
@@ -106,9 +74,6 @@ pub fn run_docker_game(args: &[String]) {
         .enumerate()
         .map(|(i, url)| run_tank(url, &game_url, i))
         .collect::<Vec<String>>();
-    // for tank_id in tank_ids.iter() {
-    //     remove_tank(tank_id);
-    // }
     thread::sleep(time::Duration::from_millis(5000));
 
     run_game(&tank_ids);
@@ -131,14 +96,5 @@ pub fn update_sim_job(id: &str, successful: bool) {
         .output()
         .expect("failed to communicate with ocypod");
 
-    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-
     println!("update job, id={}", id);
-    // println!("stdout:");
-    // println!("{}", result_raw.to_string());
-    // println!("");
-    // println!("stderr:");
-    // println!("{}", err_raw.to_string());
-    // println!("");
 }

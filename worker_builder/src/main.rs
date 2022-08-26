@@ -9,11 +9,7 @@ use worker_builder::{
 fn main() {
     println!("Started ctbuilder");
 
-    //  build("hello", "world");
-
-    // if !get_queues().contains(&"build".to_string()) {
     create_build_queue();
-    // }
 
     let mut client = get_client();
 

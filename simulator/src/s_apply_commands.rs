@@ -13,9 +13,7 @@ pub fn apply_commands(
     mut query: Query<(
         &mut CommandSource,
         &Transform,
-        &mut Velocity, // &mut CVelocity,
-        // &mut TankVelocity,
-        // &Position,
+        &mut Velocity,
         &mut Tank,
         &Health,
     )>,
@@ -30,9 +28,6 @@ pub fn apply_commands(
             continue;
         }
         let grouped_commands = command_receiver.queue.remove(0);
-
-        // println!("apply_commands {:?}", grouped_commands);
-        // info!("apply_commands {:?}", grouped_commands);
 
         if CCommands::MOVE_FORWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
@@ -82,11 +77,9 @@ pub fn apply_commands(
                         angvel: 0.0,
                     })
                     .insert_bundle(SpatialBundle {
-                        // transform: transform + t,
                         transform: Transform::from_translation(
                             transform.translation + t * Vec3::new(35.0, 35.0, 35.0),
                         ),
-                        // transform: Transform::from_xyz(10.0, 20.0, 30.0),
                         visibility: Visibility { is_visible: true },
                         ..default()
                     });
@@ -100,8 +93,5 @@ pub fn apply_commands(
         velocity.linvel = vel;
 
         velocity.angvel = ang;
-
-        // println!("commands remaining {:?}", command_receiver.queue);
-        // info!("commands remaining {:?}", command_receiver.queue);
     }
 }

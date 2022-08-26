@@ -25,7 +25,6 @@ fn main() {
         .init_asset_loader::<CustomAssetLoader>()
         .add_startup_system(load_tanks)
         .add_system(setup_web_tanks)
-        // .add_system(print_on_load)
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugin(RapierDebugRenderPlugin::default())
         .add_startup_system(setup_graphics)
@@ -60,35 +59,3 @@ fn main() {
         )
         .run();
 }
-
-// fn print_ball_altitude(
-//     mut positions: Query<(&Transform, &RigidBody, &mut Velocity)>,
-//     keys: Res<Input<KeyCode>>,
-// ) {
-//     for (transform, _body, mut velocity) in &mut positions {
-//         // info!("Ball altitude: {}", transform.translation.y);
-
-//         let mut vel = Vec2::ZERO;
-//         let mut ang = 0.0;
-//         if keys.pressed(KeyCode::W) {
-//             let dir = transform.rotation * Vec3::X;
-
-//             vel.x += 100.0 * dir.x;
-//             vel.y += 100.0 * dir.y;
-//         }
-//         if keys.pressed(KeyCode::S) {
-//             let dir = transform.rotation * Vec3::X;
-//             vel.x -= 100.0 * dir.x;
-//             vel.y -= 100.0 * dir.y;
-//         }
-//         if keys.pressed(KeyCode::A) {
-//             ang += 0.125 * std::f32::consts::PI;
-//         }
-//         if keys.pressed(KeyCode::D) {
-//             ang -= 0.125 * std::f32::consts::PI;
-//         }
-//         velocity.linvel = vel;
-
-//         velocity.angvel = ang;
-//     }
-// }

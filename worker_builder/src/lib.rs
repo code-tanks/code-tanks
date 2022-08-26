@@ -12,17 +12,6 @@ pub fn get_lang(_url: &str) -> &'static str {
     Langs::DART
 }
 
-// pub fn get_queues() -> Vec<String> {
-//     let output_raw = Command::new("curl")
-//         .arg("ocypod:8023/queue")
-//         .output()
-//         .expect("failed to communicate with ocypod");
-
-//     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-
-//     serde_json::from_str(&result_raw.to_string()).unwrap()
-// }
-
 pub fn create_build_queue() {
     Command::new("curl")
         .arg("-H")
@@ -49,14 +38,7 @@ pub fn get_build_job() -> Vec<String> {
         .expect("failed to communicate with ocypod");
 
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    // println!("stdout:");
-    // println!("{}", result_raw.to_string());
-    // println!("");
-    // println!("stderr:");
-    // println!("{}", err_raw.to_string());
-    // println!("");
     result_raw
         .to_string()
         .split('\n')
@@ -65,15 +47,9 @@ pub fn get_build_job() -> Vec<String> {
         .collect::<Vec<String>>()
 }
 
-// pub struct BuildInfo {
-//     pub successful: bool,
-//     pub log: String,
-// }
-
 pub fn build(url: &str, lang: &str) -> String {
     let output_raw = Command::new("docker")
         .arg("build")
-        // .arg("--no-cache")
         .arg("-t")
         .arg(format!("localhost:5001/{}", url))
         .arg("--network")
@@ -91,11 +67,6 @@ pub fn build(url: &str, lang: &str) -> String {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    // println!("out: {}", result_raw.to_string());
-    // println!("err: {}", err_raw.to_string() != "");
-
-    // let successful = result_raw.to_string() == "";
-
     println!("build, url={}", url);
     println!("stdout:");
     println!("{}", result_raw.to_string());
@@ -104,25 +75,8 @@ pub fn build(url: &str, lang: &str) -> String {
     println!("{}", err_raw.to_string());
     println!("");
 
-    // if successful {
-    //     return BuildInfo {
-    //         successful: true,
-    //         log: result_raw.to_string(),
-    //     };
-    // }
-
-    // BuildInfo {
-    //     successful: false,
-    //     log: err_raw.to_string(),
-    // }
     err_raw.to_string()
 }
-
-// pub fn simulate(urls: &[&str]) {
-//     // docker network create --driver bridge FooAppNet
-//     // docker run --rm --net=FooAppNet --name=component1 -p 9000:9000 component1-image
-//     // docker run --rm --net=FooAppNet --name=component2 component2-image
-// }
 
 pub fn update_build_job(id: &str, successful: bool) {
     Command::new("curl")
@@ -138,16 +92,7 @@ pub fn update_build_job(id: &str, successful: bool) {
         .output()
         .expect("failed to communicate with ocypod");
 
-    // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-
     println!("update job, id={}", id);
-    // println!("stdout:");
-    // println!("{}", result_raw.to_string());
-    // println!("");
-    // println!("stderr:");
-    // println!("{}", err_raw.to_string());
-    // println!("");
 }
 
 pub fn push_to_registry(url: &str) -> bool {
@@ -159,9 +104,6 @@ pub fn push_to_registry(url: &str) -> bool {
 
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-
-    // println!("out: {}", result_raw.to_string());
-    // println!("err: {}", err_raw.to_string() != "");
 
     let successful = err_raw.to_string() == "";
 

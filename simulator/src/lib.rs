@@ -46,7 +46,6 @@ pub fn run_game(tank_ids: &[String]) {
     App::new()
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_nanos(1)))
         .add_plugins(MinimalPlugins)
-        // .add_plugins(DefaultPlugins)
         .insert_resource(TickState {
             tick: 0,
             tank_ids: tank_ids.to_vec(),
