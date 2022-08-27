@@ -26,7 +26,38 @@ pub fn request_debug_commands(mut query: Query<&mut CommandSource>, keys: Res<In
             info!("Space pressed");
             grouped_commands = grouped_commands | CCommands::FIRE;
         }
-
+        if keys.pressed(KeyCode::E) {
+            info!("E pressed");
+            grouped_commands = grouped_commands | CCommands::ROTATE_GUN_CLOCKWISE;
+        }
+        if keys.pressed(KeyCode::Q) {
+            info!("Q pressed");
+            grouped_commands = grouped_commands | CCommands::ROTATE_GUN_COUNTER_CLOCKWISE;
+        }
+        if keys.pressed(KeyCode::X) {
+            info!("X pressed");
+            grouped_commands = grouped_commands | CCommands::ROTATE_RADAR_CLOCKWISE;
+        }
+        if keys.pressed(KeyCode::Z) {
+            info!("Z pressed");
+            grouped_commands = grouped_commands | CCommands::ROTATE_RADAR_COUNTER_CLOCKWISE;
+        }
+        if keys.pressed(KeyCode::R) {
+            info!("R pressed");
+            grouped_commands = grouped_commands | CCommands::LOCK_GUN;
+        }
+        if keys.pressed(KeyCode::T) {
+            info!("T pressed");
+            grouped_commands = grouped_commands | CCommands::UNLOCK_GUN;
+        }
+        if keys.pressed(KeyCode::F) {
+            info!("F pressed");
+            grouped_commands = grouped_commands | CCommands::LOCK_RADAR;
+        }
+        if keys.pressed(KeyCode::G) {
+            info!("G pressed");
+            grouped_commands = grouped_commands | CCommands::UNLOCK_RADAR;
+        }
         command_source.queue.insert(0, grouped_commands);
     }
 }

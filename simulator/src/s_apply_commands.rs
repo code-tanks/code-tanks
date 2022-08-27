@@ -4,7 +4,7 @@ use bevy_rapier2d::prelude::*;
 use crate::{
     c_command::{CCommands, CommandSource},
     c_health::Health,
-    c_tank::{Bullet, Tank},
+    c_tank::{Bullet, Tank, Gun, Radar},
     collision_mask, CCollider, CollisionType,
 };
 
@@ -16,13 +16,26 @@ pub fn apply_commands(
         &mut Velocity,
         &mut Tank,
         &Health,
-    )>,
+    ), (Without<Radar>, Without<Gun>)>,
+    mut query_radar: Query<(
+        &mut Radar,
+        &mut Transform,
+        &mut Velocity,
+    ), (Without<Gun>, Without<Tank>)>,
+    mut query_gun: Query<(
+        &mut Gun,
+        &mut Transform,
+        &mut Velocity,
+    ), (Without<Radar>, Without<Tank>)>,
 ) {
     for (mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;
         velocity.linvel = vel;
         velocity.angvel = ang;
+
+        let mut gun_ang = 0.0;
+        let mut radar_ang = 0.0;
 
         if health.val == 0 {
             continue;
@@ -40,16 +53,74 @@ pub fn apply_commands(
             vel.x -= 100.0 * dir.x;
             vel.y -= 100.0 * dir.y;
         }
+        let (mut radar, mut radar_transform, mut radar_velocity) = query_radar.get_mut(tank.radar).unwrap();
+        let (mut gun, mut gun_transform, mut gun_velocity) = query_gun.get_mut(tank.gun).unwrap();
+        radar_velocity.angvel = radar_ang;
+        gun_velocity.angvel = gun_ang;
+        
+        if CCommands::LOCK_GUN & grouped_commands != 0 {
+            gun.locked = true;
+        }
+        if CCommands::UNLOCK_GUN & grouped_commands != 0 {
+            gun.locked = false;
+        }
+        if CCommands::LOCK_RADAR & grouped_commands != 0 {
+            radar.locked = true;
+        }
+        if CCommands::UNLOCK_RADAR & grouped_commands != 0 {
+            radar.locked = false;
+        }
+
         if CCommands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
             ang -= 0.3 * std::f32::consts::PI;
+
+            if gun.locked {
+                gun_ang -= 0.3 * std::f32::consts::PI;
+
+                if radar.locked {
+                    radar_ang -= 0.3 * std::f32::consts::PI;
+                }
+            }
         }
         if CCommands::ROTATE_TANK_COUNTER_CLOCKWISE & grouped_commands != 0 {
             ang += 0.3 * std::f32::consts::PI;
+
+            if gun.locked {
+                gun_ang += 0.3 * std::f32::consts::PI;
+
+                if radar.locked {
+                    radar_ang += 0.3 * std::f32::consts::PI;
+                }
+            }
+        }
+
+        if CCommands::ROTATE_GUN_CLOCKWISE & grouped_commands != 0 {
+            gun_ang -= 0.3 * std::f32::consts::PI;
+
+            if radar.locked {
+                radar_ang -= 0.3 * std::f32::consts::PI;
+            }
+        }
+
+        if CCommands::ROTATE_GUN_COUNTER_CLOCKWISE & grouped_commands != 0 {
+            gun_ang += 0.3 * std::f32::consts::PI;
+
+            if radar.locked {
+                radar_ang += 0.3 * std::f32::consts::PI;
+            }
+        }
+
+        if CCommands::ROTATE_RADAR_CLOCKWISE & grouped_commands != 0 {
+            radar_ang -= 0.3 * std::f32::consts::PI;
+        }
+
+        if CCommands::ROTATE_RADAR_COUNTER_CLOCKWISE & grouped_commands != 0 {
+            radar_ang += 0.3 * std::f32::consts::PI;
         }
 
         if CCommands::FIRE & grouped_commands != 0 {
             if tank.cooldown <= 0 {
-                let t = transform.rotation * Vec3::Y;
+                let t = gun_transform.rotation * Vec3::Y;
                 commands
                     .spawn()
                     .insert(CCollider {
@@ -91,7 +162,15 @@ pub fn apply_commands(
         }
 
         velocity.linvel = vel;
-
         velocity.angvel = ang;
+
+        gun_velocity.angvel = gun_ang;
+        radar_velocity.angvel = radar_ang;
+
+        gun_transform.translation.x = transform.translation.x;
+        gun_transform.translation.y = transform.translation.y;
+
+        radar_transform.translation.x = transform.translation.x;
+        radar_transform.translation.y = transform.translation.y;
     }
 }
