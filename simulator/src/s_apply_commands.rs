@@ -36,8 +36,11 @@ pub fn apply_commands(
 
         let mut gun_ang = 0.0;
         let mut radar_ang = 0.0;
-        gun_velocity.angvel = gun_ang;
+        let (mut radar, mut radar_transform, mut radar_velocity) = query_radar.get_mut(tank.radar).unwrap();
+        let (mut gun, mut gun_transform, mut gun_velocity) = query_gun.get_mut(tank.gun).unwrap();
         radar_velocity.angvel = radar_ang;
+        gun_velocity.angvel = gun_ang;
+        
         if health.val == 0 {
             continue;
         }
@@ -54,11 +57,6 @@ pub fn apply_commands(
             vel.x -= 100.0 * dir.x;
             vel.y -= 100.0 * dir.y;
         }
-        let (mut radar, mut radar_transform, mut radar_velocity) = query_radar.get_mut(tank.radar).unwrap();
-        let (mut gun, mut gun_transform, mut gun_velocity) = query_gun.get_mut(tank.gun).unwrap();
-        radar_velocity.angvel = radar_ang;
-        gun_velocity.angvel = gun_ang;
-        
         if CCommands::LOCK_GUN & grouped_commands != 0 {
             gun.locked = true;
         }
@@ -71,7 +69,6 @@ pub fn apply_commands(
         if CCommands::UNLOCK_RADAR & grouped_commands != 0 {
             radar.locked = false;
         }
-
         if CCommands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
             ang -= 0.3 * std::f32::consts::PI;
 
@@ -94,7 +91,6 @@ pub fn apply_commands(
                 }
             }
         }
-
         if CCommands::ROTATE_GUN_CLOCKWISE & grouped_commands != 0 {
             gun_ang -= 0.3 * std::f32::consts::PI;
 
@@ -102,7 +98,6 @@ pub fn apply_commands(
                 radar_ang -= 0.3 * std::f32::consts::PI;
             }
         }
-
         if CCommands::ROTATE_GUN_COUNTER_CLOCKWISE & grouped_commands != 0 {
             gun_ang += 0.3 * std::f32::consts::PI;
 
@@ -110,15 +105,12 @@ pub fn apply_commands(
                 radar_ang += 0.3 * std::f32::consts::PI;
             }
         }
-
         if CCommands::ROTATE_RADAR_CLOCKWISE & grouped_commands != 0 {
             radar_ang -= 0.3 * std::f32::consts::PI;
         }
-
         if CCommands::ROTATE_RADAR_COUNTER_CLOCKWISE & grouped_commands != 0 {
             radar_ang += 0.3 * std::f32::consts::PI;
         }
-
         if CCommands::FIRE & grouped_commands != 0 {
             if tank.cooldown <= 0 {
                 let t = gun_transform.rotation * Vec3::Y;
