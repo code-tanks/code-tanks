@@ -36,7 +36,8 @@ pub fn apply_commands(
 
         let mut gun_ang = 0.0;
         let mut radar_ang = 0.0;
-
+        gun_velocity.angvel = gun_ang;
+        radar_velocity.angvel = radar_ang;
         if health.val == 0 {
             continue;
         }
