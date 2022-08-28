@@ -4,29 +4,30 @@ use bevy_rapier2d::prelude::*;
 use crate::{
     c_command::{CCommands, CommandSource},
     c_health::Health,
-    c_tank::{Bullet, Tank, Gun, Radar},
+    c_tank::{Bullet, Gun, Radar, Tank},
     collision_mask, CCollider, CollisionType,
 };
 
 pub fn apply_commands(
     mut commands: Commands,
-    mut query: Query<(
-        &mut CommandSource,
-        &Transform,
-        &mut Velocity,
-        &mut Tank,
-        &Health,
-    ), (Without<Radar>, Without<Gun>)>,
-    mut query_radar: Query<(
-        &mut Radar,
-        &mut Transform,
-        &mut Velocity,
-    ), (Without<Gun>, Without<Tank>)>,
-    mut query_gun: Query<(
-        &mut Gun,
-        &mut Transform,
-        &mut Velocity,
-    ), (Without<Radar>, Without<Tank>)>,
+    mut query: Query<
+        (
+            &mut CommandSource,
+            &Transform,
+            &mut Velocity,
+            &mut Tank,
+            &Health,
+        ),
+        (Without<Radar>, Without<Gun>),
+    >,
+    mut query_radar: Query<
+        (&mut Radar, &mut Transform, &mut Velocity),
+        (Without<Gun>, Without<Tank>),
+    >,
+    mut query_gun: Query<
+        (&mut Gun, &mut Transform, &mut Velocity),
+        (Without<Radar>, Without<Tank>),
+    >,
 ) {
     for (mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
         let mut vel = Vec2::ZERO;
@@ -36,11 +37,12 @@ pub fn apply_commands(
 
         let mut gun_ang = 0.0;
         let mut radar_ang = 0.0;
-        let (mut radar, mut radar_transform, mut radar_velocity) = query_radar.get_mut(tank.radar).unwrap();
+        let (mut radar, mut radar_transform, mut radar_velocity) =
+            query_radar.get_mut(tank.radar).unwrap();
         let (mut gun, mut gun_transform, mut gun_velocity) = query_gun.get_mut(tank.gun).unwrap();
         radar_velocity.angvel = radar_ang;
         gun_velocity.angvel = gun_ang;
-        
+
         if health.val == 0 {
             continue;
         }
