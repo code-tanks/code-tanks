@@ -96,11 +96,11 @@ pub fn run_game(tank_ids: &[String]) {
 }
 
 pub mod collision_mask {
-    pub const NONE: u32 = 0b0000;
-    pub const TANK: u32 = 0b0001;
-    pub const WALL: u32 = 0b0010;
-    pub const BULLET: u32 = 0b0100;
-    pub const ALL: u32 = 0b1111;
+    pub const NONE: u32 = 0b0;
+    pub const TANK: u32 = 0b1;
+    pub const WALL: u32 = 0b1 << 1;
+    pub const BULLET: u32 = 0b1 << 2;
+    pub const RADAR: u32 = 0b1 << 3; 
 }
 
 #[derive(Component)]
@@ -113,4 +113,5 @@ pub enum CollisionType {
     Bullet,
     Tank,
     Wall,
+    Radar,
 }

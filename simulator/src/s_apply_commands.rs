@@ -132,7 +132,7 @@ pub fn apply_commands(
                     .insert(Restitution::coefficient(0.1))
                     .insert(CollisionGroups::new(
                         collision_mask::BULLET,
-                        collision_mask::ALL,
+                        collision_mask::WALL | collision_mask::TANK | collision_mask::RADAR,
                     ))
                     .insert(Damping {
                         linear_damping: 0.0,
@@ -167,5 +167,8 @@ pub fn apply_commands(
 
         radar_transform.translation.x = transform.translation.x;
         radar_transform.translation.y = transform.translation.y;
+
+        let _v = transform.rotation * Vec3::Y;
+        // info!("{:?}", v.y.atan2(v.x));
     }
 }

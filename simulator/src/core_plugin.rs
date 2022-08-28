@@ -19,12 +19,16 @@ impl Plugin for CoreCTPlugin {
                 SystemStage::single_threaded().with_system(apply_commands),
             )
             .add_stage(
-                "physics2",
-                SystemStage::single_threaded().with_system(physics2),
+                "tank_physics",
+                SystemStage::single_threaded().with_system(tank_physics),
             )
             .add_stage(
-                "physics",
-                SystemStage::single_threaded().with_system(physics),
+                "radar_physics",
+                SystemStage::single_threaded().with_system(radar_physics),
+            )
+            .add_stage(
+                "bullet_physics",
+                SystemStage::single_threaded().with_system(bullet_physics),
             )
             .add_stage(
                 "publish_events",

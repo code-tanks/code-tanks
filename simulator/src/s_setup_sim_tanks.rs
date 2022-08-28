@@ -5,15 +5,14 @@ use crate::{
         Client,
         DockerClient, // , DummyClient
     },
-    c_tank::Tank,
     c_tank::Gun,
     c_tank::Radar,
+    c_tank::Tank,
     CCollider, CollisionType, TickState,
 };
 use bevy_rapier2d::prelude::*;
 
 use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, collision_mask};
-
 
 pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
     for (i, tank_id) in state.tank_ids.iter().enumerate() {
@@ -22,7 +21,7 @@ pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
             .spawn()
             .insert(Gun { locked: true })
             .insert_bundle(SpatialBundle {
-                transform: Transform::from_rotation(Quat::from_rotation_z(std::f32::consts::PI)),
+                transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
                 visibility: Visibility { is_visible: true },
                 ..default()
             })
@@ -49,9 +48,12 @@ pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
 
         let radar = commands
             .spawn()
+            .insert(CCollider {
+                collision_type: CollisionType::Radar,
+            })
             .insert(Radar { locked: true })
             .insert_bundle(SpatialBundle {
-                transform: Transform::from_rotation(Quat::from_rotation_z(std::f32::consts::PI)),
+                transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
                 visibility: Visibility { is_visible: true },
                 ..default()
             })
@@ -60,7 +62,11 @@ pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
             .insert(RigidBody::Dynamic)
             .insert(ColliderMassProperties::Mass(1.0))
             .insert(ColliderMassProperties::Density(1.0))
-            .insert(Collider::ball(5.0))
+            .insert(Collider::triangle(
+                Vec2::new(0.0, 0.0),
+                Vec2::new(-25.0, 500.0),
+                Vec2::new(25.0, 500.0),
+            ))
             .insert(Restitution::coefficient(0.1))
             .insert(CollisionGroups::new(
                 collision_mask::NONE,
@@ -84,7 +90,11 @@ pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
             .insert(ActiveEvents::COLLISION_EVENTS)
             .insert(Sleeping::disabled())
             .insert(Ccd::enabled())
-            .insert(Tank { cooldown: 0, gun: gun, radar: radar })
+            .insert(Tank {
+                cooldown: 0,
+                gun: gun,
+                radar: radar,
+            })
             .insert(Health {
                 val: Health::MAX_HEALTH,
             })
@@ -98,7 +108,10 @@ pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
             .insert(Restitution::coefficient(0.1))
             .insert(CollisionGroups::new(
                 collision_mask::TANK,
-                collision_mask::ALL,
+                collision_mask::TANK
+                    | collision_mask::BULLET
+                    | collision_mask::WALL
+                    | collision_mask::RADAR,
             ))
             .insert(Damping {
                 linear_damping: 0.5,
@@ -119,7 +132,5 @@ pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
                 visibility: Visibility { is_visible: true },
                 ..default()
             });
-
-
     }
 }

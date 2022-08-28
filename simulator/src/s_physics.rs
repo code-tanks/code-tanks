@@ -8,7 +8,7 @@ use crate::{
     CCollider, CollisionType,
 };
 
-pub fn physics(
+pub fn bullet_physics(
     rapier_context: Res<RapierContext>,
     query_bullet: Query<Entity, With<Bullet>>,
     query_collidable: Query<Entity, (With<Collider>, Without<Bullet>)>,
@@ -30,36 +30,80 @@ pub fn physics(
     }
 }
 
-pub fn physics2(
+pub fn radar_physics(
+    mut contact_events: EventReader<CollisionEvent>,
+    mut query_tank: Query<(Entity, &Tank, &mut EventSink, &Transform)>,
+    query_collider: Query<(&CCollider, &Transform)>,
+) {
+    for contact_event in contact_events.iter() {
+        for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
+            // let radar = query_radar.get(tank.radar).unwrap();
+
+            if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
+                if h1 == &tank.radar && *h2 != tank_entity {
+                    let (collider, collider_transform) = query_collider.get(*h2).unwrap();
+
+                    scan(
+                        transform,
+                        h2,
+                        &collider.collision_type,
+                        &mut event_sink,
+                        collider_transform,
+                    );
+                } else if h2 == &tank.radar && *h1 != tank_entity {
+                    let (collider, collider_transform) = query_collider.get(*h1).unwrap();
+
+                    scan(
+                        transform,
+                        h1,
+                        &collider.collision_type,
+                        &mut event_sink,
+                        collider_transform,
+                    );
+                }
+            }
+        }
+    }
+}
+
+fn scan(
+    _t1: &Transform,
+    b: &Entity,
+    collision_type: &CollisionType,
+    _event_sink: &mut EventSink,
+    _t2: &Transform,
+) {
+    info!("SCANNED {:?} of type {:?}", b, collision_type);
+}
+
+pub fn tank_physics(
     mut contact_events: EventReader<CollisionEvent>,
     mut query_tank: Query<(Entity, &mut EventSink, &mut Health), With<Tank>>,
-    query_collider: Query<&CCollider>,
+    query_collider: Query<(&CCollider, &Transform)>,
     // mut commands: Commands,
 ) {
     for contact_event in contact_events.iter() {
-        for (entity, mut event_sink, mut health) in &mut query_tank {
+        for (tank, mut event_sink, mut health) in &mut query_tank {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
-                if h1 == &entity {
+                if h1 == &tank {
+                    let (collider, transform) = query_collider.get(*h2).unwrap();
                     hit(
-                        &entity,
+                        &tank,
                         h2,
-                        &query_collider
-                            .get_component::<CCollider>(*h2)
-                            .unwrap()
-                            .collision_type,
+                        &collider.collision_type,
                         &mut event_sink,
                         &mut health,
+                        transform,
                     );
-                } else if h2 == &entity {
+                } else if h2 == &tank {
+                    let (collider, transform) = query_collider.get(*h1).unwrap();
                     hit(
-                        &entity,
+                        &tank,
                         h1,
-                        &query_collider
-                            .get_component::<CCollider>(*h1)
-                            .unwrap()
-                            .collision_type,
+                        &collider.collision_type,
                         &mut event_sink,
                         &mut health,
+                        transform,
                     );
                 }
             }
@@ -73,7 +117,15 @@ fn hit(
     collision_type: &CollisionType,
     _event_sink: &mut EventSink,
     health: &mut Health,
+    _t: &Transform,
 ) {
+    match collision_type {
+        &CollisionType::Radar => {
+            return;
+        }
+        _ => {}
+    };
+
     info!("HIT {:?}, by {:?} of type {:?}", tank, b, collision_type);
     health.val = health.val - 10;
 

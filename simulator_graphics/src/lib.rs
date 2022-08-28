@@ -11,7 +11,7 @@ use bevy_prototype_lyon::{
 };
 use bevy_rapier2d::prelude::{
     ActiveEvents, Ccd, Collider, ColliderMassProperties, CollisionGroups, Damping, GravityScale,
-    Restitution, RigidBody, Sleeping, Velocity, Sensor,
+    Restitution, RigidBody, Sensor, Sleeping, Velocity,
 };
 use ctsimlib::{
     c_command::*, c_event::EventSink, c_health::Health, c_healthbar::HealthBar, c_tank::Tank,
@@ -19,15 +19,15 @@ use ctsimlib::{
 };
 pub mod s_graphics;
 pub mod s_update_health;
+use crate::s_graphics::setup_graphics;
+use crate::s_update_health::update_health;
+use bevy::ecs::schedule::SystemStage;
 use bevy::DefaultPlugins;
 use bevy_prototype_lyon::prelude::ShapePlugin;
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
-use bevy::ecs::schedule::SystemStage;
-use crate::s_graphics::setup_graphics;
-use ctsimlib::s_request_debug_commands::request_debug_commands;
-use crate::s_update_health::update_health;
 use ctsimlib::c_tank::Gun;
 use ctsimlib::c_tank::Radar;
+use ctsimlib::s_request_debug_commands::request_debug_commands;
 
 pub fn create_tank(
     commands: &mut Commands,
@@ -36,8 +36,6 @@ pub fn create_tank(
     x: f32,
     y: f32,
 ) {
-  
-
     let gun = commands
         .spawn()
         .insert(Gun { locked: true })
@@ -69,6 +67,9 @@ pub fn create_tank(
 
     let radar = commands
         .spawn()
+        .insert(CCollider {
+            collision_type: CollisionType::Radar,
+        })
         .insert(Radar { locked: true })
         .insert_bundle(SpriteBundle {
             transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
@@ -76,15 +77,20 @@ pub fn create_tank(
             ..default()
         })
         .insert(Sensor)
+        .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(GravityScale(0.0))
         .insert(RigidBody::Dynamic)
-        .insert(ColliderMassProperties::Mass(1.0))
-        .insert(ColliderMassProperties::Density(1.0))
-        .insert(Collider::ball(5.0))
-        .insert(Restitution::coefficient(0.1))
+        .insert(ColliderMassProperties::Mass(0.0))
+        .insert(ColliderMassProperties::Density(0.0))
+        .insert(Collider::triangle(
+            Vec2::new(0.0, 0.0),
+            Vec2::new(-25.0, 500.0),
+            Vec2::new(25.0, 500.0),
+        ))
+        .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
-            collision_mask::NONE,
-            collision_mask::NONE,
+            collision_mask::RADAR,
+            collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
         ))
         .insert(Damping {
             linear_damping: 0.0,
@@ -94,7 +100,7 @@ pub fn create_tank(
             linvel: Vec2::new(0.0, 0.0),
             angvel: 0.0,
         })
-        .id(); 
+        .id();
 
     commands
         .spawn()
@@ -104,7 +110,11 @@ pub fn create_tank(
         })
         .insert(Sleeping::disabled())
         .insert(Ccd::enabled())
-        .insert(Tank { cooldown: 0, gun: gun, radar: radar })
+        .insert(Tank {
+            cooldown: 0,
+            gun: gun,
+            radar: radar,
+        })
         .insert(Health {
             val: Health::MAX_HEALTH,
         })
@@ -112,13 +122,16 @@ pub fn create_tank(
         .insert(EventSink::default())
         .insert(GravityScale(0.0))
         .insert(RigidBody::Dynamic)
-        .insert(ColliderMassProperties::Mass(1.0))
-        .insert(ColliderMassProperties::Density(1.0))
+        .insert(ColliderMassProperties::Mass(0.0))
+        .insert(ColliderMassProperties::Density(0.0))
         .insert(Collider::cuboid(19.0, 23.0))
-        .insert(Restitution::coefficient(0.1))
+        .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
             collision_mask::TANK,
-            collision_mask::ALL,
+            collision_mask::TANK
+                | collision_mask::BULLET
+                | collision_mask::WALL
+                | collision_mask::RADAR,
         ))
         .insert(Damping {
             linear_damping: 0.5,
@@ -136,7 +149,7 @@ pub fn create_tank(
         })
         .with_children(|parent| {
             parent.spawn_bundle(SpriteBundle {
-                transform: Transform::from_rotation(Quat::from_rotation_z(std::f32::consts::PI)),
+                transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
                 texture: asset_server.load("tankBody_red.png"),
                 ..default()
             });
@@ -156,8 +169,6 @@ pub fn create_tank(
                 ))
                 .insert(HealthBar {});
         });
-
-
 }
 
 pub struct CoreCTGraphicsPlugin;
