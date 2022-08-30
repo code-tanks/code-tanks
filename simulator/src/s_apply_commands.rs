@@ -51,6 +51,7 @@ pub fn apply_commands(
             continue;
         }
         let grouped_commands = command_receiver.queue.remove(0);
+        let rot = 3.14;
 
         if CCommands::MOVE_FORWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
@@ -76,46 +77,46 @@ pub fn apply_commands(
             radar.locked = false;
         }
         if CCommands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
-            ang -= 0.3 * std::f32::consts::PI;
+            ang -= 0.3 * rot;
 
             if gun.locked {
-                gun_ang -= 0.3 * std::f32::consts::PI;
+                gun_ang -= 0.3 * rot;
 
                 if radar.locked {
-                    radar_ang -= 0.3 * std::f32::consts::PI;
+                    radar_ang -= 0.3 * rot;
                 }
             }
         }
         if CCommands::ROTATE_TANK_COUNTER_CLOCKWISE & grouped_commands != 0 {
-            ang += 0.3 * std::f32::consts::PI;
+            ang += 0.3 * rot;
 
             if gun.locked {
-                gun_ang += 0.3 * std::f32::consts::PI;
+                gun_ang += 0.3 * rot;
 
                 if radar.locked {
-                    radar_ang += 0.3 * std::f32::consts::PI;
+                    radar_ang += 0.3 * rot;
                 }
             }
         }
         if CCommands::ROTATE_GUN_CLOCKWISE & grouped_commands != 0 {
-            gun_ang -= 0.3 * std::f32::consts::PI;
+            gun_ang -= 0.3 * rot;
 
             if radar.locked {
-                radar_ang -= 0.3 * std::f32::consts::PI;
+                radar_ang -= 0.3 * rot;
             }
         }
         if CCommands::ROTATE_GUN_COUNTER_CLOCKWISE & grouped_commands != 0 {
-            gun_ang += 0.3 * std::f32::consts::PI;
+            gun_ang += 0.3 * rot;
 
             if radar.locked {
-                radar_ang += 0.3 * std::f32::consts::PI;
+                radar_ang += 0.3 * rot;
             }
         }
         if CCommands::ROTATE_RADAR_CLOCKWISE & grouped_commands != 0 {
-            radar_ang -= 0.3 * std::f32::consts::PI;
+            radar_ang -= 0.3 * rot;
         }
         if CCommands::ROTATE_RADAR_COUNTER_CLOCKWISE & grouped_commands != 0 {
-            radar_ang += 0.3 * std::f32::consts::PI;
+            radar_ang += 0.3 * rot;
         }
         if CCommands::FIRE & grouped_commands != 0 {
             if tank.cooldown <= 0 {
