@@ -108,24 +108,24 @@ impl ClientTrait for DockerClient {
     }
 }
 
-pub struct DummyClient {}
+// pub struct DummyClient {}
 
-impl ClientTrait for DummyClient {
-    fn request_commands(&mut self) -> Vec<CCommand> {
-        vec![CCommands::MOVE_FORWARD | CCommands::ROTATE_TANK_CLOCKWISE]
-    }
+// impl ClientTrait for DummyClient {
+//     fn request_commands(&mut self) -> Vec<CCommand> {
+//         vec![CCommands::MOVE_FORWARD | CCommands::ROTATE_TANK_CLOCKWISE]
+//     }
 
-    fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand> {
-        match event.event_type {
-            EventType::Scan => {
-                vec![CCommands::MOVE_FORWARD]
-            }
-            EventType::Hit => {
-                vec![CCommands::MOVE_FORWARD]
-            }
-        }
-    }
-}
+//     fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand> {
+//         match event.event_type {
+//             EventType::Scan => {
+//                 vec![CCommands::MOVE_FORWARD]
+//             }
+//             EventType::Hit => {
+//                 vec![CCommands::MOVE_FORWARD]
+//             }
+//         }
+//     }
+// }
 
 pub struct ReaderClient {
     pub lines: Vec<CCommand>,

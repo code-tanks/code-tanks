@@ -2,16 +2,16 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::{
-    c_event::EventSink,
+    c_event::{Event, EventSink, EventTypes},
     c_health::Health,
-    c_tank::{Bullet, Tank},
+    c_tank::{Bullet, Radar, Tank},
     CCollider, CollisionType,
 };
 
 pub fn bullet_physics(
     rapier_context: Res<RapierContext>,
     query_bullet: Query<Entity, With<Bullet>>,
-    query_collidable: Query<Entity, (With<Collider>, Without<Bullet>)>,
+    query_collidable: Query<Entity, (With<Collider>, Without<Bullet>, Without<Radar>)>,
     // mut query_health: Query<&mut Health>,
     mut commands: Commands,
 ) {
@@ -70,10 +70,15 @@ fn scan(
     _t1: &Transform,
     b: &Entity,
     collision_type: &CollisionType,
-    _event_sink: &mut EventSink,
+    event_sink: &mut EventSink,
     _t2: &Transform,
 ) {
     info!("SCANNED {:?} of type {:?}", b, collision_type);
+
+    event_sink.queue.push(Event {
+        event_type: EventTypes::SCAN,
+        info: "".to_string(),
+    });
 }
 
 pub fn tank_physics(
@@ -115,7 +120,7 @@ fn hit(
     tank: &Entity,
     b: &Entity,
     collision_type: &CollisionType,
-    _event_sink: &mut EventSink,
+    event_sink: &mut EventSink,
     health: &mut Health,
     _t: &Transform,
 ) {
@@ -132,4 +137,9 @@ fn hit(
     if health.val < 0 {
         health.val = 0;
     }
+
+    event_sink.queue.push(Event {
+        event_type: EventTypes::HIT,
+        info: "".to_string(),
+    });
 }

@@ -4,7 +4,7 @@ use ctsimlib::{
     c_client::{Client, ReaderClient},
     c_command::*,
 };
-use ctsimlibgraphics::create_tank;
+use ctsimlibgraphics::*;
 
 pub fn setup_web_tanks(
     mut state: ResMut<CustomAssetState>,
@@ -40,14 +40,13 @@ pub fn setup_web_tanks(
         }
         assert!(n_commands == c_lines.len());
 
-        create_tank(
+        create_graphics_tank(
             &mut commands,
-            &asset_server,
+            n,
             Client {
                 client: Box::new(ReaderClient { lines: c_lines }),
             },
-            150.0 * (n as f32) + 10.0,
-            0.0,
+            &asset_server,
         );
     }
 

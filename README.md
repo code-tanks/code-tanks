@@ -6,3 +6,11 @@
 {
   "insecure-registries" : ["localhost:5001"] 
 }
+
+# Development
+
+```
+# for testing the in browser
+cd viewer
+./scripts/run.sh
+```

@@ -11,7 +11,7 @@ impl EventSink {
     }
 }
 
-pub const EVENT_TYPES_LENGTH: usize = 2;
+// pub const EVENT_TYPES_LENGTH: usize = 2;
 
 #[derive(Debug)]
 pub struct Event {
@@ -19,9 +19,11 @@ pub struct Event {
     pub info: String,
 }
 
-#[repr(u64)]
-#[derive(Debug)]
-pub enum EventType {
-    Scan,
-    Hit,
+pub type EventType = u64;
+
+pub enum EventTypes {}
+
+impl EventTypes {
+    pub const HIT: EventType = 0b1;
+    pub const SCAN: EventType = 0b1 << 1;
 }
