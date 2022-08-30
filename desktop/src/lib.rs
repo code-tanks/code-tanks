@@ -62,8 +62,7 @@ pub fn run_game(args: &[String]) {
     App::new()
         .add_plugin(CoreCTPlugin)
         .add_plugin(CoreCTGraphicsPlugin)
-        .insert_resource(TickState {
-            tick: 0,
+        .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
         })
         .add_system(setup_desktop_tanks)

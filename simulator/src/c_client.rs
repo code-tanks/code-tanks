@@ -44,7 +44,7 @@ impl ClientTrait for DockerClient {
         // println!("out: {}", result_raw.to_string());
         // println!("err: {}", err_raw.to_string() != "");
 
-        let successful = err_raw.to_string() == "";
+        // let successful = err_raw.to_string() == "";
 
         // println!("tank_id={}, successful={}", self.tank_id, successful);
         // println!("stdout:");

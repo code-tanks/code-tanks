@@ -8,7 +8,7 @@ use crate::{
     c_tank::Gun,
     c_tank::Radar,
     c_tank::Tank,
-    CCollider, CollisionType, TickState,
+    CCollider, CollisionType, TankIds,
 };
 use bevy_rapier2d::prelude::*;
 
@@ -151,7 +151,7 @@ pub fn create_basic_tank(i: usize, client: impl Component, commands: &mut Comman
     create_base_tank(commands, gun, radar, x, y, client);
 }
 
-pub fn setup_sim_tanks(state: Res<TickState>, mut commands: Commands) {
+pub fn setup_sim_tanks(state: Res<TankIds>, mut commands: Commands) {
     for (i, tank_id) in state.tank_ids.iter().enumerate() {
         create_basic_tank(
             i,

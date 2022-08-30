@@ -5,7 +5,7 @@ use crate::{
     c_event::{Event, EventSink, EventTypes},
     c_health::Health,
     c_tank::{Bullet, Radar, Tank},
-    CCollider, CollisionType,
+    CCollider, CollisionType, TickState,
 };
 
 pub fn bullet_physics(
@@ -14,7 +14,12 @@ pub fn bullet_physics(
     query_collidable: Query<Entity, (With<Collider>, Without<Bullet>, Without<Radar>)>,
     // mut query_health: Query<&mut Health>,
     mut commands: Commands,
+    state: Res<TickState>,
 ) {
+    if state.tick <= 1 {
+        return;
+    }
+
     for a in query_collidable.iter() {
         for bullet in query_bullet.iter() {
             /* Find the intersection pair, if it exists, between two colliders. */
@@ -34,7 +39,12 @@ pub fn radar_physics(
     mut contact_events: EventReader<CollisionEvent>,
     mut query_tank: Query<(Entity, &Tank, &mut EventSink, &Transform)>,
     query_collider: Query<(&CCollider, &Transform)>,
+    state: Res<TickState>,
 ) {
+    if state.tick <= 1 {
+        return;
+    }
+
     for contact_event in contact_events.iter() {
         for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
             // let radar = query_radar.get(tank.radar).unwrap();
@@ -85,8 +95,13 @@ pub fn tank_physics(
     mut contact_events: EventReader<CollisionEvent>,
     mut query_tank: Query<(Entity, &mut EventSink, &mut Health), With<Tank>>,
     query_collider: Query<(&CCollider, &Transform)>,
+    state: Res<TickState>,
     // mut commands: Commands,
 ) {
+    if state.tick <= 1 {
+        return;
+    }
+
     for contact_event in contact_events.iter() {
         for (tank, mut event_sink, mut health) in &mut query_tank {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {

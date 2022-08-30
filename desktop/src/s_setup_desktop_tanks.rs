@@ -5,6 +5,7 @@ use ctsimlibgraphics::*;
 
 pub fn setup_desktop_tanks(
     mut state: ResMut<TickState>,
+    tank_state: Res<TankIds>,
     mut commands: Commands,
     asset_server: Res<AssetServer>,
 ) {
@@ -13,7 +14,7 @@ pub fn setup_desktop_tanks(
         return;
     }
 
-    for (i, tank_id) in state.tank_ids.iter().enumerate() {
+    for (i, tank_id) in tank_state.tank_ids.iter().enumerate() {
         // create_tank(
         //     &mut commands,
         //     &asset_server,

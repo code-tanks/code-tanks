@@ -33,6 +33,10 @@ use s_walls::*;
 #[derive(Default)]
 pub struct TickState {
     pub tick: u32,
+}
+
+#[derive(Default)]
+pub struct TankIds {
     pub tank_ids: Vec<String>,
 }
 
@@ -44,8 +48,7 @@ pub fn run_game(tank_ids: &[String]) {
     App::new()
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_nanos(1)))
         .add_plugins(MinimalPlugins)
-        .insert_resource(TickState {
-            tick: 0,
+        .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
         })
         .add_startup_system(setup_walls)
