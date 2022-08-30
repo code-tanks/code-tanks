@@ -5,7 +5,7 @@ use crate::{
     c_command::{CCommands, CommandSource},
     c_health::Health,
     c_tank::{Bullet, Gun, Radar, Tank},
-    collision_mask, CCollider, CollisionType,
+    collision_mask, CCollider, CollisionType, TickState,
 };
 
 pub fn apply_commands(
@@ -28,7 +28,10 @@ pub fn apply_commands(
         (&mut Gun, &mut Transform, &mut Velocity),
         (Without<Radar>, Without<Tank>),
     >,
+    mut state: ResMut<TickState>,
 ) {
+    state.tick = state.tick + 1;
+
     for (mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;

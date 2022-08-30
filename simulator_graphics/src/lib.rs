@@ -30,19 +30,19 @@ pub fn create_graphics_tank(
     let x = 150.0 * (i as f32) + 10.0;
     let y = 0.0;
 
-    let gun = create_gun(commands);
+    let gun = create_gun(commands, x, y);
     let mut gun = commands.entity(gun);
     gun.insert_bundle(SpriteBundle {
-        transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
+        transform: Transform::from_xyz(x, y, 0.0),
         texture: asset_server.load("tankRed_barrel1.png"),
         ..default()
     });
     let gun = gun.id();
 
-    let radar = create_radar(commands);
+    let radar = create_radar(commands, x, y);
     let mut radar = commands.entity(radar);
     radar.insert_bundle(SpriteBundle {
-        transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
+        transform: Transform::from_xyz(x, y, 0.0),
         texture: asset_server.load("shotLarge.png"),
         ..default()
     });

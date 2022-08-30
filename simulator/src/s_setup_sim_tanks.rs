@@ -14,12 +14,12 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, collision_mask};
 
-pub fn create_gun(commands: &mut Commands) -> Entity {
+pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
     commands
         .spawn()
         .insert(Gun { locked: true })
         .insert_bundle(SpatialBundle {
-            transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
+            transform: Transform::from_xyz(x, y, 0.0),
             visibility: Visibility { is_visible: true },
             ..default()
         })
@@ -45,7 +45,7 @@ pub fn create_gun(commands: &mut Commands) -> Entity {
         .id()
 }
 
-pub fn create_radar(commands: &mut Commands) -> Entity {
+pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
     commands
         .spawn()
         .insert(CCollider {
@@ -53,7 +53,7 @@ pub fn create_radar(commands: &mut Commands) -> Entity {
         })
         .insert(Radar { locked: true })
         .insert_bundle(SpatialBundle {
-            transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
+            transform: Transform::from_xyz(x, y, 0.0),
             visibility: Visibility { is_visible: true },
             ..default()
         })
@@ -144,9 +144,9 @@ pub fn create_basic_tank(i: usize, client: impl Component, commands: &mut Comman
     let x = 150.0 * (i as f32) + 10.0;
     let y = 0.0;
 
-    let gun = create_gun(commands);
+    let gun = create_gun(commands, x, y);
 
-    let radar = create_radar(commands);
+    let radar = create_radar(commands, x, y);
 
     create_base_tank(commands, gun, radar, x, y, client);
 }

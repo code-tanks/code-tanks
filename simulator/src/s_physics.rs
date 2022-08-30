@@ -16,10 +16,6 @@ pub fn bullet_physics(
     mut commands: Commands,
     state: Res<TickState>,
 ) {
-    if state.tick <= 1 {
-        return;
-    }
-
     for a in query_collidable.iter() {
         for bullet in query_bullet.iter() {
             /* Find the intersection pair, if it exists, between two colliders. */
@@ -41,10 +37,6 @@ pub fn radar_physics(
     query_collider: Query<(&CCollider, &Transform)>,
     state: Res<TickState>,
 ) {
-    if state.tick <= 1 {
-        return;
-    }
-
     for contact_event in contact_events.iter() {
         for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
             // let radar = query_radar.get(tank.radar).unwrap();
@@ -52,6 +44,7 @@ pub fn radar_physics(
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
                 if h1 == &tank.radar && *h2 != tank_entity {
                     let (collider, collider_transform) = query_collider.get(*h2).unwrap();
+                    info!("{:?} {:?}", tank_entity, state.tick);
 
                     scan(
                         transform,
@@ -62,6 +55,7 @@ pub fn radar_physics(
                     );
                 } else if h2 == &tank.radar && *h1 != tank_entity {
                     let (collider, collider_transform) = query_collider.get(*h1).unwrap();
+                    info!("{:?} {:?}", tank_entity, state.tick);
 
                     scan(
                         transform,
@@ -98,10 +92,6 @@ pub fn tank_physics(
     state: Res<TickState>,
     // mut commands: Commands,
 ) {
-    if state.tick <= 1 {
-        return;
-    }
-
     for contact_event in contact_events.iter() {
         for (tank, mut event_sink, mut health) in &mut query_tank {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
