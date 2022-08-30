@@ -12,7 +12,7 @@ pub fn save_commands(
     for command_receiver in &query {
         let grouped_commands = command_receiver.queue[0];
 
-        println!("save_commands {:?}", grouped_commands);
+        // println!("save_commands {:?}", grouped_commands);
 
         let mut f = OpenOptions::new()
             .append(true)
@@ -21,7 +21,7 @@ pub fn save_commands(
         f.write_all(format!("{}\n", grouped_commands).to_string().as_bytes())
             .expect("Unable to write data");
 
-        println!("commands remaining {:?}", command_receiver.queue);
+        // println!("commands remaining {:?}", command_receiver.queue);
     }
     state.tick = state.tick + 1;
 

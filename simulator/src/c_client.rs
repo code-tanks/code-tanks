@@ -46,13 +46,13 @@ impl ClientTrait for DockerClient {
 
         let successful = err_raw.to_string() == "";
 
-        println!("tank_id={}, successful={}", self.tank_id, successful);
-        println!("stdout:");
-        println!("{}", result_raw.to_string());
-        println!("");
-        println!("stderr:");
-        println!("{}", err_raw.to_string());
-        println!("");
+        // println!("tank_id={}, successful={}", self.tank_id, successful);
+        // println!("stdout:");
+        // println!("{}", result_raw.to_string());
+        // println!("");
+        // println!("stderr:");
+        // println!("{}", err_raw.to_string());
+        // println!("");
 
         // if err_raw.to_string() == "" {
         // res =
@@ -91,6 +91,8 @@ impl ClientTrait for DockerClient {
 
         // if err_raw.to_string() == "" {
         //     res =
+        println!("request event \n {}", result_raw.to_string());
+
         result_raw
             .to_string()
             .split('\n')
@@ -101,7 +103,6 @@ impl ClientTrait for DockerClient {
         //         ;
         // } else {
         //     println!("stderr:");
-        //     println!("{}", err_raw.to_string());
         //     println!("");
         // }
 
