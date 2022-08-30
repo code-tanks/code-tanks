@@ -12,6 +12,7 @@ pub fn apply_commands(
     mut commands: Commands,
     mut query: Query<
         (
+            Entity,
             &mut CommandSource,
             &Transform,
             &mut Velocity,
@@ -32,7 +33,7 @@ pub fn apply_commands(
 ) {
     state.tick = state.tick + 1;
 
-    for (mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
+    for (entity, mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;
         velocity.linvel = vel;
@@ -126,7 +127,9 @@ pub fn apply_commands(
                     })
                     .insert(ActiveEvents::COLLISION_EVENTS)
                     .insert(Sensor)
-                    .insert(Bullet {})
+                    .insert(Bullet {
+                        tank: entity,
+                    })
                     .insert(GravityScale(0.0))
                     .insert(RigidBody::Dynamic)
                     .insert(ColliderMassProperties::Mass(1.0))

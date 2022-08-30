@@ -12,7 +12,9 @@ impl Tank {
 }
 
 #[derive(Component)]
-pub struct Bullet {}
+pub struct Bullet {
+    pub tank: Entity,
+}
 
 #[derive(Component)]
 pub struct Radar {

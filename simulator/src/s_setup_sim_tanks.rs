@@ -70,7 +70,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
         .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
             collision_mask::RADAR,
-            collision_mask::RADAR | collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
+            collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
         ))
         .insert(Damping {
             linear_damping: 0.0,

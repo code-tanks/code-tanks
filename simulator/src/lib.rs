@@ -111,7 +111,7 @@ pub struct CCollider {
     pub collision_type: CollisionType,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum CollisionType {
     Bullet,
     Tank,

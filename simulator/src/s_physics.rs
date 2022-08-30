@@ -35,8 +35,9 @@ pub fn radar_physics(
     mut contact_events: EventReader<CollisionEvent>,
     mut query_tank: Query<(Entity, &Tank, &mut EventSink, &Transform)>,
     query_collider: Query<(&CCollider, &Transform)>,
-    rapier_context: Res<RapierContext>
+    rapier_context: Res<RapierContext>,
     // state: Res<TickState>,
+    query_bullet: Query<&Bullet>,
 ) {
     for contact_event in contact_events.iter() {
         for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
@@ -47,28 +48,32 @@ pub fn radar_physics(
                     if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
                         let (collider, collider_transform) = query_collider.get(*h2).unwrap();
                         // info!("{:?} {:?}", tank_entity, state.tick);
-                        info!("{:?} {:?} {:?} {:?}", tank_entity, tank.radar, h1, h2);
+                        info!("Tank Got Scan:{:?} Radar:{:?} Other:{:?}", tank_entity, tank.radar, h2);
 
                         scan(
+                            &tank_entity,
                             transform,
                             h2,
                             &collider.collision_type,
                             &mut event_sink,
                             collider_transform,
+                            &query_bullet,
                         );
                     }
                 } else if h2 == &tank.radar && *h1 != tank_entity {
                     if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
                         let (collider, collider_transform) = query_collider.get(*h1).unwrap();
                         // info!("{:?} {:?}", tank_entity, state.tick);
-                        info!("{:?} {:?} {:?} {:?}", tank_entity, tank.radar, h2, h1);
+                        info!("Tank Got Scan:{:?} Radar:{:?} Other:{:?}", tank_entity, tank.radar, h1);
 
                         scan(
+                            &tank_entity,
                             transform,
                             h1,
                             &collider.collision_type,
                             &mut event_sink,
                             collider_transform,
+                            &query_bullet,
                         );
                     }
                 }
@@ -78,22 +83,41 @@ pub fn radar_physics(
 }
 
 fn scan(
+    a: &Entity,
     _t1: &Transform,
     b: &Entity,
     collision_type: &CollisionType,
     event_sink: &mut EventSink,
     _t2: &Transform,
+    query: &Query<&Bullet>,
 ) {
-    // if collision_type == CollisionType::Radar {
-    //     return;
-    // }
+    if *collision_type == CollisionType::Bullet {
+        let bullet = query.get(*b).unwrap();
 
+        if bullet.tank == *a {
+            return;
+        }
+    }
     info!("SCANNED {:?} of type {:?}", b, collision_type);
 
     event_sink.queue.push(Event {
         event_type: EventTypes::SCAN,
         info: "".to_string(),
     });
+    // match *collision_type {
+    //     CollisionType::Bullet => {
+    //         let bullet = query.get(*b).unwrap();
+
+    //         info!("Tank Got Scan:{:?}, Shot From:{:?}, eq:{:?}", a, bullet.tank, bullet.tank == *a);
+
+    //         if bullet.tank == *a {
+    //             return;
+    //         }
+    //     },
+    //     _ => {
+
+    //     }
+    // }
 }
 
 pub fn tank_physics(
