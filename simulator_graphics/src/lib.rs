@@ -9,7 +9,7 @@ use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
     shapes::{self, RectangleOrigin},
 };
-use ctsimlib::{c_healthbar::HealthBar, s_setup_sim_tanks::*};
+use ctsimlib::c_healthbar::HealthBar;
 pub mod s_graphics;
 pub mod s_update_health;
 use crate::s_graphics::setup_graphics;
@@ -19,6 +19,7 @@ use bevy::DefaultPlugins;
 use bevy_prototype_lyon::prelude::ShapePlugin;
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 use ctsimlib::s_request_debug_commands::request_debug_commands;
+use ctsimlib::s_setup_sim_tanks::{create_gun, create_radar, create_base_tank};
 
 pub fn create_graphics_tank(
     commands: &mut Commands,

@@ -11,6 +11,9 @@
             "worker_simulator/Cargo.toml",
             "viewer/Cargo.toml",
             "desktop/Cargo.toml"
+        ],
+        "rust-analyzer.diagnostics.disabled": [
+            "unresolved-proc-macro"
         ]
     },
     "extensions": [
