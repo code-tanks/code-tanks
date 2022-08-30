@@ -85,13 +85,14 @@ impl ClientTrait for DockerClient {
             .expect("failed to communicate with ocypod");
 
         let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-        // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+        let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
         // let mut res: Vec<CCommand> = vec![];
 
         // if err_raw.to_string() == "" {
         //     res =
-        println!("request event \n {}", result_raw.to_string());
+        println!("request event: \n {}", result_raw.to_string());
+        println!("request event2: \n {}", err_raw.to_string());
 
         result_raw
             .to_string()
