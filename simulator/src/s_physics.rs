@@ -5,7 +5,7 @@ use crate::{
     c_event::{Event, EventSink, EventTypes},
     c_health::Health,
     c_tank::{Bullet, Radar, Tank},
-    CCollider, CollisionType, TickState,
+    CCollider, CollisionType,
 };
 
 pub fn bullet_physics(
@@ -14,7 +14,7 @@ pub fn bullet_physics(
     query_collidable: Query<Entity, (With<Collider>, Without<Bullet>, Without<Radar>)>,
     // mut query_health: Query<&mut Health>,
     mut commands: Commands,
-    state: Res<TickState>,
+    // state: Res<TickState>,
 ) {
     for a in query_collidable.iter() {
         for bullet in query_bullet.iter() {
@@ -35,7 +35,8 @@ pub fn radar_physics(
     mut contact_events: EventReader<CollisionEvent>,
     mut query_tank: Query<(Entity, &Tank, &mut EventSink, &Transform)>,
     query_collider: Query<(&CCollider, &Transform)>,
-    state: Res<TickState>,
+    rapier_context: Res<RapierContext>
+    // state: Res<TickState>,
 ) {
     for contact_event in contact_events.iter() {
         for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
@@ -43,27 +44,33 @@ pub fn radar_physics(
 
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
                 if h1 == &tank.radar && *h2 != tank_entity {
-                    let (collider, collider_transform) = query_collider.get(*h2).unwrap();
-                    info!("{:?} {:?}", tank_entity, state.tick);
+                    if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
+                        let (collider, collider_transform) = query_collider.get(*h2).unwrap();
+                        // info!("{:?} {:?}", tank_entity, state.tick);
+                        info!("{:?} {:?} {:?} {:?}", tank_entity, tank.radar, h1, h2);
 
-                    scan(
-                        transform,
-                        h2,
-                        &collider.collision_type,
-                        &mut event_sink,
-                        collider_transform,
-                    );
+                        scan(
+                            transform,
+                            h2,
+                            &collider.collision_type,
+                            &mut event_sink,
+                            collider_transform,
+                        );
+                    }
                 } else if h2 == &tank.radar && *h1 != tank_entity {
-                    let (collider, collider_transform) = query_collider.get(*h1).unwrap();
-                    info!("{:?} {:?}", tank_entity, state.tick);
+                    if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
+                        let (collider, collider_transform) = query_collider.get(*h1).unwrap();
+                        // info!("{:?} {:?}", tank_entity, state.tick);
+                        info!("{:?} {:?} {:?} {:?}", tank_entity, tank.radar, h2, h1);
 
-                    scan(
-                        transform,
-                        h1,
-                        &collider.collision_type,
-                        &mut event_sink,
-                        collider_transform,
-                    );
+                        scan(
+                            transform,
+                            h1,
+                            &collider.collision_type,
+                            &mut event_sink,
+                            collider_transform,
+                        );
+                    }
                 }
             }
         }
@@ -77,6 +84,10 @@ fn scan(
     event_sink: &mut EventSink,
     _t2: &Transform,
 ) {
+    // if collision_type == CollisionType::Radar {
+    //     return;
+    // }
+
     info!("SCANNED {:?} of type {:?}", b, collision_type);
 
     event_sink.queue.push(Event {
@@ -89,7 +100,7 @@ pub fn tank_physics(
     mut contact_events: EventReader<CollisionEvent>,
     mut query_tank: Query<(Entity, &mut EventSink, &mut Health), With<Tank>>,
     query_collider: Query<(&CCollider, &Transform)>,
-    state: Res<TickState>,
+    // state: Res<TickState>,
     // mut commands: Commands,
 ) {
     for contact_event in contact_events.iter() {

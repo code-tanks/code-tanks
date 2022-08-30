@@ -58,7 +58,6 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             ..default()
         })
         .insert(Sensor)
-        .insert(ActiveEvents::COLLISION_EVENTS)
         .insert(GravityScale(0.0))
         .insert(RigidBody::Dynamic)
         .insert(ColliderMassProperties::Mass(0.0))
@@ -71,7 +70,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
         .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
             collision_mask::RADAR,
-            collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
+            collision_mask::RADAR | collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
         ))
         .insert(Damping {
             linear_damping: 0.0,
@@ -112,10 +111,10 @@ pub fn create_base_tank(
         .insert(EventSink::default())
         .insert(GravityScale(0.0))
         .insert(RigidBody::Dynamic)
-        .insert(ColliderMassProperties::Mass(0.0))
-        .insert(ColliderMassProperties::Density(0.0))
+        .insert(ColliderMassProperties::Mass(1.0))
+        .insert(ColliderMassProperties::Density(1.0))
         .insert(Collider::cuboid(19.0, 23.0))
-        .insert(Restitution::coefficient(0.0))
+        .insert(Restitution::coefficient(0.1))
         .insert(CollisionGroups::new(
             collision_mask::TANK,
             collision_mask::TANK
