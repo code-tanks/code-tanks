@@ -42,7 +42,7 @@ pub fn create_gun(commands: &mut Commands) -> Entity {
             linvel: Vec2::new(0.0, 0.0),
             angvel: 0.0,
         })
-    .id()
+        .id()
 }
 
 pub fn create_radar(commands: &mut Commands) -> Entity {
@@ -81,7 +81,7 @@ pub fn create_radar(commands: &mut Commands) -> Entity {
             linvel: Vec2::new(0.0, 0.0),
             angvel: 0.0,
         })
-    .id()
+        .id()
 }
 
 pub fn create_base_tank(
@@ -137,14 +137,10 @@ pub fn create_base_tank(
             visibility: Visibility { is_visible: true },
             ..default()
         })
-    .id()
+        .id()
 }
 
-pub fn create_basic_tank(
-    i: usize,
-    client: impl Component,
-    commands: &mut Commands,
-) {
+pub fn create_basic_tank(i: usize, client: impl Component, commands: &mut Commands) {
     let x = 150.0 * (i as f32) + 10.0;
     let y = 0.0;
 

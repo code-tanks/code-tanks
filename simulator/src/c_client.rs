@@ -21,8 +21,9 @@ pub struct DockerClient {
 impl ClientTrait for DockerClient {
     fn request_commands(&mut self) -> Vec<CCommand> {
         println!(
-                r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
-                self.tank_id);
+            r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
+            self.tank_id
+        );
         let output_raw = Command::new("bash")
             .arg("-c")
             .arg(format!(
@@ -39,12 +40,12 @@ impl ClientTrait for DockerClient {
         // let mut res: Vec<CCommand> = vec![];
         let result_raw = String::from_utf8_lossy(&output_raw.stdout);
         let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-    
+
         // println!("out: {}", result_raw.to_string());
         // println!("err: {}", err_raw.to_string() != "");
-    
+
         let successful = err_raw.to_string() == "";
-    
+
         println!("tank_id={}, successful={}", self.tank_id, successful);
         println!("stdout:");
         println!("{}", result_raw.to_string());
@@ -52,16 +53,16 @@ impl ClientTrait for DockerClient {
         println!("stderr:");
         println!("{}", err_raw.to_string());
         println!("");
-    
+
         // if err_raw.to_string() == "" {
-            // res = 
-            result_raw
-                .to_string()
-                .split('\n')
-                .map(|f| f.to_string())
-                .filter(|f| !f.is_empty())
-                .filter_map(|f| f.parse::<CCommand>().ok())
-                .collect::<Vec<CCommand>>()
+        // res =
+        result_raw
+            .to_string()
+            .split('\n')
+            .map(|f| f.to_string())
+            .filter(|f| !f.is_empty())
+            .filter_map(|f| f.parse::<CCommand>().ok())
+            .collect::<Vec<CCommand>>()
         //         ;
         // } else {
         //     println!("stderr:");
@@ -75,9 +76,9 @@ impl ClientTrait for DockerClient {
     fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
         let output_raw = Command::new("bash")
             .arg("-c") 
-            .arg(format!( 
+            .arg(format!(
                 r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
-                self.tank_id,  
+                self.tank_id,
             ))
             // .arg("ocypod:8023/queue/build/job")
             .output()
@@ -89,14 +90,14 @@ impl ClientTrait for DockerClient {
         // let mut res: Vec<CCommand> = vec![];
 
         // if err_raw.to_string() == "" {
-        //     res = 
-            result_raw
-                .to_string()
-                .split('\n')
-                .map(|f| f.to_string())
-                .filter(|f| !f.is_empty())
-                .filter_map(|f| f.parse::<CCommand>().ok())
-                .collect::<Vec<CCommand>>()
+        //     res =
+        result_raw
+            .to_string()
+            .split('\n')
+            .map(|f| f.to_string())
+            .filter(|f| !f.is_empty())
+            .filter_map(|f| f.parse::<CCommand>().ok())
+            .collect::<Vec<CCommand>>()
         //         ;
         // } else {
         //     println!("stderr:");
@@ -149,7 +150,6 @@ impl ClientTrait for ReaderClient {
     }
 }
 
-
 pub struct LocalClient {
     pub tank_id: String,
     pub port: usize,
@@ -173,12 +173,12 @@ impl ClientTrait for LocalClient {
         // let mut res: Vec<CCommand> = vec![];
         let result_raw = String::from_utf8_lossy(&output_raw.stdout);
         // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
-    
+
         // println!("out: {}", result_raw.to_string());
         // println!("err: {}", err_raw.to_string() != "");
-    
+
         // let successful = err_raw.to_string() == "";
-    
+
         // println!("tank_id={}, successful={}", self.port, successful);
         // println!("stdout:");
         // println!("{}", result_raw.to_string());
@@ -186,16 +186,16 @@ impl ClientTrait for LocalClient {
         // println!("stderr:");
         // println!("{}", err_raw.to_string());
         // println!("");
-    
+
         // if err_raw.to_string() == "" {
-            // res = 
-            result_raw
-                .to_string()
-                .split('\n')
-                .map(|f| f.to_string())
-                .filter(|f| !f.is_empty())
-                .filter_map(|f| f.parse::<CCommand>().ok())
-                .collect::<Vec<CCommand>>()
+        // res =
+        result_raw
+            .to_string()
+            .split('\n')
+            .map(|f| f.to_string())
+            .filter(|f| !f.is_empty())
+            .filter_map(|f| f.parse::<CCommand>().ok())
+            .collect::<Vec<CCommand>>()
         //         ;
         // } else {
         //     println!("stderr:");
@@ -209,9 +209,9 @@ impl ClientTrait for LocalClient {
     fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
         let output_raw = Command::new("bash")
             .arg("-c") 
-            .arg(format!( 
+            .arg(format!(
                 r#"curl -d {{"event_type": 0,"info":{{}}}} -X POST localhost:808{}/request_commands_by_event | jq --raw-output '.[]'"#,
-                self.port,  
+                self.port,
             ))
             .output()
             .expect("failed to communicate with ocypod");
@@ -222,14 +222,14 @@ impl ClientTrait for LocalClient {
         // let mut res: Vec<CCommand> = vec![];
 
         // if err_raw.to_string() == "" {
-        //     res = 
-            result_raw
-                .to_string()
-                .split('\n')
-                .map(|f| f.to_string())
-                .filter(|f| !f.is_empty())
-                .filter_map(|f| f.parse::<CCommand>().ok())
-                .collect::<Vec<CCommand>>()
+        //     res =
+        result_raw
+            .to_string()
+            .split('\n')
+            .map(|f| f.to_string())
+            .filter(|f| !f.is_empty())
+            .filter_map(|f| f.parse::<CCommand>().ok())
+            .collect::<Vec<CCommand>>()
         //         ;
         // } else {
         //     println!("stderr:");

@@ -1,8 +1,6 @@
-use bevy::prelude::{
-    AssetServer, Commands, Res, ResMut,
-};
-use ctsimlib::{c_client::Client, *};
+use bevy::prelude::{AssetServer, Commands, Res, ResMut};
 use ctsimlib::c_client::LocalClient;
+use ctsimlib::{c_client::Client, *};
 use ctsimlibgraphics::*;
 
 pub fn setup_desktop_tanks(

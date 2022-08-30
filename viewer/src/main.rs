@@ -1,7 +1,5 @@
 use bevy::prelude::*;
-use ctsimlib::{
-    s_walls::setup_walls,
-};
+use ctsimlib::s_walls::setup_walls;
 
 use ctviewer::{s_setup_web_tanks::setup_web_tanks, *};
 use s_load_tanks::*;

@@ -1,10 +1,7 @@
 use std::process::Command;
 
 use bevy::prelude::*;
-use ctsimlib::{
-    s_walls::setup_walls,
-    *,
-};
+use ctsimlib::{s_walls::setup_walls, *};
 use s_setup_desktop_tanks::setup_desktop_tanks;
 
 pub mod s_setup_desktop_tanks;
@@ -62,17 +59,16 @@ pub fn run_game(args: &[String]) {
         .map(|(i, url)| run_tank(url, &game_url, i))
         .collect::<Vec<String>>();
 
-
-        App::new()
-            .add_plugin(CoreCTPlugin)
-            .add_plugin(CoreCTGraphicsPlugin)
-            .insert_resource(TickState {
-                tick: 0,
-                tank_ids: tank_ids.to_vec(),
-            })
-            .add_system(setup_desktop_tanks)
-            .add_startup_system(setup_walls)
-            .run();
+    App::new()
+        .add_plugin(CoreCTPlugin)
+        .add_plugin(CoreCTGraphicsPlugin)
+        .insert_resource(TickState {
+            tick: 0,
+            tank_ids: tank_ids.to_vec(),
+        })
+        .add_system(setup_desktop_tanks)
+        .add_startup_system(setup_walls)
+        .run();
 
     // App::new()
     //     .insert_resource(Msaa { samples: 4 })

@@ -21,14 +21,14 @@ use std::fs::File;
 use std::io::Write;
 use std::time::Duration;
 
+use bevy::app::App;
+use bevy::ecs::schedule::SystemStage;
+use bevy::prelude::Component;
+use bevy::MinimalPlugins;
+use core_plugin::*;
 use s_save_commands::*;
 use s_setup_sim_tanks::*;
 use s_walls::*;
-use core_plugin::*;
-use bevy::app::App;
-use bevy::MinimalPlugins;
-use bevy::ecs::schedule::SystemStage;
-use bevy::prelude::Component;
 
 #[derive(Default)]
 pub struct TickState {
@@ -41,7 +41,7 @@ pub fn run_game(tank_ids: &[String]) {
     f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
         .expect("Unable to write data");
 
-        App::new()
+    App::new()
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_nanos(1)))
         .add_plugins(MinimalPlugins)
         .insert_resource(TickState {
@@ -100,7 +100,7 @@ pub mod collision_mask {
     pub const TANK: u32 = 0b1;
     pub const WALL: u32 = 0b1 << 1;
     pub const BULLET: u32 = 0b1 << 2;
-    pub const RADAR: u32 = 0b1 << 3; 
+    pub const RADAR: u32 = 0b1 << 3;
 }
 
 #[derive(Component)]

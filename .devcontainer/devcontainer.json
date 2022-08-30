@@ -1,20 +1,16 @@
 {
     "name": "codetanks-devcontainer",
     "image": "ghcr.io/derrick56007/codetanks_devcontainer:latest",
-    // "build": {
-    //     "context": ".",
-    //     "dockerfile": "Dockerfile"
-    // },
     "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "rust-analyzer.linkedProjects": [
+            "simulator/Cargo.toml",
+            "simulator_graphics/Cargo.toml",
             "server/Cargo.toml",
             "worker_builder/Cargo.toml",
             "worker_simulator/Cargo.toml",
-            "simulator/Cargo.toml",
             "viewer/Cargo.toml",
-            "desktop/Cargo.toml",
-            "simulator_graphics/Cargo.toml"
+            "desktop/Cargo.toml"
         ]
     },
     "extensions": [

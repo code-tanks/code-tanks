@@ -22,9 +22,9 @@ impl CCommands {
     pub const ROTATE_TANK_CLOCKWISE: CCommand = 0b1 << 2;
     pub const ROTATE_TANK_COUNTER_CLOCKWISE: CCommand = 0b1 << 3;
     pub const FIRE: CCommand = 0b1 << 4;
-    pub const ROTATE_GUN_CLOCKWISE: CCommand = 0b1 << 5; 
-    pub const ROTATE_GUN_COUNTER_CLOCKWISE: CCommand = 0b1 << 6; 
-    pub const ROTATE_RADAR_CLOCKWISE: CCommand = 0b1 << 7; 
+    pub const ROTATE_GUN_CLOCKWISE: CCommand = 0b1 << 5;
+    pub const ROTATE_GUN_COUNTER_CLOCKWISE: CCommand = 0b1 << 6;
+    pub const ROTATE_RADAR_CLOCKWISE: CCommand = 0b1 << 7;
     pub const ROTATE_RADAR_COUNTER_CLOCKWISE: CCommand = 0b1 << 8;
     pub const LOCK_GUN: CCommand = 0b1 << 9;
     pub const UNLOCK_GUN: CCommand = 0b1 << 10;
