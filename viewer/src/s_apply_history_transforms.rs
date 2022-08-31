@@ -14,7 +14,7 @@ pub fn apply_history_transforms(
     ),
     // (Without<Radar>, Without<Gun>),
     >,
-    mut query_t: Query<&mut Transform, (Without<Tank>)>,
+    mut query_t: Query<&mut Transform, Without<Tank>>,
 ) {
     for (mut t, tank, mut history_transforms) in &mut query {
         if history_transforms.transforms.is_empty() {
