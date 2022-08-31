@@ -64,8 +64,8 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
         .insert(ColliderMassProperties::Density(0.0))
         .insert(Collider::triangle(
             Vec2::new(0.0, 0.0),
-            Vec2::new(-25.0, 500.0),
-            Vec2::new(25.0, 500.0),
+            Vec2::new(-25.0, 50.0),
+            Vec2::new(25.0, 50.0),
         ))
         .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
