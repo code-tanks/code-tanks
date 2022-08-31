@@ -3,7 +3,7 @@ use std::{thread, time};
 use worker_builder::{
     build, create_build_queue,
     db::{get_client, upload_log},
-    get_build_job, get_lang, push_to_registry, remove_image, update_build_job,
+    get_build_job, push_to_registry, remove_image, update_build_job,
 };
 
 fn main() {
@@ -18,11 +18,11 @@ fn main() {
 
         if !job.is_empty() {
             let id = &job[0];
-            let url = &job[1];
+            let input = &job[1].split(",").map(|f| f.to_string()).collect::<Vec<String>>();
+            let url = &input[0];
+            let lang = &input[1];
 
-            let lang = get_lang(&url);
-
-            println!("{:?}", job);
+            println!("id: {:?}, {}, {}", job, url, lang);
             println!("");
 
             let build_log = build(&url, &lang);

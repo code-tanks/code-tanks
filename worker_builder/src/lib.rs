@@ -2,15 +2,15 @@ use std::process::Command;
 
 pub mod db;
 
-enum Langs {}
+// enum Langs {}
 
-impl Langs {
-    const DART: &'static str = "dart";
-}
+// impl Langs {
+//     const DART: &'static str = "dart";
+// }
 
-pub fn get_lang(_url: &str) -> &'static str {
-    Langs::DART
-}
+// pub fn get_lang(_url: &str) -> &'static str {
+//     Langs::DART
+// }
 
 pub fn create_build_queue() {
     Command::new("curl")

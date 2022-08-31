@@ -66,13 +66,16 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             url         VARCHAR NOT NULL,
             code        VARCHAR NOT NULL,
             log         VARCHAR NOT NULL,
-            successful  BOOL NOT NULL
+            successful  BOOL NOT NULL,
+            language    VARCHAR NOT NULL,
+            timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
         );
 
         CREATE TABLE IF NOT EXISTS simulations (
             id          VARCHAR PRIMARY KEY,
             log         VARCHAR NOT NULL,
-            successful  BOOL NOT NULL
+            successful  BOOL NOT NULL,
+            timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
         );        
     "#).unwrap();
 
@@ -83,6 +86,7 @@ pub fn insert_tank(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
     code: String,
     post_fix: String,
+    language: String,
 ) {
     client
         .execute(
@@ -96,10 +100,11 @@ pub fn insert_tank(
                     SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), 
                     $1, 
                     'waiting to build',
-                    false
+                    false,
+                    $2
                 FROM cte;
             "#,
-            &[&code, &post_fix],
+            &[&code, &post_fix, &language],
         )
         .unwrap();
 }

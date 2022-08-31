@@ -138,7 +138,7 @@ fn handle_connection(
     let path = args[0];
     let args = &args[1..];
 
-    println!("{} {} {:?}", method, path, args);
+    println!("{} {} {} {:?}", request, method, path, args);
 
     let url: String;
     let res_code: String;
@@ -159,7 +159,7 @@ fn handle_connection(
 
                 if existing.is_empty() {
                     println!("generating short url...");
-                    insert_tank(db, uploaded_code.to_string(), post_fix.to_string());
+                    insert_tank(db, uploaded_code.to_string(), post_fix.to_string(), args[0].to_string());
                     needs_generation = true;
                 } else {
                     let code: String = existing[0].get(2);
@@ -177,11 +177,12 @@ fn handle_connection(
             let existing = get_existing(db, uploaded_code.to_string(), post_fix.to_string());
 
             url = existing[0].get(1);
+            let language: String = existing[0].get(5);
 
             println!("found short url {}", url);
 
             if needs_generation {
-                add_build_job(&url);
+                add_build_job(&format!("{},{}", url, language));
             }
 
             Response {
@@ -310,14 +311,14 @@ fn get_data_from_request(request: &String) -> String {
     response.trim_matches(char::from(0)).to_string()
 }
 
-pub fn add_build_job(url: &str) {
+pub fn add_build_job(input: &str) {
     // curl -i -H 'content-type: application/json' -XPOST -d '{"input": [1,2,3]}' localhost:8023/queue/demo/job
     let output_raw = Command::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPOST")
         .arg("-d")
-        .arg(format!(r#"{{"input": "{}"}}"#, url))
+        .arg(format!(r#"{{"input": "{}"}}"#, input))
         .arg("ocypod:8023/queue/build/job")
         .output()
         .expect("failed to communicate with ocypod");
