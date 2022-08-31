@@ -1,10 +1,30 @@
 version: 2
 updates:
   - package-ecosystem: cargo
-    directory: /
+    directory: /desktop
     schedule:
-      interval: weekly
-  - package-ecosystem: github-actions
-    directory: /
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /server
     schedule:
-      interval: weekly
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /viewer
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /simulator
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /simulator_graphics
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /worker_builder
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /worker_simulator
+    schedule:
+      interval: daily
