@@ -101,7 +101,7 @@ pub fn insert_tank(
                     $1, 
                     'waiting to build',
                     false,
-                    $2
+                    $3
                 FROM cte;
             "#,
             &[&code, &post_fix, &language],
