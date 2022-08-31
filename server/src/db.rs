@@ -68,14 +68,14 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             log         VARCHAR NOT NULL,
             successful  BOOL NOT NULL,
             language    VARCHAR NOT NULL,
-            timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
+            timestamp   TIMESTAMP NOT NULL
         );
 
         CREATE TABLE IF NOT EXISTS simulations (
             id          VARCHAR PRIMARY KEY,
             log         VARCHAR NOT NULL,
             successful  BOOL NOT NULL,
-            timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
+            timestamp   TIMESTAMP NOT NULL
         );        
     "#).unwrap();
 
