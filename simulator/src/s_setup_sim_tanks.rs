@@ -25,7 +25,7 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
         })
         .insert(Sensor)
         .insert(GravityScale(0.0))
-        // .insert(RigidBody::Dynamic)
+        .insert(RigidBody::Dynamic)
         .insert(ColliderMassProperties::Mass(1.0))
         .insert(ColliderMassProperties::Density(1.0))
         .insert(Collider::ball(5.0))
