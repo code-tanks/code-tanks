@@ -1,4 +1,4 @@
-use crate::{CustomAsset, CustomAssetState};
+use crate::{CustomAsset, CustomAssetState, *};
 use bevy::prelude::{info, AssetServer, Assets, Commands, Res, ResMut};
 use ctsimlib::{
     c_client::{Client, ReaderClient},
@@ -33,14 +33,19 @@ pub fn setup_web_tanks(
         let c_lines: Vec<CCommand> = lines[(1 + n)..]
             .iter()
             .step_by(tank_ids.len())
-            .map(|f| f.to_string().parse::<CCommand>().unwrap())
+            .map(|f| f.split("|").collect::<Vec<&str>>()[0].to_string().parse::<CCommand>().unwrap())
+            .collect();
+        let transforms: Vec<Vec<f32>> = lines[(1 + n)..]
+            .iter()
+            .step_by(tank_ids.len())
+            .map(|f| f.split("|").collect::<Vec<&str>>()[1].split(",").map(|g| g.to_string().parse::<f32>().unwrap()).collect())
             .collect();
         if n_commands == 0 && c_lines.len() > 0 {
             n_commands = c_lines.len();
         }
         assert!(n_commands == c_lines.len());
 
-        create_graphics_tank(
+        let tank = create_graphics_tank(
             &mut commands,
             n,
             Client {
@@ -48,6 +53,10 @@ pub fn setup_web_tanks(
             },
             &asset_server,
         );
+        let mut tank = commands.entity(tank);
+        tank.insert(HistoryTransforms {
+            transforms: transforms,
+        });
     }
 
     state.printed = true;

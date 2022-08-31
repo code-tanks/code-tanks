@@ -7,6 +7,8 @@ use s_load_tanks::*;
 use ctsimlib::core_plugin::CoreCTPlugin;
 use ctsimlibgraphics::CoreCTGraphicsPlugin;
 
+use s_apply_history_transforms::*;
+
 fn main() {
     App::new()
         .add_plugin(CoreCTPlugin)
@@ -17,6 +19,11 @@ fn main() {
         .add_startup_system(load_tanks)
         .add_system(setup_web_tanks)
         .add_startup_system(setup_walls)
+        .add_stage_after(
+            "request_commands",
+            "apply_history_transforms",
+            SystemStage::single_threaded().with_system(apply_history_transforms),
+        )
         .run();
 
     // App::new()

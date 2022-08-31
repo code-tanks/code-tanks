@@ -26,10 +26,14 @@ pub fn save_commands(
             .expect("Unable to open file");
         f.write_all(
             format!(
-                "{}|{}{}{}{}{}{}{}{}{}{}\n",
+                "{}|{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n",
                  grouped_commands, 
                  tanks[i].translation.x,
                  tanks[i].translation.y,
+                 tanks[i].rotation.x,
+                 tanks[i].rotation.y,
+                 tanks[i].rotation.z,
+                 tanks[i].rotation.w,
                  radars[i].rotation.x,
                  radars[i].rotation.y,
                  radars[i].rotation.z,

@@ -1,5 +1,6 @@
 pub mod s_load_tanks;
 pub mod s_setup_web_tanks;
+pub mod s_apply_history_transforms;
 
 use bevy::{
     asset::{AssetLoader, LoadContext, LoadedAsset},
@@ -39,4 +40,9 @@ impl AssetLoader for CustomAssetLoader {
 pub struct CustomAssetState {
     pub handle: Handle<CustomAsset>,
     pub printed: bool,
+}
+
+#[derive(Component)]
+pub struct HistoryTransforms {
+    pub transforms: Vec<Vec<f32>>,
 }

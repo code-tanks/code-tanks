@@ -16,6 +16,7 @@ use crate::s_graphics::setup_graphics;
 use crate::s_update_health::update_health;
 use bevy::ecs::schedule::SystemStage;
 use bevy::DefaultPlugins;
+use bevy::ecs::entity::Entity;
 use bevy_prototype_lyon::prelude::ShapePlugin;
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 use ctsimlib::s_request_debug_commands::request_debug_commands;
@@ -26,7 +27,7 @@ pub fn create_graphics_tank(
     i: usize,
     client: impl Component,
     asset_server: &Res<AssetServer>,
-) {
+) -> Entity {
     let x = 150.0 * (i as f32) + 10.0;
     let y = 0.0;
 
@@ -70,7 +71,8 @@ pub fn create_graphics_tank(
                 Transform::from_xyz(-19.0, -23.0, 1.0),
             ))
             .insert(HealthBar {});
-    });
+    })
+    .id()
 }
 
 // pub fn create_tank(
