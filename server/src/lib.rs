@@ -143,6 +143,7 @@ fn handle_connection(
     let url: String;
     let res_code: String;
     let res_log: String;
+    let mut string_build = "could not run simulation\n".to_string();
 
     let response = match (method, path) {
         (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
@@ -159,7 +160,12 @@ fn handle_connection(
 
                 if existing.is_empty() {
                     println!("generating short url...");
-                    insert_tank(db, uploaded_code.to_string(), post_fix.to_string(), args[0].to_string());
+                    insert_tank(
+                        db,
+                        uploaded_code.to_string(),
+                        post_fix.to_string(),
+                        args[0].to_string(),
+                    );
                     needs_generation = true;
                 } else {
                     let code: String = existing[0].get(2);
@@ -224,28 +230,51 @@ fn handle_connection(
             res
         }
         (methods::POST, paths::RUN) => {
-            let url = &get_data_from_request(&request)
-                .split(" ")
-                .collect::<Vec<&str>>()
-                .join("");
-
-            println!("run: {}", url);
-
-            let mut matches = get_simulation_by_url(db, url);
-            if matches.is_empty() {
-                add_sim_job(&get_data_from_request(&request));
-                upsert_simulation_by_url(db, url);
-                matches = get_simulation_by_url(db, url);
-            }
-
             let mut res = responses::NOT_FOUND_RESPONSE;
-            if !matches.is_empty() {
-                res_code = matches[0].get(1);
 
+            let data = get_data_from_request(&request);
+            let tank_urls = data.split(" ").collect::<Vec<&str>>();
+
+            let invalid_tanks = tank_urls
+                .iter()
+                .map(|f| (f.to_string(), get_tank_build_status_by_url(db, f)))
+                .filter(|g| g.1 != TankBuildStatus::VALID)
+                .collect::<Vec<(String, TankBuildStatus)>>();
+
+            if !invalid_tanks.is_empty() {
+                for (tank_url, status) in invalid_tanks {
+                    let status_str = match status {
+                        TankBuildStatus::INVALID => " -> build failed",
+                        TankBuildStatus::BUILDING => " -> waiting to build",
+                        TankBuildStatus::MISSING => " -> missing",
+                        _ => "",
+                    };
+                    string_build = string_build + &tank_url + status_str;
+                }
                 res = Response {
                     status_line: StatusLines::OK,
-                    content: &res_code,
+                    content: &string_build,
                 };
+            } else {
+                let game_id = &tank_urls.join("");
+
+                println!("run: {}", game_id);
+
+                let mut matches = get_simulation_by_url(db, game_id);
+                if matches.is_empty() {
+                    add_sim_job(&data);
+                    upsert_simulation_by_url(db, game_id);
+                    matches = get_simulation_by_url(db, game_id);
+                }
+
+                if !matches.is_empty() {
+                    res_code = matches[0].get(1);
+
+                    res = Response {
+                        status_line: StatusLines::OK,
+                        content: &res_code,
+                    };
+                }
             }
 
             res
@@ -355,4 +384,36 @@ pub fn add_sim_job(url: &str) {
     println!("stderr:");
     println!("{}", err_raw.to_string());
     println!("");
+}
+
+fn get_tank_build_status_by_url(
+    db: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+    url: &str,
+) -> TankBuildStatus {
+    let matches = get_tank_by_url(db, url);
+
+    let mut status = TankBuildStatus::INVALID;
+
+    if !matches.is_empty() {
+        let log: String = matches[0].get(4);
+        let successful: bool = matches[0].get(5);
+
+        if log == "waiting to build" {
+            status = TankBuildStatus::BUILDING;
+        } else if successful {
+            status = TankBuildStatus::VALID;
+        }
+    } else {
+        status = TankBuildStatus::MISSING;
+    }
+
+    status
+}
+
+#[derive(PartialEq)]
+enum TankBuildStatus {
+    VALID,
+    INVALID,
+    BUILDING,
+    MISSING,
 }
