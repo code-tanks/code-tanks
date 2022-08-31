@@ -39,6 +39,7 @@ pub fn setup_web_tanks(
             .iter()
             .step_by(tank_ids.len())
             .map(|f| f.split("|").collect::<Vec<&str>>()[1].split(",").map(|g| g.to_string().parse::<f32>().unwrap()).collect())
+            .rev()
             .collect();
         if n_commands == 0 && c_lines.len() > 0 {
             n_commands = c_lines.len();
