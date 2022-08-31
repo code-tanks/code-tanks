@@ -25,7 +25,7 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
         })
         .insert(Sensor)
         .insert(GravityScale(0.0))
-        .insert(RigidBody::Dynamic)
+        // .insert(RigidBody::Dynamic)
         .insert(ColliderMassProperties::Mass(1.0))
         .insert(ColliderMassProperties::Density(1.0))
         .insert(Collider::ball(5.0))
@@ -64,8 +64,8 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
         .insert(ColliderMassProperties::Density(0.0))
         .insert(Collider::triangle(
             Vec2::new(0.0, 0.0),
-            Vec2::new(-25.0, 50.0),
-            Vec2::new(25.0, 50.0),
+            Vec2::new(-25.0, 500.0),
+            Vec2::new(25.0, 500.0),
         ))
         .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(

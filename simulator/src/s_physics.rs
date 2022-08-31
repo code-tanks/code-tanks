@@ -33,12 +33,68 @@ pub fn bullet_physics(
 
 pub fn radar_physics(
     mut contact_events: EventReader<CollisionEvent>,
+    // mut intersection_events: EventReader<IntersectionEvent>,
     mut query_tank: Query<(Entity, &Tank, &mut EventSink, &Transform)>,
     query_collider: Query<(&CCollider, &Transform)>,
     rapier_context: Res<RapierContext>,
     // state: Res<TickState>,
     query_bullet: Query<&Bullet>,
 ) {
+    // for intersection_event in intersection_events.iter() {
+    //     for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
+    //         if intersection_event.collider1.entity() == tank.radar
+    //             && intersection_event.collider1.entity() != tank_entity
+    //         {
+    //             // commands.entity(entity).despawn();
+
+    //             let (collider, collider_transform) = query_collider
+    //                 .get(intersection_event.collider2.entity())
+    //                 .unwrap();
+    //             // info!("{:?} {:?}", tank_entity, state.tick);
+    //             info!(
+    //                 "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
+    //                 tank_entity,
+    //                 tank.radar,
+    //                 intersection_event.collider2.entity()
+    //             );
+
+    //             scan(
+    //                 &tank_entity,
+    //                 transform,
+    //                 intersection_event.collider2.entity(),
+    //                 &collider.collision_type,
+    //                 &mut event_sink,
+    //                 collider_transform,
+    //                 &query_bullet,
+    //             );
+    //         } else if intersection_event.collider2.entity() == tank.radar
+    //             && intersection_event.collider2.entity() != tank_entity
+    //         {
+    //             // commands.entity(entity).despawn();
+    //             let (collider, collider_transform) = query_collider
+    //                 .get(intersection_event.collider1.entity())
+    //                 .unwrap();
+    //             // info!("{:?} {:?}", tank_entity, state.tick);
+    //             info!(
+    //                 "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
+    //                 tank_entity,
+    //                 tank.radar,
+    //                 intersection_event.collider1.entity()
+    //             );
+
+    //             scan(
+    //                 &tank_entity,
+    //                 transform,
+    //                 intersection_event.collider1.entity(),
+    //                 &collider.collision_type,
+    //                 &mut event_sink,
+    //                 collider_transform,
+    //                 &query_bullet,
+    //             );
+    //         }
+    //     }
+    // }
+
     for contact_event in contact_events.iter() {
         for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
             // let radar = query_radar.get(tank.radar).unwrap();
@@ -48,7 +104,10 @@ pub fn radar_physics(
                     if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
                         let (collider, collider_transform) = query_collider.get(*h2).unwrap();
                         // info!("{:?} {:?}", tank_entity, state.tick);
-                        info!("Tank Got Scan:{:?} Radar:{:?} Other:{:?}", tank_entity, tank.radar, h2);
+                        info!(
+                            "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
+                            tank_entity, tank.radar, h2
+                        );
 
                         scan(
                             &tank_entity,
@@ -64,7 +123,10 @@ pub fn radar_physics(
                     if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
                         let (collider, collider_transform) = query_collider.get(*h1).unwrap();
                         // info!("{:?} {:?}", tank_entity, state.tick);
-                        info!("Tank Got Scan:{:?} Radar:{:?} Other:{:?}", tank_entity, tank.radar, h1);
+                        info!(
+                            "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
+                            tank_entity, tank.radar, h1
+                        );
 
                         scan(
                             &tank_entity,
