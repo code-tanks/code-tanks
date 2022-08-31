@@ -244,12 +244,12 @@ fn handle_connection(
             if !invalid_tanks.is_empty() {
                 for (tank_url, status) in invalid_tanks {
                     let status_str = match status {
-                        TankBuildStatus::INVALID => " -> build failed",
-                        TankBuildStatus::BUILDING => " -> waiting to build",
-                        TankBuildStatus::MISSING => " -> missing",
+                        TankBuildStatus::INVALID => "build failed",
+                        TankBuildStatus::BUILDING => "waiting to build",
+                        TankBuildStatus::MISSING => "missing",
                         _ => "",
                     };
-                    string_build = string_build + &tank_url + status_str;
+                    string_build = string_build + &tank_url + " -> " + status_str + "\n";
                 }
                 res = Response {
                     status_line: StatusLines::OK,
