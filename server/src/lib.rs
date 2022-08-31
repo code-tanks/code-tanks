@@ -395,8 +395,8 @@ fn get_tank_build_status_by_url(
     let mut status = TankBuildStatus::INVALID;
 
     if !matches.is_empty() {
-        let log: String = matches[0].get(4);
-        let successful: bool = matches[0].get(5);
+        let log: String = matches[0].get(3);
+        let successful: bool = matches[0].get(4);
 
         if log == "waiting to build" {
             status = TankBuildStatus::BUILDING;
