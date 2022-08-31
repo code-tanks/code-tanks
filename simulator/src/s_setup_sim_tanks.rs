@@ -26,10 +26,10 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
         .insert(Sensor)
         .insert(GravityScale(0.0))
         .insert(RigidBody::Dynamic)
-        .insert(ColliderMassProperties::Mass(1.0))
-        .insert(ColliderMassProperties::Density(1.0))
+        .insert(ColliderMassProperties::Mass(0.0))
+        .insert(ColliderMassProperties::Density(0.0))
         .insert(Collider::ball(5.0))
-        .insert(Restitution::coefficient(0.1))
+        .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
             collision_mask::NONE,
             collision_mask::NONE,
@@ -114,7 +114,7 @@ pub fn create_base_tank(
         .insert(ColliderMassProperties::Mass(1.0))
         .insert(ColliderMassProperties::Density(1.0))
         .insert(Collider::cuboid(19.0, 23.0))
-        .insert(Restitution::coefficient(0.1))
+        .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
             collision_mask::TANK,
             collision_mask::TANK
@@ -123,8 +123,8 @@ pub fn create_base_tank(
                 | collision_mask::RADAR,
         ))
         .insert(Damping {
-            linear_damping: 0.5,
-            angular_damping: 0.5,
+            linear_damping: 0.0,
+            angular_damping: 0.0,
         })
         .insert(Velocity {
             linvel: Vec2::new(0.0, 0.0),
