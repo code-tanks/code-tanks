@@ -16,7 +16,7 @@ on:
       - .github/workflows/build.yml
 
 jobs:
-  build_worker_builder:
+  build_builder:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,7 +41,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/derrick56007/code-tanks-builder:buildcache
           cache-to: type=registry,ref=ghcr.io/derrick56007/code-tanks-builder:buildcache,mode=max
 
-  build_worker_simulator:
+  build_simulator:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
