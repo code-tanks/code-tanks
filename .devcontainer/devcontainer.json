@@ -1,6 +1,6 @@
 {
     "name": "code-tanks-devcontainer",
-    "image": "ghcr.io/derrick56007/code-tanks-devcontainer:latest",
+    "image": "ghcr.io/code-tanks/code-tanks-devcontainer:latest",
     "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
         "rust-analyzer.linkedProjects": [

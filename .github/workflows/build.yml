@@ -37,9 +37,9 @@ jobs:
           context: .
           file: worker_builder/Dockerfile
           push: true
-          tags: ghcr.io/derrick56007/code-tanks-builder:latest
-          cache-from: type=registry,ref=ghcr.io/derrick56007/code-tanks-builder:buildcache
-          cache-to: type=registry,ref=ghcr.io/derrick56007/code-tanks-builder:buildcache,mode=max
+          tags: ghcr.io/code-tanks/code-tanks-builder:latest
+          cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache
+          cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache,mode=max
 
   build_simulator:
     runs-on: ubuntu-latest
@@ -62,9 +62,9 @@ jobs:
           context: .
           file: worker_simulator/Dockerfile
           push: true
-          tags: ghcr.io/derrick56007/code-tanks-simulator:latest
-          cache-from: type=registry,ref=ghcr.io/derrick56007/code-tanks-simulator:buildcache
-          cache-to: type=registry,ref=ghcr.io/derrick56007/code-tanks-simulator:buildcache,mode=max
+          tags: ghcr.io/code-tanks/code-tanks-simulator:latest
+          cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache
+          cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache,mode=max
 
   build_server:
     runs-on: ubuntu-latest
@@ -87,9 +87,9 @@ jobs:
           context: .
           file: server/Dockerfile
           push: true
-          tags: ghcr.io/derrick56007/code-tanks-server:latest
-          cache-from: type=registry,ref=ghcr.io/derrick56007/code-tanks-server:buildcache
-          cache-to: type=registry,ref=ghcr.io/derrick56007/code-tanks-server:buildcache,mode=max
+          tags: ghcr.io/code-tanks/code-tanks-server:latest
+          cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache
+          cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache,mode=max
 
   build_web:
     runs-on: ubuntu-latest
@@ -112,9 +112,9 @@ jobs:
           context: .
           file: web/Dockerfile
           push: true
-          tags: ghcr.io/derrick56007/code-tanks-web:latest
-          cache-from: type=registry,ref=ghcr.io/derrick56007/code-tanks-web:buildcache
-          cache-to: type=registry,ref=ghcr.io/derrick56007/code-tanks-web:buildcache,mode=max
+          tags: ghcr.io/code-tanks/code-tanks-web:latest
+          cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache
+          cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache,mode=max
 
   # build_linux:
   #   runs-on: ubuntu-latest
@@ -137,6 +137,6 @@ jobs:
   #         context: .
   #         file: desktop/Dockerfile
   #         push: true
-  #         tags: ghcr.io/derrick56007/code-tanks_linux:latest
-  #         cache-from: type=registry,ref=ghcr.io/derrick56007/code-tanks_linux:buildcache
-  #         cache-to: type=registry,ref=ghcr.io/derrick56007/code-tanks_linux:buildcache,mode=max
+  #         tags: ghcr.io/code-tanks/code-tanks_linux:latest
+  #         cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks_linux:buildcache
+  #         cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks_linux:buildcache,mode=max

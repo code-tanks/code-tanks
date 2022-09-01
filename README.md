@@ -1,5 +1,5 @@
 # CodeTanks
-[![build](https://github.com/derrick56007/code-tanks/actions/workflows/build.yml/badge.svg)](https://github.com/derrick56007/code-tanks/actions/workflows/build.yml)[![devcontainer](https://github.com/derrick56007/code-tanks/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/derrick56007/code-tanks/actions/workflows/devcontainer.yml)
+[![build](https://github.com/code-tanks/code-tanks/actions/workflows/build.yml/badge.svg)](https://github.com/code-tanks/code-tanks/actions/workflows/build.yml)[![devcontainer](https://github.com/code-tanks/code-tanks/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/code-tanks/actions/workflows/devcontainer.yml)
 
 /etc/docker/daemon.json
 

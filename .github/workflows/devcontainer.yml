@@ -30,6 +30,6 @@ jobs:
           context: .devcontainer/
           file: .devcontainer/Dockerfile
           push: true
-          tags: ghcr.io/derrick56007/code-tanks-devcontainer:latest
-          cache-from: type=registry,ref=ghcr.io/derrick56007/code-tanks-devcontainer:buildcache
-          cache-to: type=registry,ref=ghcr.io/derrick56007/code-tanks-devcontainer:buildcache,mode=max
+          tags: ghcr.io/code-tanks/code-tanks-devcontainer:latest
+          cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-devcontainer:buildcache
+          cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-devcontainer:buildcache,mode=max
