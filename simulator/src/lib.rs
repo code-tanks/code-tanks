@@ -46,7 +46,7 @@ pub fn run_game(tank_ids: &[String]) {
         .expect("Unable to write data");
 
     App::new()
-        .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_nanos(1)))
+        .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(1.0/60.0)))
         .add_plugins(MinimalPlugins)
         .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
