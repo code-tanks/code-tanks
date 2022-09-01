@@ -47,6 +47,12 @@ pub fn apply_commands(
         radar_velocity.angvel = radar_ang;
         gun_velocity.angvel = gun_ang;
 
+        gun_transform.translation.x = transform.translation.x;
+        gun_transform.translation.y = transform.translation.y;
+
+        radar_transform.translation.x = transform.translation.x;
+        radar_transform.translation.y = transform.translation.y;
+
         if health.val == 0 {
             continue;
         }
@@ -169,13 +175,7 @@ pub fn apply_commands(
         gun_velocity.angvel = gun_ang;
         radar_velocity.angvel = radar_ang;
 
-        gun_transform.translation.x = transform.translation.x;
-        gun_transform.translation.y = transform.translation.y;
-
-        radar_transform.translation.x = transform.translation.x;
-        radar_transform.translation.y = transform.translation.y;
-
-        let _v = transform.rotation * Vec3::Y;
+        // let _v = transform.rotation * Vec3::Y;
         // info!("{:?}", v.y.atan2(v.x));
     }
 }
