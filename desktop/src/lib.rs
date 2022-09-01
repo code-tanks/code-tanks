@@ -9,18 +9,18 @@ use ctsimlib::core_plugin::CoreCTPlugin;
 use ctsimlibgraphics::CoreCTGraphicsPlugin;
 
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-    // docker run -d --network=codetanks_default -p  8080:8080 --name tank_id --label com.docker.compose.project=codetanks localhost:5001/url
+    // docker run -d --network=code-tanks_default -p  8080:8080 --name tank_id --label com.docker.compose.project=code-tanks localhost:5001/url
     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
     let output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
-        .arg("--network=codetanks_default")
+        .arg("--network=code-tanks_default")
         .arg("-p")
         .arg(format!("808{}:8080", post_fix))
         .arg("--name")
         .arg(&tank_id)
         .arg("--label")
-        .arg("com.docker.compose.project=codetanks")
+        .arg("com.docker.compose.project=code-tanks")
         .arg(format!("localhost:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");

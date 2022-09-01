@@ -6,7 +6,7 @@
 //         format!(
 //             "{:?}",
 //             CCommands::all_commands_from_file(
-//                 "/workspaces/codetanks/apps/simulator/tests/empty.ct"
+//                 "/workspaces/code-tanks/apps/simulator/tests/empty.ct"
 //             )
 //         ),
 //         "[[], [], [], []]"
@@ -19,7 +19,7 @@
 //         format!(
 //             "{:?}",
 //             CCommands::all_commands_from_file(
-//                 "/workspaces/codetanks/apps/simulator/tests/do_nothing.ct"
+//                 "/workspaces/code-tanks/apps/simulator/tests/do_nothing.ct"
 //             )
 //         ),
 //         format!(

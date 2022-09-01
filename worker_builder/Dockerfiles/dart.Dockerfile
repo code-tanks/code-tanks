@@ -8,7 +8,7 @@ WORKDIR /app
 
 ARG url
 
-RUN git clone -b dart-api --single-branch https://github.com/derrick56007/codetanks.git /app
+RUN git clone -b dart-api --single-branch https://github.com/derrick56007/code-tanks.git /app
 
 RUN dart pub get
 

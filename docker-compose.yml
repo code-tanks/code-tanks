@@ -2,7 +2,7 @@ version: "3.9"
 services:
   server:
     container_name: server
-    image: ghcr.io/derrick56007/codetanks_server:latest
+    image: ghcr.io/derrick56007/code-tanks-server:latest
     restart: unless-stopped
     ports:
       - 8089:8088
@@ -12,10 +12,7 @@ services:
   
   builder:
     container_name: builder
-    image: ghcr.io/derrick56007/codetanks_worker_builder:latest
-    # build:
-    #   dockerfile: worker_builder/Dockerfile
-    #   context: .
+    image: ghcr.io/derrick56007/code-tanks-builder:latest
     command: ctbuilder
     restart: unless-stopped
     volumes:
@@ -25,10 +22,7 @@ services:
 
   simulator:
     container_name: simulator
-    image: ghcr.io/derrick56007/codetanks_worker_simulator:latest
-    # build:
-    #   dockerfile: worker_simulator/Dockerfile
-    #   context: .
+    image: ghcr.io/derrick56007/code-tanks-simulator:latest
     command: ctsim
     restart: unless-stopped
     volumes:
@@ -38,10 +32,7 @@ services:
 
   web:
     container_name: web
-    image: ghcr.io/derrick56007/codetanks_web:latest
-    # build:
-    #   dockerfile: web/Dockerfile
-    #   context: .
+    image: ghcr.io/derrick56007/code-tanks-web:latest
     restart: unless-stopped
     ports:
       - 8088:8080
