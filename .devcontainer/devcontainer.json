@@ -3,15 +3,6 @@
     "image": "ghcr.io/code-tanks/code-tanks-devcontainer:latest",
     "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
-        "rust-analyzer.linkedProjects": [
-            "simulator/Cargo.toml",
-            "simulator_graphics/Cargo.toml",
-            "server/Cargo.toml",
-            "worker_builder/Cargo.toml",
-            "worker_simulator/Cargo.toml",
-            "viewer/Cargo.toml",
-            "desktop/Cargo.toml"
-        ],
         "rust-analyzer.diagnostics.disabled": [
             "unresolved-proc-macro"
         ]

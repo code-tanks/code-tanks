@@ -1,0 +1,11 @@
+[workspace]
+
+members = [
+    "desktop",
+    "server",
+    "simulator",
+    "simulator_graphics",
+    "viewer",
+    "worker_builder",
+    "worker_simulator"
+]
