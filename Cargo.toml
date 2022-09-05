@@ -9,3 +9,5 @@ members = [
     "worker_builder",
     "worker_simulator"
 ]
+
+resolver = "2"
