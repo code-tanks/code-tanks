@@ -8,6 +8,7 @@ WORKDIR /app
 
 ARG url
 
+# TODO improve cache
 RUN git clone --depth 1 https://github.com/code-tanks/dart-api.git /app
 
 RUN dart pub get

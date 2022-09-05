@@ -6,6 +6,9 @@ RUN apt update \
 
 WORKDIR /app
 
+ARG url
+
+# TODO improve cache
 RUN git clone --depth 1 https://github.com/code-tanks/python-api.git /app
 
 RUN pip install -r requirements.txt
