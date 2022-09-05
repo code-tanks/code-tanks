@@ -6,12 +6,11 @@ RUN apt update \
 
 WORKDIR /app
 
-ARG url
-
-# TODO improve cache
-RUN git clone --depth 1 https://github.com/code-tanks/dart-api.git /app
+RUN git clone -b 'v0.1.0' --single-branch --depth 1 https://github.com/code-tanks/dart-api.git /app
 
 RUN dart pub get
+
+ARG url
 
 RUN curl http://localhost:8089/raw/$url > tanks/my_tank.dart
 

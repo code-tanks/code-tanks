@@ -6,14 +6,12 @@ RUN apt update \
 
 WORKDIR /app
 
-ARG url
-
-# TODO improve cache
-RUN git clone --depth 1 https://github.com/code-tanks/python-api.git /app
+RUN git clone -b 'v0.1.0' --single-branch --depth 1 https://github.com/code-tanks/python-api.git /app
 
 RUN pip install -r requirements.txt
 
-RUN curl http://localhost:8089/raw/$url > tanks/my_tank.py
+ARG url
 
+RUN curl http://localhost:8089/raw/$url > tanks/my_tank.py
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
