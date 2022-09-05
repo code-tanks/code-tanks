@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.10-slim
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
