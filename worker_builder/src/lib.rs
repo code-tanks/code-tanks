@@ -75,7 +75,7 @@ pub fn build(url: &str, lang: &str) -> String {
     println!("{}", err_raw.to_string());
     println!("");
 
-    err_raw.to_string()
+    result_raw.to_string()
 }
 
 pub fn update_build_job(id: &str, successful: bool) {
