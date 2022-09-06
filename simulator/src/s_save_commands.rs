@@ -1,7 +1,11 @@
 use bevy::prelude::*;
 use std::{fs::OpenOptions, io::Write};
 
-use crate::{c_command::CommandSource, TickState, c_tank::*};
+use crate::{
+    c_command::{CCommands, CommandSource},
+    c_tank::*,
+    TickState,
+};
 use bevy::app::AppExit;
 
 pub fn save_commands(
@@ -16,7 +20,11 @@ pub fn save_commands(
     let radars: Vec<&Transform> = radars.iter().collect();
     let guns: Vec<&Transform> = guns.iter().collect();
     for (i, command_receiver) in query.iter().enumerate() {
-        let grouped_commands = command_receiver.queue[0];
+        let grouped_commands = if command_receiver.queue.is_empty() {
+            CCommands::NONE
+        } else {
+            command_receiver.queue[0]
+        };
 
         // println!("save_commands {:?}", grouped_commands);
 
@@ -27,23 +35,26 @@ pub fn save_commands(
         f.write_all(
             format!(
                 "{}|{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n",
-                 grouped_commands, 
-                 tanks[i].translation.x,
-                 tanks[i].translation.y,
-                 tanks[i].rotation.x,
-                 tanks[i].rotation.y,
-                 tanks[i].rotation.z,
-                 tanks[i].rotation.w,
-                 radars[i].rotation.x,
-                 radars[i].rotation.y,
-                 radars[i].rotation.z,
-                 radars[i].rotation.w,
-                 guns[i].rotation.x,
-                 guns[i].rotation.y,
-                 guns[i].rotation.z,
-                 guns[i].rotation.w,
-                ).to_string().as_bytes())
-            .expect("Unable to write data");
+                grouped_commands,
+                tanks[i].translation.x,
+                tanks[i].translation.y,
+                tanks[i].rotation.x,
+                tanks[i].rotation.y,
+                tanks[i].rotation.z,
+                tanks[i].rotation.w,
+                radars[i].rotation.x,
+                radars[i].rotation.y,
+                radars[i].rotation.z,
+                radars[i].rotation.w,
+                guns[i].rotation.x,
+                guns[i].rotation.y,
+                guns[i].rotation.z,
+                guns[i].rotation.w,
+            )
+            .to_string()
+            .as_bytes(),
+        )
+        .expect("Unable to write data");
 
         // println!("commands remaining {:?}", command_receiver.queue);
     }
