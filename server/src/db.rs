@@ -76,7 +76,13 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
             log         VARCHAR NOT NULL,
             successful  BOOL NOT NULL,
             timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
-        );        
+        );
+
+        CREATE TABLE IF NOT EXISTS runs (
+            id          VARCHAR PRIMARY KEY,
+            log         VARCHAR NOT NULL,
+            timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
+        );
     "#).unwrap();
 
     pool
@@ -130,36 +136,6 @@ pub fn get_existing(
         )
         .unwrap()
 }
-
-// pub fn get_code(
-//     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-//     url: &str,
-// ) -> Vec<Row> {
-//     client
-//         .query(
-//             "
-//                 SELECT code FROM tanks
-//                 WHERE url = $1;
-//             ",
-//             &[&url],
-//         )
-//         .unwrap()
-// }
-
-// pub fn get_log(
-//     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-//     url: &str,
-// ) -> Vec<Row> {
-//     client
-//         .query(
-//             "
-//                 SELECT log FROM tanks
-//                 WHERE url = $1;
-//             ",
-//             &[&url],
-//         )
-//         .unwrap()
-// }
 
 pub fn get_tank_by_url(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,

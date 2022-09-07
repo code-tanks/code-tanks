@@ -2,6 +2,8 @@ use core::time;
 use std::{process::Command, thread};
 
 use ctsimlib::run_game;
+use db::upload_log_to_db;
+use postgres::Client;
 
 pub mod db;
 
@@ -67,7 +69,18 @@ pub fn remove_tank(tank_id: &str) {
         .expect("failed to communicate with docker");
 }
 
-pub fn run_docker_game(args: &[String]) {
+pub fn upload_log(tank_id: &str, client: &mut Client, game_id: &str) {
+    let output_raw = Command::new("docker")
+        .arg("logs")
+        .arg(&tank_id)
+        .output()
+        .expect("failed to communicate with docker");
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+
+    upload_log_to_db(client, game_id, tank_id, &result_raw.to_string());
+}
+
+pub fn run_docker_game(args: &[String]) -> Vec<String> {
     let game_url = args.join("");
     let tank_ids = args
         .iter()
@@ -77,9 +90,7 @@ pub fn run_docker_game(args: &[String]) {
     thread::sleep(time::Duration::from_millis(5000));
 
     run_game(&tank_ids);
-    for tank_id in tank_ids.iter() {
-        remove_tank(tank_id);
-    }
+    tank_ids
 }
 
 pub fn update_sim_job(id: &str, successful: bool) {
