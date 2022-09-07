@@ -52,7 +52,7 @@ def index(game_id: str):
 
         <body>
             <div id="log">
-                <select id="sel">
+                <select id="sel" onchange="display()">
                     {
                         "".join([
                             f"<option value='{game_id}-{t}-{i}'>{t}-{i}</option>"
@@ -82,10 +82,6 @@ def index(game_id: str):
                 xmlHttp.open("GET", "http://localhost:8089/sim_log/" + select.value, true); // true for asynchronous 
                 xmlHttp.send(null);
             }}
-
-            select.addEventListener('change',function(){{
-                display();
-            }});
 
             display();
         </script>
