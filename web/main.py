@@ -51,17 +51,34 @@ def index(game_id: str):
                         ])
                     }
                 </select>
+                <div id="out">
+                <div>
             </div>
         </body>
 
         <script type="module">
-            import init from './{game_id}/ctviewer.js'
-            init()
+            import init from './{game_id}/ctviewer.js';
+            init();
 
             var select = document.querySelector('#sel');
+            var out = document.querySelector("#out");
+
+            function display() {{
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function() {{ 
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {{
+                        out.innerHTML = xmlHttp.responseText;
+                    }}
+                }};
+                xmlHttp.open("GET", "http://localhost:8089/sim_log/" + select.value, true); // true for asynchronous 
+                xmlHttp.send(null);
+            }}
+
             select.addEventListener('change',function(){{
-                alert('changed');
+                display();
             }});
+
+            display();
         </script>
 
         </html>
