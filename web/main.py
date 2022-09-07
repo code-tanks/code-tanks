@@ -11,7 +11,7 @@ def root():
 
 @app.get('/{game_id}', response_class=HTMLResponse)
 def index(game_id: str):
-    tank_ids = game_ids.split("-")
+    tank_ids = game_id.split("-")
     game_id = "".join(tank_ids)
 
     return f"""
