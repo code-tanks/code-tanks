@@ -15,9 +15,9 @@ class MyTank extends BaseTank {
   @override
   void onEvent(EventType e, Map info) {
     if (i % 2 == 0) {
-        commands.add(Command.MOVE_BACKWARD | Command.ROTATE_TANK_COUNTER_CLOCKWISE | Command.FIRE);
-    } else {
-        commands.add(Command.MOVE_FORWARD | Command.ROTATE_TANK_CLOCKWISE | Command.FIRE);
+        for (var j = 0; j < 1000; j++) {
+            commands.add(Command.MOVE_BACKWARD | Command.ROTATE_TANK_COUNTER_CLOCKWISE | Command.FIRE);
+        }
     }
     i = i + 1;
   }
