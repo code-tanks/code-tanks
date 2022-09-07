@@ -334,7 +334,7 @@ fn handle_connection(
     };
 
     let response_string = format!(
-        "{}\r\nContent-Length: {}\r\nContent-Type: {}; Access-Control-Allow-Origin: *; charset=UTF-8\r\n\r\n{}",
+        "{}\r\nContent-Length: {}\r\nContent-Type: {}; Access-Control-Allow-Origin: *; Access-Control-Allow-Methods: GET; charset=UTF-8\r\n\r\n{}",
         response.status_line,
         response.content.len(),
         content_type,
