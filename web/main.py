@@ -38,6 +38,15 @@ def index(game_id: str):
                 canvas {{
                     background-color: white;
                 }}
+
+                #out {{
+                    white-space: pre-wrap;
+                    background: gray;
+                }}
+
+                #log {{
+                    width: 1000px;
+                }}
             </style>
         </head>
 
