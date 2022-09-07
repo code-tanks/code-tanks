@@ -72,7 +72,7 @@ pub fn remove_tank(tank_id: &str) {
 pub fn upload_log(tank_id: &str, client: &mut Client) {
     let output_raw = Command::new("docker")
         .arg("logs")
-        .args("--timestamps")
+        .arg("--timestamps")
         .arg(&tank_id)
         .output()
         .expect("failed to communicate with docker");
