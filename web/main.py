@@ -48,8 +48,7 @@ def index(game_id: str):
                     width: 1000px;
                 }}
             </style>
-        </head>
-        <script type="module">
+                    <script type="module">
             var select = document.querySelector('#sel');
             var out = document.querySelector("#out");
 
@@ -66,6 +65,8 @@ def index(game_id: str):
 
             display();
         </script>
+        </head>
+
         <body>
             <div id="log">
                 <select id="sel" onchange="display()">
