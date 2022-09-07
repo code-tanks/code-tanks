@@ -46,7 +46,7 @@ def index(game_id: str):
                 <select id="sel">
                     {
                         "".join([
-                            f"<option value='{game_id}{t}-{i}'>{t}-{i}</option>"
+                            f"<option value='{game_id}-{t}-{i}'>{t}-{i}</option>"
                             for i, t in enumerate(tank_ids)
                         ])
                     }
