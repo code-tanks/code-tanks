@@ -26,7 +26,7 @@ fn main() {
             let tank_ids = run_docker_game(args);
             let game_id = &args.join("");
             for tank_id in tank_ids.iter() {
-                upload_log(tank_id, &mut client, game_id);
+                upload_log(tank_id, &mut client);
                 remove_tank(tank_id);
             }
             let sim = fs::read_to_string("./sim.txt").expect("Unable to read file");

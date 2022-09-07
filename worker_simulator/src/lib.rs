@@ -69,7 +69,7 @@ pub fn remove_tank(tank_id: &str) {
         .expect("failed to communicate with docker");
 }
 
-pub fn upload_log(tank_id: &str, client: &mut Client, game_id: &str) {
+pub fn upload_log(tank_id: &str, client: &mut Client) {
     let output_raw = Command::new("docker")
         .arg("logs")
         .arg(&tank_id)
@@ -80,7 +80,6 @@ pub fn upload_log(tank_id: &str, client: &mut Client, game_id: &str) {
 
     upload_log_to_db(
         client,
-        game_id,
         tank_id,
         &result_raw.to_string(),
         &err_raw.to_string(),
