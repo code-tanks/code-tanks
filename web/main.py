@@ -48,28 +48,11 @@ def index(game_id: str):
                     width: 1000px;
                 }}
             </style>
-                    <script type="module">
-            var select = document.querySelector('#sel');
-            var out = document.querySelector("#out");
-
-            function display() {{
-                var xmlHttp = new XMLHttpRequest();
-                xmlHttp.onreadystatechange = function() {{ 
-                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {{
-                        out.innerHTML = xmlHttp.responseText;
-                    }}
-                }};
-                xmlHttp.open("GET", "http://localhost:8089/sim_log/" + select.value, true); // true for asynchronous 
-                xmlHttp.send(null);
-            }}
-
-            display();
-        </script>
         </head>
 
         <body>
             <div id="log">
-                <select id="sel" onchange="display()">
+                <select id="sel">
                     {
                         "".join([
                             f"<option value='{game_id}-{t}-{i}'>{t}-{i}</option>"
@@ -85,6 +68,31 @@ def index(game_id: str):
         <script type="module">
             import init from './{game_id}/ctviewer.js';
             init();
+
+            var select = document.querySelector('#sel');
+            var out = document.querySelector("#out");
+
+            function display() {{
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function() {{ 
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {{
+                        out.innerHTML = xmlHttp.responseText;
+                    }}
+                }};
+                xmlHttp.open("GET", "http://localhost:8089/sim_log/" + select.value, true); // true for asynchronous 
+                xmlHttp.send(null);
+            }}
+
+
+            function start(){{
+                select.addEventListener('change',function(){{
+                    display();
+                }});
+                display();
+            }}
+
+            window.addEventListener("load", start, false);
+
         </script>
 
         </html>
