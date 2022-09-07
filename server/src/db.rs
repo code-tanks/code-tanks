@@ -183,3 +183,18 @@ pub fn upsert_simulation_by_url(
         )
         .unwrap();
 }
+
+pub fn get_simulation_log_by_id(
+    client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+    id: &str,
+) -> Vec<Row> {
+    client
+        .query(
+            "
+                SELECT * FROM runs
+                WHERE id = $1
+            ",
+            &[&id],
+        )
+        .unwrap()
+}

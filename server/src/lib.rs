@@ -86,6 +86,7 @@ mod paths {
     pub const RAW: &'static str = "raw";
     pub const RUN: &'static str = "run";
     pub const SIM: &'static str = "sim";
+    pub const SIM_LOG: &'static str = "sim_log";
 }
 
 // enum Methods {}
@@ -296,6 +297,28 @@ fn handle_connection(
                     content: &res_code,
                 };
             }
+            res
+        }
+        (methods::GET, paths::SIM_LOG) => {
+            let mut res = responses::NOT_FOUND_RESPONSE;
+
+            println!("get sim_log: {:?}", args);
+
+            // handle error
+
+            let matches = get_simulation_log_by_id(db, &args[0]);
+
+            if !matches.is_empty() {
+                let out: String = matches[0].get(1);
+                let err: String = matches[0].get(2);
+                res_code = format!("{}\n{}", out, err);
+
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content: &res_code,
+                };
+            }
+
             res
         }
         _ => responses::NOT_FOUND_RESPONSE,
