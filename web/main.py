@@ -46,7 +46,7 @@ def index(game_id: str):
                 <select id="sel">
                     {
                         "".join([
-                            "<option value='{game_id}{t}-{i}'>{t}</option>"
+                            f"<option value='{game_id}{t}-{i}'>{t}</option>"
                             for i, t in enumerate(tank_ids)
                         ])
                     }
@@ -59,9 +59,9 @@ def index(game_id: str):
             init()
 
             var select = document.querySelector('#sel');
-            select.addEventListener('change',function(){
+            select.addEventListener('change',function(){{
                 alert('changed');
-            });
+            }});
         </script>
 
         </html>
