@@ -11,6 +11,9 @@ def root():
 
 @app.get('/{game_id}', response_class=HTMLResponse)
 def index(game_id: str):
+    tank_ids = game_ids.split("-")
+    game_id = "".join(tank_ids)
+
     return f"""
         <html>
 
@@ -27,6 +30,9 @@ def index(game_id: str):
                             white 100%);
                     background-repeat: repeat;
                     background-size: 20px 20px;
+                    display: flex;
+                    flex-direction: column-reverse;
+                    align-items: center;                    
                 }}
 
                 canvas {{
@@ -34,9 +40,28 @@ def index(game_id: str):
                 }}
             </style>
         </head>
+
+        <body>
+            <div id="log">
+                <select id="sel">
+                    {
+                        "".join([
+                            "<option value='{game_id}{t}-{i}'>{t}</option>"
+                            for i, t in enumerate(tank_ids)
+                        ])
+                    }
+                </select>
+            </div>
+        </body>
+
         <script type="module">
             import init from './{game_id}/ctviewer.js'
             init()
+
+            var select = document.querySelector('#sel');
+            select.addEventListener('change',function(){
+                alert('changed');
+            });
         </script>
 
         </html>
