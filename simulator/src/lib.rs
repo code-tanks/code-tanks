@@ -46,7 +46,9 @@ pub fn run_game(tank_ids: &[String]) {
         .expect("Unable to write data");
 
     App::new()
-        .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(1.0/60.0)))
+        .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
+            1.0 / 60.0,
+        )))
         .add_plugins(MinimalPlugins)
         .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
@@ -60,42 +62,6 @@ pub fn run_game(tank_ids: &[String]) {
             SystemStage::single_threaded().with_system(save_commands),
         )
         .run();
-
-    // App::new()
-    //     .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_nanos(1)))
-    //     .add_plugins(MinimalPlugins)
-    //     .insert_resource(TickState {
-    //         tick: 0,
-    //         tank_ids: tank_ids.to_vec(),
-    //     })
-    //     .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-    //     .add_startup_system(setup_walls)
-    //     .add_startup_system(setup_sim_tanks)
-    //     .add_stage(
-    //         "request_commands",
-    //         SystemStage::single_threaded().with_system(request_commands),
-    //     )
-    //     .add_stage(
-    //         "save_commands",
-    //         SystemStage::single_threaded().with_system(save_commands),
-    //     )
-    //     .add_stage(
-    //         "apply_commands",
-    //         SystemStage::single_threaded().with_system(apply_commands),
-    //     )
-    //     .add_stage(
-    //         "physics2",
-    //         SystemStage::single_threaded().with_system(physics2),
-    //     )
-    //     .add_stage(
-    //         "physics",
-    //         SystemStage::single_threaded().with_system(physics),
-    //     )
-    //     .add_stage(
-    //         "publish_events",
-    //         SystemStage::single_threaded().with_system(request_commands_by_event),
-    //     )
-    //     .run();
 }
 
 pub mod collision_mask {
