@@ -9,15 +9,15 @@ class MyTank extends BaseTank {
 
   @override
   void run() {
-    commands.add(Commands.MOVE_FORWARD | Commands.ROTATE_TANK_CLOCKWISE | Commands.FIRE);
+    commands.add(Command.MOVE_FORWARD | Command.ROTATE_TANK_CLOCKWISE | Command.FIRE);
   }
   
   @override
   void onEvent(EventType e, Map info) {
     if (i % 2 == 0) {
-        commands.add(Commands.MOVE_BACKWARD | Commands.ROTATE_TANK_COUNTER_CLOCKWISE | Commands.FIRE);
+        commands.add(Command.MOVE_BACKWARD | Command.ROTATE_TANK_COUNTER_CLOCKWISE | Command.FIRE);
     } else {
-        commands.add(Commands.MOVE_FORWARD | Commands.ROTATE_TANK_CLOCKWISE | Commands.FIRE);
+        commands.add(Command.MOVE_FORWARD | Command.ROTATE_TANK_CLOCKWISE | Command.FIRE);
     }
     i = i + 1;
   }
