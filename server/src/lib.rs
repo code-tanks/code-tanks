@@ -95,6 +95,11 @@ mod methods {
     pub const GET: &'static str = "GET";
 }
 
+mod content_types {
+    pub const JSON: &'static str = "application/json";
+    pub const TEXT: &'static str = "text/plain";
+}
+
 // enum Responses {}
 mod responses {
     type StatusLine<'a> = &'a str;
@@ -145,6 +150,8 @@ fn handle_connection(
     let res_code: String;
     let res_log: String;
     let mut string_build = "could not run simulation\n".to_string();
+
+    let mut content_type = content_types::JSON;
 
     let response = match (method, path) {
         (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
@@ -313,6 +320,8 @@ fn handle_connection(
                 let err: String = matches[0].get(2);
                 res_code = format!("{}\n{}", out, err);
 
+                content_type = content_types::TEXT;
+
                 res = Response {
                     status_line: StatusLines::OK,
                     content: &res_code,
@@ -325,9 +334,10 @@ fn handle_connection(
     };
 
     let response_string = format!(
-        "{}\r\nContent-Length: {}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{}",
+        "{}\r\nContent-Length: {}\r\nContent-Type: {}; charset=UTF-8\r\n\r\n{}",
         response.status_line,
         response.content.len(),
+        content_type,
         response.content
     );
 
