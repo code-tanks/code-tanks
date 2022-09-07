@@ -76,7 +76,7 @@ pub fn upload_log(tank_id: &str, client: &mut Client, game_id: &str) {
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     upload_log_to_db(
         client,
