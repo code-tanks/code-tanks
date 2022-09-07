@@ -76,8 +76,15 @@ pub fn upload_log(tank_id: &str, client: &mut Client, game_id: &str) {
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+    let err_raw = String::from_utf8_lossy(&output_raw.stdout);
 
-    upload_log_to_db(client, game_id, tank_id, &result_raw.to_string());
+    upload_log_to_db(
+        client,
+        game_id,
+        tank_id,
+        &result_raw.to_string(),
+        &err_raw.to_string(),
+    );
 }
 
 pub fn run_docker_game(args: &[String]) -> Vec<String> {

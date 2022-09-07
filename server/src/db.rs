@@ -80,7 +80,8 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
 
         CREATE TABLE IF NOT EXISTS runs (
             id          VARCHAR PRIMARY KEY,
-            log         VARCHAR NOT NULL,
+            out         VARCHAR NOT NULL,
+            err         VARCHAR NOT NULL,
             timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
         );
     "#).unwrap();
