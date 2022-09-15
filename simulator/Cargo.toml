@@ -6,6 +6,8 @@ edition = "2021"
 [dependencies]
 bevy = "0.8.0"
 bevy_rapier2d = { version = "0.16.2", features = [ "debug-render", "enhanced-determinism", "wasm-bindgen" ] }
+serde = "1.0.144"
+serde_json = "1.0.85"
 
 [[bin]]
 name = "test"

@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
+use serde_json::json;
 
 use crate::{
     c_event::{Event, EventSink, EventTypes},
@@ -164,7 +165,7 @@ fn scan(
 
     event_sink.queue.push(Event {
         event_type: EventTypes::SCAN,
-        info: "".to_string(),
+        info: json!({}), // TODO populate
     });
     // match *collision_type {
     //     CollisionType::Bullet => {
@@ -242,6 +243,6 @@ fn hit(
 
     event_sink.queue.push(Event {
         event_type: EventTypes::HIT,
-        info: "".to_string(),
+        info: json!({}), // TODO populate
     });
 }

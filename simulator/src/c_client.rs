@@ -73,11 +73,12 @@ impl ClientTrait for DockerClient {
         // res
     }
 
-    fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
+    fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand> {
         let output_raw = Command::new("bash")
-            .arg("-c") 
+            .arg("-c")
             .arg(format!(
-                r#"curl -d '{{"event_type": 0,"info":{{}}}}' -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
+                r#"curl -d '{}' -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
+                serde_json::to_string(event).unwrap(),
                 self.tank_id,
             ))
             // .arg("ocypod:8023/queue/build/job")
@@ -208,11 +209,12 @@ impl ClientTrait for LocalClient {
         // res
     }
 
-    fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
+    fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand> {
         let output_raw = Command::new("bash")
             .arg("-c") 
             .arg(format!(
-                r#"curl -d '{{"event_type": 0,"info":{{}}}}' -X POST localhost:808{}/request_commands_by_event | jq --raw-output '.[]'"#,
+                r#"curl -d '{}' -X POST localhost:808{}/request_commands_by_event | jq --raw-output '.[]'"#,
+                serde_json::to_string(event).unwrap(),
                 self.port,
             ))
             .output()

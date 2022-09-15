@@ -1,4 +1,6 @@
 use bevy::prelude::*;
+use serde::Serialize;
+use serde_json::Value;
 
 #[derive(Component)]
 pub struct EventSink {
@@ -13,10 +15,10 @@ impl EventSink {
 
 // pub const EVENT_TYPES_LENGTH: usize = 2;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Event {
     pub event_type: EventType,
-    pub info: String,
+    pub info: Value,
 }
 
 pub type EventType = u64;
