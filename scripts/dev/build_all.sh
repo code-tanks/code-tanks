@@ -2,7 +2,7 @@
 
 git pull
 
-./scripts/build_builder.sh
-./scripts/build_server.sh
-./scripts/build_simulator.sh
-./scripts/build_web.sh
+./scripts/dev/build_builder.sh
+./scripts/dev/build_server.sh
+./scripts/dev/build_simulator.sh
+./scripts/dev/build_web.sh
