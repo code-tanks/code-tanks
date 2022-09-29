@@ -13,6 +13,7 @@ class MyTank extends BaseTank {
   @override
   void onEvent(EventType e, Map info) {
     // TODO: implement onEvent
+    print(info);
   }
 }
 
