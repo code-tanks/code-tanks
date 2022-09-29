@@ -36,7 +36,7 @@ pub fn radar_physics(
     mut contact_events: EventReader<CollisionEvent>,
     // mut intersection_events: EventReader<IntersectionEvent>,
     mut query_tank: Query<(Entity, &Tank, &mut EventSink, &Transform)>,
-    query_collider: Query<(&CCollider, &Transform)>,
+    query_collider: Query<(&CCollider, &Transform, Option<&Velocity>)>,
     rapier_context: Res<RapierContext>,
     // state: Res<TickState>,
     query_bullet: Query<&Bullet>,
@@ -103,7 +103,8 @@ pub fn radar_physics(
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
                 if h1 == &tank.radar && *h2 != tank_entity {
                     if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
-                        let (collider, collider_transform) = query_collider.get(*h2).unwrap();
+                        let (collider, collider_transform, velocity) =
+                            query_collider.get(*h2).unwrap();
                         // info!("{:?} {:?}", tank_entity, state.tick);
                         info!(
                             "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
@@ -118,11 +119,13 @@ pub fn radar_physics(
                             &mut event_sink,
                             collider_transform,
                             &query_bullet,
+                            velocity,
                         );
                     }
                 } else if h2 == &tank.radar && *h1 != tank_entity {
                     if rapier_context.intersection_pair(*h1, *h2) == Some(true) {
-                        let (collider, collider_transform) = query_collider.get(*h1).unwrap();
+                        let (collider, collider_transform, velocity) =
+                            query_collider.get(*h1).unwrap();
                         // info!("{:?} {:?}", tank_entity, state.tick);
                         info!(
                             "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
@@ -137,6 +140,7 @@ pub fn radar_physics(
                             &mut event_sink,
                             collider_transform,
                             &query_bullet,
+                            velocity,
                         );
                     }
                 }
@@ -151,8 +155,9 @@ fn scan(
     b: &Entity,
     collision_type: &CollisionType,
     event_sink: &mut EventSink,
-    _t2: &Transform,
+    t2: &Transform,
     query: &Query<&Bullet>,
+    t2_velocity: Option<&Velocity>,
 ) {
     if *collision_type == CollisionType::Bullet {
         let bullet = query.get(*b).unwrap();
@@ -163,9 +168,33 @@ fn scan(
     }
     info!("SCANNED {:?} of type {:?}", b, collision_type);
 
+    let v = t2.rotation * Vec3::Y;
+
+    let zero = Velocity::zero();
+
+    let vel = match t2_velocity {
+        Some(x) => x,
+        None => &zero,
+    };
+
     event_sink.queue.push(Event {
         event_type: EventTypes::SCAN,
-        info: json!({}), // TODO populate
+        info: json!({
+            "collision_type": format!("{:?}", collision_type),
+            "entity": b.id(),
+            "transform": {
+                "x": t2.translation.x,
+                "y": t2.translation.y,
+                "rotation": v.y.atan2(v.x),
+            },
+            "velocity": {
+                "linvel": {
+                    "x": vel.linvel.x,
+                    "y": vel.linvel.y
+                },
+                "angvel": vel.angvel
+            }
+        }),
     });
     // match *collision_type {
     //     CollisionType::Bullet => {
@@ -186,7 +215,7 @@ fn scan(
 pub fn tank_physics(
     mut contact_events: EventReader<CollisionEvent>,
     mut query_tank: Query<(Entity, &mut EventSink, &mut Health), With<Tank>>,
-    query_collider: Query<(&CCollider, &Transform)>,
+    query_collider: Query<(&CCollider, &Transform, Option<&Velocity>)>,
     // state: Res<TickState>,
     // mut commands: Commands,
 ) {
@@ -194,7 +223,7 @@ pub fn tank_physics(
         for (tank, mut event_sink, mut health) in &mut query_tank {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
                 if h1 == &tank {
-                    let (collider, transform) = query_collider.get(*h2).unwrap();
+                    let (collider, transform, velocity) = query_collider.get(*h2).unwrap();
                     hit(
                         &tank,
                         h2,
@@ -202,9 +231,10 @@ pub fn tank_physics(
                         &mut event_sink,
                         &mut health,
                         transform,
+                        velocity,
                     );
                 } else if h2 == &tank {
-                    let (collider, transform) = query_collider.get(*h1).unwrap();
+                    let (collider, transform, velocity) = query_collider.get(*h1).unwrap();
                     hit(
                         &tank,
                         h1,
@@ -212,6 +242,7 @@ pub fn tank_physics(
                         &mut event_sink,
                         &mut health,
                         transform,
+                        velocity,
                     );
                 }
             }
@@ -225,7 +256,8 @@ fn hit(
     collision_type: &CollisionType,
     event_sink: &mut EventSink,
     health: &mut Health,
-    _t: &Transform,
+    t2: &Transform,
+    t2_velocity: Option<&Velocity>,
 ) {
     match collision_type {
         &CollisionType::Radar => {
@@ -241,8 +273,30 @@ fn hit(
         health.val = 0;
     }
 
+    let v = t2.rotation * Vec3::Y;
+    let zero = Velocity::zero();
+
+    let vel = match t2_velocity {
+        Some(x) => x,
+        None => &zero,
+    };
     event_sink.queue.push(Event {
         event_type: EventTypes::HIT,
-        info: json!({}), // TODO populate
+        info: json!({
+            "collision_type": format!("{:?}", collision_type),
+            "entity": b.id(),
+            "transform": {
+                "x": t2.translation.x,
+                "y": t2.translation.y,
+                "rotation": v.y.atan2(v.x),
+            },
+            "velocity": {
+                "linvel": {
+                    "x": vel.linvel.x,
+                    "y": vel.linvel.y
+                },
+                "angvel": vel.angvel
+            }
+        }), // TODO populate
     });
 }
