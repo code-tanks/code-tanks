@@ -5,7 +5,7 @@ RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
     curl g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.63.0 -y
+RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.64.0 -y
 
 WORKDIR /ctsim
 

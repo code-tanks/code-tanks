@@ -1,4 +1,4 @@
-FROM rust:1.63.0 AS builder_builder
+FROM rust:1.64.0 AS builder_builder
 
 COPY worker_builder/dummy.rs .
 COPY worker_builder/Cargo.toml .
