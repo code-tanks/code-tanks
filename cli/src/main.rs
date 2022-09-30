@@ -37,10 +37,10 @@ fn upload(path: &str, extension: &str) {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
     let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
 
-    if result_raw == "" {
-        println!("{}", err_raw)
-    } else {
-        // println!("stdout:");
+    if err_raw != "" {
+        println!("{}", err_raw);
+    }
+    if result_raw != "" {
         println!("Tank Id: {}", result_raw.to_string());
         println!("Run the command below to retrieve build logs");
         println!("\t$ctcli logs {}", result_raw.to_string());
@@ -66,7 +66,7 @@ fn main() {
 
             upload(path_str, extension);
 
-            println!("upload {} with {} extension", path_str, extension);
+            // println!("upload {} with {} extension", path_str, extension);
         }
         Some(("logs", sub_matches)) => {
             println!(
