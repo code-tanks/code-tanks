@@ -37,7 +37,7 @@ fn upload(path: &str, extension: &str) {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
     let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
 
-    if err_raw != "" {
+    if result_raw == "" {
         println!("{}", err_raw)
     } else {
         // println!("stdout:");
