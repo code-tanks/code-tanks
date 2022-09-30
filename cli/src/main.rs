@@ -34,15 +34,21 @@ fn upload(path: &str, extension: &str) {
         .output()
         .expect("failed to communicate with CodeTanks server");
 
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
 
-    println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
-    println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    if err_raw != "" {
+        println!("{}", err_raw)
+    } else {
+        // println!("stdout:");
+        println!("Tank Id: {}", result_raw.to_string());
+        println!("Run the command below to retrieve build logs");
+        println!("\t$ctcli logs {}", result_raw.to_string());
+    }
+    // println!("");
+    // println!("stderr:");
+    // println!("{}", err_raw.to_string());
+    // println!("");
 }
 
 fn main() {
