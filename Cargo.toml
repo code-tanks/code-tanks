@@ -1,6 +1,7 @@
 [workspace]
 
 members = [
+    "cli",
     "desktop",
     "server",
     "simulator",
