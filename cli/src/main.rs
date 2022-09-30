@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
 use clap::{arg, Command};
+use colored::*;
 
 fn cli() -> Command {
     Command::new("ctcli")
@@ -41,9 +42,9 @@ fn upload(path: &str, extension: &str) {
         println!("{}", err_raw);
     }
     if result_raw != "" {
-        println!("Tank Id: {}", result_raw.to_string());
-        println!("Run the command below to retrieve build logs");
-        println!("\t$ctcli logs {}", result_raw.to_string());
+        println!("Tank Id: {}", result_raw.to_string().green());
+        println!("To retrieve build logs");
+        println!("    $ctcli logs {}", result_raw.to_string().yellow());
     }
     // println!("");
     // println!("stderr:");

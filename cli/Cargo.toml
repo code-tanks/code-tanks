@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 clap = "4.0.7"
+colored = "2"
 
 [[bin]]
 name = "ctcli"
