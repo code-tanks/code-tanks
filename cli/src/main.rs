@@ -43,8 +43,6 @@ fn upload(path: &str, extension: &str) {
     }
     if result_raw != "" {
         println!("Tank Id: {}", result_raw.to_string().green());
-        println!("To retrieve build logs");
-        println!("    $ctcli logs {}", result_raw.to_string().yellow());
     }
     // println!("");
     // println!("stderr:");
