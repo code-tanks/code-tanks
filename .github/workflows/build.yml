@@ -16,6 +16,22 @@ on:
       - .github/workflows/build.yml
 
 jobs:
+  build_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --bin ctcli
+  build_desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --bin ctdesktop
   build_builder:
     runs-on: ubuntu-latest
     steps:
