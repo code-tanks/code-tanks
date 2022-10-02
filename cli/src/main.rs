@@ -21,6 +21,12 @@ fn cli() -> Command {
                 .arg_required_else_help(true)
                 .arg(arg!(<PATH> "Path to tank file").value_parser(clap::value_parser!(PathBuf))),
         )
+        .subcommand(
+            Command::new("raw")
+                .about("Download tank code")
+                .arg_required_else_help(true)
+                .arg(arg!(<TANK_ID> "The tank id to download")),
+        )
 }
 
 fn upload(path: &str, extension: &str) {
@@ -50,6 +56,23 @@ fn upload(path: &str, extension: &str) {
     // println!("");
 }
 
+fn get_logs(tank_id: &str) {
+    let output_raw = std::process::Command::new("curl")
+        .arg(format!("http://localhost:8089/log/{}", tank_id))
+        .output()
+        .expect("failed to communicate with CodeTanks server");
+
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
+    let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
+
+    if err_raw != "" {
+        println!("{}", err_raw);
+    }
+    if result_raw != "" {
+        println!("{}", result_raw);
+    }
+}
+
 fn main() {
     let matches = cli().get_matches();
 
@@ -59,21 +82,36 @@ fn main() {
                 .get_one::<PathBuf>("PATH")
                 .expect("required")
                 .as_path();
-
             let path_str = path.to_str().unwrap();
-            let extension = path.extension().unwrap().to_str().unwrap();
 
-            upload(path_str, extension);
+            if !path.exists() {
+                println!("Path '{}' does not exist.", path_str.red());
+            } else if path.is_dir() {
+                println!(
+                    "Path '{}' is a directory. Your upload must be a file.",
+                    path_str.red()
+                );
+            } else {
+                let extension = path.extension().unwrap().to_str().unwrap();
 
+                upload(path_str, extension);
+            }
             // println!("upload {} with {} extension", path_str, extension);
         }
         Some(("logs", sub_matches)) => {
-            println!(
-                "logs for {}",
+            get_logs(
                 sub_matches
                     .get_one::<String>("LOG_TARGET")
-                    .expect("required")
+                    .expect("required"),
             );
+        }
+        Some(("raw", _sub_matches)) => {
+            // println!(
+            //     "logs for {}",
+            //     sub_matches
+            //         .get_one::<String>("TANK_ID")
+            //         .expect("required")
+            // );
         }
         _ => unreachable!(), // If all subcommands are defined above, anything else is unreachabe!()
     }
