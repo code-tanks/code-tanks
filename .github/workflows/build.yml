@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - cli/**
       - server/**
       - simulator/**
       - simulator_graphis/**
