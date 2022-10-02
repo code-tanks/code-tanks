@@ -31,7 +31,7 @@ fn cli() -> Command {
             Command::new("run")
                 .about("Run simulation with tank ids")
                 .arg_required_else_help(true)
-                .arg(arg!(<TANK_ID> "The tank ids to run")),
+                .arg(arg!(<TANK_ID> ... "The tank ids to run")),
         )
 }
 
