@@ -136,7 +136,6 @@ fn main() {
 
                 upload(path_str, extension);
             }
-            // println!("upload {} with {} extension", path_str, extension);
         }
         Some(("logs", sub_matches)) => {
             get_logs(
