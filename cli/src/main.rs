@@ -61,6 +61,7 @@ fn upload(path: &str, extension: &str) {
 
 fn get_logs(tank_id: &str) {
     let output_raw = std::process::Command::new("curl")
+        .arg("-s")
         .arg(format!("http://localhost:8089/log/{}", tank_id))
         .output()
         .expect("failed to communicate with CodeTanks server");
@@ -78,6 +79,7 @@ fn get_logs(tank_id: &str) {
 
 fn get_raw(tank_id: &str) {
     let output_raw = std::process::Command::new("curl")
+        .arg("-s")
         .arg(format!("http://localhost:8089/raw/{}", tank_id))
         .output()
         .expect("failed to communicate with CodeTanks server");
@@ -95,6 +97,7 @@ fn get_raw(tank_id: &str) {
 
 fn run_sim(tank_ids: Vec<String>) {
     let output_raw = std::process::Command::new("curl")
+        .arg("-s")
         .arg("-d")
         .arg(format!("{}", tank_ids.join(" ")))
         .arg("-X")
