@@ -9,6 +9,7 @@ class MyTank extends BaseTank {
 
   @override
   void run() {
+    print(1);
     commands.add(Command.MOVE_FORWARD | Command.ROTATE_TANK_CLOCKWISE | Command.FIRE);
   }
   
