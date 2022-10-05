@@ -32,14 +32,14 @@ impl ClientTrait for DockerClient {
             ))
             // .arg("ocypod:8023/queue/build/job")
             .output()
-            .expect("failed to communicate with ocypod");
+            .expect("failed to communicate with tank");
 
         // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
         // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
         // let mut res: Vec<CCommand> = vec![];
         let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-        let _err_raw = String::from_utf8_lossy(&output_raw.stderr);
+        let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
         // println!("out: {}", result_raw.to_string());
         // println!("err: {}", err_raw.to_string() != "");
@@ -47,12 +47,12 @@ impl ClientTrait for DockerClient {
         // let successful = err_raw.to_string() == "";
 
         // println!("tank_id={}, successful={}", self.tank_id, successful);
-        // println!("stdout:");
-        // println!("{}", result_raw.to_string());
-        // println!("");
-        // println!("stderr:");
-        // println!("{}", err_raw.to_string());
-        // println!("");
+        println!("stdout:");
+        println!("{}", result_raw.to_string());
+        println!("");
+        println!("stderr:");
+        println!("{}", err_raw.to_string());
+        println!("");
 
         // if err_raw.to_string() == "" {
         // res =
