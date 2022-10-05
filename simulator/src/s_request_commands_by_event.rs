@@ -18,13 +18,13 @@ pub fn request_commands_by_event(
         let mut queue: Vec<CCommand> = Vec::new();
 
         for event in event_sender.queue.iter() {
-            info!("{:?}", event);
+            println!("{:?}", event);
             let mut new_commands = client_connection.client.request_commands_by_event(event);
             if new_commands.is_empty() {
                 health.val = 0;
             } else {
                 queue.append(&mut new_commands);
-                info!("{:?}", queue);
+                println!("{:?}", queue);
             }
         }
         event_sender.queue.clear();
