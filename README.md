@@ -6,7 +6,6 @@
 
 {
   "insecure-registries" : ["localhost:5001"],
-  "features": { "buildkit": true }
 }
 
 # Development
