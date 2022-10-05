@@ -9,13 +9,12 @@ class MyTank extends BaseTank {
 
   @override
   void run() {
-    print(1);
     commands.add(Command.MOVE_FORWARD | Command.ROTATE_TANK_CLOCKWISE | Command.FIRE);
   }
   
   @override
   void onEvent(EventType e, Map info) {
-    print(info);
+    print("$e $info");
     if (i % 2 == 0) {
         for (var j = 0; j < 1000; j++) {
             commands.add(Command.MOVE_BACKWARD | Command.ROTATE_TANK_COUNTER_CLOCKWISE | Command.FIRE);
