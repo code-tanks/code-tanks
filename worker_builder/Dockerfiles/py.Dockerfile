@@ -6,7 +6,7 @@ RUN apt update \
 
 WORKDIR /app
 
-RUN git clone -b 'v0.1.0' --single-branch --depth 1 https://github.com/code-tanks/python-api.git /app
+RUN git clone -b 'v0.1.1' --single-branch --depth 1 https://github.com/code-tanks/python-api.git /app
 
 RUN pip install -r requirements.txt
 
