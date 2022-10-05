@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - cli/**
       - server/**
       - simulator/**
       - simulator_graphis/**
@@ -16,6 +17,37 @@ on:
       - .github/workflows/build.yml
 
 jobs:
+  build_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --bin ctcli
+  build_desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+      - run: cargo build --bin ctdesktop
   build_builder:
     runs-on: ubuntu-latest
     steps:
