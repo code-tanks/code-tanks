@@ -3,7 +3,7 @@ use bevy_rapier2d::prelude::*;
 use serde_json::json;
 
 use crate::{
-    c_event::{Event, EventSink, EventTypes},
+    c_event::{Event, EventSink},
     c_health::Health,
     c_tank::{Bullet, Radar, Tank},
     CCollider, CollisionType,
@@ -178,7 +178,7 @@ fn scan(
     };
 
     event_sink.queue.push(Event {
-        event_type: EventTypes::SCAN,
+        event_type: "scan".to_string(),
         info: json!({
             "collision_type": format!("{:?}", collision_type),
             "entity": b.id(),
@@ -281,7 +281,7 @@ fn hit(
         None => &zero,
     };
     event_sink.queue.push(Event {
-        event_type: EventTypes::HIT,
+        event_type: "hit".to_string(),
         info: json!({
             "collision_type": format!("{:?}", collision_type),
             "entity": b.id(),

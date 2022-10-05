@@ -17,15 +17,6 @@ impl EventSink {
 
 #[derive(Debug, Serialize)]
 pub struct Event {
-    pub event_type: EventType,
+    pub event_type: String,
     pub info: Value,
-}
-
-pub type EventType = u64;
-
-pub enum EventTypes {}
-
-impl EventTypes {
-    pub const HIT: EventType = 0b1;
-    pub const SCAN: EventType = 0b1 << 1;
 }

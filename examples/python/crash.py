@@ -12,7 +12,7 @@ class MyTank(BaseTank):
         # TODO
         pass
 
-    def on_event(self, event_type, info):
+    def on_event(self, event):
         # TODO
         pass
 
