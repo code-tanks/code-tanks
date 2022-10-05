@@ -37,6 +37,7 @@ fn cli() -> Command {
 
 fn upload(path: &str, extension: &str) {
     let output_raw = std::process::Command::new("curl")
+        .arg("-s")
         .arg("--data-binary")
         .arg(format!("@{}", path))
         .arg("-H")
