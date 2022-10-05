@@ -27,7 +27,7 @@ fn main() {
             let game_id = &args.join("");
             for tank_id in tank_ids.iter() {
                 upload_log(tank_id, &mut client);
-                remove_tank(tank_id);
+                // remove_tank(tank_id);
             }
             let sim = fs::read_to_string("./sim.txt").expect("Unable to read file");
             let uploaded_sim = upload_sim(&mut client, game_id, &sim, true);
