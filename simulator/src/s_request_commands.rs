@@ -16,6 +16,6 @@ pub fn request_commands(mut query: Query<(&mut CommandSource, &mut Client, &mut 
                 command_receiver.queue.append(&mut new_commands);
             }
         }
-        // println!("request_commands {:?}", command_receiver.queue);
+        println!("request_commands {:?}", command_receiver.queue);
     }
 }
