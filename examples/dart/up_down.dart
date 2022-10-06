@@ -9,6 +9,7 @@ class MyTank extends BaseTank {
 
   @override
   void run() {
+    
     if (i % 2 == 0) {
         for (var j = 0; j < 1000; j++) {
           commands.add(Command.MOVE_FORWARD | Command.FIRE);
