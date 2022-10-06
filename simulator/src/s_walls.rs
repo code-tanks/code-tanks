@@ -15,8 +15,10 @@ pub fn setup_walls(mut commands: Commands) {
         .insert(RigidBody::Fixed)
         .insert(Collider::cuboid(500.0, 50.0))
         .insert(CollisionGroups::new(
-            collision_mask::WALL,
-            collision_mask::TANK | collision_mask::BULLET | collision_mask::RADAR,
+            Group::from_bits_truncate(collision_mask::WALL),
+            Group::from_bits_truncate(
+                collision_mask::TANK | collision_mask::BULLET | collision_mask::RADAR,
+            ),
         ))
         .insert_bundle(TransformBundle::from(Transform::from_xyz(0.0, -300.0, 0.0)));
 

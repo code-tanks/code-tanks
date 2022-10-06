@@ -134,9 +134,7 @@ pub fn apply_commands(
                     })
                     .insert(ActiveEvents::COLLISION_EVENTS)
                     .insert(Sensor)
-                    .insert(Bullet {
-                        tank: entity,
-                    })
+                    .insert(Bullet { tank: entity })
                     .insert(GravityScale(0.0))
                     .insert(RigidBody::Dynamic)
                     .insert(ColliderMassProperties::Mass(1.0))
@@ -144,8 +142,10 @@ pub fn apply_commands(
                     .insert(Collider::ball(5.0))
                     .insert(Restitution::coefficient(0.1))
                     .insert(CollisionGroups::new(
-                        collision_mask::BULLET,
-                        collision_mask::WALL | collision_mask::TANK | collision_mask::RADAR,
+                        Group::from_bits_truncate(collision_mask::BULLET),
+                        Group::from_bits_truncate(
+                            collision_mask::WALL | collision_mask::TANK | collision_mask::RADAR,
+                        ),
                     ))
                     .insert(Damping {
                         linear_damping: 0.0,

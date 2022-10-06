@@ -31,8 +31,8 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
         .insert(Collider::ball(5.0))
         .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
-            collision_mask::NONE,
-            collision_mask::NONE,
+            Group::from_bits_truncate(collision_mask::NONE),
+            Group::from_bits_truncate(collision_mask::NONE),
         ))
         .insert(Damping {
             linear_damping: 0.0,
@@ -69,8 +69,10 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
         ))
         .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
-            collision_mask::RADAR,
-            collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
+            Group::from_bits_truncate(collision_mask::RADAR),
+            Group::from_bits_truncate(
+                collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
+            ),
         ))
         .insert(Damping {
             linear_damping: 0.0,
@@ -116,11 +118,13 @@ pub fn create_base_tank(
         .insert(Collider::cuboid(19.0, 23.0))
         .insert(Restitution::coefficient(0.0))
         .insert(CollisionGroups::new(
-            collision_mask::TANK,
-            collision_mask::TANK
-                | collision_mask::BULLET
-                | collision_mask::WALL
-                | collision_mask::RADAR,
+            Group::from_bits_truncate(collision_mask::TANK),
+            Group::from_bits_truncate(
+                collision_mask::TANK
+                    | collision_mask::BULLET
+                    | collision_mask::WALL
+                    | collision_mask::RADAR,
+            ),
         ))
         .insert(Damping {
             linear_damping: 0.0,
