@@ -9,7 +9,7 @@ ctsimlibgraphics = { path = "../simulator_graphics" }
 serde = "1.0.143"
 wasm-bindgen = "0.2.82"
 web-sys = { version = "0.3.59", features = [ "Window", "Location" ] }
-bevy = "0.8.0"
+bevy = "0.9.1"
 
 [[bin]]
 name = "ctviewer"
