@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.9.1"
-bevy_rapier2d = { version = "0.17.0", features = [ "debug-render", "enhanced-determinism", "wasm-bindgen" ] }
+bevy_rapier2d = { version = "0.19.0", features = [ "debug-render", "enhanced-determinism", "wasm-bindgen" ] }
 serde = "1.0.144"
 serde_json = "1.0.85"
 
