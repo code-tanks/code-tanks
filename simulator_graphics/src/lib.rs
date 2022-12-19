@@ -33,7 +33,7 @@ pub fn create_graphics_tank(
 
     let gun = create_gun(commands, x, y);
     let mut gun = commands.entity(gun);
-    gun.insert_bundle(SpriteBundle {
+    gun.insert(SpriteBundle {
         transform: Transform::from_xyz(x, y, 0.0),
         texture: asset_server.load("tankRed_barrel1.png"),
         ..default()
@@ -42,7 +42,7 @@ pub fn create_graphics_tank(
 
     let radar = create_radar(commands, x, y);
     let mut radar = commands.entity(radar);
-    radar.insert_bundle(SpriteBundle {
+    radar.insert(SpriteBundle {
         transform: Transform::from_xyz(x, y, 0.0),
         texture: asset_server.load("shotLarge.png"),
         ..default()
@@ -51,7 +51,7 @@ pub fn create_graphics_tank(
 
     let tank = create_base_tank(commands, gun, radar, x, y, client);
     commands.entity(tank).with_children(|parent| {
-        parent.spawn_bundle(SpriteBundle {
+        parent.spawn(SpriteBundle {
             transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
             texture: asset_server.load("tankBody_red.png"),
             ..default()
@@ -62,7 +62,7 @@ pub fn create_graphics_tank(
         };
 
         parent
-            .spawn_bundle(GeometryBuilder::build_as(
+            .spawn(GeometryBuilder::build_as(
                 &shape,
                 DrawMode::Outlined {
                     fill_mode: FillMode::color(Color::GREEN),

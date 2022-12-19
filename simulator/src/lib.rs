@@ -23,19 +23,19 @@ use std::time::Duration;
 
 use bevy::app::App;
 use bevy::ecs::schedule::SystemStage;
-use bevy::prelude::Component;
+use bevy::prelude::{Component, Resource};
 use bevy::MinimalPlugins;
 use core_plugin::*;
 use s_save_commands::*;
 use s_setup_sim_tanks::*;
 use s_walls::*;
 
-#[derive(Default)]
+#[derive(Default, Resource)]
 pub struct TickState {
     pub tick: u32,
 }
 
-#[derive(Default)]
+#[derive(Default, Resource)]
 pub struct TankIds {
     pub tank_ids: Vec<String>,
 }

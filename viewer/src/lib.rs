@@ -36,7 +36,7 @@ impl AssetLoader for CustomAssetLoader {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Resource)]
 pub struct CustomAssetState {
     pub handle: Handle<CustomAsset>,
     pub printed: bool,

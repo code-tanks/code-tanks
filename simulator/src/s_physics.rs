@@ -181,7 +181,7 @@ fn scan(
         event_type: "scan".to_string(),
         info: json!({
             "collision_type": format!("{:?}", collision_type),
-            "entity": b.id(),
+            "entity": b,
             "transform": {
                 "x": t2.translation.x,
                 "y": t2.translation.y,
@@ -284,7 +284,7 @@ fn hit(
         event_type: "hit".to_string(),
         info: json!({
             "collision_type": format!("{:?}", collision_type),
-            "entity": b.id(),
+            "entity": b,
             "transform": {
                 "x": t2.translation.x,
                 "y": t2.translation.y,
