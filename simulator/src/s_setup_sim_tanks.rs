@@ -101,8 +101,8 @@ pub fn create_base_tank(
             CCollider {
                 collision_type: CollisionType::Tank,
             },
-            Sleeping::disabled(),
-            Ccd::enabled(),
+            // Sleeping::disabled(),
+            // Ccd::enabled(),
             Tank {
                 cooldown: 0,
                 gun,
@@ -128,22 +128,20 @@ pub fn create_base_tank(
                         | collision_mask::RADAR,
                 ),
             ),
-        ))
-        .insert((
-            Damping {
-                linear_damping: 0.0,
-                angular_damping: 0.0,
-            },
-            Velocity {
-                linvel: Vec2::new(0.0, 0.0),
-                angvel: 0.0,
-            },
+            // Damping {
+            //     linear_damping: 0.0,
+            //     angular_damping: 0.0,
+            // },
+            // Velocity {
+            //     linvel: Vec2::new(0.0, 0.0),
+            //     angvel: 0.0,
+            // },
             client,
-            SpatialBundle {
-                transform: Transform::from_xyz(x, y, 0.0),
-                visibility: Visibility { is_visible: true },
-                ..default()
-            },
+            // SpatialBundle {
+            //     transform: Transform::from_xyz(x, y, 0.0),
+            //     visibility: Visibility { is_visible: true },
+            //     ..default()
+            // },
         ))
         .id()
 }
