@@ -26,7 +26,7 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
             Sensor,
             GravityScale(0.0),
             RigidBody::Dynamic,
-            ColliderMassProperties::Mass(0.0),
+            // ColliderMassProperties::Mass(0.0),
             ColliderMassProperties::Density(0.0),
             Collider::ball(5.0),
             Restitution::coefficient(0.0),
@@ -61,7 +61,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             Sensor,
             GravityScale(0.0),
             RigidBody::Dynamic,
-            ColliderMassProperties::Mass(0.0),
+            // ColliderMassProperties::Mass(0.0),
             ColliderMassProperties::Density(0.0),
             Collider::triangle(
                 Vec2::new(0.0, 0.0),
@@ -96,51 +96,53 @@ pub fn create_base_tank(
     client: impl Component,
 ) -> Entity {
     commands
-        .spawn(ActiveEvents::COLLISION_EVENTS)
-        .insert(CCollider {
-            collision_type: CollisionType::Tank,
-        })
-        .insert(Sleeping::disabled())
-        .insert(Ccd::enabled())
-        .insert(Tank {
-            cooldown: 0,
-            gun: gun,
-            radar: radar,
-        })
-        .insert(Health {
-            val: Health::MAX_HEALTH,
-        })
-        .insert(CommandSource::default())
-        .insert(EventSink::default())
-        .insert(GravityScale(0.0))
-        .insert(RigidBody::Dynamic)
-        .insert(ColliderMassProperties::Mass(1.0))
-        .insert(ColliderMassProperties::Density(1.0))
-        .insert(Collider::cuboid(19.0, 23.0))
-        .insert(Restitution::coefficient(0.0))
-        .insert(CollisionGroups::new(
-            Group::from_bits_truncate(collision_mask::TANK),
-            Group::from_bits_truncate(
-                collision_mask::TANK
-                    | collision_mask::BULLET
-                    | collision_mask::WALL
-                    | collision_mask::RADAR,
+        .spawn((
+            ActiveEvents::COLLISION_EVENTS,
+            CCollider {
+                collision_type: CollisionType::Tank,
+            },
+            Sleeping::disabled(),
+            Ccd::enabled(),
+            Tank {
+                cooldown: 0,
+                gun,
+                radar,
+            },
+            Health {
+                val: Health::MAX_HEALTH,
+            },
+            CommandSource::default(),
+            EventSink::default(),
+            GravityScale(0.0),
+            RigidBody::Dynamic,
+            // ColliderMassProperties::Mass(1.0),
+            ColliderMassProperties::Density(1.0),
+            Collider::cuboid(19.0, 23.0),
+            // Restitution::coefficient(0.0),
+            CollisionGroups::new(
+                Group::from_bits_truncate(collision_mask::TANK),
+                Group::from_bits_truncate(
+                    collision_mask::TANK
+                        | collision_mask::BULLET
+                        | collision_mask::WALL
+                        | collision_mask::RADAR,
+                ),
             ),
+            // Damping {
+            //     linear_damping: 0.0,
+            //     angular_damping: 0.0,
+            // },
+            // Velocity {
+            //     linvel: Vec2::new(0.0, 0.0),
+            //     angvel: 0.0,
+            // },
+            client,
+            SpatialBundle {
+                transform: Transform::from_xyz(x, y, 0.0),
+                visibility: Visibility { is_visible: true },
+                ..default()
+            },
         ))
-        .insert(Damping {
-            linear_damping: 0.0,
-            angular_damping: 0.0,
-        })
-        .insert(Velocity {
-            linvel: Vec2::new(0.0, 0.0),
-            angvel: 0.0,
-        })
-        .insert(client)
-        .insert(SpatialBundle {
-            transform: Transform::from_xyz(x, y, 0.0),
-            visibility: Visibility { is_visible: true },
-            ..default()
-        })
         .id()
 }
 

@@ -136,7 +136,7 @@ pub fn apply_commands(
                     Bullet { tank: entity },
                     GravityScale(0.0),
                     RigidBody::Dynamic,
-                    ColliderMassProperties::Mass(1.0),
+                    // ColliderMassProperties::Mass(1.0),
                     ColliderMassProperties::Density(1.0),
                     Collider::ball(5.0),
                     Restitution::coefficient(0.1),
