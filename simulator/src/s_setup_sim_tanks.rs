@@ -27,17 +27,17 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
             GravityScale(0.0),
             RigidBody::Dynamic,
             // ColliderMassProperties::Mass(0.0),
-            ColliderMassProperties::Density(0.0),
+            ColliderMassProperties::Density(1.0),
             Collider::ball(5.0),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
                 Group::from_bits_truncate(collision_mask::NONE),
                 Group::from_bits_truncate(collision_mask::NONE),
             ),
-            Damping {
-                linear_damping: 0.0,
-                angular_damping: 0.0,
-            },
+            // Damping {
+            //     linear_damping: 0.0,
+            //     angular_damping: 0.0,
+            // },
             Velocity {
                 linvel: Vec2::new(0.0, 0.0),
                 angvel: 0.0,
@@ -62,7 +62,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             GravityScale(0.0),
             RigidBody::Dynamic,
             // ColliderMassProperties::Mass(0.0),
-            ColliderMassProperties::Density(0.0),
+            ColliderMassProperties::Density(1.0),
             Collider::triangle(
                 Vec2::new(0.0, 0.0),
                 Vec2::new(-25.0, 50.0),
@@ -75,10 +75,10 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
                     collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
                 ),
             ),
-            Damping {
-                linear_damping: 0.0,
-                angular_damping: 0.0,
-            },
+            // Damping {
+            //     linear_damping: 0.0,
+            //     angular_damping: 0.0,
+            // },
             Velocity {
                 linvel: Vec2::new(0.0, 0.0),
                 angvel: 0.0,
@@ -101,8 +101,8 @@ pub fn create_base_tank(
             CCollider {
                 collision_type: CollisionType::Tank,
             },
-            Sleeping::disabled(),
-            Ccd::enabled(),
+            // Sleeping::disabled(),
+            // Ccd::enabled(),
             Tank {
                 cooldown: 0,
                 gun,
@@ -118,7 +118,7 @@ pub fn create_base_tank(
             // ColliderMassProperties::Mass(1.0),
             ColliderMassProperties::Density(1.0),
             Collider::cuboid(19.0, 23.0),
-            // Restitution::coefficient(0.0),
+            Restitution::coefficient(0.0),
             CollisionGroups::new(
                 Group::from_bits_truncate(collision_mask::TANK),
                 Group::from_bits_truncate(
@@ -132,10 +132,10 @@ pub fn create_base_tank(
             //     linear_damping: 0.0,
             //     angular_damping: 0.0,
             // },
-            // Velocity {
-            //     linvel: Vec2::new(0.0, 0.0),
-            //     angvel: 0.0,
-            // },
+            Velocity {
+                linvel: Vec2::new(0.0, 0.0),
+                angvel: 0.0,
+            },
             client,
             SpatialBundle {
                 transform: Transform::from_xyz(x, y, 0.0),
