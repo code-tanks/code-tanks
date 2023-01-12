@@ -26,7 +26,7 @@ RUN pip install fastapi "uvicorn[standard]" requests
 
 
 # COPY web/web/* /ctweb/web
-COPY web/assets/* /ctweb/assets/
+COPY web/assets/ /ctweb/assets/
 COPY web/main.py .
 COPY --from=viewer_builder /ctviewer/target/release/web /ctweb/web
 

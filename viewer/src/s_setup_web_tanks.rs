@@ -19,7 +19,9 @@ pub fn setup_web_tanks(
 
     let custom_asset = custom_asset.unwrap();
 
-    let lines: Vec<String> = custom_asset.0.lines().map(|l| l.to_string()).collect();
+    let mut lines: Vec<String> = custom_asset.0.lines().map(|l| l.to_string()).collect();
+    // remove results of simulation
+    lines.pop();
 
     let tank_ids = lines[0]
         .split(",")
