@@ -2,7 +2,6 @@ pub mod c_client;
 pub mod c_command;
 pub mod c_event;
 pub mod c_health;
-pub mod c_healthbar;
 pub mod c_tank;
 pub mod core_plugin;
 
@@ -13,7 +12,7 @@ pub mod s_request_commands_by_event;
 pub mod s_request_debug_commands;
 pub mod s_save_commands;
 pub mod s_setup_sim_tanks;
-pub mod s_walls;
+pub mod s_setup_walls;
 
 use bevy::app::ScheduleRunnerSettings;
 
@@ -28,12 +27,18 @@ use bevy::MinimalPlugins;
 use core_plugin::*;
 use s_save_commands::*;
 use s_setup_sim_tanks::*;
-use s_walls::*;
+use s_setup_walls::*;
 
 #[derive(Default, Resource)]
 pub struct TickState {
     pub tick: u32,
 }
+
+impl TickState {
+    pub const MAXIMUM_SIMULATION_TICKS: u32 = 2000;
+    pub const TICK_RATE: f64 = 1.0 / 60.0;
+}
+
 
 #[derive(Default, Resource)]
 pub struct TankIds {
@@ -47,7 +52,7 @@ pub fn run_game(tank_ids: &[String]) {
 
     App::new()
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
-            1.0 / 60.0,
+            TickState::TICK_RATE,
         )))
         .add_plugins(MinimalPlugins)
         .insert_resource(TankIds {
@@ -64,7 +69,9 @@ pub fn run_game(tank_ids: &[String]) {
         .run();
 }
 
-pub mod collision_mask {
+pub enum CollisionMask {}
+
+impl CollisionMask {
     pub const NONE: u32 = 0b0;
     pub const TANK: u32 = 0b1;
     pub const WALL: u32 = 0b1 << 1;

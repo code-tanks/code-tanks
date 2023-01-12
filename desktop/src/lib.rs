@@ -1,7 +1,7 @@
 use std::{process::Command, thread, time};
 
 use bevy::prelude::*;
-use ctsimlib::{s_walls::setup_walls, *};
+use ctsimlib::{s_setup_walls::setup_walls, *};
 use s_setup_desktop_tanks::setup_desktop_tanks;
 
 pub mod s_setup_desktop_tanks;
@@ -16,7 +16,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
         .arg("--force")
         .arg(&tank_id)
         .output()
-        .expect("failed to communicate with docker");    
+        .expect("failed to communicate with docker");
     let output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
@@ -78,47 +78,4 @@ pub fn run_game(args: &[String]) {
         .add_system(setup_desktop_tanks)
         .add_startup_system(setup_walls)
         .run();
-
-    // App::new()
-    //     .insert_resource(Msaa { samples: 4 })
-    //     .add_plugins(DefaultPlugins)
-    //     .add_plugin(ShapePlugin)
-    //     .insert_resource(TickState {
-    //         tick: 0,
-    //         tank_ids: tank_ids.to_vec(),
-    //     })
-    //     .add_system(setup_desktop_tanks)
-    //     .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-    //     .add_plugin(RapierDebugRenderPlugin::default())
-    //     .add_startup_system(setup_graphics)
-    //     .add_startup_system(setup_walls)
-    //     .add_stage(
-    //         "request_commands",
-    //         SystemStage::single_threaded().with_system(request_commands),
-    //     )
-    //     .add_stage(
-    //         "request_debug_commands",
-    //         SystemStage::single_threaded().with_system(request_debug_commands),
-    //     )
-    //     .add_stage(
-    //         "apply_commands",
-    //         SystemStage::single_threaded().with_system(apply_commands),
-    //     )
-    //     .add_stage(
-    //         "physics2",
-    //         SystemStage::single_threaded().with_system(physics2),
-    //     )
-    //     .add_stage(
-    //         "physics",
-    //         SystemStage::single_threaded().with_system(physics),
-    //     )
-    //     .add_stage(
-    //         "publish_events",
-    //         SystemStage::single_threaded().with_system(request_commands_by_event),
-    //     )
-    //     .add_stage(
-    //         "update_health",
-    //         SystemStage::single_threaded().with_system(update_health),
-    //     )
-    //     .run();
 }

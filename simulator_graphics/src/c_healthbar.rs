@@ -1,6 +1,5 @@
 use bevy::prelude::*;
-
-use crate::c_tank::Tank;
+use ctsimlib::c_tank::Tank;
 
 #[derive(Component)]
 pub struct HealthBar {

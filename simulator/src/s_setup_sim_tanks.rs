@@ -12,7 +12,7 @@ use crate::{
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, collision_mask};
+use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, CollisionMask};
 
 pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
     commands
@@ -31,8 +31,8 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
             Collider::ball(5.0),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
-                Group::from_bits_truncate(collision_mask::NONE),
-                Group::from_bits_truncate(collision_mask::NONE),
+                Group::from_bits_truncate(CollisionMask::NONE),
+                Group::from_bits_truncate(CollisionMask::NONE),
             ),
             // Damping {
             //     linear_damping: 0.0,
@@ -70,9 +70,9 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             ),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
-                Group::from_bits_truncate(collision_mask::RADAR),
+                Group::from_bits_truncate(CollisionMask::RADAR),
                 Group::from_bits_truncate(
-                    collision_mask::TANK | collision_mask::BULLET | collision_mask::WALL,
+                    CollisionMask::TANK | CollisionMask::BULLET | CollisionMask::WALL,
                 ),
             ),
             // Damping {
@@ -120,12 +120,12 @@ pub fn create_base_tank(
             Collider::cuboid(Tank::WIDTH, Tank::HEIGHT),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
-                Group::from_bits_truncate(collision_mask::TANK),
+                Group::from_bits_truncate(CollisionMask::TANK),
                 Group::from_bits_truncate(
-                    collision_mask::TANK
-                        | collision_mask::BULLET
-                        | collision_mask::WALL
-                        | collision_mask::RADAR,
+                    CollisionMask::TANK
+                        | CollisionMask::BULLET
+                        | CollisionMask::WALL
+                        | CollisionMask::RADAR,
                 ),
             ),
             // Damping {

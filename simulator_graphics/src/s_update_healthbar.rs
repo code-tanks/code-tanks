@@ -3,9 +3,11 @@ use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, Path, ShapePath, StrokeMode},
     shapes::{self, RectangleOrigin},
 };
-use ctsimlib::{c_health::Health, c_healthbar::HealthBar, c_tank::Tank};
+use ctsimlib::{c_health::Health, c_tank::Tank};
 
-pub fn update_health(
+use crate::c_healthbar::HealthBar;
+
+pub fn update_healthbar(
     q_parent: Query<(&Health, &Transform)>,
     mut q: Query<(&mut Path, &mut DrawMode, &mut Transform, &HealthBar), Without<Health>>,
 ) {

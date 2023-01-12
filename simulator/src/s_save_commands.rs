@@ -60,7 +60,7 @@ pub fn save_commands(
     }
     state.tick = state.tick + 1;
 
-    if state.tick > 2000 {
+    if state.tick > TickState::MAXIMUM_SIMULATION_TICKS {
         exit.send(AppExit);
     }
 }

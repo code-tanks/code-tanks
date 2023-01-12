@@ -53,10 +53,11 @@ pub fn setup_web_tanks(
                 client: Box::new(ReaderClient { lines: c_lines }),
             },
             &asset_server,
+            tank_ids[n].to_string()
         );
         let mut tank = commands.entity(tank);
         tank.insert(HistoryTransforms {
-            transforms: transforms,
+            transforms,
         });
     }
 

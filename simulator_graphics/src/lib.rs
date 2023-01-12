@@ -4,16 +4,23 @@ use bevy::{
         Res, Transform, Vec2,
     },
     sprite::SpriteBundle,
+    text::{Text, Text2dBundle, TextAlignment, TextStyle},
 };
 use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
     shapes::{self, RectangleOrigin},
 };
-use ctsimlib::{c_healthbar::HealthBar, c_tank::Tank};
+use c_healthbar::HealthBar;
+use c_nametag::NameTag;
+use ctsimlib::c_tank::Tank;
+use s_update_nametag::update_nametag;
+pub mod c_healthbar;
+pub mod c_nametag;
 pub mod s_graphics;
-pub mod s_update_health;
+pub mod s_update_healthbar;
+pub mod s_update_nametag;
 use crate::s_graphics::setup_graphics;
-use crate::s_update_health::update_health;
+use crate::s_update_healthbar::update_healthbar;
 use bevy::ecs::entity::Entity;
 use bevy::ecs::schedule::SystemStage;
 use bevy::DefaultPlugins;
@@ -27,6 +34,7 @@ pub fn create_graphics_tank(
     i: usize,
     client: impl Component,
     asset_server: &Res<AssetServer>,
+    tank_id: String,
 ) -> Entity {
     let x = 150.0 * (i as f32) + 10.0;
     let y = 0.0;
@@ -73,7 +81,10 @@ pub fn create_graphics_tank(
             },
             Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::HEIGHT, 1.0),
         ),
-        HealthBar { tank, is_backdrop: true },
+        HealthBar {
+            tank,
+            is_backdrop: true,
+        },
     ));
     commands.spawn((
         GeometryBuilder::build_as(
@@ -87,8 +98,29 @@ pub fn create_graphics_tank(
             },
             Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::HEIGHT, 1.0),
         ),
-        HealthBar { tank, is_backdrop: false },
-    ));    
+        HealthBar {
+            tank,
+            is_backdrop: false,
+        },
+    ));
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_section(
+                &tank_id[tank_id.find("-").unwrap() + 1..],
+                TextStyle {
+                    font: asset_server.load("fonts/Roboto-Regular.ttf"),
+                    font_size: 12.0,
+                    color: Color::BLACK,
+                },
+            ).with_alignment(TextAlignment::TOP_CENTER),
+            // We align text to the top-left, so this transform is the top-left corner of our text. The
+            // box is centered at box_position, so it is necessary to move by half of the box size to
+            // keep the text in the box.
+            transform: Transform::from_xyz(x, y - Tank::HEIGHT, 1.0),
+            ..default()
+        },
+        NameTag { tank },
+    ));
     tank
 }
 
@@ -107,8 +139,12 @@ impl Plugin for CoreCTGraphicsPlugin {
                 SystemStage::single_threaded().with_system(request_debug_commands),
             )
             .add_stage(
-                "update_health",
-                SystemStage::single_threaded().with_system(update_health),
+                "update_healthbar",
+                SystemStage::single_threaded().with_system(update_healthbar),
+            )
+            .add_stage(
+                "update_nametag",
+                SystemStage::single_threaded().with_system(update_nametag),
             );
     }
 }
