@@ -1,4 +1,4 @@
-use std::process::Command;
+use std::{process::Command, thread, time};
 
 use bevy::prelude::*;
 use ctsimlib::{s_walls::setup_walls, *};
@@ -11,6 +11,12 @@ use ctsimlibgraphics::CoreCTGraphicsPlugin;
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     // docker run -d --network=code-tanks_default -p  8080:8080 --name tank_id --label com.docker.compose.project=code-tanks localhost:5001/url
     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
+    Command::new("docker")
+        .arg("rm")
+        .arg("--force")
+        .arg(&tank_id)
+        .output()
+        .expect("failed to communicate with docker");    
     let output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
@@ -26,6 +32,8 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+
+    println!("running tank {} on port 808{}", url, post_fix);
 
     println!("run stdout:");
     println!("{}", result_raw.to_string());
@@ -58,6 +66,8 @@ pub fn run_game(args: &[String]) {
         .enumerate()
         .map(|(i, url)| run_tank(url, &game_url, i))
         .collect::<Vec<String>>();
+
+    thread::sleep(time::Duration::from_millis(1000));
 
     App::new()
         .add_plugin(CoreCTPlugin)

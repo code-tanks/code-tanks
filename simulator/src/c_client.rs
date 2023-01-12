@@ -168,7 +168,7 @@ impl ClientTrait for LocalClient {
             ))
             // .arg("ocypod:8023/queue/build/job")
             .output()
-            .expect("failed to communicate with ocypod");
+            .expect("failed to communicate with docker");
 
         // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
         // let err_raw = String::from_utf8_lossy(&output_raw.stderr);

@@ -11,7 +11,7 @@ pub fn request_commands(mut query: Query<(Entity, &mut CommandSource, &mut Clien
 
         if command_receiver.queue.is_empty() {
             let mut new_commands = client_connection.client.request_commands();
-            println!("request_commands {:?} {:?}", entity, new_commands);
+            // println!("request_commands {:?} {:?}", entity, new_commands);
             if new_commands.is_empty() {
                 println!("killed {:?} empty request_commands", entity);
                 // TODO what do we do when request_commands returns empty?
@@ -20,6 +20,6 @@ pub fn request_commands(mut query: Query<(Entity, &mut CommandSource, &mut Clien
                 command_receiver.queue.append(&mut new_commands);
             }
         }
-        println!("commands {:?} {:?}", entity, command_receiver.queue);
+        // println!("commands {:?} {:?}", entity, command_receiver.queue);
     }
 }

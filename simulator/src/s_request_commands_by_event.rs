@@ -28,13 +28,13 @@ pub fn request_commands_by_event(
         for event in event_sender.queue.iter() {
             println!("{:?} {:?}", entity, event);
             let mut new_commands = client_connection.client.request_commands_by_event(event);
-            println!("request_commands_by_event {:?} {:?}", entity, new_commands);
+            // println!("request_commands_by_event {:?} {:?}", entity, new_commands);
             if !new_commands.is_empty() {
                 queue.append(&mut new_commands);
             }
         }
         event_sender.queue.clear();
         command_receiver.queue.splice(0..0, queue);
-        println!("commands {:?} {:?}", entity, command_receiver.queue);
+        // println!("commands {:?} {:?}", entity, command_receiver.queue);
     }
 }
