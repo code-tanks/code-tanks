@@ -1,33 +1,47 @@
-use bevy::prelude::{Children, Query, Vec2, With};
+use bevy::prelude::{Color, Query, Transform, Vec2, Without};
 use bevy_prototype_lyon::{
-    prelude::{Path, ShapePath},
+    prelude::{DrawMode, FillMode, Path, ShapePath, StrokeMode},
     shapes::{self, RectangleOrigin},
 };
-use ctsimlib::{c_health::Health, c_healthbar::HealthBar};
+use ctsimlib::{c_health::Health, c_healthbar::HealthBar, c_tank::Tank};
 
 pub fn update_health(
-    q_parent: Query<(&Health, &Children)>,
-    mut q_child: Query<&mut Path, With<HealthBar>>,
+    q_parent: Query<(&Health, &Transform)>,
+    mut q: Query<(&mut Path, &mut DrawMode, &mut Transform, &HealthBar), Without<Health>>,
 ) {
-    for (health, children) in q_parent.iter() {
-        // `children` is a collection of Entity IDs
-        for &child in children.iter() {
-            // get the health of each child unit
-            let p = q_child.get_mut(child);
+    for (mut path, mut draw_mode, mut transform, healthbar) in &mut q {
+        let (health, p_transform) = q_parent.get(healthbar.tank).unwrap();
 
-            if p.is_ok() {
-                let mut path = p.unwrap();
-                let polygon = shapes::Rectangle {
-                    extents: Vec2::new(
-                        38.0 * (health.val as f32) / (Health::MAX_HEALTH as f32),
-                        3.0,
-                    ),
-                    origin: RectangleOrigin::BottomLeft,
-                };
+        let polygon = shapes::Rectangle {
+            extents: Vec2::new(
+                {
+                    if healthbar.is_backdrop {
+                        HealthBar::MAX_WIDTH
+                    } else {
+                        HealthBar::MAX_WIDTH * (health.val as f32) / (Health::MAX_HEALTH as f32)
+                    }
+                },
+                HealthBar::MAX_HEIGHT,
+            ),
+            origin: RectangleOrigin::BottomLeft,
+        };
 
-                *path = ShapePath::build_as(&polygon);
-            }
-            // do something
-        }
+        *path = ShapePath::build_as(&polygon);
+
+        *draw_mode = DrawMode::Outlined {
+            fill_mode: FillMode::color({
+                if healthbar.is_backdrop {
+                    Color::GRAY
+                } else if (health.val as f32) <= (Health::MAX_HEALTH as f32) / 2.0 {
+                    Color::RED
+                } else {
+                    Color::GREEN
+                }
+            }),
+            outline_mode: StrokeMode::new(Color::BLACK, 1.0),
+        };
+
+        transform.translation.x = p_transform.translation.x - HealthBar::MAX_WIDTH / 2.0;
+        transform.translation.y = p_transform.translation.y - Tank::HEIGHT;
     }
 }

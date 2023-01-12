@@ -117,7 +117,7 @@ pub fn create_base_tank(
             RigidBody::Dynamic,
             // ColliderMassProperties::Mass(1.0),
             ColliderMassProperties::Density(1.0),
-            Collider::cuboid(19.0, 23.0),
+            Collider::cuboid(Tank::WIDTH, Tank::HEIGHT),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
                 Group::from_bits_truncate(collision_mask::TANK),
