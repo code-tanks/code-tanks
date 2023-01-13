@@ -5,7 +5,7 @@ use crate::{
     c_command::{CCommands, CommandSource},
     c_health::Health,
     c_tank::{Bullet, Gun, Radar, Tank},
-    collision_mask, CCollider, CollisionType, TickState,
+    CollisionMask, CCollider, CollisionType, TickState,
 };
 
 pub fn apply_commands(
@@ -136,14 +136,14 @@ pub fn apply_commands(
                     Bullet { tank: entity },
                     GravityScale(0.0),
                     RigidBody::Dynamic,
-                    ColliderMassProperties::Mass(1.0),
+                    // ColliderMassProperties::Mass(1.0),
                     ColliderMassProperties::Density(1.0),
                     Collider::ball(5.0),
                     Restitution::coefficient(0.1),
                     CollisionGroups::new(
-                        Group::from_bits_truncate(collision_mask::BULLET),
+                        Group::from_bits_truncate(CollisionMask::BULLET),
                         Group::from_bits_truncate(
-                            collision_mask::WALL | collision_mask::TANK | collision_mask::RADAR,
+                            CollisionMask::WALL | CollisionMask::TANK | CollisionMask::RADAR,
                         ),
                     ),
                     Damping {

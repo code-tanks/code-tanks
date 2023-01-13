@@ -31,32 +31,3 @@ impl CCommands {
     pub const LOCK_RADAR: CCommand = 0b1 << 11;
     pub const UNLOCK_RADAR: CCommand = 0b1 << 12;
 }
-
-// impl CCommands {
-//     pub fn all_commands_from_file(file: &str) -> Vec<Vec<CCommand>> {
-//         let file = File::open(file).unwrap();
-//         let reader = BufReader::new(file);
-
-//         let lines: Vec<String> = reader
-//             .lines()
-//             .map(|l| l.expect("Could not parse line"))
-//             .collect();
-
-//         let s: usize = lines[0].parse::<usize>().unwrap();
-
-//         (0..s)
-//             .map(|n| {
-//                 if lines.len() > 1 + n {
-//                     lines[(1 + n)..]
-//                         .iter()
-//                         .step_by(s)
-//                         .map(|f| f.to_string())
-//                         .map(|f| f.parse::<CCommand>().unwrap())
-//                         .collect()
-//                 } else {
-//                     Vec::new()
-//                 }
-//             })
-//             .collect()
-//     }
-// }

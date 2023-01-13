@@ -112,24 +112,6 @@ impl ClientTrait for DockerClient {
     }
 }
 
-// pub struct DummyClient {}
-
-// impl ClientTrait for DummyClient {
-//     fn request_commands(&mut self) -> Vec<CCommand> {
-//         vec![CCommands::MOVE_FORWARD | CCommands::ROTATE_TANK_CLOCKWISE]
-//     }
-
-//     fn request_commands_by_event(&mut self, event: &Event) -> Vec<CCommand> {
-//         match event.event_type {
-//             EventType::Scan => {
-//                 vec![CCommands::MOVE_FORWARD]
-//             }
-//             EventType::Hit => {
-//                 vec![CCommands::MOVE_FORWARD]
-//             }
-//         }
-//     }
-// }
 
 pub struct ReaderClient {
     pub lines: Vec<CCommand>,
@@ -168,7 +150,7 @@ impl ClientTrait for LocalClient {
             ))
             // .arg("ocypod:8023/queue/build/job")
             .output()
-            .expect("failed to communicate with ocypod");
+            .expect("failed to communicate with docker");
 
         // let result_raw = String::from_utf8_lossy(&output_raw.stdout);
         // let err_raw = String::from_utf8_lossy(&output_raw.stderr);

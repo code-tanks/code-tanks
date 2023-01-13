@@ -266,12 +266,13 @@ fn hit(
         _ => {}
     };
 
-    info!("HIT {:?}, by {:?} of type {:?}", tank, b, collision_type);
+    println!("HIT {:?}, by {:?} of type {:?}", tank, b, collision_type);
     health.val = health.val - 10;
 
     if health.val < 0 {
         health.val = 0;
     }
+    println!("{:?}", health.val);
 
     let v = t2.rotation * Vec3::Y;
     let zero = Velocity::zero();

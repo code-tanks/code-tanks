@@ -37,6 +37,7 @@ pub fn setup_desktop_tanks(
                 }),
             },
             &asset_server,
+            tank_id.to_string()
         );
     }
 }
