@@ -6,7 +6,7 @@ RUN apt update \
 
 WORKDIR /app
 
-RUN git clone -b 'v0.1.1' --single-branch --depth 1 https://github.com/code-tanks/dart-api.git /app
+RUN git clone -b 'v0.1.2' --single-branch --depth 1 https://github.com/code-tanks/dart-api.git /app
 
 RUN dart pub get
 
