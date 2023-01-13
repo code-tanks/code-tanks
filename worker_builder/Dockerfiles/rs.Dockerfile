@@ -4,7 +4,7 @@ ENV PATH "$PATH:/home/developer/.cargo/bin"
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    curl build-essential pkg-config libssl-dev
+    curl git build-essential pkg-config libssl-dev
 
 RUN useradd -ms /bin/bash developer
 USER developer
