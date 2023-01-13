@@ -7,4 +7,4 @@
 | [Python](https://github.com/code-tanks/python-template) | [![Python](https://github.com/code-tanks/python-api/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/python-api/actions/workflows/devcontainer.yml) |
 | [Dart](https://github.com/code-tanks/dart-template) | [![devcontainer](https://github.com/code-tanks/dart-api/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/dart-api/actions/workflows/devcontainer.yml) |
 
-Check out our [wiki](https://github.com/code-tanks/code-tanks/wiki) to get started!
+Check out the [wiki](https://github.com/code-tanks/code-tanks/wiki) to get started!
