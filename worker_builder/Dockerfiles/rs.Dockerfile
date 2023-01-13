@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-ENV PATH "$PATH:/home/developer/.cargo/bin"
+ENV PATH "$PATH:/root/.cargo/bin"
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
