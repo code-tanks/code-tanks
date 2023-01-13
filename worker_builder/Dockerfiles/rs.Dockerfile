@@ -10,7 +10,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.66.0 -y
 
 WORKDIR /app
 
-RUN git clone -b 'v0.1.0' --single-branch --depth 1 https://github.com/code-tanks/rust-api.git /app
+RUN git clone -b 'v0.1.1' --single-branch --depth 1 https://github.com/code-tanks/rust-api.git /app
 
 RUN cargo build
 
@@ -20,13 +20,13 @@ RUN curl http://localhost:8089/raw/$url > src/my_tank.rs
 
 RUN cargo install --path .
 
-FROM ubuntu:focal AS runner
+FROM ubuntu:latest AS runner
 
 WORKDIR /app
 
 RUN apt update
 
-COPY --from=builder /usr/local/cargo/bin/ct-api /usr/local/bin/ct-api
+COPY --from=builder /root/.cargo/bin/ct-api /usr/local/bin/ct-api
 
 
 CMD ["ct-api"]
