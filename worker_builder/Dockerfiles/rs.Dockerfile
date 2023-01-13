@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:latest as builder
 
 ENV PATH "$PATH:/root/.cargo/bin"
 
@@ -18,6 +18,15 @@ ARG url
 
 RUN curl http://localhost:8089/raw/$url > src/my_tank.rs
 
-RUN cargo install
+RUN cargo install --path .
+
+FROM ubuntu:focal AS runner
+
+WORKDIR /app
+
+RUN apt update
+
+COPY --from=builder /usr/local/cargo/bin/ct-api /usr/local/bin/ct-api
+
 
 CMD ["ct-api"]
