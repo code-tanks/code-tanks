@@ -2,7 +2,7 @@ use std::process::Command;
 
 use bevy::prelude::*;
 
-use crate::{c_command::*, c_event::*};
+use crate::{c_command::*, c_event::*, s_request_commands::request_commands};
 
 #[derive(Component)]
 pub struct Client {
@@ -127,11 +127,7 @@ impl ClientTrait for ReaderClient {
     }
 
     fn request_commands_by_event(&mut self, _event: &Event) -> Vec<CCommand> {
-        if self.lines.is_empty() {
-            vec![CCommands::NONE]
-        } else {
-            vec![self.lines.remove(0)]
-        }
+        self.request_commands()
     }
 }
 
