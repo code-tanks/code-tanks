@@ -16,4 +16,4 @@ Code-Tanks is a game of strategy, and players must think about how their tank wi
 | [Dart](https://github.com/code-tanks/dart-template) | [![devcontainer](https://github.com/code-tanks/dart-api/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/dart-api/actions/workflows/devcontainer.yml) |
 | [Rust](https://github.com/code-tanks/rust-template) | [![devcontainer](https://github.com/code-tanks/rust-api/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/rust-api/actions/workflows/devcontainer.yml) |
 
-Check out the [wiki](https://github.com/code-tanks/code-tanks/wiki) to get started!
+Check out the [website](https://code-tanks.github.io/website) to get started!
