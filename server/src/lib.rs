@@ -128,14 +128,25 @@ mod responses {
         status_line: StatusLines::NOT_FOUND,
         content: "\"404\"",
     };
+
+    pub const ERROR_TOO_LARGE: Response<'static> = Response {
+        status_line: StatusLines::NOT_FOUND,
+        content: "\"FILE TOO LARGE\"",
+    };
 }
+
+const HEADER_PADDING: usize = 150;
+const MAX_BYTES_READ: usize = 1000000;
+const BUFFER_SIZE_BYTES: usize = MAX_BYTES_READ + HEADER_PADDING;
 
 fn handle_connection(
     mut stream: TcpStream,
     db: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
 ) {
-    let mut buffer = [0; 20000];
-    stream.read(&mut buffer).unwrap();
+    let mut buffer = [0; BUFFER_SIZE_BYTES];
+    let bytes_read = stream.read(&mut buffer).unwrap();
+
+    println!("bytes read: {}", bytes_read);
 
     let request = String::from_utf8(buffer.to_vec()).unwrap();
     let method = get_header_from_request(&request);
@@ -153,18 +164,26 @@ fn handle_connection(
 
     let mut content_type = content_types::JSON;
 
-    let response = match (method, path) {
+    let response: Response = match (method, path) {
         (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
         (methods::GET, paths::PING) => responses::PING_RESPONSE,
         (methods::POST, paths::UPLOAD) => {
             let uploaded_code = get_data_from_request(&request);
+
+            let code_bytes_len = uploaded_code.bytes().len();
+            println!("code size {}", code_bytes_len);
+
+            if code_bytes_len > MAX_BYTES_READ {
+                responses::ERROR_TOO_LARGE
+            } else {
             const POST_FIX_CHAR: &str = "0";
             let mut post_fix_count = 0;
             let mut needs_generation = false;
 
             loop {
                 let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
-                let existing = get_existing(db, uploaded_code.to_string(), post_fix.to_string());
+                    let existing =
+                        get_existing(db, uploaded_code.to_string(), post_fix.to_string());
 
                 if existing.is_empty() {
                     println!("generating short url...");
@@ -202,6 +221,7 @@ fn handle_connection(
             Response {
                 status_line: StatusLines::OK,
                 content: &url,
+                }
             }
         }
         (methods::GET, paths::LOG) => {
