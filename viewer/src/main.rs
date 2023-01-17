@@ -1,5 +1,7 @@
-use bevy::prelude::*;
-use ctsimlib::s_setup_walls::setup_walls;
+use std::time::Duration;
+
+use bevy::{app::{ScheduleRunnerSettings, ScheduleRunnerPlugin}, prelude::*};
+use ctsimlib::{s_setup_walls::setup_walls, TickState};
 
 use ctviewer::{s_setup_web_tanks::setup_web_tanks, *};
 use s_load_tanks::*;
@@ -10,9 +12,14 @@ use ctsimlibgraphics::CoreCTGraphicsPlugin;
 use s_apply_history_transforms::*;
 
 fn main() {
+    info!("web viewer");
     App::new()
         .add_plugin(CoreCTPlugin)
         .add_plugin(CoreCTGraphicsPlugin)
+        .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
+            TickState::TICK_RATE * 0.0,
+        )))
+        .add_plugin(ScheduleRunnerPlugin{})
         .init_resource::<CustomAssetState>()
         .add_asset::<CustomAsset>()
         .init_asset_loader::<CustomAssetLoader>()
