@@ -32,6 +32,8 @@ pub fn save_commands(
         .open("./sim.txt")
         .expect("Unable to open file");
 
+    let mut dead_count = 0usize;
+
     for (i, command_receiver) in query.iter().enumerate() {
         let grouped_commands = if command_receiver.queue.is_empty() {
             CCommands::NONE
@@ -65,11 +67,18 @@ pub fn save_commands(
         )
         .expect("Unable to write data");
 
+        if healths[i].val <= 0 {
+            dead_count += 1;
+        }
+
         // println!("commands remaining {:?}", command_receiver.queue);
     }
     state.tick = state.tick + 1;
 
-    if state.tick > TickState::MAXIMUM_SIMULATION_TICKS {
+    let early_stop = dead_count >= tanks.len() - 1;
+    println!("early_stop: {}", early_stop);
+
+    if state.tick > TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
         // TODO save results of the simulation (winner, damage given, damage taken, time alive)
         let mut j = json!({});
         let all_tank_ids: &mut Vec<&str> = &mut Vec::new();
