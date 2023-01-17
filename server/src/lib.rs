@@ -284,7 +284,7 @@ fn handle_connection(
                     content: &string_build,
                 };
             } else {
-                let game_id = &tank_urls.join("");
+                let game_id = &tank_urls.join("-");
 
                 println!("run: {}", game_id);
 
@@ -314,7 +314,7 @@ fn handle_connection(
 
             // handle error
 
-            let matches = get_simulation_by_url(db, &args.join(""));
+            let matches = get_simulation_by_url(db, &args.join("-"));
 
             if !matches.is_empty() {
                 res_code = matches[0].get(1);

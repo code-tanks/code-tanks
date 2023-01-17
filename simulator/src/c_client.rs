@@ -2,7 +2,7 @@ use std::process::Command;
 
 use bevy::prelude::*;
 
-use crate::{c_command::*, c_event::*, s_request_commands::request_commands};
+use crate::{c_command::*, c_event::*};
 
 #[derive(Component)]
 pub struct Client {

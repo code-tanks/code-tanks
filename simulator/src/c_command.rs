@@ -30,4 +30,5 @@ impl CCommands {
     pub const UNLOCK_GUN: CCommand = 0b1 << 10;
     pub const LOCK_RADAR: CCommand = 0b1 << 11;
     pub const UNLOCK_RADAR: CCommand = 0b1 << 12;
+    pub const SELF_DESTRUCT: CCommand = 0b1 << 13;
 }

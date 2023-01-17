@@ -5,7 +5,7 @@ use serde_json::json;
 use crate::{
     c_event::{Event, EventSink},
     c_health::Health,
-    c_tank::{Bullet, Radar, Tank},
+    c_tank::{Bullet, Radar, Tank, DamageDealer},
     CCollider, CollisionType,
 };
 
@@ -13,20 +13,13 @@ pub fn bullet_physics(
     rapier_context: Res<RapierContext>,
     query_bullet: Query<Entity, With<Bullet>>,
     query_collidable: Query<Entity, (With<Collider>, Without<Bullet>, Without<Radar>)>,
-    // mut query_health: Query<&mut Health>,
     mut commands: Commands,
-    // state: Res<TickState>,
 ) {
     for a in query_collidable.iter() {
         for bullet in query_bullet.iter() {
             /* Find the intersection pair, if it exists, between two colliders. */
             if rapier_context.intersection_pair(a, bullet) == Some(true) {
                 commands.entity(bullet).despawn();
-
-                // if let Some(_) = tank {
-                //     let mut health = query_health.get_mut(a).unwrap();
-                //     health.val = health.val - 10;
-                // }
             }
         }
     }
@@ -34,68 +27,11 @@ pub fn bullet_physics(
 
 pub fn radar_physics(
     mut contact_events: EventReader<CollisionEvent>,
-    // mut intersection_events: EventReader<IntersectionEvent>,
     mut query_tank: Query<(Entity, &Tank, &mut EventSink, &Transform)>,
     query_collider: Query<(&CCollider, &Transform, Option<&Velocity>)>,
     rapier_context: Res<RapierContext>,
-    // state: Res<TickState>,
     query_bullet: Query<&Bullet>,
 ) {
-    // for intersection_event in intersection_events.iter() {
-    //     for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
-    //         if intersection_event.collider1.entity() == tank.radar
-    //             && intersection_event.collider1.entity() != tank_entity
-    //         {
-    //             // commands.entity(entity).despawn();
-
-    //             let (collider, collider_transform) = query_collider
-    //                 .get(intersection_event.collider2.entity())
-    //                 .unwrap();
-    //             // info!("{:?} {:?}", tank_entity, state.tick);
-    //             info!(
-    //                 "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
-    //                 tank_entity,
-    //                 tank.radar,
-    //                 intersection_event.collider2.entity()
-    //             );
-
-    //             scan(
-    //                 &tank_entity,
-    //                 transform,
-    //                 intersection_event.collider2.entity(),
-    //                 &collider.collision_type,
-    //                 &mut event_sink,
-    //                 collider_transform,
-    //                 &query_bullet,
-    //             );
-    //         } else if intersection_event.collider2.entity() == tank.radar
-    //             && intersection_event.collider2.entity() != tank_entity
-    //         {
-    //             // commands.entity(entity).despawn();
-    //             let (collider, collider_transform) = query_collider
-    //                 .get(intersection_event.collider1.entity())
-    //                 .unwrap();
-    //             // info!("{:?} {:?}", tank_entity, state.tick);
-    //             info!(
-    //                 "Tank Got Scan:{:?} Radar:{:?} Other:{:?}",
-    //                 tank_entity,
-    //                 tank.radar,
-    //                 intersection_event.collider1.entity()
-    //             );
-
-    //             scan(
-    //                 &tank_entity,
-    //                 transform,
-    //                 intersection_event.collider1.entity(),
-    //                 &collider.collision_type,
-    //                 &mut event_sink,
-    //                 collider_transform,
-    //                 &query_bullet,
-    //             );
-    //         }
-    //     }
-    // }
-
     for contact_event in contact_events.iter() {
         for (tank_entity, tank, mut event_sink, transform) in &mut query_tank {
             // let radar = query_radar.get(tank.radar).unwrap();
@@ -196,35 +132,22 @@ fn scan(
             }
         }),
     });
-    // match *collision_type {
-    //     CollisionType::Bullet => {
-    //         let bullet = query.get(*b).unwrap();
-
-    //         info!("Tank Got Scan:{:?}, Shot From:{:?}, eq:{:?}", a, bullet.tank, bullet.tank == *a);
-
-    //         if bullet.tank == *a {
-    //             return;
-    //         }
-    //     },
-    //     _ => {
-
-    //     }
-    // }
 }
 
 pub fn tank_physics(
     mut contact_events: EventReader<CollisionEvent>,
-    mut query_tank: Query<(Entity, &mut EventSink, &mut Health), With<Tank>>,
+    mut query_tank_many: Query<(Entity, &Tank, &mut EventSink, &mut Health)>,
+    mut query_damage_dealer: Query<&mut DamageDealer>,
+    query_bullet: Query<&Bullet>,
     query_collider: Query<(&CCollider, &Transform, Option<&Velocity>)>,
-    // state: Res<TickState>,
-    // mut commands: Commands,
 ) {
     for contact_event in contact_events.iter() {
-        for (tank, mut event_sink, mut health) in &mut query_tank {
+        for (tank_entity, tank, mut event_sink, mut health) in &mut query_tank_many {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
-                if h1 == &tank {
+                if h1 == &tank_entity {
                     let (collider, transform, velocity) = query_collider.get(*h2).unwrap();
                     hit(
+                        &tank_entity,
                         &tank,
                         h2,
                         &collider.collision_type,
@@ -232,10 +155,14 @@ pub fn tank_physics(
                         &mut health,
                         transform,
                         velocity,
+                        &mut query_damage_dealer,
+                        &query_bullet,
+
                     );
-                } else if h2 == &tank {
+                } else if h2 == &tank_entity {
                     let (collider, transform, velocity) = query_collider.get(*h1).unwrap();
                     hit(
+                        &tank_entity,
                         &tank,
                         h1,
                         &collider.collision_type,
@@ -243,6 +170,9 @@ pub fn tank_physics(
                         &mut health,
                         transform,
                         velocity,
+                        &mut query_damage_dealer,
+                        &query_bullet,
+
                     );
                 }
             }
@@ -251,22 +181,33 @@ pub fn tank_physics(
 }
 
 fn hit(
-    tank: &Entity,
-    b: &Entity,
+    tank_entity: &Entity,
+    _tank: &Tank,
+    collided_entity: &Entity,
     collision_type: &CollisionType,
     event_sink: &mut EventSink,
     health: &mut Health,
-    t2: &Transform,
-    t2_velocity: Option<&Velocity>,
+    collided_entity_transform: &Transform,
+    collided_entity_velocity: Option<&Velocity>,
+    query_damage_dealer: &mut Query<&mut DamageDealer>,
+    query_bullet: &Query<&Bullet>,
+
 ) {
     match collision_type {
         &CollisionType::Radar => {
             return;
         }
+        &CollisionType::Bullet => {
+            let damage_dealer =  &mut query_damage_dealer.get_mut(query_bullet.get(*collided_entity).unwrap().tank).unwrap();
+            damage_dealer.damage_dealt += 10;
+        }
         _ => {}
     };
 
-    println!("HIT {:?}, by {:?} of type {:?}", tank, b, collision_type);
+    println!(
+        "HIT {:?}, by {:?} of type {:?}",
+        tank_entity, collided_entity, collision_type
+    );
     health.val = health.val - 10;
 
     if health.val < 0 {
@@ -274,10 +215,10 @@ fn hit(
     }
     println!("{:?}", health.val);
 
-    let v = t2.rotation * Vec3::Y;
+    let v = collided_entity_transform.rotation * Vec3::Y;
     let zero = Velocity::zero();
 
-    let vel = match t2_velocity {
+    let vel = match collided_entity_velocity {
         Some(x) => x,
         None => &zero,
     };
@@ -285,10 +226,10 @@ fn hit(
         event_type: "hit".to_string(),
         info: json!({
             "collision_type": format!("{:?}", collision_type),
-            "entity": b,
+            "entity": collided_entity,
             "transform": {
-                "x": t2.translation.x,
-                "y": t2.translation.y,
+                "x": collided_entity_transform.translation.x,
+                "y": collided_entity_transform.translation.y,
                 "rotation": v.y.atan2(v.x),
             },
             "velocity": {

@@ -5,6 +5,7 @@ use crate::{
         Client,
         DockerClient, // , DummyClient
     },
+    c_tank::DamageDealer,
     c_tank::Gun,
     c_tank::Radar,
     c_tank::Tank,
@@ -97,10 +98,12 @@ pub fn create_base_tank(
 ) -> Entity {
     commands
         .spawn((
-            ActiveEvents::COLLISION_EVENTS,
-            CCollider {
-                collision_type: CollisionType::Tank,
-            },
+            (
+                ActiveEvents::COLLISION_EVENTS,
+                CCollider {
+                    collision_type: CollisionType::Tank,
+                },
+            ),
             // Sleeping::disabled(),
             // Ccd::enabled(),
             Tank {
@@ -111,6 +114,7 @@ pub fn create_base_tank(
             Health {
                 val: Health::MAX_HEALTH,
             },
+            DamageDealer { damage_dealt: 0 },
             CommandSource::default(),
             EventSink::default(),
             GravityScale(0.0),

@@ -27,3 +27,8 @@ pub struct Radar {
 pub struct Gun {
     pub locked: bool,
 }
+
+#[derive(Component)]
+pub struct DamageDealer {
+    pub damage_dealt: u32,
+}

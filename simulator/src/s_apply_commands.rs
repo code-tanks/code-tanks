@@ -5,7 +5,7 @@ use crate::{
     c_command::{CCommands, CommandSource},
     c_health::Health,
     c_tank::{Bullet, Gun, Radar, Tank},
-    CollisionMask, CCollider, CollisionType, TickState,
+    CCollider, CollisionMask, CollisionType, TickState,
 };
 
 pub fn apply_commands(
@@ -17,7 +17,7 @@ pub fn apply_commands(
             &Transform,
             &mut Velocity,
             &mut Tank,
-            &Health,
+            &mut Health,
         ),
         (Without<Radar>, Without<Gun>),
     >,
@@ -33,7 +33,8 @@ pub fn apply_commands(
 ) {
     state.tick = state.tick + 1;
 
-    for (entity, mut command_receiver, transform, mut velocity, mut tank, health) in &mut query {
+    for (entity, mut command_receiver, transform, mut velocity, mut tank, mut health) in &mut query
+    {
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;
         velocity.linvel = vel;
@@ -57,6 +58,11 @@ pub fn apply_commands(
             continue;
         }
         let grouped_commands = command_receiver.queue.remove(0);
+        if CCommands::SELF_DESTRUCT & grouped_commands != 0 {
+            health.val = 0;
+            continue;
+        }
+
         let rot = 3.14;
 
         if CCommands::MOVE_FORWARD & grouped_commands != 0 {
