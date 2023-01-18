@@ -115,7 +115,7 @@ def f4(game_id: str):
     game_id = "/".join(game_id.split(".")[0].split("-"))
 
     print(game_id)
-    r = requests.get(f'http://172.17.0.1:8089/sim/{game_id}')
+    r = requests.get(f'http://server:8089/sim/{game_id}')
 
     return Response(content=r.text, media_type="text/plain")
 

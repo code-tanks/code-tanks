@@ -11,7 +11,6 @@ services:
     command: ctserver
   
   builder:
-    container_name: builder
     image: ghcr.io/code-tanks/code-tanks-builder:latest
     command: ctbuilder
     restart: unless-stopped
@@ -19,9 +18,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - DB_URL=postgres://postgres:example@db:5432
+    deploy:
+      replicas: 2
 
   simulator:
-    container_name: simulator
     image: ghcr.io/code-tanks/code-tanks-simulator:latest
     command: ctsim
     restart: unless-stopped
@@ -29,13 +29,15 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock    
     environment:
       - DB_URL=postgres://postgres:example@db:5432
-
+    deploy:
+      replicas: 2
+      
   web:
     container_name: web
     image: ghcr.io/code-tanks/code-tanks-web:latest
     restart: unless-stopped
     ports:
-      - 8088:8080
+      - 8098:8080
 
   db:
     container_name: db
