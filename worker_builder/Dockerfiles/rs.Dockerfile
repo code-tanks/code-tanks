@@ -18,7 +18,7 @@ ARG url
 
 RUN curl http://localhost:8089/raw/$url > runner/src/my_tank.rs
 
-RUN cargo install runner
+RUN cargo install ct-runner
 
 FROM ubuntu:latest AS runner
 
@@ -26,7 +26,7 @@ WORKDIR /app
 
 RUN apt update
 
-COPY --from=builder /root/.cargo/bin/runner /usr/local/bin/runner
+COPY --from=builder /root/.cargo/bin/ct-runner /usr/local/bin/ct-runner
 
 
-CMD ["runner"]
+CMD ["ct-runner"]
