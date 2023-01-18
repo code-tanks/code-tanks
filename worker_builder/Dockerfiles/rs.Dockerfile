@@ -16,9 +16,9 @@ RUN cargo build
 
 ARG url
 
-RUN curl http://localhost:8089/raw/$url > src/my_tank.rs
+RUN curl http://localhost:8089/raw/$url > runner/src/my_tank.rs
 
-RUN cargo install --path .
+RUN cargo install runner
 
 FROM ubuntu:latest AS runner
 
@@ -26,7 +26,7 @@ WORKDIR /app
 
 RUN apt update
 
-COPY --from=builder /root/.cargo/bin/ct-api /usr/local/bin/ct-api
+COPY --from=builder /root/.cargo/bin/runner /usr/local/bin/runner
 
 
-CMD ["ct-api"]
+CMD ["runner"]
