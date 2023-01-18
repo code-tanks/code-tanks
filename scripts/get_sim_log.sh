@@ -1,4 +1,6 @@
 #!/bin/bash
 
-curl http://localhost:8089/sim_log/$1 --http1.1
+export $(xargs < ./scripts/.env)
+
+curl $HOST/sim_log/$1 --http1.1
 echo ""
