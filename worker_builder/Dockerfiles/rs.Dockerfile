@@ -18,7 +18,7 @@ ARG url
 
 RUN curl http://localhost:8089/raw/$url > runner/src/my_tank.rs
 
-RUN cargo install ct-runner
+RUN cargo install --path runner
 
 FROM ubuntu:latest AS runner
 
