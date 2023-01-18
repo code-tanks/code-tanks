@@ -35,7 +35,7 @@ pub struct TickState {
 }
 
 impl TickState {
-    pub const MAXIMUM_SIMULATION_TICKS: u32 = 2000;
+    pub const MAXIMUM_SIMULATION_TICKS: u32 = 300;
     pub const TICK_RATE: f64 = 1.0 / 60.0;
 }
 

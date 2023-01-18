@@ -49,16 +49,16 @@ pub fn save_commands(
                 grouped_commands,
                 tanks[i].0.translation.x,
                 tanks[i].0.translation.y,
-                tanks[i].0.rotation.x,
-                tanks[i].0.rotation.y,
+                tanks[i].0.rotation.x, // unused
+                tanks[i].0.rotation.y, // unused
                 tanks[i].0.rotation.z,
                 tanks[i].0.rotation.w,
-                radars[i].rotation.x,
-                radars[i].rotation.y,
+                radars[i].rotation.x, // unused
+                radars[i].rotation.y, // unused
                 radars[i].rotation.z,
                 radars[i].rotation.w,
-                guns[i].rotation.x,
-                guns[i].rotation.y,
+                guns[i].rotation.x, // unused
+                guns[i].rotation.y, // unused
                 guns[i].rotation.z,
                 guns[i].rotation.w,
             )
@@ -76,9 +76,9 @@ pub fn save_commands(
     state.tick = state.tick + 1;
 
     let early_stop = dead_count >= tanks.len() - 1;
-    println!("early_stop: {}", early_stop);
-
+    
     if state.tick > TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
+        println!("early_stop: {}", early_stop);
         // TODO save results of the simulation (winner, damage given, damage taken, time alive)
         let mut j = json!({});
         let all_tank_ids: &mut Vec<&str> = &mut Vec::new();

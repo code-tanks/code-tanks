@@ -27,18 +27,18 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
             Sensor,
             GravityScale(0.0),
             RigidBody::Dynamic,
-            // ColliderMassProperties::Mass(0.0),
-            ColliderMassProperties::Density(1.0),
+            ColliderMassProperties::Mass(0.0),
+            // ColliderMassProperties::Density(1.0),
             Collider::ball(5.0),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
                 Group::from_bits_truncate(CollisionMask::NONE),
                 Group::from_bits_truncate(CollisionMask::NONE),
             ),
-            // Damping {
-            //     linear_damping: 0.0,
-            //     angular_damping: 0.0,
-            // },
+            Damping {
+                linear_damping: 0.0,
+                angular_damping: 0.0,
+            },
             Velocity {
                 linvel: Vec2::new(0.0, 0.0),
                 angvel: 0.0,
@@ -62,8 +62,8 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             Sensor,
             GravityScale(0.0),
             RigidBody::Dynamic,
-            // ColliderMassProperties::Mass(0.0),
-            ColliderMassProperties::Density(1.0),
+            ColliderMassProperties::Mass(0.0),
+            // ColliderMassProperties::Density(1.0),
             Collider::triangle(
                 Vec2::new(0.0, 0.0),
                 Vec2::new(-25.0, 50.0),
@@ -76,10 +76,10 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
                     CollisionMask::TANK | CollisionMask::BULLET | CollisionMask::WALL,
                 ),
             ),
-            // Damping {
-            //     linear_damping: 0.0,
-            //     angular_damping: 0.0,
-            // },
+            Damping {
+                linear_damping: 0.0,
+                angular_damping: 0.0,
+            },
             Velocity {
                 linvel: Vec2::new(0.0, 0.0),
                 angvel: 0.0,
@@ -121,7 +121,7 @@ pub fn create_base_tank(
             RigidBody::Dynamic,
             // ColliderMassProperties::Mass(1.0),
             ColliderMassProperties::Density(1.0),
-            Collider::cuboid(Tank::WIDTH, Tank::HEIGHT),
+            Collider::ball(Tank::RADIUS),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
                 Group::from_bits_truncate(CollisionMask::TANK),
@@ -132,14 +132,14 @@ pub fn create_base_tank(
                         | CollisionMask::RADAR,
                 ),
             ),
-            // Damping {
-            //     linear_damping: 0.0,
-            //     angular_damping: 0.0,
-            // },
+            (Damping {
+                linear_damping: 0.0,
+                angular_damping: 0.0,
+            },
             Velocity {
                 linvel: Vec2::new(0.0, 0.0),
                 angvel: 0.0,
-            },
+            }),
             client,
             SpatialBundle {
                 transform: Transform::from_xyz(x, y, 0.0),

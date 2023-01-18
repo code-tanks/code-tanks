@@ -11,6 +11,6 @@ pub fn update_nametag(
         let p_transform = q_parent.get(nametag.tank).unwrap();
 
         transform.translation.x = p_transform.translation.x;
-        transform.translation.y = p_transform.translation.y - Tank::HEIGHT;
+        transform.translation.y = p_transform.translation.y - Tank::RADIUS;
     }
 }
