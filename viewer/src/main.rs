@@ -14,7 +14,7 @@ use s_apply_history_transforms::*;
 fn main() {
     App::new()
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
-            TickState::SERVER_TICK_RATE,
+            TickState::CLIENT_TICK_RATE,
         )))
         .add_plugin(ScheduleRunnerPlugin)
         .add_plugin(CoreCTPlugin)
