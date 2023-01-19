@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - api/**
       - cli/**
       - server/**
       - simulator/**
