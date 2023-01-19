@@ -133,11 +133,17 @@ mod responses {
         status_line: StatusLines::NOT_FOUND,
         content: "\"FILE TOO LARGE\"",
     };
+
+    pub const ERROR_TOO_MANY_PLAYERS: Response<'static> = Response {
+        status_line: StatusLines::NOT_FOUND,
+        content: "\"TOO MANY PLAYERS\"",
+    };
 }
 
 const HEADER_PADDING: usize = 150;
 const MAX_BYTES_READ: usize = 1000000;
 const BUFFER_SIZE_BYTES: usize = MAX_BYTES_READ + HEADER_PADDING;
+const MAX_NUMBER_PLAYERS: usize = 4;
 
 fn handle_connection(
     mut stream: TcpStream,
@@ -176,51 +182,51 @@ fn handle_connection(
             if code_bytes_len > MAX_BYTES_READ {
                 responses::ERROR_TOO_LARGE
             } else {
-            const POST_FIX_CHAR: &str = "0";
-            let mut post_fix_count = 0;
-            let mut needs_generation = false;
+                const POST_FIX_CHAR: &str = "0";
+                let mut post_fix_count = 0;
+                let mut needs_generation = false;
 
-            loop {
-                let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
+                loop {
+                    let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
                     let existing =
                         get_existing(db, uploaded_code.to_string(), post_fix.to_string());
 
-                if existing.is_empty() {
-                    println!("generating short url...");
-                    insert_tank(
-                        db,
-                        uploaded_code.to_string(),
-                        post_fix.to_string(),
-                        args[0].to_string(),
-                    );
-                    needs_generation = true;
-                } else {
-                    let code: String = existing[0].get(2);
-
-                    if code == uploaded_code {
-                        break;
+                    if existing.is_empty() {
+                        println!("generating short url...");
+                        insert_tank(
+                            db,
+                            uploaded_code.to_string(),
+                            post_fix.to_string(),
+                            args[0].to_string(),
+                        );
+                        needs_generation = true;
                     } else {
-                        println!("regenerating");
-                        post_fix_count = post_fix_count + 1;
+                        let code: String = existing[0].get(2);
+
+                        if code == uploaded_code {
+                            break;
+                        } else {
+                            println!("regenerating");
+                            post_fix_count = post_fix_count + 1;
+                        }
                     }
                 }
-            }
-            let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
+                let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
 
-            let existing = get_existing(db, uploaded_code.to_string(), post_fix.to_string());
+                let existing = get_existing(db, uploaded_code.to_string(), post_fix.to_string());
 
-            url = existing[0].get(1);
-            let language: String = existing[0].get(5);
+                url = existing[0].get(1);
+                let language: String = existing[0].get(5);
 
-            println!("found short url {}", url);
+                println!("found short url {}", url);
 
-            if needs_generation {
-                add_build_job(&format!("{},{}", url, language));
-            }
+                if needs_generation {
+                    add_build_job(&format!("{},{}", url, language));
+                }
 
-            Response {
-                status_line: StatusLines::OK,
-                content: &url,
+                Response {
+                    status_line: StatusLines::OK,
+                    content: &url,
                 }
             }
         }
@@ -263,45 +269,49 @@ fn handle_connection(
             let data = get_data_from_request(&request);
             let tank_urls = data.split(" ").collect::<Vec<&str>>();
 
-            let invalid_tanks = tank_urls
-                .iter()
-                .map(|f| (f.to_string(), get_tank_build_status_by_url(db, f)))
-                .filter(|g| g.1 != TankBuildStatus::VALID)
-                .collect::<Vec<(String, TankBuildStatus)>>();
-
-            if !invalid_tanks.is_empty() {
-                for (tank_url, status) in invalid_tanks {
-                    let status_str = match status {
-                        TankBuildStatus::INVALID => "build failed",
-                        TankBuildStatus::BUILDING => "waiting to build",
-                        TankBuildStatus::MISSING => "missing",
-                        _ => "",
-                    };
-                    string_build = string_build + &tank_url + " -> " + status_str + "\n";
-                }
-                res = Response {
-                    status_line: StatusLines::OK,
-                    content: &string_build,
-                };
+            if tank_urls.len() > MAX_NUMBER_PLAYERS {
+                res = responses::ERROR_TOO_MANY_PLAYERS
             } else {
-                let game_id = &tank_urls.join("-");
+                let invalid_tanks = tank_urls
+                    .iter()
+                    .map(|f| (f.to_string(), get_tank_build_status_by_url(db, f)))
+                    .filter(|g| g.1 != TankBuildStatus::VALID)
+                    .collect::<Vec<(String, TankBuildStatus)>>();
 
-                println!("run: {}", game_id);
-
-                let mut matches = get_simulation_by_url(db, game_id);
-                if matches.is_empty() {
-                    add_sim_job(&data);
-                    upsert_simulation_by_url(db, game_id);
-                    matches = get_simulation_by_url(db, game_id);
-                }
-
-                if !matches.is_empty() {
-                    res_code = matches[0].get(1);
-
+                if !invalid_tanks.is_empty() {
+                    for (tank_url, status) in invalid_tanks {
+                        let status_str = match status {
+                            TankBuildStatus::INVALID => "build failed",
+                            TankBuildStatus::BUILDING => "waiting to build",
+                            TankBuildStatus::MISSING => "missing",
+                            _ => "",
+                        };
+                        string_build = string_build + &tank_url + " -> " + status_str + "\n";
+                    }
                     res = Response {
                         status_line: StatusLines::OK,
-                        content: &res_code,
+                        content: &string_build,
                     };
+                } else {
+                    let game_id = &tank_urls.join("-");
+
+                    println!("run: {}", game_id);
+
+                    let mut matches = get_simulation_by_url(db, game_id);
+                    if matches.is_empty() {
+                        add_sim_job(&data);
+                        upsert_simulation_by_url(db, game_id);
+                        matches = get_simulation_by_url(db, game_id);
+                    }
+
+                    if !matches.is_empty() {
+                        res_code = matches[0].get(1);
+
+                        res = Response {
+                            status_line: StatusLines::OK,
+                            content: &res_code,
+                        };
+                    }
                 }
             }
 
