@@ -10,10 +10,10 @@ The game engine is responsible for handling the physics of the arena, the collis
 Code-Tanks is a game of strategy, and players must think about how their tank will move and fire in the arena to survive and cause damage to other tanks. They can also analyze the code of the winning tanks to learn from their strategies and improve their own tanks.
 
 ## Supported Languages
-| Language | Dev Container |
-| --- | --- |
-| [Python](https://github.com/code-tanks/python-template) | [![Python](https://github.com/code-tanks/python-api/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/python-api/actions/workflows/devcontainer.yml) |
-| [Dart](https://github.com/code-tanks/dart-template) | [![devcontainer](https://github.com/code-tanks/dart-api/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/dart-api/actions/workflows/devcontainer.yml) |
-| [Rust](https://github.com/code-tanks/rust-template) | [![devcontainer](https://github.com/code-tanks/rust-api/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/code-tanks/rust-api/actions/workflows/devcontainer.yml) |
+| Language |
+| --- |
+| [Python](https://github.com/code-tanks/python-template) |
+| [Dart](https://github.com/code-tanks/dart-template) |
+| [Rust](https://github.com/code-tanks/rust-template) |
 
 Check out the [website](https://code-tanks.github.io/website) to get started!
