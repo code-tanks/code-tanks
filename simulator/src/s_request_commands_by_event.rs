@@ -1,11 +1,7 @@
 use bevy::prelude::*;
+use ct_api::CCommand;
 
-use crate::{
-    c_client::Client,
-    c_command::{CCommand, CommandSource},
-    c_event::EventSink,
-    c_health::Health,
-};
+use crate::{c_client::Client, c_command::CommandSource, c_event::EventSink, c_health::Health};
 
 pub fn request_commands_by_event(
     mut query: Query<(

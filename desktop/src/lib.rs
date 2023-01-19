@@ -22,7 +22,9 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
         .arg("-d")
         .arg("--network=code-tanks_default")
         .arg("-p")
-        .arg(format!("808{}:8080", post_fix))
+        .arg("8080")
+        // .arg("-p")
+        // .arg(format!("808{}:8080", post_fix))
         .arg("--name")
         .arg(&tank_id)
         .arg("--label")
@@ -33,7 +35,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     // let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    println!("running tank {} on port 808{}", url, post_fix);
+    println!("running tank_id {} on port 8080", tank_id);
 
     println!("run stdout:");
     println!("{}", result_raw.to_string());

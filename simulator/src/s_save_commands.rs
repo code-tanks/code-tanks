@@ -1,13 +1,9 @@
 use bevy::{prelude::*, utils::HashSet};
+use ct_api::CCommands;
 use serde_json::{json, to_value};
 use std::{fs::OpenOptions, io::Write};
 
-use crate::{
-    c_command::{CCommands, CommandSource},
-    c_health::Health,
-    c_tank::*,
-    TankIds, TickState,
-};
+use crate::{c_command::CommandSource, c_health::Health, c_tank::*, TankIds, TickState};
 use bevy::app::AppExit;
 
 pub fn save_commands(
@@ -76,7 +72,7 @@ pub fn save_commands(
     state.tick = state.tick + 1;
 
     let early_stop = dead_count >= tanks.len() - 1;
-    
+
     if state.tick > TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
         println!("early_stop: {}", early_stop);
         // TODO save results of the simulation (winner, damage given, damage taken, time alive)
@@ -113,11 +109,7 @@ pub fn save_commands(
         } else {
             all_tank_ids[best_idx].into()
         };
-        j["winner_index"] = if dup {
-            (-1i32).into()
-        } else {
-            best_idx.into()
-        };        
+        j["winner_index"] = if dup { (-1i32).into() } else { best_idx.into() };
         println!("{}", j);
 
         f.write_all(j.to_string().as_bytes())

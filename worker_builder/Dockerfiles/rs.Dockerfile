@@ -28,5 +28,5 @@ RUN apt update
 
 COPY --from=builder /root/.cargo/bin/ct-runner /usr/local/bin/ct-runner
 
-
+EXPOSE 8080
 CMD ["ct-runner"]

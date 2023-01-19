@@ -81,6 +81,14 @@ services:
     volumes:
       - ./test/registry/:/var/lib/registry
 
+  hoster:
+    container_name: hoster
+    image: dvdarias/docker-hoster
+    restart: always
+    volumes:
+      - /etc/hosts:/tmp/hosts
+      - /var/run/docker.sock:/tmp/docker.sock
+
   pgAdmin:
     container_name: pgAdmin
     image: dpage/pgadmin4

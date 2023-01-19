@@ -1,6 +1,7 @@
-use bevy::prelude::{Query, Entity};
+use bevy::prelude::{Entity, Query};
+use ct_api::CCommands;
 
-use crate::{c_client::Client, c_command::{CommandSource, CCommands}, c_health::Health};
+use crate::{c_client::Client, c_command::CommandSource, c_health::Health};
 
 pub fn request_commands(mut query: Query<(Entity, &mut CommandSource, &mut Client, &Health)>) {
     for (entity, mut command_receiver, mut client_connection, health) in &mut query {
