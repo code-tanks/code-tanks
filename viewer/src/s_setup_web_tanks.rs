@@ -1,9 +1,7 @@
 use crate::{CustomAsset, CustomAssetState, *};
 use bevy::prelude::{info, AssetServer, Assets, Commands, Res, ResMut};
-use ctsimlib::{
-    c_client::{Client, ReaderClient},
-    c_command::*,
-};
+use ct_api::CCommand;
+use ctsimlib::c_client::{Client, ReaderClient};
 use ctsimlibgraphics::*;
 
 pub fn setup_web_tanks(
@@ -35,12 +33,22 @@ pub fn setup_web_tanks(
         let c_lines: Vec<CCommand> = lines[(1 + n)..]
             .iter()
             .step_by(tank_ids.len())
-            .map(|f| f.split("|").collect::<Vec<&str>>()[0].to_string().parse::<CCommand>().unwrap())
+            .map(|f| {
+                f.split("|").collect::<Vec<&str>>()[0]
+                    .to_string()
+                    .parse::<CCommand>()
+                    .unwrap()
+            })
             .collect();
         let transforms: Vec<Vec<f32>> = lines[(1 + n)..]
             .iter()
             .step_by(tank_ids.len())
-            .map(|f| f.split("|").collect::<Vec<&str>>()[1].split(",").map(|g| g.to_string().parse::<f32>().unwrap()).collect())
+            .map(|f| {
+                f.split("|").collect::<Vec<&str>>()[1]
+                    .split(",")
+                    .map(|g| g.to_string().parse::<f32>().unwrap())
+                    .collect()
+            })
             .rev()
             .collect();
         if n_commands == 0 && c_lines.len() > 0 {
@@ -55,12 +63,10 @@ pub fn setup_web_tanks(
                 client: Box::new(ReaderClient { lines: c_lines }),
             },
             &asset_server,
-            tank_ids[n].to_string()
+            tank_ids[n].to_string(),
         );
         let mut tank = commands.entity(tank);
-        tank.insert(HistoryTransforms {
-            transforms,
-        });
+        tank.insert(HistoryTransforms { transforms });
     }
 
     state.printed = true;
