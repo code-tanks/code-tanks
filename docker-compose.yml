@@ -42,7 +42,7 @@ services:
   db:
     container_name: db
     image: postgres
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_PASSWORD=example
       - PGDATA=/var/lib/postgresql/data/pgdata
@@ -59,7 +59,7 @@ services:
     command: /etc/ocypod.toml
     ports:
       - 8023:8023
-    restart: always
+    restart: unless-stopped
 
   ocypod-redis:
     container_name: ocypod-redis
@@ -68,12 +68,12 @@ services:
       - 6379:6379
     # volumes:
     #   - ./test/redis:/data
-    restart: always
+    restart: unless-stopped
 
   registry:
     container_name: registry
     image: registry
-    restart: always
+    restart: unless-stopped
     ports:
       - 5001:5001
     environment:
@@ -84,7 +84,7 @@ services:
   hoster:
     container_name: hoster
     image: dvdarias/docker-hoster
-    restart: always
+    restart: unless-stopped
     volumes:
       - /etc/hosts:/tmp/hosts
       - /var/run/docker.sock:/tmp/docker.sock
