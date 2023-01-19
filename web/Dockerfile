@@ -5,6 +5,7 @@ RUN rustup target install wasm32-unknown-unknown
 RUN cargo install wasm-bindgen-cli
 
 COPY server/dummy.rs .
+COPY api api
 COPY simulator_graphics simulator_graphics
 COPY simulator simulator
 COPY viewer/Cargo.toml .

@@ -10,6 +10,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.66.0 -y
 WORKDIR /ctsim
 
 COPY worker_simulator/dummy.rs .
+COPY api api
 COPY simulator simulator
 COPY worker_simulator/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
