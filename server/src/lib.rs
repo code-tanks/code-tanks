@@ -87,6 +87,7 @@ mod paths {
     pub const RUN: &'static str = "run";
     pub const SIM: &'static str = "sim";
     pub const SIM_LOG: &'static str = "sim_log";
+    pub const RECENT: &'static str = "recent";
 }
 
 // enum Methods {}
@@ -357,6 +358,15 @@ fn handle_connection(
                     content: &res_code,
                 };
             }
+
+            res
+        }
+        (methods::GET, paths::RECENT) => {
+            let mut res = responses::NOT_FOUND_RESPONSE;
+
+            println!("get recent: {:?}", args);
+
+            // TODO query recent
 
             res
         }

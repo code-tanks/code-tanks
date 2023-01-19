@@ -1,9 +1,19 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, Response
+import pandas as pd
 import requests
 
 app = FastAPI()
+
+@app.get("/recent")
+def recent():
+    df = pd.DataFrame([
+        # {1: 2}, {1: 'https://google.com'}
+    ])
+    # df[1] = df[1].apply(lambda x: f'<a href="{x}">{x}</a>')
+    
+    return df.to_html(escape=False)
 
 @app.get("/ping")
 def root():
