@@ -10,6 +10,7 @@ pub mod s_physics;
 pub mod s_request_commands;
 pub mod s_request_commands_by_event;
 pub mod s_request_debug_commands;
+pub mod s_setup_physics;
 pub mod s_save_commands;
 pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;

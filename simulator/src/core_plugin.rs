@@ -3,7 +3,7 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{
     s_apply_commands::apply_commands, s_physics::*, s_request_commands::request_commands,
-    s_request_commands_by_event::request_commands_by_event, TickState,
+    s_request_commands_by_event::request_commands_by_event, TickState, s_setup_physics::setup_physics,
 };
 pub struct CoreCTPlugin;
 
@@ -13,6 +13,7 @@ impl Plugin for CoreCTPlugin {
                 tick: 0,
             })
             .add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
+            .add_startup_system(setup_physics)
             .add_stage(
                 "request_commands",
                 SystemStage::single_threaded().with_system(request_commands),
