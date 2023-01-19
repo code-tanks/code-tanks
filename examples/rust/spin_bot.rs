@@ -7,7 +7,7 @@ pub struct MyTank {
 
 impl Tank for MyTank {
     fn run(&mut self, commands: &mut Vec<CCommand>) {
-        if i % 2 == 0 {
+        if self.i % 2 == 0 {
             commands.push(CCommands::MOVE_FORWARD | CCommands::ROTATE_TANK_CLOCKWISE | CCommands::FIRE);
         } else {
             commands.push(CCommands::MOVE_BACKWARD | CCommands::ROTATE_TANK_COUNTER_CLOCKWISE | CCommands::FIRE);
@@ -20,5 +20,5 @@ impl Tank for MyTank {
 }
 
 pub fn create_tank() -> MyTank {
-    MyTank {}
+    MyTank { i: 0 }
 }
