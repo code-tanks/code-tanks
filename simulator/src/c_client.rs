@@ -3,7 +3,7 @@ use std::process::Command;
 use bevy::prelude::*;
 use ct_api::{CCommand, CCommands};
 
-use crate::{c_command::*, c_event::*};
+use crate::c_event::*;
 
 #[derive(Component)]
 pub struct Client {
