@@ -1,4 +1,4 @@
-name: devcontainer
+name: rust-devcontainer
 
 on:
   push:
