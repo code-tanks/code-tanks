@@ -3,6 +3,8 @@ use std::path::PathBuf;
 use clap::{arg, Command};
 use colored::*;
 
+const HOST: &str = "https://code-tanks.derrickliu.dev";
+
 fn cli() -> Command {
     Command::new("ctcli")
         .about("Code Tanks CLI")
@@ -44,7 +46,7 @@ fn upload(path: &str, extension: &str) {
         .arg("Content-Type: text/plain")
         .arg("-X")
         .arg("POST")
-        .arg(format!("http://localhost:8089/upload/{}", extension))
+        .arg(format!("{}/upload/{}", HOST, extension))
         .output()
         .expect("failed to communicate with CodeTanks server");
 
@@ -62,7 +64,7 @@ fn upload(path: &str, extension: &str) {
 fn get_logs(tank_id: &str) {
     let output_raw = std::process::Command::new("curl")
         .arg("-s")
-        .arg(format!("http://localhost:8089/log/{}", tank_id))
+        .arg(format!("{}/log/{}", HOST, tank_id))
         .output()
         .expect("failed to communicate with CodeTanks server");
 
@@ -80,7 +82,7 @@ fn get_logs(tank_id: &str) {
 fn get_raw(tank_id: &str) {
     let output_raw = std::process::Command::new("curl")
         .arg("-s")
-        .arg(format!("http://localhost:8089/raw/{}", tank_id))
+        .arg(format!("{}/raw/{}", HOST, tank_id))
         .output()
         .expect("failed to communicate with CodeTanks server");
 
@@ -102,7 +104,7 @@ fn run_sim(tank_ids: Vec<String>) {
         .arg(format!("{}", tank_ids.join(" ")))
         .arg("-X")
         .arg("POST")
-        .arg("http://localhost:8089/run")
+        .arg(format!("{}/run", HOST))
         .output()
         .expect("failed to communicate with CodeTanks server");
 
