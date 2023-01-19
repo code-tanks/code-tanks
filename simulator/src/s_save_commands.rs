@@ -7,7 +7,7 @@ use crate::{c_command::CommandSource, c_health::Health, c_tank::*, TankIds, Tick
 use bevy::app::AppExit;
 
 pub fn save_commands(
-    mut state: ResMut<TickState>,
+    state: Res<TickState>,
     tank_ids_state: Res<TankIds>,
     mut exit: EventWriter<AppExit>,
     query: Query<&CommandSource>,
@@ -69,7 +69,6 @@ pub fn save_commands(
 
         // println!("commands remaining {:?}", command_receiver.queue);
     }
-    state.tick = state.tick + 1;
 
     let early_stop = dead_count >= tanks.len() - 1;
 

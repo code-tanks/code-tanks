@@ -77,7 +77,7 @@ pub fn run_game(args: &[String]) {
         .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
         })
-        .add_system(setup_desktop_tanks)
         .add_startup_system(setup_walls)
+        .add_startup_system(setup_desktop_tanks)
         .run();
 }
