@@ -10,12 +10,12 @@ pub mod s_physics;
 pub mod s_request_commands;
 pub mod s_request_commands_by_event;
 pub mod s_request_debug_commands;
-pub mod s_setup_physics;
 pub mod s_save_commands;
+pub mod s_setup_physics;
 pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;
 
-use bevy::app::{ScheduleRunnerSettings, ScheduleRunnerPlugin};
+use bevy::app::{ScheduleRunnerPlugin, ScheduleRunnerSettings};
 use bevy::time::TimePlugin;
 
 use std::fs::File;
@@ -24,7 +24,7 @@ use std::time::Duration;
 
 use bevy::app::App;
 use bevy::ecs::schedule::SystemStage;
-use bevy::prelude::{Component, Resource, CorePlugin};
+use bevy::prelude::{Component, CorePlugin, Resource};
 use bevy::MinimalPlugins;
 use core_plugin::*;
 use s_save_commands::*;
@@ -40,8 +40,8 @@ impl TickState {
     pub const MAXIMUM_SIMULATION_TICKS: u32 = 300 * 2; // 10 secs
     pub const SERVER_TICK_RATE: f64 = 0.0;
     pub const CLIENT_TICK_RATE: f64 = 1.0 / 60.0;
+    pub const DT: f32 = 1.0 / 60.0;
 }
-
 
 #[derive(Default, Resource)]
 pub struct TankIds {
