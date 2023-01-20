@@ -7,7 +7,7 @@ use crate::{c_command::CommandSource, c_health::Health, c_tank::*, TankIds, Tick
 use bevy::app::AppExit;
 
 pub fn save_commands(
-    mut state: ResMut<TickState>,
+    state: Res<TickState>,
     tank_ids_state: Res<TankIds>,
     mut exit: EventWriter<AppExit>,
     query: Query<&CommandSource>,

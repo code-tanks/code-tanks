@@ -36,10 +36,9 @@ pub struct TickState {
 }
 
 impl TickState {
-    pub const MAXIMUM_SIMULATION_TICKS: u32 = 300;
-    pub const SERVER_TICK_RATE: f64 = 1.0 / 60.0;
-    pub const CLIENT_TICK_RATE: f64 = TickState::SERVER_TICK_RATE / 2.0;
-
+    pub const MAXIMUM_SIMULATION_TICKS: u32 = 300 * 2; // 10 secs
+    pub const SERVER_TICK_RATE: f64 = 0.0;
+    pub const CLIENT_TICK_RATE: f64 = 1.0 / 60.0;
 }
 
 
