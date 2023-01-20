@@ -5,7 +5,7 @@ use serde_json::json;
 use crate::{
     c_event::{Event, EventSink},
     c_health::Health,
-    c_tank::{Bullet, Radar, Tank, DamageDealer},
+    c_tank::{Bullet, DamageDealer, Radar, Tank},
     CCollider, CollisionType,
 };
 
@@ -136,43 +136,48 @@ fn scan(
 
 pub fn tank_physics(
     mut contact_events: EventReader<CollisionEvent>,
-    mut query_tank_many: Query<(Entity, &Tank, &mut EventSink, &mut Health)>,
+    mut query_tank_many: Query<(Entity, &Tank, &mut Health, &Transform, &Velocity)>,
+    mut query_event_sink: Query<&mut EventSink>,
     mut query_damage_dealer: Query<&mut DamageDealer>,
     query_bullet: Query<&Bullet>,
     query_collider: Query<(&CCollider, &Transform, Option<&Velocity>)>,
 ) {
     for contact_event in contact_events.iter() {
-        for (tank_entity, tank, mut event_sink, mut health) in &mut query_tank_many {
+        for (tank_entity, tank, mut health, transform, velocity) in &mut query_tank_many {
             if let CollisionEvent::Started(h1, h2, _event_flag) = contact_event {
                 if h1 == &tank_entity {
-                    let (collider, transform, velocity) = query_collider.get(*h2).unwrap();
+                    let (collider, transform2, velocity2) = query_collider.get(*h2).unwrap();
                     hit(
                         &tank_entity,
                         &tank,
+                        &transform,
+                        &velocity,
                         h2,
                         &collider.collision_type,
-                        &mut event_sink,
+                        // &mut query_event_sink.get_mut(*h1).unwrap(),
                         &mut health,
-                        transform,
-                        velocity,
+                        transform2,
+                        velocity2,
                         &mut query_damage_dealer,
                         &query_bullet,
-
+                        &mut query_event_sink,
                     );
                 } else if h2 == &tank_entity {
-                    let (collider, transform, velocity) = query_collider.get(*h1).unwrap();
+                    let (collider, transform2, velocity2) = query_collider.get(*h1).unwrap();
                     hit(
                         &tank_entity,
                         &tank,
+                        &transform,
+                        &velocity,
                         h1,
                         &collider.collision_type,
-                        &mut event_sink,
+                        // &mut query_event_sink.get_mut(*h2).unwrap(),
                         &mut health,
-                        transform,
-                        velocity,
+                        transform2,
+                        velocity2,
                         &mut query_damage_dealer,
                         &query_bullet,
-
+                        &mut query_event_sink,
                     );
                 }
             }
@@ -183,23 +188,50 @@ pub fn tank_physics(
 fn hit(
     tank_entity: &Entity,
     _tank: &Tank,
+    transform: &Transform,
+    velocity: &Velocity,
     collided_entity: &Entity,
     collision_type: &CollisionType,
-    event_sink: &mut EventSink,
+    // event_sink: &mut EventSink,
     health: &mut Health,
     collided_entity_transform: &Transform,
     collided_entity_velocity: Option<&Velocity>,
     query_damage_dealer: &mut Query<&mut DamageDealer>,
     query_bullet: &Query<&Bullet>,
-
+    query_event_sink: &mut Query<&mut EventSink>,
 ) {
     match collision_type {
         &CollisionType::Radar => {
             return;
         }
         &CollisionType::Bullet => {
-            let damage_dealer =  &mut query_damage_dealer.get_mut(query_bullet.get(*collided_entity).unwrap().tank).unwrap();
+            let damage_dealer = &mut query_damage_dealer
+                .get_mut(query_bullet.get(*collided_entity).unwrap().tank)
+                .unwrap();
             damage_dealer.damage_dealt += 10;
+            let v = transform.rotation * Vec3::Y;
+            // let zero = Velocity::zero();
+        
+            let mut event_sink = query_event_sink.get_mut(*tank_entity).unwrap();
+            event_sink.queue.push(Event {
+                event_type: "bullet hit".to_string(),
+                info: json!({
+                    "collision_type": format!("{:?}", CollisionType::Tank),
+                    "entity": tank_entity,
+                    "transform": {
+                        "x": transform.translation.x,
+                        "y": transform.translation.y,
+                        "rotation": v.y.atan2(v.x),
+                    },
+                    "velocity": {
+                        "linvel": {
+                            "x": velocity.linvel.x,
+                            "y": velocity.linvel.y
+                        },
+                        "angvel": velocity.angvel
+                    }
+                }), // TODO populate
+            });
         }
         _ => {}
     };
@@ -222,6 +254,7 @@ fn hit(
         Some(x) => x,
         None => &zero,
     };
+    let mut event_sink = query_event_sink.get_mut(*tank_entity).unwrap();
     event_sink.queue.push(Event {
         event_type: "hit".to_string(),
         info: json!({
