@@ -56,7 +56,7 @@ pub fn run_game(tank_ids: &[String]) {
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
             TickState::SERVER_TICK_RATE,
         )))
-        .add_plugin(ScheduleRunnerPlugin)
+        .add_plugin(ScheduleRunnerPlugin {})
         .add_plugins(MinimalPlugins)
         .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
