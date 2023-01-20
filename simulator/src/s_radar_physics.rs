@@ -1,13 +1,11 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-
 use crate::{
-    c_event::{EventSink, generate_event},
+    c_event::{generate_event, EventSink},
     c_tank::{Bullet, Tank},
     CCollider, CollisionType,
 };
-
 
 pub fn radar_physics(
     rapier_context: Res<RapierContext>,

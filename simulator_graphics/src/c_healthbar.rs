@@ -4,7 +4,7 @@ use ctsimlib::c_tank::Tank;
 #[derive(Component)]
 pub struct HealthBar {
     pub tank: Entity,
-    pub is_backdrop: bool
+    pub is_backdrop: bool,
 }
 
 impl HealthBar {

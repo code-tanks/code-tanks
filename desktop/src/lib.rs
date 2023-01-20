@@ -1,8 +1,4 @@
-use std::{
-    process::Command,
-    thread,
-    time,
-};
+use std::{process::Command, thread, time};
 
 use bevy::prelude::*;
 use ctsimlib::{s_setup_walls::setup_walls, *};

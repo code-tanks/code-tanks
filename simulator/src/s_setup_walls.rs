@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::{CollisionMask, CCollider, CollisionType};
+use crate::{CCollider, CollisionMask, CollisionType};
 
 pub fn setup_walls(mut commands: Commands) {
     /* Create the ground. */

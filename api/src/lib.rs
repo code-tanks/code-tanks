@@ -93,8 +93,7 @@ fn handle_connection(mut stream: TcpStream, tank: &mut dyn Tank) {
 
     let content_type = content_types::JSON;
 
-    let commands:&mut Vec<CCommand> = &mut Vec::new();
-
+    let commands: &mut Vec<CCommand> = &mut Vec::new();
 
     let response = match (method, path) {
         (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,

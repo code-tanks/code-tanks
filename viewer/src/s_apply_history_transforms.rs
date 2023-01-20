@@ -7,12 +7,8 @@ use ctsimlib::c_tank::*;
 pub fn apply_history_transforms(
     // mut commands: Commands,
     mut query: Query<
-    (
-        &mut Transform,
-        &Tank,
-        &mut HistoryTransforms
-    ),
-    // (Without<Radar>, Without<Gun>),
+        (&mut Transform, &Tank, &mut HistoryTransforms),
+        // (Without<Radar>, Without<Gun>),
     >,
     mut query_t: Query<&mut Transform, Without<Tank>>,
 ) {

@@ -1,14 +1,12 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-
 use crate::{
-    c_event::{EventSink, generate_event},
+    c_event::{generate_event, EventSink},
     c_health::Health,
     c_tank::{Bullet, DamageDealer, Tank},
     CCollider, CollisionType,
 };
-
 
 pub fn tank_physics(
     mut contact_events: EventReader<CollisionEvent>,
@@ -175,4 +173,3 @@ fn hit(
         collision_type,
     );
 }
-

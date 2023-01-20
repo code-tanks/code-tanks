@@ -132,14 +132,16 @@ pub fn create_base_tank(
                         | CollisionMask::RADAR,
                 ),
             ),
-            (Damping {
-                linear_damping: 0.0,
-                angular_damping: 0.0,
-            },
-            Velocity {
-                linvel: Vec2::new(0.0, 0.0),
-                angvel: 0.0,
-            }),
+            (
+                Damping {
+                    linear_damping: 0.0,
+                    angular_damping: 0.0,
+                },
+                Velocity {
+                    linvel: Vec2::new(0.0, 0.0),
+                    angvel: 0.0,
+                },
+            ),
             client,
             SpatialBundle {
                 transform: Transform::from_xyz(x, y, 0.0),

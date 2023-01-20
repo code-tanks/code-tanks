@@ -18,7 +18,10 @@ fn main() {
 
         if !job.is_empty() {
             let id = &job[0];
-            let input = &job[1].split(",").map(|f| f.to_string()).collect::<Vec<String>>();
+            let input = &job[1]
+                .split(",")
+                .map(|f| f.to_string())
+                .collect::<Vec<String>>();
             let url = &input[0];
             let lang = &input[1];
 
