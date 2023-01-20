@@ -6,7 +6,8 @@ pub mod c_tank;
 pub mod core_plugin;
 
 pub mod s_apply_commands;
-pub mod s_physics;
+pub mod s_bullet_physics;
+pub mod s_radar_physics;
 pub mod s_request_commands;
 pub mod s_request_commands_by_event;
 pub mod s_request_debug_commands;
@@ -14,6 +15,7 @@ pub mod s_save_commands;
 pub mod s_setup_physics;
 pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;
+pub mod s_tank_physics;
 
 use std::fs::File;
 use std::io::Write;
