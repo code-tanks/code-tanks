@@ -205,7 +205,7 @@ pub fn get_recent_simulations(
     client
         .query(
             "
-                SELECT json_agg(to_json(r))
+                SELECT json_agg(to_json(r))::varchar
                 FROM (
                     SELECT
                         id,
