@@ -10,16 +10,44 @@ use crate::{
 };
 
 pub fn bullet_physics(
+    mut query_event_sink: Query<&mut EventSink>,
     rapier_context: Res<RapierContext>,
-    query_bullet: Query<Entity, With<Bullet>>,
-    query_collidable: Query<Entity, (With<Collider>, Without<Bullet>, Without<Radar>)>,
+    query_bullet: Query<(Entity, &Bullet)>,
+    query_collidable: Query<(Entity, &CCollider, &Transform, Option<&Velocity>), Without<Radar>>,
     mut commands: Commands,
 ) {
-    for a in query_collidable.iter() {
-        for bullet in query_bullet.iter() {
+    for (a, ccollider, transform, velocity) in query_collidable.iter() {
+        for (bullet_entity, bullet) in query_bullet.iter() {
             /* Find the intersection pair, if it exists, between two colliders. */
-            if rapier_context.intersection_pair(a, bullet) == Some(true) {
-                commands.entity(bullet).despawn();
+            if rapier_context.intersection_pair(a, bullet_entity) == Some(true) {
+                let mut event_sink = query_event_sink.get_mut(bullet.tank).unwrap();
+                let v = transform.rotation * Vec3::Y;
+                let zero = Velocity::zero();
+
+                let vel = match velocity {
+                    Some(x) => x,
+                    None => &zero,
+                };
+                event_sink.queue.push(Event {
+                    event_type: "bullet hit".to_string(),
+                    info: json!({
+                        "collision_type": format!("{:?}", ccollider.collision_type),
+                        "entity": a,
+                        "transform": {
+                            "x": transform.translation.x,
+                            "y": transform.translation.y,
+                            "rotation": v.y.atan2(v.x),
+                        },
+                        "velocity": {
+                            "linvel": {
+                                "x": vel.linvel.x,
+                                "y": vel.linvel.y
+                            },
+                            "angvel": vel.angvel
+                        }
+                    }), // TODO populate
+                });
+                commands.entity(bullet_entity).despawn();
             }
         }
     }
