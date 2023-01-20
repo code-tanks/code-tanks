@@ -1,10 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
-    c_client::{
-        Client,
-        DockerClient, // , DummyClient
-    },
+    c_client::{Client, DockerClient},
     c_tank::DamageDealer,
     c_tank::Gun,
     c_tank::Radar,
