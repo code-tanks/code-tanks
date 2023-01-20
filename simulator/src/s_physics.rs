@@ -205,14 +205,18 @@ fn hit(
             return;
         }
         &CollisionType::Bullet => {
+            let tank_entity_that_shot_this_bullet =
+                query_bullet.get(*collided_entity).unwrap().tank;
             let damage_dealer = &mut query_damage_dealer
-                .get_mut(query_bullet.get(*collided_entity).unwrap().tank)
+                .get_mut(tank_entity_that_shot_this_bullet)
                 .unwrap();
             damage_dealer.damage_dealt += 10;
             let v = transform.rotation * Vec3::Y;
             // let zero = Velocity::zero();
-        
-            let mut event_sink = query_event_sink.get_mut(*tank_entity).unwrap();
+
+            let mut event_sink = query_event_sink
+                .get_mut(tank_entity_that_shot_this_bullet)
+                .unwrap();
             event_sink.queue.push(Event {
                 event_type: "bullet hit".to_string(),
                 info: json!({
