@@ -6,14 +6,23 @@ import requests
 
 app = FastAPI()
 
+@app.get("/raw/{tank_id}")
+def raw(tank_id: str):
+    r = requests.get(f'http://server:8088/raw/{tank_id}')
+
+    return Response(content=r.text, media_type="text/plain")
+
 @app.get("/recent")
 def recent():
-    df = pd.DataFrame([
-        # {1: 2}, {1: 'https://google.com'}
-    ])
-    # df[1] = df[1].apply(lambda x: f'<a href="{x}">{x}</a>')
+    # df = pd.DataFrame([
+    #     # {1: 2}, {1: 'https://google.com'}
+    # ])
+    # # df[1] = df[1].apply(lambda x: f'<a href="{x}">{x}</a>')
     
-    return df.to_html(escape=False)
+    # return df.to_html(escape=False)
+    r = requests.get(f'http://server:8088/recent')
+
+    return Response(content=r.json(), media_type="text/json")    
 
 @app.get("/ping")
 def root():

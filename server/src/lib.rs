@@ -366,7 +366,15 @@ fn handle_connection(
 
             println!("get recent: {:?}", args);
 
-            // TODO query recent
+            let recent = get_recent_simulations(db);
+
+            if !recent.is_empty() {
+                res_code = recent[0].get(1);
+                res = Response {
+                    status_line: StatusLines::OK,
+                    content: &res_code,
+                };
+            }
 
             res
         }

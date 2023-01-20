@@ -198,3 +198,28 @@ pub fn get_simulation_log_by_id(
         )
         .unwrap()
 }
+
+pub fn get_recent_simulations(
+    client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
+) -> Vec<Row> {
+    client
+        .query(
+            "
+                SELECT json_agg(to_json(r))
+                FROM (
+                    SELECT
+                        id,
+                        timestamp,
+                        SPLIT_PART(log, E'\n', -1)::json as results,
+                        SPLIT_PART(log, E'\n', -1)::json->'tanks' as tanks,
+                        SPLIT_PART(log, E'\n', -1)::json->'winner' as winner
+                    FROM simulations
+                    WHERE log != 'waiting to build'
+                    ORDER BY timestamp DESC
+                    LIMIT 10
+                ) r
+            ",
+            &[],
+        )
+        .unwrap()
+}
