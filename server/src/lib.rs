@@ -370,6 +370,7 @@ fn handle_connection(
 
             if !recent.is_empty() {
                 res_code = recent[0].get(0);
+                println!("recent: {}", res_code);
                 res = Response {
                     status_line: StatusLines::OK,
                     content: &res_code,
