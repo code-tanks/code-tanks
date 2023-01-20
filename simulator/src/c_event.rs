@@ -16,8 +16,6 @@ impl EventSink {
     }
 }
 
-// pub const EVENT_TYPES_LENGTH: usize = 2;
-
 #[derive(Debug, Serialize)]
 pub struct Event {
     pub event_type: String,
@@ -25,6 +23,7 @@ pub struct Event {
 }
 
 pub fn generate_event(
+    event_type: String,
     event_sink: &mut EventSink,
     entity_of_interest: &Entity,
     transform_of_interest: &Transform,
@@ -39,7 +38,7 @@ pub fn generate_event(
     };
     let v = transform_of_interest.rotation * Vec3::Y;
     event_sink.queue.push(Event {
-        event_type: "hit".to_string(),
+        event_type,
         info: json!({
             "collision_type": format!("{:?}", collision_type),
             "entity": entity_of_interest,

@@ -33,7 +33,7 @@ pub fn radar_physics(
                             tank_entity, tank.radar, collision_entity_2
                         );
 
-                        scan(
+                        on_radar_collision(
                             &mut event_sink,
                             &tank_entity,
                             tank_transform,
@@ -56,7 +56,7 @@ pub fn radar_physics(
                             tank_entity, tank.radar, collision_entity_1
                         );
 
-                        scan(
+                        on_radar_collision(
                             &mut event_sink,
                             &tank_entity,
                             tank_transform,
@@ -73,7 +73,7 @@ pub fn radar_physics(
     }
 }
 
-fn scan(
+fn on_radar_collision(
     event_sink: &mut EventSink,
     tank_entity: &Entity,
     _tank_transform: &Transform,
@@ -86,42 +86,14 @@ fn scan(
     if *collision_type == CollisionType::Bullet {
         let bullet = query_bullet.get(*scanned_entity).unwrap();
 
-        if bullet.tank == *tank_entity {
+        if bullet.tank == *tank_entity { // SKIP SCAN IF BULLET WAS SHOT FROM SELF
             return;
         }
     }
     info!("SCANNED {:?} of type {:?}", scanned_entity, collision_type);
 
-    // let v = t2.rotation * Vec3::Y;
-
-    // let zero = Velocity::zero();
-
-    // let vel = match t2_velocity {
-    //     Some(x) => x,
-    //     None => &zero,
-    // };
-
-    // event_sink.queue.push(Event {
-    //     event_type: "scan".to_string(),
-    //     info: json!({
-    //         "collision_type": format!("{:?}", collision_type),
-    //         "entity": b,
-    //         "transform": {
-    //             "x": t2.translation.x,
-    //             "y": t2.translation.y,
-    //             "rotation": v.y.atan2(v.x),
-    //         },
-    //         "velocity": {
-    //             "linvel": {
-    //                 "x": vel.linvel.x,
-    //                 "y": vel.linvel.y
-    //             },
-    //             "angvel": vel.angvel
-    //         }
-    //     }),
-    // });
-
     generate_event(
+        "radar_scan".to_string(),
         event_sink,
         scanned_entity,
         scanned_entity_transform,

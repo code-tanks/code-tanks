@@ -26,7 +26,7 @@ pub fn tank_physics(
                 if collision_entity_1 == &tank_entity {
                     let (collider, collided_entity_transform, collided_entity_velocity) =
                         query_collidable.get(*collision_entity_2).unwrap();
-                    hit(
+                    on_tank_collision(
                         &tank_entity,
                         &tank,
                         &tank_transform,
@@ -43,7 +43,7 @@ pub fn tank_physics(
                 } else if collision_entity_2 == &tank_entity {
                     let (collider, collided_entity_transform, collided_entity_velocity) =
                         query_collidable.get(*collision_entity_1).unwrap();
-                    hit(
+                    on_tank_collision(
                         &tank_entity,
                         &tank,
                         &tank_transform,
@@ -63,7 +63,7 @@ pub fn tank_physics(
     }
 }
 
-fn hit(
+fn on_tank_collision(
     tank_entity: &Entity,
     _tank: &Tank,
     tank_transform: &Transform,
@@ -88,33 +88,9 @@ fn hit(
                 .get_mut(tank_entity_that_shot_this_bullet)
                 .unwrap();
             damage_dealer.damage_dealt += 10;
-            // let v = transform.rotation * Vec3::Y;
-            // let zero = Velocity::zero();
-
-            // let mut event_sink = query_event_sink
-            //     .get_mut(tank_entity_that_shot_this_bullet)
-            //     .unwrap();
-            // event_sink.queue.push(Event {
-            //     event_type: "bullet hit".to_string(),
-            //     info: json!({
-            //         "collision_type": format!("{:?}", CollisionType::Tank),
-            //         "entity": tank_entity,
-            //         "transform": {
-            //             "x": transform.translation.x,
-            //             "y": transform.translation.y,
-            //             "rotation": v.y.atan2(v.x),
-            //         },
-            //         "velocity": {
-            //             "linvel": {
-            //                 "x": velocity.linvel.x,
-            //                 "y": velocity.linvel.y
-            //             },
-            //             "angvel": velocity.angvel
-            //         }
-            //     }), // TODO populate
-            // });
 
             generate_event(
+                "bullet_hit".to_string(),
                 &mut query_event_sink
                     .get_mut(tank_entity_that_shot_this_bullet)
                     .unwrap(),
@@ -137,35 +113,8 @@ fn hit(
         tank_health.val = 0;
     }
 
-    // let v = collided_entity_transform.rotation * Vec3::Y;
-    // let zero = Velocity::zero();
-
-    // let vel = match collided_entity_velocity {
-    //     Some(x) => x,
-    //     None => &zero,
-    // };
-    // let mut event_sink = ;
-    // event_sink.queue.push(Event {
-    //     event_type: "hit".to_string(),
-    //     info: json!({
-    //         "collision_type": format!("{:?}", collision_type),
-    //         "entity": collided_entity,
-    //         "transform": {
-    //             "x": collided_entity_transform.translation.x,
-    //             "y": collided_entity_transform.translation.y,
-    //             "rotation": v.y.atan2(v.x),
-    //         },
-    //         "velocity": {
-    //             "linvel": {
-    //                 "x": vel.linvel.x,
-    //                 "y": vel.linvel.y
-    //             },
-    //             "angvel": vel.angvel
-    //         }
-    //     }), // TODO populate
-    // });
-
     generate_event(
+        "tank_hit".to_string(),
         &mut query_event_sink.get_mut(*tank_entity).unwrap(),
         collided_entity,
         collided_entity_transform,

@@ -21,6 +21,7 @@ pub fn bullet_physics(
             /* Find the intersection pair, if it exists, between two colliders. */
             if rapier_context.intersection_pair(collision_entity, bullet_entity) == Some(true) {
                 generate_event(
+                    "bullet_hit".to_string(),
                     &mut query_event_sink.get_mut(bullet.tank).unwrap(),
                     &collision_entity,
                     collision_entity_transform,
