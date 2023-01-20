@@ -15,16 +15,13 @@ pub mod s_setup_physics;
 pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;
 
-use bevy::app::{ScheduleRunnerPlugin, ScheduleRunnerSettings};
-use bevy::time::TimePlugin;
-
 use std::fs::File;
 use std::io::Write;
-use std::time::Duration;
 
 use bevy::app::App;
 use bevy::ecs::schedule::SystemStage;
-use bevy::prelude::{Component, CorePlugin, Resource};
+use bevy::prelude::{Component, Resource};
+use bevy::MinimalPlugins;
 use core_plugin::*;
 use s_save_commands::*;
 use s_setup_sim_tanks::*;
@@ -37,8 +34,6 @@ pub struct TickState {
 
 impl TickState {
     pub const MAXIMUM_SIMULATION_TICKS: u32 = 300 * 2; // 10 secs
-    pub const SERVER_TICK_RATE: f64 = 0.0;
-    pub const CLIENT_TICK_RATE: f64 = 1.0 / 60.0 * 2.0;
     pub const DT: f32 = 1.0 / 60.0;
 }
 
@@ -53,12 +48,7 @@ pub fn run_game(tank_ids: &[String]) {
         .expect("Unable to write data");
 
     App::new()
-        .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
-            TickState::SERVER_TICK_RATE,
-        )))
-        .add_plugin(ScheduleRunnerPlugin {})
-        .add_plugin(CorePlugin::default())
-        .add_plugin(TimePlugin::default())
+        .add_plugins(MinimalPlugins)
         .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
         })

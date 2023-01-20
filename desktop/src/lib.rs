@@ -1,6 +1,10 @@
-use std::{process::Command, thread, time::{self, Duration}};
+use std::{
+    process::Command,
+    thread,
+    time,
+};
 
-use bevy::{prelude::*, app::{ScheduleRunnerSettings, ScheduleRunnerPlugin}};
+use bevy::prelude::*;
 use ctsimlib::{s_setup_walls::setup_walls, *};
 use s_setup_desktop_tanks::setup_desktop_tanks;
 
@@ -72,10 +76,6 @@ pub fn run_game(args: &[String]) {
     thread::sleep(time::Duration::from_millis(1000));
 
     App::new()
-        .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
-            TickState::SERVER_TICK_RATE,
-        )))
-        .add_plugin(ScheduleRunnerPlugin)
         .add_plugin(CoreCTPlugin)
         .add_plugin(CoreCTGraphicsPlugin)
         .insert_resource(TankIds {
