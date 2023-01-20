@@ -369,7 +369,7 @@ fn handle_connection(
             let recent = get_recent_simulations(db);
 
             if !recent.is_empty() {
-                res_code = recent[0].get(1);
+                res_code = recent[0].get(0);
                 res = Response {
                     status_line: StatusLines::OK,
                     content: &res_code,
