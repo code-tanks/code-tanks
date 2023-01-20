@@ -25,7 +25,6 @@ use std::time::Duration;
 use bevy::app::App;
 use bevy::ecs::schedule::SystemStage;
 use bevy::prelude::{Component, CorePlugin, Resource};
-use bevy::MinimalPlugins;
 use core_plugin::*;
 use s_save_commands::*;
 use s_setup_sim_tanks::*;
