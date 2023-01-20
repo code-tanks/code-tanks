@@ -86,7 +86,8 @@ fn on_radar_collision(
     if *collision_type == CollisionType::Bullet {
         let bullet = query_bullet.get(*scanned_entity).unwrap();
 
-        if bullet.tank == *tank_entity { // SKIP SCAN IF BULLET WAS SHOT FROM SELF
+        if bullet.tank == *tank_entity {
+            // SKIP SCAN IF BULLET WAS SHOT FROM SELF
             return;
         }
     }
