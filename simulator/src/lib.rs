@@ -16,6 +16,7 @@ pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;
 
 use bevy::app::{ScheduleRunnerSettings, ScheduleRunnerPlugin};
+use bevy::time::TimePlugin;
 
 use std::fs::File;
 use std::io::Write;
@@ -23,7 +24,7 @@ use std::time::Duration;
 
 use bevy::app::App;
 use bevy::ecs::schedule::SystemStage;
-use bevy::prelude::{Component, Resource};
+use bevy::prelude::{Component, Resource, CorePlugin};
 use bevy::MinimalPlugins;
 use core_plugin::*;
 use s_save_commands::*;
@@ -57,7 +58,8 @@ pub fn run_game(tank_ids: &[String]) {
             TickState::SERVER_TICK_RATE,
         )))
         .add_plugin(ScheduleRunnerPlugin {})
-        .add_plugins(MinimalPlugins)
+        .add_plugin(CorePlugin::default())
+        .add_plugin(TimePlugin::default())
         .insert_resource(TankIds {
             tank_ids: tank_ids.to_vec(),
         })

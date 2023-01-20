@@ -16,7 +16,7 @@ fn main() {
         .insert_resource(ScheduleRunnerSettings::run_loop(Duration::from_secs_f64(
             TickState::CLIENT_TICK_RATE,
         )))
-        .add_plugin(ScheduleRunnerPlugin)
+        .add_plugin(ScheduleRunnerPlugin{})
         .add_plugin(CoreCTPlugin)
         .add_plugin(CoreCTGraphicsPlugin)
         .init_resource::<CustomAssetState>()
