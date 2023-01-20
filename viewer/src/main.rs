@@ -23,8 +23,8 @@ fn main() {
         .add_asset::<CustomAsset>()
         .init_asset_loader::<CustomAssetLoader>()
         .add_startup_system(load_tanks)
+        .add_system(setup_web_tanks)
         .add_startup_system(setup_walls)
-        .add_startup_system(setup_web_tanks)
         .add_stage_after(
             "request_commands",
             "apply_history_transforms",
