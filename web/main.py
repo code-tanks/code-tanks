@@ -12,6 +12,12 @@ def raw(tank_id: str):
 
     return Response(content=r.text, media_type="text/plain")
 
+@app.get("/log/{tank_id}")
+def log(tank_id: str):
+    r = requests.get(f'http://server:8088/log/{tank_id}')
+
+    return Response(content=r.text, media_type="text/plain")    
+
 @app.get("/recent")
 def recent():
     r = requests.get(f'http://server:8088/recent')
