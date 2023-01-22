@@ -18,3 +18,5 @@ WORKDIR /home/developer
 RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.66.0 -y
 RUN rustup component add rust-analysis
 RUN rustup target install wasm32-unknown-unknown
+
+VOLUME [ "/var/lib/docker" ]
