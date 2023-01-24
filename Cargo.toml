@@ -4,6 +4,7 @@ members = [
     "api",
     "cli",
     "desktop",
+    "runner",
     "server",
     "simulator",
     "simulator_graphics",

@@ -10,9 +10,9 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.66.0 -y
 
 WORKDIR /app
 
-RUN git clone -b 'v0.1.4' --single-branch --depth 1 https://github.com/code-tanks/rust-api.git /app
+RUN git clone -b 'v0.1.4' --single-branch --depth 1 https://github.com/code-tanks/code-tanks.git /app
 
-RUN cargo build
+RUN cargo build --bin ct-runner
 
 ARG url
 

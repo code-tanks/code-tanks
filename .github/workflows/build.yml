@@ -5,19 +5,35 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/build.yml
       - api/**
       - cli/**
+      - desktop/**
+      - runner/**
       - server/**
       - simulator/**
       - simulator_graphis/**
-      - desktop/**
       - viewer/**
+      - web/**
       - worker_builder/**
       - worker_simulator/**
-      - web/**
-      - .github/workflows/build.yml
 
 jobs:
+  build_rust_runner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-runner-${{ hashFiles('**/Cargo.toml') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --bin ct-runner
   build_cli:
     runs-on: ubuntu-latest
     steps:
