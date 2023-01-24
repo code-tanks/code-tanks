@@ -6,11 +6,9 @@ use std::{
 
 use serde_json::{json, Value};
 
-use crate::responses::{Response, StatusLines};
-
 pub trait Tank: Send + Sync {
-    fn run(&mut self, commands: &mut Vec<CCommand>);
-    fn on_event(&mut self, commands: &mut Vec<CCommand>, event: &Value);
+    fn run(&mut self, commands: &mut Vec<Command>);
+    fn on_event(&mut self, commands: &mut Vec<Command>, event: &Value);
 }
 
 pub struct HttpServer {
@@ -34,47 +32,48 @@ impl HttpServer {
     }
 }
 
-mod paths {
+struct Path {}
+impl Path {
     pub const ROOT: &'static str = "";
     pub const PING: &'static str = "ping";
     pub const REQUEST_COMMANDS: &'static str = "request_commands";
     pub const REQUEST_COMMANDS_BY_EVENT: &'static str = "request_commands_by_event";
 }
 
-mod methods {
+struct Method {}
+impl Method {
     pub const POST: &'static str = "POST";
     pub const GET: &'static str = "GET";
 }
 
-mod content_types {
+struct ContentType {}
+impl ContentType {
     pub const JSON: &'static str = "application/json";
 }
 
-mod responses {
-    type StatusLine<'a> = &'a str;
+pub struct StatusLine {}
+impl StatusLine {
+    pub const OK: &str = "HTTP/1.1 200 OK";
+    pub const NOT_FOUND: &str = "HTTP/1.1 404 NOT FOUND";
+}
 
-    pub enum StatusLines {}
-
-    impl StatusLines {
-        pub const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
-        pub const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
-    }
-    pub struct Response<'a> {
-        pub status_line: StatusLine<'a>,
-        pub content: &'a str,
-    }
-    pub const ROOT_RESPONSE: Response<'static> = Response {
-        status_line: StatusLines::OK,
+pub struct Response<'a> {
+    pub status_line: &'a str,
+    pub content: &'a str,
+}
+impl Response<'_> {
+    pub const ROOT: Response<'static> = Response {
+        status_line: StatusLine::OK,
         content: "\"hello\"",
     };
 
-    pub const PING_RESPONSE: Response<'static> = Response {
-        status_line: StatusLines::OK,
+    pub const PING: Response<'static> = Response {
+        status_line: StatusLine::OK,
         content: "\"pong\"",
     };
 
-    pub const NOT_FOUND_RESPONSE: Response<'static> = Response {
-        status_line: StatusLines::NOT_FOUND,
+    pub const NOT_FOUND: Response<'static> = Response {
+        status_line: StatusLine::NOT_FOUND,
         content: "\"404\"",
     };
 }
@@ -91,33 +90,33 @@ fn handle_connection(mut stream: TcpStream, tank: &mut dyn Tank) {
 
     let content: String;
 
-    let content_type = content_types::JSON;
+    let content_type = ContentType::JSON;
 
-    let commands: &mut Vec<CCommand> = &mut Vec::new();
+    let commands: &mut Vec<Command> = &mut Vec::new();
 
     let response = match (method, path) {
-        (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
-        (methods::GET, paths::PING) => responses::PING_RESPONSE,
-        (methods::GET, paths::REQUEST_COMMANDS) => {
+        (Method::GET, Path::ROOT) => Response::ROOT,
+        (Method::GET, Path::PING) => Response::PING,
+        (Method::GET, Path::REQUEST_COMMANDS) => {
             tank.run(commands);
             content = json!(commands).to_string();
             commands.clear();
             Response {
-                status_line: StatusLines::OK,
+                status_line: StatusLine::OK,
                 content: &content,
             }
         }
-        (methods::POST, paths::REQUEST_COMMANDS_BY_EVENT) => {
+        (Method::POST, Path::REQUEST_COMMANDS_BY_EVENT) => {
             let event: Value = serde_json::from_str(&get_data_from_request(&request)).unwrap();
             tank.on_event(commands, &event);
             content = json!(commands).to_string();
             commands.clear();
             Response {
-                status_line: StatusLines::OK,
+                status_line: StatusLine::OK,
                 content: &content,
             }
         }
-        _ => responses::NOT_FOUND_RESPONSE,
+        _ => Response::NOT_FOUND,
     };
 
     let response_string = format!(
@@ -160,24 +159,24 @@ fn get_data_from_request(request: &String) -> String {
     response.trim_matches(char::from(0)).to_string()
 }
 
-pub type CCommand = u64;
+pub type Command = u64;
 
-pub enum CCommands {}
+pub enum Commands {}
 
-impl CCommands {
-    pub const NONE: CCommand = 0b0;
-    pub const MOVE_FORWARD: CCommand = 0b1;
-    pub const MOVE_BACKWARD: CCommand = 0b1 << 1;
-    pub const ROTATE_TANK_CLOCKWISE: CCommand = 0b1 << 2;
-    pub const ROTATE_TANK_COUNTER_CLOCKWISE: CCommand = 0b1 << 3;
-    pub const FIRE: CCommand = 0b1 << 4;
-    pub const ROTATE_GUN_CLOCKWISE: CCommand = 0b1 << 5;
-    pub const ROTATE_GUN_COUNTER_CLOCKWISE: CCommand = 0b1 << 6;
-    pub const ROTATE_RADAR_CLOCKWISE: CCommand = 0b1 << 7;
-    pub const ROTATE_RADAR_COUNTER_CLOCKWISE: CCommand = 0b1 << 8;
-    pub const LOCK_GUN: CCommand = 0b1 << 9;
-    pub const UNLOCK_GUN: CCommand = 0b1 << 10;
-    pub const LOCK_RADAR: CCommand = 0b1 << 11;
-    pub const UNLOCK_RADAR: CCommand = 0b1 << 12;
-    pub const SELF_DESTRUCT: CCommand = 0b1 << 13;
+impl Commands {
+    pub const NONE: Command = 0b0;
+    pub const MOVE_FORWARD: Command = 0b1;
+    pub const MOVE_BACKWARD: Command = 0b1 << 1;
+    pub const ROTATE_TANK_CLOCKWISE: Command = 0b1 << 2;
+    pub const ROTATE_TANK_COUNTER_CLOCKWISE: Command = 0b1 << 3;
+    pub const FIRE: Command = 0b1 << 4;
+    pub const ROTATE_GUN_CLOCKWISE: Command = 0b1 << 5;
+    pub const ROTATE_GUN_COUNTER_CLOCKWISE: Command = 0b1 << 6;
+    pub const ROTATE_RADAR_CLOCKWISE: Command = 0b1 << 7;
+    pub const ROTATE_RADAR_COUNTER_CLOCKWISE: Command = 0b1 << 8;
+    pub const LOCK_GUN: Command = 0b1 << 9;
+    pub const UNLOCK_GUN: Command = 0b1 << 10;
+    pub const LOCK_RADAR: Command = 0b1 << 11;
+    pub const UNLOCK_RADAR: Command = 0b1 << 12;
+    pub const SELF_DESTRUCT: Command = 0b1 << 13;
 }

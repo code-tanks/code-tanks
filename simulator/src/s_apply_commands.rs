@@ -1,6 +1,7 @@
-use bevy::prelude::*;
+use bevy::prelude::{Query, Entity, Transform, Without, ResMut, Vec2, Vec3, Commands as BevyCommands, SpatialBundle, Visibility, default};
+// use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-use ct_api::CCommands;
+use ct_api::Commands;
 
 use crate::{
     c_command::CommandSource,
@@ -10,7 +11,7 @@ use crate::{
 };
 
 pub fn apply_commands(
-    mut commands: Commands,
+    mut commands: BevyCommands,
     mut query: Query<
         (
             Entity,
@@ -59,37 +60,37 @@ pub fn apply_commands(
             continue;
         }
         let grouped_commands = command_receiver.queue.remove(0);
-        if CCommands::SELF_DESTRUCT & grouped_commands != 0 {
+        if Commands::SELF_DESTRUCT & grouped_commands != 0 {
             health.val = 0;
             continue;
         }
 
         let rot = 3.14;
 
-        if CCommands::MOVE_FORWARD & grouped_commands != 0 {
+        if Commands::MOVE_FORWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
 
             vel.x += 100.0 * dir.x;
             vel.y += 100.0 * dir.y;
         }
-        if CCommands::MOVE_BACKWARD & grouped_commands != 0 {
+        if Commands::MOVE_BACKWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
             vel.x -= 100.0 * dir.x;
             vel.y -= 100.0 * dir.y;
         }
-        if CCommands::LOCK_GUN & grouped_commands != 0 {
+        if Commands::LOCK_GUN & grouped_commands != 0 {
             gun.locked = true;
         }
-        if CCommands::UNLOCK_GUN & grouped_commands != 0 {
+        if Commands::UNLOCK_GUN & grouped_commands != 0 {
             gun.locked = false;
         }
-        if CCommands::LOCK_RADAR & grouped_commands != 0 {
+        if Commands::LOCK_RADAR & grouped_commands != 0 {
             radar.locked = true;
         }
-        if CCommands::UNLOCK_RADAR & grouped_commands != 0 {
+        if Commands::UNLOCK_RADAR & grouped_commands != 0 {
             radar.locked = false;
         }
-        if CCommands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
+        if Commands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
             ang -= 0.3 * rot;
 
             if gun.locked {
@@ -100,7 +101,7 @@ pub fn apply_commands(
                 }
             }
         }
-        if CCommands::ROTATE_TANK_COUNTER_CLOCKWISE & grouped_commands != 0 {
+        if Commands::ROTATE_TANK_COUNTER_CLOCKWISE & grouped_commands != 0 {
             ang += 0.3 * rot;
 
             if gun.locked {
@@ -111,27 +112,27 @@ pub fn apply_commands(
                 }
             }
         }
-        if CCommands::ROTATE_GUN_CLOCKWISE & grouped_commands != 0 {
+        if Commands::ROTATE_GUN_CLOCKWISE & grouped_commands != 0 {
             gun_ang -= 0.3 * rot;
 
             if radar.locked {
                 radar_ang -= 0.3 * rot;
             }
         }
-        if CCommands::ROTATE_GUN_COUNTER_CLOCKWISE & grouped_commands != 0 {
+        if Commands::ROTATE_GUN_COUNTER_CLOCKWISE & grouped_commands != 0 {
             gun_ang += 0.3 * rot;
 
             if radar.locked {
                 radar_ang += 0.3 * rot;
             }
         }
-        if CCommands::ROTATE_RADAR_CLOCKWISE & grouped_commands != 0 {
+        if Commands::ROTATE_RADAR_CLOCKWISE & grouped_commands != 0 {
             radar_ang -= 0.3 * rot;
         }
-        if CCommands::ROTATE_RADAR_COUNTER_CLOCKWISE & grouped_commands != 0 {
+        if Commands::ROTATE_RADAR_COUNTER_CLOCKWISE & grouped_commands != 0 {
             radar_ang += 0.3 * rot;
         }
-        if CCommands::FIRE & grouped_commands != 0 {
+        if Commands::FIRE & grouped_commands != 0 {
             if tank.cooldown <= 0 {
                 let t = gun_transform.rotation * Vec3::Y;
                 commands.spawn((

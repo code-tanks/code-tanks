@@ -1,6 +1,6 @@
 use crate::{CustomAsset, CustomAssetState, *};
 use bevy::prelude::{info, AssetServer, Assets, Commands, Res, ResMut};
-use ct_api::CCommand;
+use ct_api::Command;
 use ctsimlib::c_client::{Client, ReaderClient};
 use ctsimlibgraphics::*;
 
@@ -30,13 +30,13 @@ pub fn setup_web_tanks(
     let mut n_commands = 0;
 
     for n in 0..tank_ids.len() {
-        let c_lines: Vec<CCommand> = lines[(1 + n)..]
+        let c_lines: Vec<Command> = lines[(1 + n)..]
             .iter()
             .step_by(tank_ids.len())
             .map(|f| {
                 f.split("|").collect::<Vec<&str>>()[0]
                     .to_string()
-                    .parse::<CCommand>()
+                    .parse::<Command>()
                     .unwrap()
             })
             .collect();

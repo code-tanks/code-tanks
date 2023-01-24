@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use ct_api::CCommand;
+use ct_api::Command;
 
 use crate::{c_client::Client, c_command::CommandSource, c_event::EventSink, c_health::Health};
 
@@ -19,7 +19,7 @@ pub fn request_commands_by_event(
             continue;
         }
 
-        let mut queue: Vec<CCommand> = Vec::new();
+        let mut queue: Vec<Command> = Vec::new();
 
         for event in event_sender.queue.iter() {
             println!("{:?} {:?}", entity, event);

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use ct_api::CCommands;
+use ct_api::Commands;
 use ctsimlib::c_command::CommandSource;
 
 use crate::DebugToggle;
@@ -39,55 +39,55 @@ pub fn request_debug_commands(
 
     if keys.pressed(KeyCode::W) {
         // info!("W pressed");
-        grouped_commands = grouped_commands | CCommands::MOVE_FORWARD;
+        grouped_commands = grouped_commands | Commands::MOVE_FORWARD;
     }
     if keys.pressed(KeyCode::S) {
         // info!("S pressed");
-        grouped_commands = grouped_commands | CCommands::MOVE_BACKWARD;
+        grouped_commands = grouped_commands | Commands::MOVE_BACKWARD;
     }
     if keys.pressed(KeyCode::A) {
         // info!("A pressed");
-        grouped_commands = grouped_commands | CCommands::ROTATE_TANK_COUNTER_CLOCKWISE;
+        grouped_commands = grouped_commands | Commands::ROTATE_TANK_COUNTER_CLOCKWISE;
     }
     if keys.pressed(KeyCode::D) {
         // info!("D pressed");
-        grouped_commands = grouped_commands | CCommands::ROTATE_TANK_CLOCKWISE;
+        grouped_commands = grouped_commands | Commands::ROTATE_TANK_CLOCKWISE;
     }
     if keys.pressed(KeyCode::Space) {
         // info!("Space pressed");
-        grouped_commands = grouped_commands | CCommands::FIRE;
+        grouped_commands = grouped_commands | Commands::FIRE;
     }
     if keys.pressed(KeyCode::E) {
         // info!("E pressed");
-        grouped_commands = grouped_commands | CCommands::ROTATE_GUN_CLOCKWISE;
+        grouped_commands = grouped_commands | Commands::ROTATE_GUN_CLOCKWISE;
     }
     if keys.pressed(KeyCode::Q) {
         // info!("Q pressed");
-        grouped_commands = grouped_commands | CCommands::ROTATE_GUN_COUNTER_CLOCKWISE;
+        grouped_commands = grouped_commands | Commands::ROTATE_GUN_COUNTER_CLOCKWISE;
     }
     if keys.pressed(KeyCode::X) {
         // info!("X pressed");
-        grouped_commands = grouped_commands | CCommands::ROTATE_RADAR_CLOCKWISE;
+        grouped_commands = grouped_commands | Commands::ROTATE_RADAR_CLOCKWISE;
     }
     if keys.pressed(KeyCode::Z) {
         // info!("Z pressed");
-        grouped_commands = grouped_commands | CCommands::ROTATE_RADAR_COUNTER_CLOCKWISE;
+        grouped_commands = grouped_commands | Commands::ROTATE_RADAR_COUNTER_CLOCKWISE;
     }
     if keys.pressed(KeyCode::R) {
         // info!("R pressed");
-        grouped_commands = grouped_commands | CCommands::LOCK_GUN;
+        grouped_commands = grouped_commands | Commands::LOCK_GUN;
     }
     if keys.pressed(KeyCode::T) {
         // info!("T pressed");
-        grouped_commands = grouped_commands | CCommands::UNLOCK_GUN;
+        grouped_commands = grouped_commands | Commands::UNLOCK_GUN;
     }
     if keys.pressed(KeyCode::F) {
         // info!("F pressed");
-        grouped_commands = grouped_commands | CCommands::LOCK_RADAR;
+        grouped_commands = grouped_commands | Commands::LOCK_RADAR;
     }
     if keys.pressed(KeyCode::G) {
         // info!("G pressed");
-        grouped_commands = grouped_commands | CCommands::UNLOCK_RADAR;
+        grouped_commands = grouped_commands | Commands::UNLOCK_RADAR;
     }
     command_source.queue[0] = grouped_commands;
 }

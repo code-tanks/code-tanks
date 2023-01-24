@@ -1,5 +1,5 @@
 use bevy::prelude::{Entity, Query};
-use ct_api::CCommands;
+use ct_api::Commands;
 
 use crate::{c_client::Client, c_command::CommandSource, c_health::Health};
 
@@ -7,7 +7,7 @@ pub fn request_commands(mut query: Query<(Entity, &mut CommandSource, &mut Clien
     for (entity, mut command_receiver, mut client_connection, health) in &mut query {
         if command_receiver.queue.is_empty() {
             if health.val == 0 {
-                command_receiver.queue.push(CCommands::NONE);
+                command_receiver.queue.push(Commands::NONE);
                 continue;
             }
 
@@ -15,7 +15,7 @@ pub fn request_commands(mut query: Query<(Entity, &mut CommandSource, &mut Clien
             // println!("request_commands {:?} {:?}", entity, new_commands);
             if new_commands.is_empty() {
                 println!("SELF_DESTRUCT {:?} empty request_commands", entity);
-                command_receiver.queue.push(CCommands::SELF_DESTRUCT);
+                command_receiver.queue.push(Commands::SELF_DESTRUCT);
             } else {
                 command_receiver.queue.append(&mut new_commands);
             }

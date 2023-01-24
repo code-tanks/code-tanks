@@ -1,5 +1,5 @@
 use bevy::{prelude::*, utils::HashSet};
-use ct_api::CCommands;
+use ct_api::Commands;
 use serde_json::{json, to_value};
 use std::{fs::OpenOptions, io::Write};
 
@@ -32,7 +32,7 @@ pub fn save_commands(
 
     for (i, command_receiver) in query.iter().enumerate() {
         let grouped_commands = if command_receiver.queue.is_empty() {
-            CCommands::NONE
+            Commands::NONE
         } else {
             command_receiver.queue[0]
         };
