@@ -9,7 +9,3 @@ r2d2_postgres = "0.18.1"
 [[bin]]
 name = "ctserver"
 path = "src/main.rs"
-
-[[bin]]
-name = "test"
-path = "src/test.rs"

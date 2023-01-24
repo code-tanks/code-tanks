@@ -11,10 +11,6 @@ postgres = "0.19.3"
 name = "ctsim"
 path = "src/main.rs"
 
-[[bin]]
-name = "cttest"
-path = "src/test.rs"
-
 [profile.release]
 codegen-units = 1
 

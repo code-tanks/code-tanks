@@ -9,7 +9,3 @@ postgres = "0.19.3"
 [[bin]]
 name = "ctbuilder"
 path = "src/main.rs"
-
-[[bin]]
-name = "test"
-path = "src/test.rs"

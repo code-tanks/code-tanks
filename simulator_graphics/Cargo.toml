@@ -10,9 +10,6 @@ bevy_rapier2d = { version = "0.20.0", features = [ "debug-render-2d", "enhanced-
 bevy_prototype_lyon = "0.7.2"
 ct-api = { path = "../api" }
 
-[[bin]]
-name = "test"
-path = "src/test.rs"
 
 [profile.release]
 codegen-units = 1
