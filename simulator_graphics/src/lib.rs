@@ -75,7 +75,7 @@ pub fn create_graphics_tank(
                 fill_mode: FillMode::color(Color::WHITE),
                 outline_mode: StrokeMode::new(Color::BLACK, 1.0),
             },
-            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS, 1.0),
+            t,
         ),
     );
     let radar = radar.id();
