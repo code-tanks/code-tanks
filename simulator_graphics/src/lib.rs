@@ -1,10 +1,11 @@
 use bevy::{
     prelude::{
-        default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin, Quat,
-        Res, Transform, Vec2, PluginGroup,
+        default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin,
+        PluginGroup, Quat, Res, Transform, Vec2,
     },
     sprite::SpriteBundle,
-    text::{Text, Text2dBundle, TextAlignment, TextStyle}, window::{WindowDescriptor, WindowPlugin, PresentMode},
+    text::{Text, Text2dBundle, TextAlignment, TextStyle},
+    window::{PresentMode, WindowDescriptor, WindowPlugin},
 };
 use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
@@ -12,7 +13,7 @@ use bevy_prototype_lyon::{
 };
 use c_healthbar::HealthBar;
 use c_nametag::NameTag;
-use ctsimlib::c_tank::Tank;
+use ctsimlib::{c_tank::Tank, game};
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
 pub mod c_nametag;
@@ -52,11 +53,31 @@ pub fn create_graphics_tank(
 
     let radar = create_radar(commands, x, y);
     let mut radar = commands.entity(radar);
-    radar.insert(SpriteBundle {
-        transform: t,
-        texture: asset_server.load("shotLarge.png"),
-        ..default()
-    });
+    radar.insert(
+        //     SpriteBundle {
+        //     transform: t,
+        //     texture: asset_server.load("shotLarge.png"),
+        //     ..default()
+        // }
+        GeometryBuilder::build_as(
+            &shapes::Polygon {
+                // extents: Vec2::new(HealthBar::MAX_WIDTH, HealthBar::MAX_HEIGHT),
+                // origin: RectangleOrigin::BottomLeft,
+                points: vec![
+                    // 25.0, game::WIDTH + game::HEIGHT
+                    Vec2::new(0.0, 0.0),
+                    Vec2::new(25.0, game::WIDTH + game::HEIGHT),
+                    Vec2::new(125.0, game::WIDTH + game::HEIGHT),
+                ],
+                closed: true,
+            },
+            DrawMode::Outlined {
+                fill_mode: FillMode::color(Color::WHITE),
+                outline_mode: StrokeMode::new(Color::BLACK, 1.0),
+            },
+            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS, 1.0),
+        ),
+    );
     let radar = radar.id();
 
     let tank = create_base_tank(commands, gun, radar, x, y, client);
