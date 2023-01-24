@@ -32,6 +32,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+      - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
       - run: cargo build
   build_rust_runner:
     runs-on: ubuntu-latest
