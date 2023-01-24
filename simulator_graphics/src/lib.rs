@@ -41,8 +41,10 @@ pub fn create_graphics_tank(
 
     let gun = create_gun(commands, x, y);
     let mut gun = commands.entity(gun);
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
     gun.insert(SpriteBundle {
-        transform: Transform::from_xyz(x, y, 0.0),
+        transform: t,
         texture: asset_server.load("tankRed_barrel1.png"),
         ..default()
     });
@@ -51,7 +53,7 @@ pub fn create_graphics_tank(
     let radar = create_radar(commands, x, y);
     let mut radar = commands.entity(radar);
     radar.insert(SpriteBundle {
-        transform: Transform::from_xyz(x, y, 0.0),
+        transform: t,
         texture: asset_server.load("shotLarge.png"),
         ..default()
     });
