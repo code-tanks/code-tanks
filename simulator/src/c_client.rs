@@ -1,7 +1,7 @@
 use std::process::Command as ProcessCommand;
 
 use bevy::prelude::*;
-use ct_api::{Commands, Command};
+use ct_api::{Command, Commands};
 
 use crate::c_event::*;
 

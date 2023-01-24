@@ -10,11 +10,11 @@ use ctsimlibgraphics::CoreCTGraphicsPlugin;
 
 pub fn remove_tank(tank_id: &str) {
     Command::new("docker")
-    .arg("rm")
-    .arg("--force")
-    .arg(&tank_id)
-    .output()
-    .expect("failed to communicate with docker");
+        .arg("rm")
+        .arg("--force")
+        .arg(&tank_id)
+        .output()
+        .expect("failed to communicate with docker");
 }
 
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {

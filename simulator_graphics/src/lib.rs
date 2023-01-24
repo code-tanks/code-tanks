@@ -1,10 +1,9 @@
 use bevy::{
     prelude::{
-        default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin, Quat,
-        Res, Transform, Vec2, Resource,
-        PluginGroup,
+        default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin,
+        PluginGroup, Quat, Res, Resource, Transform, Vec2,
     },
-    sprite::{SpriteBundle, Sprite, Anchor},
+    sprite::{Anchor, Sprite, SpriteBundle},
     text::{Text, Text2dBundle, TextAlignment, TextStyle},
     window::{PresentMode, WindowDescriptor, WindowPlugin},
 };
@@ -151,7 +150,6 @@ pub fn create_graphics_tank(
     tank
 }
 
-
 #[derive(Resource, Default, Debug)]
 pub struct DebugToggle {
     is_on: bool,
@@ -163,7 +161,7 @@ pub struct CoreCTGraphicsPlugin;
 impl Plugin for CoreCTGraphicsPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Msaa { samples: 4 })
-            .insert_resource(DebugToggle{
+            .insert_resource(DebugToggle {
                 is_on: false,
                 index: 0,
             })

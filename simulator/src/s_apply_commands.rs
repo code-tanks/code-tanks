@@ -1,4 +1,7 @@
-use bevy::prelude::{Query, Entity, Transform, Without, ResMut, Vec2, Vec3, Commands as BevyCommands, SpatialBundle, Visibility, default};
+use bevy::prelude::{
+    default, Commands as BevyCommands, Entity, Query, ResMut, SpatialBundle, Transform, Vec2, Vec3,
+    Visibility, Without,
+};
 // use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use ct_api::Commands;
