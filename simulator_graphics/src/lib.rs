@@ -18,17 +18,16 @@ use s_on_added_bullet::on_added_bullet;
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
 pub mod c_nametag;
+pub mod s_on_added_bullet;
 pub mod s_setup_graphics;
 pub mod s_update_healthbar;
 pub mod s_update_nametag;
-pub mod s_on_added_bullet;
 use crate::s_setup_graphics::setup_graphics;
 use crate::s_update_healthbar::update_healthbar;
 use bevy::ecs::entity::Entity;
 use bevy::ecs::schedule::SystemStage;
 use bevy::DefaultPlugins;
 use bevy_prototype_lyon::prelude::ShapePlugin;
-use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 use ctsimlib::s_request_debug_commands::request_debug_commands;
 use ctsimlib::s_setup_sim_tanks::{create_base_tank, create_gun, create_radar};
 
@@ -55,31 +54,20 @@ pub fn create_graphics_tank(
 
     let radar = create_radar(commands, x, y);
     let mut radar = commands.entity(radar);
-    radar.insert(
-        //     SpriteBundle {
-        //     transform: t,
-        //     texture: asset_server.load("shotLarge.png"),
-        //     ..default()
-        // }
-        GeometryBuilder::build_as(
-            &shapes::Polygon {
-                // extents: Vec2::new(HealthBar::MAX_WIDTH, HealthBar::MAX_HEIGHT),
-                // origin: RectangleOrigin::BottomLeft,
-                points: vec![
-                    // 25.0, game::WIDTH + game::HEIGHT
-                    Vec2::new(0.0, 0.0),
-                    Vec2::new(25.0, game::WIDTH + game::HEIGHT),
-                    Vec2::new(-25.0, game::WIDTH + game::HEIGHT),
-                ],
-                closed: true,
-            },
-            DrawMode::Outlined {
-                fill_mode: FillMode::color(Color::rgba(1., 1., 1., 0.1)),
-                outline_mode: StrokeMode::new(Color::BLACK, 1.0),
-            },
-            t,
-        ),
-    );
+    radar.insert(GeometryBuilder::build_as(
+        &shapes::Polygon {
+            points: vec![
+                Vec2::new(0.0, 0.0),
+                Vec2::new(25.0, game::WIDTH + game::HEIGHT),
+                Vec2::new(-25.0, game::WIDTH + game::HEIGHT),
+            ],
+            closed: true,
+        },
+        DrawMode::Fill {
+            0: FillMode::color(Color::rgba(1., 1., 1., 0.1)),
+        },
+        t,
+    ));
     let radar = radar.id();
 
     let tank = create_base_tank(commands, gun, radar, x, y, client);
@@ -181,7 +169,8 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_stage(
                 "update_nametag",
                 SystemStage::single_threaded().with_system(update_nametag),
-            ).add_stage(
+            )
+            .add_stage(
                 "on_added_bullet",
                 SystemStage::single_threaded().with_system(on_added_bullet),
             );
