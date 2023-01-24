@@ -135,6 +135,7 @@ impl Plugin for CoreCTGraphicsPlugin {
                     title: "Code Tanks".to_string(),
                     width: 500.,
                     height: 300.,
+                    resizable: false,
                     present_mode: PresentMode::AutoVsync,
                     ..default()
                 },
