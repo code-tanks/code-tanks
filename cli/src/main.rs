@@ -53,11 +53,11 @@ fn upload(path: &str, extension: &str) {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
     let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
 
-    if err_raw != "" {
+    if !err_raw.is_empty() {
         println!("{}", err_raw);
     }
-    if result_raw != "" {
-        println!("Tank Id: {}", result_raw.to_string().green());
+    if !result_raw.is_empty() {
+        println!("Tank Id: {}", result_raw.green());
     }
 }
 
@@ -71,10 +71,10 @@ fn get_logs(tank_id: &str) {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
     let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
 
-    if err_raw != "" {
+    if !err_raw.is_empty() {
         println!("{}", err_raw);
     }
-    if result_raw != "" {
+    if !result_raw.is_empty() {
         println!("{}", result_raw);
     }
 }
@@ -89,10 +89,10 @@ fn get_raw(tank_id: &str) {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
     let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
 
-    if err_raw != "" {
+    if !err_raw.is_empty() {
         println!("{}", err_raw);
     }
-    if result_raw != "" {
+    if !result_raw.is_empty() {
         println!("{}", result_raw);
     }
 }
@@ -101,7 +101,7 @@ fn run_sim(tank_ids: Vec<String>) {
     let output_raw = std::process::Command::new("curl")
         .arg("-s")
         .arg("-d")
-        .arg(format!("{}", tank_ids.join(" ")))
+        .arg(&tank_ids.join(" "))
         .arg("-X")
         .arg("POST")
         .arg(format!("{}/run", HOST))
@@ -111,10 +111,10 @@ fn run_sim(tank_ids: Vec<String>) {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout).to_string();
     let err_raw = String::from_utf8_lossy(&output_raw.stderr).to_string();
 
-    if err_raw != "" {
+    if !err_raw.is_empty() {
         println!("{}", err_raw);
     }
-    if result_raw != "" {
+    if !result_raw.is_empty() {
         println!("{}", result_raw);
     }
 }

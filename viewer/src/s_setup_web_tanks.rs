@@ -22,7 +22,7 @@ pub fn setup_web_tanks(
     lines.pop();
 
     let tank_ids = lines[0]
-        .split(",")
+        .split(',')
         .map(|f| f.to_string())
         .collect::<Vec<String>>();
     info!("players: {:?}", tank_ids);
@@ -34,7 +34,7 @@ pub fn setup_web_tanks(
             .iter()
             .step_by(tank_ids.len())
             .map(|f| {
-                f.split("|").collect::<Vec<&str>>()[0]
+                f.split('|').collect::<Vec<&str>>()[0]
                     .to_string()
                     .parse::<Command>()
                     .unwrap()
@@ -44,14 +44,14 @@ pub fn setup_web_tanks(
             .iter()
             .step_by(tank_ids.len())
             .map(|f| {
-                f.split("|").collect::<Vec<&str>>()[1]
-                    .split(",")
+                f.split('|').collect::<Vec<&str>>()[1]
+                    .split(',')
                     .map(|g| g.to_string().parse::<f32>().unwrap())
                     .collect()
             })
             .rev()
             .collect();
-        if n_commands == 0 && c_lines.len() > 0 {
+        if n_commands == 0 && !c_lines.is_empty() {
             n_commands = c_lines.len();
         }
         assert!(n_commands == c_lines.len());

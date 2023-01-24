@@ -10,7 +10,7 @@ pub fn get_sim_file() -> String {
         .location()
         .pathname()
         .unwrap()
-        .split("/")
+        .split('/')
         .filter(|f| !f.is_empty())
         .map(|f| f.to_string())
         .collect::<Vec<String>>()

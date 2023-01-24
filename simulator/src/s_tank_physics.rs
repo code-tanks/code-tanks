@@ -28,9 +28,9 @@ pub fn tank_physics(
                         query_collidable.get(*collision_entity_2).unwrap();
                     on_tank_collision(
                         &tank_entity,
-                        &tank,
-                        &tank_transform,
-                        &tank_velocity,
+                        tank,
+                        tank_transform,
+                        tank_velocity,
                         &mut tank_health,
                         collision_entity_2,
                         collided_entity_transform,
@@ -45,9 +45,9 @@ pub fn tank_physics(
                         query_collidable.get(*collision_entity_1).unwrap();
                     on_tank_collision(
                         &tank_entity,
-                        &tank,
-                        &tank_transform,
-                        &tank_velocity,
+                        tank,
+                        tank_transform,
+                        tank_velocity,
                         &mut tank_health,
                         collision_entity_1,
                         collided_entity_transform,
@@ -77,11 +77,11 @@ fn on_tank_collision(
     query_bullet: &Query<&Bullet>,
     query_event_sink: &mut Query<&mut EventSink>,
 ) {
-    match collision_type {
-        &CollisionType::Radar => {
+    match *collision_type {
+        CollisionType::Radar => {
             return;
         }
-        &CollisionType::Bullet => {
+        CollisionType::Bullet => {
             let tank_entity_that_shot_this_bullet =
                 query_bullet.get(*collided_entity).unwrap().tank;
             let damage_dealer = &mut query_damage_dealer
@@ -107,7 +107,7 @@ fn on_tank_collision(
         "HIT {:?}, by {:?} of type {:?}",
         tank_entity, collided_entity, collision_type
     );
-    tank_health.val = tank_health.val - 10;
+    tank_health.val -= 10;
 
     if tank_health.val < 0 {
         tank_health.val = 0;

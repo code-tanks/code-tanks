@@ -56,7 +56,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
 
     println!("run stdout:");
-    println!("{}", result_raw.to_string());
+    println!("{}", result_raw);
     tank_id
 }
 
@@ -64,7 +64,7 @@ pub fn remove_tank(tank_id: &str) {
     Command::new("docker")
         .arg("rm")
         .arg("-f")
-        .arg(&tank_id)
+        .arg(tank_id)
         .output()
         .expect("failed to communicate with docker");
 }
@@ -73,7 +73,7 @@ pub fn upload_log(tank_id: &str, client: &mut Client) {
     let output_raw = Command::new("docker")
         .arg("logs")
         .arg("--timestamps")
-        .arg(&tank_id)
+        .arg(tank_id)
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
@@ -82,8 +82,8 @@ pub fn upload_log(tank_id: &str, client: &mut Client) {
     upload_log_to_db(
         client,
         tank_id,
-        &result_raw.to_string(),
-        &err_raw.to_string(),
+        &result_raw,
+        &err_raw,
     );
 }
 

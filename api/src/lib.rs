@@ -34,21 +34,21 @@ impl HttpServer {
 
 struct Path {}
 impl Path {
-    pub const ROOT: &'static str = "";
-    pub const PING: &'static str = "ping";
-    pub const REQUEST_COMMANDS: &'static str = "request_commands";
-    pub const REQUEST_COMMANDS_BY_EVENT: &'static str = "request_commands_by_event";
+    pub const ROOT: &str = "";
+    pub const PING: &str = "ping";
+    pub const REQUEST_COMMANDS: &str = "request_commands";
+    pub const REQUEST_COMMANDS_BY_EVENT: &str = "request_commands_by_event";
 }
 
 struct Method {}
 impl Method {
-    pub const POST: &'static str = "POST";
-    pub const GET: &'static str = "GET";
+    pub const POST: &str = "POST";
+    pub const GET: &str = "GET";
 }
 
 struct ContentType {}
 impl ContentType {
-    pub const JSON: &'static str = "application/json";
+    pub const JSON: &str = "application/json";
 }
 
 pub struct StatusLine {}
@@ -80,12 +80,12 @@ impl Response<'_> {
 
 fn handle_connection(mut stream: TcpStream, tank: &mut dyn Tank) {
     let mut buffer = [0; 20000];
-    stream.read(&mut buffer).unwrap();
+    stream.read_exact(&mut buffer).unwrap();
 
     let request = String::from_utf8(buffer.to_vec()).unwrap();
     let method = get_header_from_request(&request);
     let path = &get_path_from_request(&request)[1..];
-    let args: Vec<&str> = path.split("/").collect();
+    let args: Vec<&str> = path.split('/').collect();
     let path = args[0];
 
     let content: String;
@@ -127,32 +127,32 @@ fn handle_connection(mut stream: TcpStream, tank: &mut dyn Tank) {
         response.content
     );
 
-    stream.write(response_string.as_bytes()).unwrap();
+    stream.write_all(response_string.as_bytes()).unwrap();
     stream.flush().unwrap();
 }
 
-fn get_header_from_request(request: &String) -> &str {
-    let mut splits = request.split(" ");
-    splits.nth(0).unwrap()
+fn get_header_from_request(request: &str) -> &str {
+    let mut splits = request.split(' ');
+    splits.next().unwrap()
 }
 
-fn get_path_from_request(request: &String) -> &str {
-    let mut splits = request.split(" ");
+fn get_path_from_request(request: &str) -> &str {
+    let mut splits = request.split(' ');
     splits.nth(1).unwrap()
 }
 
-fn get_data_from_request(request: &String) -> String {
+fn get_data_from_request(request: &str) -> String {
     let mut response = "".to_string();
     let mut data_found = false;
     for line in request.lines() {
         if data_found {
-            if response.len() == 0 {
-                response = format!("{}", line)
+            if response.is_empty() {
+                response = line.to_string();
             } else if !line.starts_with('\0') {
-                response = format!("{}\n{}", response, line)
+                response = format!("{}\n{}", response, line);
             }
         }
-        if line.len() == 0 {
+        if line.is_empty() {
             data_found = true
         };
     }

@@ -5,15 +5,9 @@ use serde_json::{json, Value};
 
 use crate::CollisionType;
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct EventSink {
     pub queue: Vec<Event>,
-}
-
-impl EventSink {
-    pub fn default() -> EventSink {
-        EventSink { queue: Vec::new() }
-    }
 }
 
 #[derive(Debug, Serialize)]

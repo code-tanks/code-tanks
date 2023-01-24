@@ -9,7 +9,7 @@ pub fn setup_desktop_tanks(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
 ) {
-    state.tick = state.tick + 1;
+    state.tick += 1; // TODO
     if state.tick > 1 {
         return;
     }

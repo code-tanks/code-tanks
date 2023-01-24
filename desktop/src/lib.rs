@@ -12,7 +12,7 @@ pub fn remove_tank(tank_id: &str) {
     Command::new("docker")
         .arg("rm")
         .arg("--force")
-        .arg(&tank_id)
+        .arg(tank_id)
         .output()
         .expect("failed to communicate with docker");
 }
@@ -42,7 +42,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     println!("running tank_id {} on port 8080", tank_id);
 
     println!("run stdout:");
-    println!("{}", result_raw.to_string());
+    println!("{}", result_raw);
 
     // let output_raw = Command::new("bash")
     //     .arg("-c")

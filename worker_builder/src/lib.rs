@@ -5,10 +5,10 @@ pub mod db;
 // enum Langs {}
 
 // impl Langs {
-//     const DART: &'static str = "dart";
+//     const DART: &str = "dart";
 // }
 
-// pub fn get_lang(_url: &str) -> &'static str {
+// pub fn get_lang(_url: &str) -> &str {
 //     Langs::DART
 // }
 
@@ -69,13 +69,11 @@ pub fn build(url: &str, lang: &str) -> String {
 
     println!("build, url={}", url);
     println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
+    println!("{}\n", result_raw);
     println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    println!("{}\n", err_raw);
 
-    format!("{}\n{}", result_raw.to_string(), err_raw.to_string())
+    format!("{}\n{}", result_raw, err_raw)
 }
 
 pub fn update_build_job(id: &str, successful: bool) {
@@ -105,15 +103,13 @@ pub fn push_to_registry(url: &str) -> bool {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    let successful = err_raw.to_string() == "";
+    let successful = err_raw.is_empty();
 
     println!("push_to_registry, url={}, successful={}", url, successful);
     println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
+    println!("{}\n", result_raw);
     println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    println!("{}\n", err_raw);
 
     successful
 }
@@ -129,15 +125,13 @@ pub fn remove_image(url: &str) -> bool {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    let successful = err_raw.to_string() == "";
+    let successful = err_raw.is_empty();
 
     println!("remove_image, url={}, successful={}", url, successful);
     println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
+    println!("{}\n", result_raw);
     println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    println!("{}\n", err_raw);
 
     successful
 }

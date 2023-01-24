@@ -19,21 +19,20 @@ fn main() {
         if !job.is_empty() {
             let id = &job[0];
             let input = &job[1]
-                .split(",")
+                .split(',')
                 .map(|f| f.to_string())
                 .collect::<Vec<String>>();
             let url = &input[0];
             let lang = &input[1];
 
-            println!("id: {:?}, {}, {}", job, url, lang);
-            println!("");
+            println!("id: {:?}, {}, {}\n", job, url, lang);
 
-            let build_log = build(&url, &lang);
-            let pushed_to_registry = push_to_registry(&url);
-            let uploaded_log = upload_log(&mut client, &url, &build_log, pushed_to_registry);
-            remove_image(&url);
+            let build_log = build(url, lang);
+            let pushed_to_registry = push_to_registry(url);
+            let uploaded_log = upload_log(&mut client, url, &build_log, pushed_to_registry);
+            remove_image(url);
 
-            update_build_job(&id, uploaded_log && pushed_to_registry);
+            update_build_job(id, uploaded_log && pushed_to_registry);
         }
 
         thread::sleep(time::Duration::from_millis(1000));

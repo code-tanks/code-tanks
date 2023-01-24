@@ -4,11 +4,11 @@ use serde_json::Value;
 pub struct MyTank {}
 
 impl Tank for MyTank {
-    fn run(&mut self, commands: &mut Vec<Command>) {
+    fn run(&mut self, _commands: &mut Vec<Command>) {
         todo!()
     }
 
-    fn on_event(&mut self, commands: &mut Vec<Command>, event: &Value) {
+    fn on_event(&mut self, _commands: &mut Vec<Command>, _event: &Value) {
         todo!()
     }
 }

@@ -24,11 +24,9 @@ pub fn create_build_queue() {
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
+    println!("{}\n", result_raw);
     println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    println!("{}\n", err_raw);
 }
 
 pub fn create_sim_queue() {
@@ -46,11 +44,9 @@ pub fn create_sim_queue() {
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
+    println!("{}\n", result_raw);
     println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    println!("{}\n", err_raw);
 }
 pub struct HttpServer {
     pub port: u16,
@@ -79,26 +75,26 @@ impl HttpServer {
 }
 // enum Paths {}
 mod paths {
-    pub const ROOT: &'static str = "";
-    pub const PING: &'static str = "ping";
-    pub const UPLOAD: &'static str = "upload";
-    pub const LOG: &'static str = "log";
-    pub const RAW: &'static str = "raw";
-    pub const RUN: &'static str = "run";
-    pub const SIM: &'static str = "sim";
-    pub const SIM_LOG: &'static str = "sim_log";
-    pub const RECENT: &'static str = "recent";
+    pub const ROOT: &str = "";
+    pub const PING: &str = "ping";
+    pub const UPLOAD: &str = "upload";
+    pub const LOG: &str = "log";
+    pub const RAW: &str = "raw";
+    pub const RUN: &str = "run";
+    pub const SIM: &str = "sim";
+    pub const SIM_LOG: &str = "sim_log";
+    pub const RECENT: &str = "recent";
 }
 
 // enum Methods {}
 mod methods {
-    pub const POST: &'static str = "POST";
-    pub const GET: &'static str = "GET";
+    pub const POST: &str = "POST";
+    pub const GET: &str = "GET";
 }
 
 mod content_types {
-    pub const JSON: &'static str = "application/json";
-    pub const TEXT: &'static str = "text/plain";
+    pub const JSON: &str = "application/json";
+    pub const TEXT: &str = "text/plain";
 }
 
 // enum Responses {}
@@ -158,7 +154,7 @@ fn handle_connection(
     let request = String::from_utf8(buffer.to_vec()).unwrap();
     let method = get_header_from_request(&request);
     let path = &get_path_from_request(&request)[1..];
-    let args: Vec<&str> = path.split("/").collect();
+    let args: Vec<&str> = path.split('/').collect();
     let path = args[0];
     let args = &args[1..];
 
@@ -208,13 +204,13 @@ fn handle_connection(
                             break;
                         } else {
                             println!("regenerating");
-                            post_fix_count = post_fix_count + 1;
+                            post_fix_count += 1;
                         }
                     }
                 }
                 let post_fix = POST_FIX_CHAR.repeat(post_fix_count);
 
-                let existing = get_existing(db, uploaded_code.to_string(), post_fix.to_string());
+                let existing = get_existing(db, uploaded_code, post_fix);
 
                 url = existing[0].get(1);
                 let language: String = existing[0].get(5);
@@ -268,7 +264,7 @@ fn handle_connection(
             let mut res = responses::NOT_FOUND_RESPONSE;
 
             let data = get_data_from_request(&request);
-            let tank_urls = data.split(" ").collect::<Vec<&str>>();
+            let tank_urls = data.split(' ').collect::<Vec<&str>>();
 
             if tank_urls.len() > MAX_NUMBER_PLAYERS {
                 res = responses::ERROR_TOO_MANY_PLAYERS
@@ -276,15 +272,15 @@ fn handle_connection(
                 let invalid_tanks = tank_urls
                     .iter()
                     .map(|f| (f.to_string(), get_tank_build_status_by_url(db, f)))
-                    .filter(|g| g.1 != TankBuildStatus::VALID)
+                    .filter(|g| g.1 != TankBuildStatus::Valid)
                     .collect::<Vec<(String, TankBuildStatus)>>();
 
                 if !invalid_tanks.is_empty() {
                     for (tank_url, status) in invalid_tanks {
                         let status_str = match status {
-                            TankBuildStatus::INVALID => "build failed",
-                            TankBuildStatus::BUILDING => "waiting to build",
-                            TankBuildStatus::MISSING => "missing",
+                            TankBuildStatus::Invalid => "build failed",
+                            TankBuildStatus::Building => "waiting to build",
+                            TankBuildStatus::Missing => "missing",
                             _ => "",
                         };
                         string_build = string_build + &tank_url + " -> " + status_str + "\n";
@@ -344,7 +340,7 @@ fn handle_connection(
 
             // handle error
 
-            let matches = get_simulation_log_by_id(db, &args[0]);
+            let matches = get_simulation_log_by_id(db, args[0]);
 
             if !matches.is_empty() {
                 let out: String = matches[0].get(1);
@@ -390,32 +386,32 @@ fn handle_connection(
         response.content
     );
 
-    stream.write(response_string.as_bytes()).unwrap();
+    stream.write_all(response_string.as_bytes()).unwrap();
     stream.flush().unwrap();
 }
 
-fn get_header_from_request(request: &String) -> &str {
-    let mut splits = request.split(" ");
-    splits.nth(0).unwrap()
+fn get_header_from_request(request: &str) -> &str {
+    let mut splits = request.split(' ');
+    splits.next().unwrap()
 }
 
-fn get_path_from_request(request: &String) -> &str {
-    let mut splits = request.split(" ");
+fn get_path_from_request(request: &str) -> &str {
+    let mut splits = request.split(' ');
     splits.nth(1).unwrap()
 }
 
-fn get_data_from_request(request: &String) -> String {
+fn get_data_from_request(request: &str) -> String {
     let mut response = "".to_string();
     let mut data_found = false;
     for line in request.lines() {
         if data_found {
-            if response.len() == 0 {
-                response = format!("{}", line)
+            if response.is_empty() {
+                response = line.to_string();
             } else if !line.starts_with('\0') {
                 response = format!("{}\n{}", response, line)
             }
         }
-        if line.len() == 0 {
+        if line.is_empty() {
             data_found = true
         };
     }
@@ -438,11 +434,9 @@ pub fn add_build_job(input: &str) {
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
+    println!("{}\n", result_raw);
     println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    println!("{}\n", err_raw);
 }
 
 pub fn add_sim_job(url: &str) {
@@ -461,11 +455,9 @@ pub fn add_sim_job(url: &str) {
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
     println!("stdout:");
-    println!("{}", result_raw.to_string());
-    println!("");
+    println!("{}\n", result_raw);
     println!("stderr:");
-    println!("{}", err_raw.to_string());
-    println!("");
+    println!("{}\n", err_raw);
 }
 
 fn get_tank_build_status_by_url(
@@ -474,19 +466,19 @@ fn get_tank_build_status_by_url(
 ) -> TankBuildStatus {
     let matches = get_tank_by_url(db, url);
 
-    let mut status = TankBuildStatus::INVALID;
+    let mut status = TankBuildStatus::Invalid;
 
     if !matches.is_empty() {
         let log: String = matches[0].get(3);
         let successful: bool = matches[0].get(4);
 
         if log == "waiting to build" {
-            status = TankBuildStatus::BUILDING;
+            status = TankBuildStatus::Building;
         } else if successful {
-            status = TankBuildStatus::VALID;
+            status = TankBuildStatus::Valid;
         }
     } else {
-        status = TankBuildStatus::MISSING;
+        status = TankBuildStatus::Missing;
     }
 
     status
@@ -494,8 +486,8 @@ fn get_tank_build_status_by_url(
 
 #[derive(PartialEq)]
 enum TankBuildStatus {
-    VALID,
-    INVALID,
-    BUILDING,
-    MISSING,
+    Valid,
+    Invalid,
+    Building,
+    Missing,
 }

@@ -20,7 +20,7 @@ fn main() {
         if !job.is_empty() {
             let id = &job[0];
             let args = &job[1]
-                .split(" ")
+                .split(' ')
                 .map(|f| f.to_string())
                 .collect::<Vec<String>>();
             let tank_ids = run_docker_game(args);

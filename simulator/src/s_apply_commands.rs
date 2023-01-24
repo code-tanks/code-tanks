@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use bevy::prelude::{
     default, Commands as BevyCommands, Entity, Query, ResMut, SpatialBundle, Transform, Vec2, Vec3,
     Visibility, Without,
@@ -36,7 +38,7 @@ pub fn apply_commands(
     >,
     mut state: ResMut<TickState>,
 ) {
-    state.tick = state.tick + 1;
+    state.tick += 1;
 
     for (entity, mut command_receiver, transform, mut velocity, mut tank, mut health) in &mut query
     {
@@ -68,7 +70,7 @@ pub fn apply_commands(
             continue;
         }
 
-        let rot = 3.14;
+        let rot = PI;
 
         if Commands::MOVE_FORWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
@@ -135,49 +137,48 @@ pub fn apply_commands(
         if Commands::ROTATE_RADAR_COUNTER_CLOCKWISE & grouped_commands != 0 {
             radar_ang += 0.3 * rot;
         }
-        if Commands::FIRE & grouped_commands != 0 {
-            if tank.cooldown <= 0 {
-                let t = gun_transform.rotation * Vec3::Y;
-                commands.spawn((
-                    CCollider {
-                        collision_type: CollisionType::Bullet,
-                    },
-                    ActiveEvents::COLLISION_EVENTS,
-                    Sensor,
-                    Bullet { tank: entity },
-                    GravityScale(0.0),
-                    RigidBody::Dynamic,
-                    // ColliderMassProperties::Mass(1.0),
-                    ColliderMassProperties::Density(1.0),
-                    Collider::ball(Bullet::RADIUS),
-                    Restitution::coefficient(0.1),
-                    CollisionGroups::new(
-                        Group::from_bits_truncate(CollisionMask::BULLET),
-                        Group::from_bits_truncate(
-                            CollisionMask::WALL | CollisionMask::TANK | CollisionMask::RADAR,
-                        ),
+        if Commands::FIRE & grouped_commands != 0 && tank.cooldown == 0 {
+            let t = gun_transform.rotation * Vec3::Y;
+            commands.spawn((
+                CCollider {
+                    collision_type: CollisionType::Bullet,
+                },
+                ActiveEvents::COLLISION_EVENTS,
+                Sensor,
+                Bullet { tank: entity },
+                GravityScale(0.0),
+                RigidBody::Dynamic,
+                // ColliderMassProperties::Mass(1.0),
+                ColliderMassProperties::Density(1.0),
+                Collider::ball(Bullet::RADIUS),
+                Restitution::coefficient(0.1),
+                CollisionGroups::new(
+                    Group::from_bits_truncate(CollisionMask::BULLET),
+                    Group::from_bits_truncate(
+                        CollisionMask::WALL | CollisionMask::TANK | CollisionMask::RADAR,
                     ),
-                    Damping {
-                        linear_damping: 0.0,
-                        angular_damping: 0.0,
-                    },
-                    Velocity {
-                        linvel: Vec2::new(t.x * 200.0, t.y * 200.0),
-                        angvel: 0.0,
-                    },
-                    SpatialBundle {
-                        transform: Transform::from_translation(
-                            transform.translation + t * Vec3::new(35.0, 35.0, 35.0),
-                        ),
-                        visibility: Visibility { is_visible: true },
-                        ..default()
-                    },
-                ));
-                tank.cooldown = Tank::MAX_COOLDOWN;
-            }
+                ),
+                Damping {
+                    linear_damping: 0.0,
+                    angular_damping: 0.0,
+                },
+                Velocity {
+                    linvel: Vec2::new(t.x * 200.0, t.y * 200.0),
+                    angvel: 0.0,
+                },
+                SpatialBundle {
+                    transform: Transform::from_translation(
+                        transform.translation + t * Vec3::new(35.0, 35.0, 35.0),
+                    ),
+                    visibility: Visibility { is_visible: true },
+                    ..default()
+                },
+            ));
+            tank.cooldown = Tank::MAX_COOLDOWN;
         }
+
         if tank.cooldown > 0 {
-            tank.cooldown = tank.cooldown - 1;
+            tank.cooldown -= 1;
         }
 
         velocity.linvel = vel;
