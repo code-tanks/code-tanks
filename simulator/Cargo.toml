@@ -10,7 +10,6 @@ serde = "1.0.144"
 serde_json = "1.0.85"
 ct-api = { path = "../api" }
 
-
 [profile.release]
 codegen-units = 1
 

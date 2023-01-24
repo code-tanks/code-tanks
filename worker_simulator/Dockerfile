@@ -19,7 +19,6 @@ RUN cargo install --bin ctsim --path . --profile dev
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY worker_simulator/src src
 RUN cargo install --bin ctsim --path . --profile dev
-RUN cargo install --bin cttest --path . --profile dev
 
 FROM ubuntu:focal AS runner
 
