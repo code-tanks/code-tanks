@@ -12,7 +12,7 @@ WORKDIR /app
 
 RUN git clone -b 'v0.1.4' --single-branch --depth 1 https://github.com/code-tanks/code-tanks.git /app
 
-RUN cargo build --bin ct-runner
+RUN cargo build --bin ctrunner
 
 ARG url
 
@@ -26,7 +26,7 @@ WORKDIR /app
 
 RUN apt update
 
-COPY --from=builder /root/.cargo/bin/ct-runner /usr/local/bin/ct-runner
+COPY --from=builder /root/.cargo/bin/ctrunner /usr/local/bin/ctrunner
 
 EXPOSE 8080
-CMD ["ct-runner"]
+CMD ["ctrunner"]
