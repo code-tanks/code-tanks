@@ -13,11 +13,13 @@ use bevy_rapier2d::prelude::*;
 use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, CollisionMask};
 
 pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((-90.0_f32).to_radians());
     commands
         .spawn((
             Gun { locked: true },
             SpatialBundle {
-                transform: Transform::from_xyz(x, y, 0.0),
+                transform: t,
                 visibility: Visibility { is_visible: true },
                 ..default()
             },
@@ -45,6 +47,9 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
 }
 
 pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((-90.0_f32).to_radians());
+
     commands
         .spawn((
             CCollider {
@@ -52,7 +57,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             },
             Radar { locked: true },
             SpatialBundle {
-                transform: Transform::from_xyz(x, y, 0.0),
+                transform: t,
                 visibility: Visibility { is_visible: true },
                 ..default()
             },
@@ -93,9 +98,8 @@ pub fn create_base_tank(
     y: f32,
     client: impl Component,
 ) -> Entity {
-
     let mut t = Transform::from_xyz(x, y, 0.0);
-    t.rotate_local_z((30.0_f32).to_radians());
+    t.rotate_local_z((-90.0_f32).to_radians());
     commands
         .spawn((
             (
