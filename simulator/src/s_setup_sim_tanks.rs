@@ -6,7 +6,7 @@ use crate::{
     c_tank::Gun,
     c_tank::Radar,
     c_tank::Tank,
-    CCollider, CollisionType, TankIds,
+    game, CCollider, CollisionType, TankIds,
 };
 use bevy_rapier2d::prelude::*;
 
@@ -68,8 +68,8 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             // ColliderMassProperties::Density(1.0),
             Collider::triangle(
                 Vec2::new(0.0, 0.0),
-                Vec2::new(-25.0, 1000.0),
-                Vec2::new(25.0, 1000.0),
+                Vec2::new(-25.0, game::WIDTH + game::HEIGHT),
+                Vec2::new(25.0, game::WIDTH + game::HEIGHT),
             ),
             Restitution::coefficient(0.0),
             CollisionGroups::new(
@@ -126,7 +126,13 @@ pub fn create_base_tank(
             // ColliderMassProperties::Mass(1.0),
             ColliderMassProperties::Density(1.0),
             Collider::ball(Tank::RADIUS),
-            Restitution::coefficient(0.0),
+            (
+                Restitution::coefficient(0.0),
+                Friction {
+                    coefficient: 0.,
+                    combine_rule: CoefficientCombineRule::Min,
+                },
+            ),
             CollisionGroups::new(
                 Group::from_bits_truncate(CollisionMask::TANK),
                 Group::from_bits_truncate(
