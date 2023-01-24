@@ -77,7 +77,7 @@ jobs:
           toolchain: stable
       - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
       - run: cargo build --bin ctdesktop
-  build_builder:
+  build_builder_image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -102,7 +102,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache,mode=max
 
-  build_simulator:
+  build_simulator_image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -127,7 +127,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache,mode=max
 
-  build_server:
+  build_server_image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -152,7 +152,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache,mode=max
 
-  build_web:
+  build_web_image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -176,28 +176,3 @@ jobs:
           tags: ghcr.io/code-tanks/code-tanks-web:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache,mode=max
-
-  # build_linux:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v2
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v2
-  #     - name: Log in to the Container registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
-  #     - name: Build and push
-  #       uses: docker/build-push-action@v3
-  #       with:
-  #         context: .
-  #         file: desktop/Dockerfile
-  #         push: true
-  #         tags: ghcr.io/code-tanks/code-tanks_linux:latest
-  #         cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks_linux:buildcache
-  #         cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks_linux:buildcache,mode=max
