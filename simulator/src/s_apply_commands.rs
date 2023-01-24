@@ -178,6 +178,8 @@ pub fn apply_commands(
 
         velocity.linvel = vel;
         velocity.angvel = ang;
+        gun_velocity.linvel = vel;
+        radar_velocity.linvel = vel;
 
         gun_velocity.angvel = gun_ang;
         radar_velocity.angvel = radar_ang;
