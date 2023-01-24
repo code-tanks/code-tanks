@@ -46,13 +46,13 @@ pub fn create_graphics_tank(
     let mut t = Transform::from_xyz(x, y, 0.0);
     t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
 
-    let mut t2 = t.clone();
-    t2.rotate_local_z((180_f32).to_radians());
+    // let mut t2 = t.clone();
     gun.insert(SpriteBundle {
-        transform: t2,
+        transform: t,
         texture: asset_server.load("tankRed_barrel1.png"),
         sprite: Sprite {
             anchor: Anchor::BottomCenter,
+            flip_y: true,
             ..default()
         },
         ..default()
