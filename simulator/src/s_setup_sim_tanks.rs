@@ -93,6 +93,9 @@ pub fn create_base_tank(
     y: f32,
     client: impl Component,
 ) -> Entity {
+
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((30.0_f32).to_radians());
     commands
         .spawn((
             (
@@ -141,7 +144,7 @@ pub fn create_base_tank(
             ),
             client,
             SpatialBundle {
-                transform: Transform::from_xyz(x, y, 0.0),
+                transform: t,
                 visibility: Visibility { is_visible: true },
                 ..default()
             },
