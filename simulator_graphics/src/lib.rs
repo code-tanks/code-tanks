@@ -99,7 +99,7 @@ pub fn create_graphics_tank(
                 fill_mode: FillMode::color(Color::GREEN),
                 outline_mode: StrokeMode::new(Color::BLACK, 1.0),
             },
-            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS, 1.0),
+            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS - 10.0, 1.0),
         ),
         HealthBar {
             tank,
@@ -116,7 +116,7 @@ pub fn create_graphics_tank(
                 fill_mode: FillMode::color(Color::GREEN),
                 outline_mode: StrokeMode::new(Color::BLACK, 1.0),
             },
-            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS, 1.0),
+            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS - 10.0, 1.0),
         ),
         HealthBar {
             tank,
@@ -137,7 +137,7 @@ pub fn create_graphics_tank(
             // We align text to the top-left, so this transform is the top-left corner of our text. The
             // box is centered at box_position, so it is necessary to move by half of the box size to
             // keep the text in the box.
-            transform: Transform::from_xyz(x, y - Tank::RADIUS, 1.0),
+            transform: Transform::from_xyz(x, y - Tank::RADIUS - 10.0, 1.0),
             ..default()
         },
         NameTag { tank },
