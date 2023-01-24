@@ -51,7 +51,7 @@ pub fn create_graphics_tank(
         transform: t,
         texture: asset_server.load("tankRed_barrel1.png"),
         sprite: Sprite {
-            anchor: Anchor::BottomCenter,
+            anchor: Anchor::Custom(Vec2::new(0.0, -0.4)),
             flip_y: true,
             ..default()
         },
