@@ -1,6 +1,6 @@
 use std::{process::Command, thread, time};
 
-use bevy::prelude::*;
+use bevy::{prelude::*, winit::WinitSettings};
 use ctsimlib::{s_setup_walls::setup_walls, *};
 use s_setup_desktop_tanks::setup_desktop_tanks;
 
@@ -72,6 +72,10 @@ pub fn run_game(args: &[String]) {
     thread::sleep(time::Duration::from_millis(1000));
 
     App::new()
+        .insert_resource(WinitSettings {
+            return_from_run: true,
+            ..default()
+        })
         .add_plugin(CoreCTPlugin)
         .add_plugin(CoreCTGraphicsPlugin)
         .insert_resource(TankIds {
@@ -80,4 +84,6 @@ pub fn run_game(args: &[String]) {
         .add_system(setup_desktop_tanks)
         .add_startup_system(setup_walls)
         .run();
+
+    println!("finished");
 }
