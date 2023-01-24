@@ -165,7 +165,7 @@ impl Plugin for CoreCTGraphicsPlugin {
                 ..default()
             }))
             .add_plugin(ShapePlugin)
-            .add_plugin(RapierDebugRenderPlugin::default())
+            // .add_plugin(RapierDebugRenderPlugin::default())
             .add_startup_system(setup_graphics)
             .add_stage_after(
                 "request_commands",
