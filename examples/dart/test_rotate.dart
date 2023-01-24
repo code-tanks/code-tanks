@@ -14,9 +14,8 @@ class MyTank extends BaseTank {
         commands.add(Command.ROTATE_TANK_CLOCKWISE);
       }
     } else {
-      commands.add(Command.MOVE_BACKWARD | Command.ROTATE_TANK_COUNTER_CLOCKWISE | Command.FIRE);
+      commands.add(Command.NONE);
     }    
-    print(commands);
     i = i + 1;
   }
   
