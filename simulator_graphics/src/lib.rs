@@ -2,9 +2,11 @@ use bevy::{
     prelude::{
         default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin, Quat,
         Res, Transform, Vec2, Resource,
+        PluginGroup,
     },
-    sprite::SpriteBundle,
+    sprite::{SpriteBundle, Sprite, Anchor},
     text::{Text, Text2dBundle, TextAlignment, TextStyle},
+    window::{PresentMode, WindowDescriptor, WindowPlugin},
 };
 use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
@@ -17,6 +19,9 @@ use s_request_debug_commands::request_debug_commands;
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
 pub mod c_nametag;
+use ctsimlib::game;
+use s_on_added_bullet::on_added_bullet;
+pub mod s_on_added_bullet;
 pub mod s_setup_graphics;
 pub mod s_update_healthbar;
 pub mod s_update_nametag;
@@ -26,7 +31,7 @@ use bevy::ecs::entity::Entity;
 use bevy::ecs::schedule::SystemStage;
 use bevy::DefaultPlugins;
 use bevy_prototype_lyon::prelude::ShapePlugin;
-use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
+// use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 
 pub mod s_request_debug_commands;
 
@@ -44,20 +49,38 @@ pub fn create_graphics_tank(
 
     let gun = create_gun(commands, x, y);
     let mut gun = commands.entity(gun);
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+
+    // let mut t2 = t.clone();
     gun.insert(SpriteBundle {
-        transform: Transform::from_xyz(x, y, 0.0),
+        transform: t,
         texture: asset_server.load("tankRed_barrel1.png"),
+        sprite: Sprite {
+            anchor: Anchor::Custom(Vec2::new(0.0, -0.35)),
+            flip_y: true,
+            ..default()
+        },
         ..default()
     });
     let gun = gun.id();
 
     let radar = create_radar(commands, x, y);
     let mut radar = commands.entity(radar);
-    radar.insert(SpriteBundle {
-        transform: Transform::from_xyz(x, y, 0.0),
-        texture: asset_server.load("shotLarge.png"),
-        ..default()
-    });
+    radar.insert(GeometryBuilder::build_as(
+        &shapes::Polygon {
+            points: vec![
+                Vec2::new(0.0, 0.0),
+                Vec2::new(25.0, game::WIDTH + game::HEIGHT),
+                Vec2::new(-25.0, game::WIDTH + game::HEIGHT),
+            ],
+            closed: true,
+        },
+        DrawMode::Fill {
+            0: FillMode::color(Color::rgba(1., 1., 1., 0.1)),
+        },
+        t,
+    ));
     let radar = radar.id();
 
     let tank = create_base_tank(commands, gun, radar, x, y, client);
@@ -82,7 +105,7 @@ pub fn create_graphics_tank(
                 fill_mode: FillMode::color(Color::GREEN),
                 outline_mode: StrokeMode::new(Color::BLACK, 1.0),
             },
-            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS, 1.0),
+            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS - 10.0, 1.0),
         ),
         HealthBar {
             tank,
@@ -99,7 +122,7 @@ pub fn create_graphics_tank(
                 fill_mode: FillMode::color(Color::GREEN),
                 outline_mode: StrokeMode::new(Color::BLACK, 1.0),
             },
-            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS, 1.0),
+            Transform::from_xyz(x - HealthBar::MAX_WIDTH / 2.0, y - Tank::RADIUS - 10.0, 1.0),
         ),
         HealthBar {
             tank,
@@ -120,7 +143,7 @@ pub fn create_graphics_tank(
             // We align text to the top-left, so this transform is the top-left corner of our text. The
             // box is centered at box_position, so it is necessary to move by half of the box size to
             // keep the text in the box.
-            transform: Transform::from_xyz(x, y - Tank::RADIUS, 1.0),
+            transform: Transform::from_xyz(x, y - Tank::RADIUS - 10.0, 1.0),
             ..default()
         },
         NameTag { tank },
@@ -144,9 +167,19 @@ impl Plugin for CoreCTGraphicsPlugin {
                 is_on: false,
                 index: 0,
             })
-            .add_plugins(DefaultPlugins)
+            .add_plugins(DefaultPlugins.set(WindowPlugin {
+                window: WindowDescriptor {
+                    title: "Code Tanks".to_string(),
+                    width: 1000.,
+                    height: 600.,
+                    resizable: false,
+                    present_mode: PresentMode::AutoVsync,
+                    ..default()
+                },
+                ..default()
+            }))
             .add_plugin(ShapePlugin)
-            .add_plugin(RapierDebugRenderPlugin::default())
+            // .add_plugin(RapierDebugRenderPlugin::default())
             .add_startup_system(setup_graphics)
             .add_stage_after(
                 "request_commands",
@@ -160,6 +193,10 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_stage(
                 "update_nametag",
                 SystemStage::single_threaded().with_system(update_nametag),
+            )
+            .add_stage(
+                "on_added_bullet",
+                SystemStage::single_threaded().with_system(on_added_bullet),
             );
     }
 }

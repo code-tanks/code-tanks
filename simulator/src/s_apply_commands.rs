@@ -145,7 +145,7 @@ pub fn apply_commands(
                     RigidBody::Dynamic,
                     // ColliderMassProperties::Mass(1.0),
                     ColliderMassProperties::Density(1.0),
-                    Collider::ball(5.0),
+                    Collider::ball(Bullet::RADIUS),
                     Restitution::coefficient(0.1),
                     CollisionGroups::new(
                         Group::from_bits_truncate(CollisionMask::BULLET),
@@ -182,7 +182,9 @@ pub fn apply_commands(
         gun_velocity.angvel = gun_ang;
         radar_velocity.angvel = radar_ang;
 
-        // let _v = gun_transform.rotation * Vec3::Y;
-        // println!("angle: {}", _v.y.atan2(_v.x));
+        // let _v = transform.rotation * Vec3::Y;
+        // let _v1 = gun_transform.rotation * Vec3::Y;
+        // let _v2 = radar_transform.rotation * Vec3::Y;
+        // println!("angle: {} {} {}", _v.y.atan2(_v.x), _v2.y.atan2(_v.x), _v2.y.atan2(_v.x));
     }
 }

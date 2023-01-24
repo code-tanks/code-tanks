@@ -1,6 +1,6 @@
 use std::{process::Command, thread, time};
 
-use bevy::prelude::*;
+use bevy::{prelude::*, winit::WinitSettings};
 use ctsimlib::{s_setup_walls::setup_walls, *};
 use s_setup_desktop_tanks::setup_desktop_tanks;
 
@@ -8,15 +8,19 @@ pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
 use ctsimlibgraphics::CoreCTGraphicsPlugin;
 
+pub fn remove_tank(tank_id: &str) {
+    Command::new("docker")
+    .arg("rm")
+    .arg("--force")
+    .arg(&tank_id)
+    .output()
+    .expect("failed to communicate with docker");
+}
+
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     // docker run -d --network=code-tanks_default -p  8080:8080 --name tank_id --label com.docker.compose.project=code-tanks localhost:5001/url
     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
-    Command::new("docker")
-        .arg("rm")
-        .arg("--force")
-        .arg(&tank_id)
-        .output()
-        .expect("failed to communicate with docker");
+    remove_tank(&tank_id);
     let output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
@@ -72,6 +76,10 @@ pub fn run_game(args: &[String]) {
     thread::sleep(time::Duration::from_millis(1000));
 
     App::new()
+        .insert_resource(WinitSettings {
+            return_from_run: true,
+            ..default()
+        })
         .add_plugin(CoreCTPlugin)
         .add_plugin(CoreCTGraphicsPlugin)
         .insert_resource(TankIds {
@@ -80,4 +88,11 @@ pub fn run_game(args: &[String]) {
         .add_system(setup_desktop_tanks)
         .add_startup_system(setup_walls)
         .run();
+
+    for tank_id in tank_ids {
+        remove_tank(&tank_id);
+        println!("removed {}", &tank_id);
+    }
+
+    println!("finished");
 }

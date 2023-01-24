@@ -44,6 +44,6 @@ pub fn update_healthbar(
         };
 
         transform.translation.x = p_transform.translation.x - HealthBar::MAX_WIDTH / 2.0;
-        transform.translation.y = p_transform.translation.y - Tank::RADIUS;
+        transform.translation.y = p_transform.translation.y - Tank::RADIUS - 10.0;
     }
 }

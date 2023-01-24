@@ -10,11 +10,16 @@ pub struct Tank {
 impl Tank {
     pub const MAX_COOLDOWN: u32 = 60;
     pub const RADIUS: f32 = 19.0;
+    pub const INITIAL_ROTATION: f32 = -90.0;
 }
 
 #[derive(Component)]
 pub struct Bullet {
     pub tank: Entity,
+}
+
+impl Bullet {
+    pub const RADIUS: f32 = 5.0;
 }
 
 #[derive(Component)]

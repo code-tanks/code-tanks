@@ -1,19 +1,26 @@
 import 'package:codetanks/codetanks.dart';
 
 class MyTank extends BaseTank {
+  int i = 0;
+
   MyTank() {
     print("Created my tank!");
   }
 
   @override
   void run() {
-    // TODO: implement run
-    commands.add(Command.NONE);
+    if (i == 0) {
+      for (int j = 0; j < 200; j++) {
+        commands.add(Command.ROTATE_TANK_CLOCKWISE);
+      }
+    } else {
+      commands.add(Command.NONE);
+    }    
+    i = i + 1;
   }
   
   @override
   void onEvent(Map event) {
-    // TODO: implement onEvent
     print(event);
   }
 }
