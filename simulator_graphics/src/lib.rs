@@ -1,7 +1,7 @@
 use bevy::{
     prelude::{
         default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin, Quat,
-        Res, Transform, Vec2,
+        Res, Transform, Vec2, Resource,
     },
     sprite::SpriteBundle,
     text::{Text, Text2dBundle, TextAlignment, TextStyle},
@@ -13,20 +13,23 @@ use bevy_prototype_lyon::{
 use c_healthbar::HealthBar;
 use c_nametag::NameTag;
 use ctsimlib::c_tank::Tank;
+use s_request_debug_commands::request_debug_commands;
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
 pub mod c_nametag;
-pub mod s_graphics;
+pub mod s_setup_graphics;
 pub mod s_update_healthbar;
 pub mod s_update_nametag;
-use crate::s_graphics::setup_graphics;
+use crate::s_setup_graphics::setup_graphics;
 use crate::s_update_healthbar::update_healthbar;
 use bevy::ecs::entity::Entity;
 use bevy::ecs::schedule::SystemStage;
 use bevy::DefaultPlugins;
 use bevy_prototype_lyon::prelude::ShapePlugin;
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
-use ctsimlib::s_request_debug_commands::request_debug_commands;
+
+pub mod s_request_debug_commands;
+
 use ctsimlib::s_setup_sim_tanks::{create_base_tank, create_gun, create_radar};
 
 pub fn create_graphics_tank(
@@ -125,11 +128,22 @@ pub fn create_graphics_tank(
     tank
 }
 
+
+#[derive(Resource, Default, Debug)]
+pub struct DebugToggle {
+    is_on: bool,
+    index: usize,
+}
+
 pub struct CoreCTGraphicsPlugin;
 
 impl Plugin for CoreCTGraphicsPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Msaa { samples: 4 })
+            .insert_resource(DebugToggle{
+                is_on: false,
+                index: 0,
+            })
             .add_plugins(DefaultPlugins)
             .add_plugin(ShapePlugin)
             .add_plugin(RapierDebugRenderPlugin::default())
