@@ -8,6 +8,7 @@ class MyTank extends BaseTank {
   @override
   void run() {
     // TODO: implement run
+    commands.add(Command.NONE);
   }
   
   @override
