@@ -182,7 +182,7 @@ pub fn apply_commands(
         gun_velocity.angvel = gun_ang;
         radar_velocity.angvel = radar_ang;
 
-        // let _v = gun_transform.rotation * Vec3::Y;
-        // println!("angle: {}", _v.y.atan2(_v.x));
+        let _v = gun_transform.rotation * Vec3::Y;
+        println!("angle: {}", _v.y.atan2(_v.x));
     }
 }
