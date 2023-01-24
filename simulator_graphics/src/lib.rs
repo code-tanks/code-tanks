@@ -1,10 +1,10 @@
 use bevy::{
     prelude::{
         default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin, Quat,
-        Res, Transform, Vec2,
+        Res, Transform, Vec2, PluginGroup,
     },
     sprite::SpriteBundle,
-    text::{Text, Text2dBundle, TextAlignment, TextStyle},
+    text::{Text, Text2dBundle, TextAlignment, TextStyle}, window::{WindowDescriptor, WindowPlugin, PresentMode},
 };
 use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
@@ -130,7 +130,16 @@ pub struct CoreCTGraphicsPlugin;
 impl Plugin for CoreCTGraphicsPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(Msaa { samples: 4 })
-            .add_plugins(DefaultPlugins)
+            .add_plugins(DefaultPlugins.set(WindowPlugin {
+                window: WindowDescriptor {
+                    title: "Code Tanks".to_string(),
+                    width: 500.,
+                    height: 300.,
+                    present_mode: PresentMode::AutoVsync,
+                    ..default()
+                },
+                ..default()
+            }))
             .add_plugin(ShapePlugin)
             .add_plugin(RapierDebugRenderPlugin::default())
             .add_startup_system(setup_graphics)
