@@ -72,7 +72,7 @@ pub fn create_graphics_tank(
                 closed: true,
             },
             DrawMode::Outlined {
-                fill_mode: FillMode::color(Color::WHITE),
+                fill_mode: FillMode::color(Color::rgba(1., 1., 1., 0.1)),
                 outline_mode: StrokeMode::new(Color::BLACK, 1.0),
             },
             t,
