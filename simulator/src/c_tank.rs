@@ -18,6 +18,10 @@ pub struct Bullet {
     pub tank: Entity,
 }
 
+impl Bullet {
+    pub const RADIUS: f32 = 5.0;
+}
+
 #[derive(Component)]
 pub struct Radar {
     pub locked: bool,

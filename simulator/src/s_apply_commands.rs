@@ -145,7 +145,7 @@ pub fn apply_commands(
                     RigidBody::Dynamic,
                     // ColliderMassProperties::Mass(1.0),
                     ColliderMassProperties::Density(1.0),
-                    Collider::ball(5.0),
+                    Collider::ball(Bullet::RADIUS),
                     Restitution::coefficient(0.1),
                     CollisionGroups::new(
                         Group::from_bits_truncate(CollisionMask::BULLET),

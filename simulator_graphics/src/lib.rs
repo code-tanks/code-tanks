@@ -14,13 +14,15 @@ use bevy_prototype_lyon::{
 use c_healthbar::HealthBar;
 use c_nametag::NameTag;
 use ctsimlib::{c_tank::Tank, game};
+use s_on_added_bullet::on_added_bullet;
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
 pub mod c_nametag;
-pub mod s_graphics;
+pub mod s_setup_graphics;
 pub mod s_update_healthbar;
 pub mod s_update_nametag;
-use crate::s_graphics::setup_graphics;
+pub mod s_on_added_bullet;
+use crate::s_setup_graphics::setup_graphics;
 use crate::s_update_healthbar::update_healthbar;
 use bevy::ecs::entity::Entity;
 use bevy::ecs::schedule::SystemStage;
@@ -165,7 +167,7 @@ impl Plugin for CoreCTGraphicsPlugin {
                 ..default()
             }))
             .add_plugin(ShapePlugin)
-            // .add_plugin(RapierDebugRenderPlugin::default())
+            .add_plugin(RapierDebugRenderPlugin::default())
             .add_startup_system(setup_graphics)
             .add_stage_after(
                 "request_commands",
@@ -179,6 +181,9 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_stage(
                 "update_nametag",
                 SystemStage::single_threaded().with_system(update_nametag),
-            );
+            ).add_stage(
+                "on_added_bullet",
+                SystemStage::single_threaded().with_system(on_added_bullet),
+            );;
     }
 }
