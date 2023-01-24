@@ -28,3 +28,11 @@ updates:
     directory: /worker_simulator
     schedule:
       interval: daily
+  - package-ecosystem: cargo
+    directory: /api
+    schedule:
+      interval: daily
+  - package-ecosystem: cargo
+    directory: /runner
+    schedule:
+      interval: daily            
