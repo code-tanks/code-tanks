@@ -3,7 +3,7 @@ use bevy::{
         default, App, AssetServer, BuildChildren, Color, Commands, Component, Msaa, Plugin,
         PluginGroup, Quat, Res, Transform, Vec2,
     },
-    sprite::SpriteBundle,
+    sprite::{SpriteBundle, Sprite, Anchor},
     text::{Text, Text2dBundle, TextAlignment, TextStyle},
     window::{PresentMode, WindowDescriptor, WindowPlugin},
 };
@@ -48,10 +48,13 @@ pub fn create_graphics_tank(
 
     let mut t2 = t.clone();
     t2.rotate_local_z((180_f32).to_radians());
-    t2.translation.y += 35.;
     gun.insert(SpriteBundle {
         transform: t2,
         texture: asset_server.load("tankRed_barrel1.png"),
+        sprite: Sprite {
+            anchor: Anchor::BottomCenter,
+            ..default()
+        },
         ..default()
     });
     let gun = gun.id();
