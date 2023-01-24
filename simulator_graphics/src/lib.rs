@@ -184,6 +184,6 @@ impl Plugin for CoreCTGraphicsPlugin {
             ).add_stage(
                 "on_added_bullet",
                 SystemStage::single_threaded().with_system(on_added_bullet),
-            );;
+            );
     }
 }

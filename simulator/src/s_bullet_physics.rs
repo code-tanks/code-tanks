@@ -28,7 +28,7 @@ pub fn bullet_physics(
                     collision_entity_velocity,
                     &ccollider.collision_type,
                 );
-                commands.entity(bullet_entity).despawn();
+                commands.entity(bullet_entity).despawn_recursive();
             }
         }
     }
