@@ -44,6 +44,11 @@ pub struct TankIds {
     pub tank_ids: Vec<String>,
 }
 
+pub mod game {
+    pub const WIDTH: f32 = 1000.0;
+    pub const HEIGHT: f32 = 600.0;
+}
+
 pub fn run_game(tank_ids: &[String]) {
     let mut f = File::create("./sim.txt").expect("Unable to create file");
     f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
