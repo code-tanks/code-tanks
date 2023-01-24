@@ -1,13 +1,10 @@
-use std::ops::IndexMut;
-
 use bevy::prelude::*;
-use ct_api::{CCommands, CCommand};
+use ct_api::CCommands;
 use ctsimlib::c_command::CommandSource;
 
 use crate::DebugToggle;
 
 pub fn request_debug_commands(
-    mut commands: Commands,
     mut debug_toggle: ResMut<DebugToggle>,
     mut query: Query<&mut CommandSource>,
     keys: Res<Input<KeyCode>>,
