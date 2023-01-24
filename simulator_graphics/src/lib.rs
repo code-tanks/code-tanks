@@ -133,8 +133,8 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_plugins(DefaultPlugins.set(WindowPlugin {
                 window: WindowDescriptor {
                     title: "Code Tanks".to_string(),
-                    width: 500.,
-                    height: 300.,
+                    width: 1000.,
+                    height: 600.,
                     resizable: false,
                     present_mode: PresentMode::AutoVsync,
                     ..default()
