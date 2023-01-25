@@ -17,18 +17,25 @@ pub fn spawn_tracks(
         if tracks.current_distant > Tracks::MAX_DISTANCE {
             tracks.current_distant = 0.;
 
+            let t = transform.clone();
+
             commands.spawn((
                 Particle {
                     progress: 0,
                     max_life_in_ticks: 20,
                 },
                 GeometryBuilder::build_as(
-                    &shapes::Rectangle {
-                        extents: Vec2::new(5.0, 10.0),
-                        origin: RectangleOrigin::BottomLeft,
+                    &shapes::Polygon {
+                        points: vec![
+                            Vec2::new(-10.0, 0.0),
+                            Vec2::new(-10.0, 10.0),
+                            Vec2::new(-5.0, 10.),
+                            Vec2::new(-5.0, 0.),
+                        ],
+                        closed: true,
                     },
                     DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
-                    transform.clone(),
+                    t,
                 ),
             ));
         }
