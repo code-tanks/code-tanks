@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_prototype_lyon::{
     prelude::{DrawMode, FillMode, GeometryBuilder},
-    shapes::{self, RectangleOrigin},
+    shapes,
 };
 use ctsimlib::c_tank::Tank;
 
@@ -16,8 +16,6 @@ pub fn spawn_tracks(
 
         if tracks.current_distant > Tracks::MAX_DISTANCE {
             tracks.current_distant = 0.;
-
-            let t = transform.clone();
 
             commands.spawn((
                 Particle {
@@ -35,7 +33,7 @@ pub fn spawn_tracks(
                         closed: true,
                     },
                     DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
-                    t,
+                    *transform,
                 ),
             ));
             commands.spawn((
@@ -54,11 +52,11 @@ pub fn spawn_tracks(
                         closed: true,
                     },
                     DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
-                    t,
+                    *transform,
                 ),
-            ));            
+            ));
         }
 
-        tracks.last_pos = transform.clone();
+        tracks.last_pos = *transform;
     }
 }
