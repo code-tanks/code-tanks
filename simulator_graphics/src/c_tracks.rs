@@ -7,7 +7,7 @@ pub struct Tracks {
 }
 
 impl Tracks {
-    pub const MAX_DISTANCE: f32 = 100.0;
+    pub const MAX_DISTANCE: f32 = 20.0;
 }
 
 

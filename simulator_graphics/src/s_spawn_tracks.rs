@@ -25,10 +25,10 @@ pub fn spawn_tracks(
                 GeometryBuilder::build_as(
                     &shapes::Polygon {
                         points: vec![
-                            Vec2::new(-20., -5.),
-                            Vec2::new(-20., 5.),
-                            Vec2::new(-15., 5.),
                             Vec2::new(-15., -5.),
+                            Vec2::new(-15., 5.),
+                            Vec2::new(-10., 5.),
+                            Vec2::new(-10., -5.),
                         ],
                         closed: true,
                     },
@@ -44,10 +44,10 @@ pub fn spawn_tracks(
                 GeometryBuilder::build_as(
                     &shapes::Polygon {
                         points: vec![
-                            Vec2::new(20., -5.),
-                            Vec2::new(20., 5.),
-                            Vec2::new(15., 5.),
                             Vec2::new(15., -5.),
+                            Vec2::new(15., 5.),
+                            Vec2::new(10., 5.),
+                            Vec2::new(10., -5.),
                         ],
                         closed: true,
                     },
