@@ -9,7 +9,10 @@ services:
     environment:
       - DB_URL=postgres://postgres:example@db:5432
     command: ctserver
-  
+    networks:
+      - no-internet
+      - internet
+
   builder:
     image: ghcr.io/code-tanks/code-tanks-builder:latest
     command: ctbuilder
@@ -20,6 +23,9 @@ services:
       - DB_URL=postgres://postgres:example@db:5432
     deploy:
       replicas: 2
+    networks:
+      - no-internet
+      - internet
 
   simulator:
     image: ghcr.io/code-tanks/code-tanks-simulator:latest
@@ -31,13 +37,18 @@ services:
       - DB_URL=postgres://postgres:example@db:5432
     deploy:
       replicas: 2
-      
+    networks:
+      - no-internet
+
   web:
     container_name: web
     image: ghcr.io/code-tanks/code-tanks-web:latest
     restart: unless-stopped
     ports:
       - 8098:8080
+    networks:
+      - no-internet
+      - internet
 
   db:
     container_name: db
@@ -50,6 +61,8 @@ services:
       - 5432:5432
     volumes:
       - ./test/postgres:/var/lib/postgresql/data
+    networks:
+      - no-internet
 
   ocypod:
     container_name: ocypod
@@ -60,6 +73,8 @@ services:
     ports:
       - 8023:8023
     restart: unless-stopped
+    networks:
+      - no-internet
 
   ocypod-redis:
     container_name: ocypod-redis
@@ -69,6 +84,8 @@ services:
     # volumes:
     #   - ./test/redis:/data
     restart: unless-stopped
+    networks:
+      - no-internet
 
   registry:
     container_name: registry
@@ -80,6 +97,8 @@ services:
       - REGISTRY_HTTP_ADDR=0.0.0.0:5001
     volumes:
       - ./test/registry/:/var/lib/registry
+    networks:
+      - no-internet
 
   hoster:
     container_name: hoster
@@ -88,6 +107,8 @@ services:
     volumes:
       - /etc/hosts:/tmp/hosts
       - /var/run/docker.sock:/tmp/docker.sock
+    networks:
+      - no-internet
 
   pgAdmin:
     container_name: pgAdmin
@@ -97,3 +118,12 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
+    networks:
+      - no-internet
+
+networks:
+  no-internet:
+    driver: bridge
+    internal: true
+  internet:
+    driver: bridge
