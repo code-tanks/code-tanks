@@ -27,10 +27,10 @@ pub fn spawn_tracks(
                 GeometryBuilder::build_as(
                     &shapes::Polygon {
                         points: vec![
-                            Vec2::new(-10.0, 0.0),
-                            Vec2::new(-10.0, 10.0),
-                            Vec2::new(-5.0, 10.),
-                            Vec2::new(-5.0, 0.),
+                            Vec2::new(-20., -5.),
+                            Vec2::new(-20., 5.),
+                            Vec2::new(-15., 5.),
+                            Vec2::new(-15., -5.),
                         ],
                         closed: true,
                     },
@@ -38,6 +38,25 @@ pub fn spawn_tracks(
                     t,
                 ),
             ));
+            commands.spawn((
+                Particle {
+                    progress: 0,
+                    max_life_in_ticks: 20,
+                },
+                GeometryBuilder::build_as(
+                    &shapes::Polygon {
+                        points: vec![
+                            Vec2::new(20., -5.),
+                            Vec2::new(20., 5.),
+                            Vec2::new(15., 5.),
+                            Vec2::new(15., -5.),
+                        ],
+                        closed: true,
+                    },
+                    DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
+                    t,
+                ),
+            ));            
         }
 
         tracks.last_pos = transform.clone();
