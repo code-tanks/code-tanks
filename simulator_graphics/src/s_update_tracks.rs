@@ -12,10 +12,11 @@ pub fn update_tracks(
         if particle.progress > particle.max_life_in_ticks {
             commands.entity(entity).despawn_recursive();
         }
-        
-        let opacity = 1.0 - (particle.progress as f32 / particle.max_life_in_ticks as f32).powf(3.);
 
-        *draw_mode = DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., opacity)));
+        let opacity = Track::OPACITY
+            * (1.0 - (particle.progress as f32 / particle.max_life_in_ticks as f32).powf(3.));
+
+        *draw_mode = DrawMode::Fill(FillMode::color(Color::rgba(0., 0., 0., opacity)));
 
         particle.progress += 1;
     }

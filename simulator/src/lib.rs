@@ -18,6 +18,7 @@ pub mod s_tank_physics;
 
 use std::fs::File;
 use std::io::Write;
+use std::process::Command;
 
 use bevy::app::App;
 use bevy::ecs::schedule::SystemStage;
@@ -90,4 +91,36 @@ pub enum CollisionType {
     Tank,
     Wall,
     Radar,
+}
+
+pub fn remove_tank(tank_id: &str) {
+    Command::new("docker")
+        .arg("rm")
+        .arg("--force")
+        .arg(tank_id)
+        .output()
+        .expect("failed to communicate with docker");
+}
+
+pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
+    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
+    remove_tank(&tank_id);
+    let output_raw = Command::new("docker")
+        .arg("run")
+        .arg("-d")
+        .arg("--network=code-tanks_no-internet")
+        .arg("-p")
+        .arg("8080")
+        .arg("--name")
+        .arg(&tank_id)
+        .arg("--label")
+        .arg("com.docker.compose.project=code-tanks")
+        .arg(format!("localhost:5001/{}", url))
+        .output()
+        .expect("failed to communicate with docker");
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+
+    println!("run stdout:");
+    println!("{}", result_raw);
+    tank_id
 }

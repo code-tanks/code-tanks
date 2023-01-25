@@ -1,7 +1,7 @@
 use core::time;
 use std::{process::Command, thread};
 
-use ctsimlib::run_game;
+use ctsimlib::{run_game, run_tank};
 use db::upload_log_to_db;
 use postgres::Client;
 
@@ -35,38 +35,6 @@ pub fn get_sim_job() -> Vec<String> {
         .map(|f| f.to_string())
         .filter(|f| !f.is_empty())
         .collect::<Vec<String>>()
-}
-
-pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-    // docker run -d --network=code-tanks_default -p  8080:8080 --name tank_id --label com.docker.compose.project=code-tanks localhost:5001/url
-    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
-    let output_raw = Command::new("docker")
-        .arg("run")
-        .arg("-d")
-        .arg("--network=code-tanks_default")
-        .arg("-p")
-        .arg("8080")
-        .arg("--name")
-        .arg(&tank_id)
-        .arg("--label")
-        .arg("com.docker.compose.project=code-tanks")
-        .arg(format!("localhost:5001/{}", url))
-        .output()
-        .expect("failed to communicate with docker");
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-
-    println!("run stdout:");
-    println!("{}", result_raw);
-    tank_id
-}
-
-pub fn remove_tank(tank_id: &str) {
-    Command::new("docker")
-        .arg("rm")
-        .arg("-f")
-        .arg(tank_id)
-        .output()
-        .expect("failed to communicate with docker");
 }
 
 pub fn upload_log(tank_id: &str, client: &mut Client) {

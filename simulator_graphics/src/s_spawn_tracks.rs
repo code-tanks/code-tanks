@@ -55,7 +55,7 @@ pub fn spawn_tracks(
                 },
                 GeometryBuilder::build_as(
                     &create_track(true),
-                    DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
+                    DrawMode::Fill(FillMode::color(Color::rgba(0., 0., 0., Track::OPACITY))),
                     t,
                 ),
             ));
@@ -67,7 +67,7 @@ pub fn spawn_tracks(
                 },
                 GeometryBuilder::build_as(
                     &create_track(false),
-                    DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
+                    DrawMode::Fill(FillMode::color(Color::rgba(0., 0., 0., Track::OPACITY))),
                     t,
                 ),
             ));

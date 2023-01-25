@@ -155,7 +155,10 @@ pub fn apply_commands(
                 CollisionGroups::new(
                     Group::from_bits_truncate(CollisionMask::BULLET),
                     Group::from_bits_truncate(
-                        CollisionMask::WALL | CollisionMask::TANK | CollisionMask::RADAR,
+                        CollisionMask::WALL
+                            | CollisionMask::TANK
+                            | CollisionMask::RADAR
+                            | CollisionMask::BULLET,
                     ),
                 ),
                 Damping {
@@ -167,9 +170,13 @@ pub fn apply_commands(
                     angvel: 0.0,
                 },
                 SpatialBundle {
-                    transform: Transform::from_translation(
-                        transform.translation + t * Vec3::new(35.0, 35.0, 35.0),
-                    ),
+                    transform: {
+                        let mut t = Transform::from_translation(
+                            transform.translation + t * Vec3::new(35.0, 35.0, 35.0),
+                        );
+                        t.translation.z = 1.0;
+                        t
+                    },
                     visibility: Visibility { is_visible: true },
                     ..default()
                 },

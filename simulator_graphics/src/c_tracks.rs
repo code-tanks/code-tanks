@@ -16,4 +16,5 @@ pub struct Track {
 }
 impl Track {
     pub const MAX_LIFE_IN_TICKS: usize = 400;
+    pub const OPACITY: f32 = 0.5;
 }

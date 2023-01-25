@@ -1,10 +1,11 @@
 use core::time;
 use std::{fs, thread};
 
+use ctsimlib::remove_tank;
 use worker_simulator::{
     create_sim_queue,
     db::{get_client, upload_sim},
-    get_sim_job, remove_tank, run_docker_game, update_sim_job, upload_log,
+    get_sim_job, run_docker_game, update_sim_job, upload_log,
 };
 
 fn main() {
