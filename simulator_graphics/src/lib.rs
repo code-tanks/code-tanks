@@ -87,6 +87,9 @@ pub fn create_graphics_tank(
     ));
     let radar = radar.id();
 
+    let mut k = Transform::from_rotation(Quat::from_rotation_z(0.0));
+    k.translation.z = 1.;
+
     let tank = create_base_tank(commands, gun, radar, x, y, client);
     let tank = commands
         .entity(tank)
@@ -96,7 +99,7 @@ pub fn create_graphics_tank(
         })
         .with_children(|parent| {
             parent.spawn(SpriteBundle {
-                transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
+                transform: k,
                 texture: asset_server.load("tankBody_red.png"),
                 ..default()
             });

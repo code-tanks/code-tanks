@@ -18,7 +18,7 @@ pub fn spawn_tracks(
             tracks.current_distant = 0.;
 
             let mut t = *transform;
-            t.translation.z = -1.0;
+            t.translation.z = 0.5;
 
             commands.spawn((
                 Particle {
