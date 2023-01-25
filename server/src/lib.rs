@@ -8,7 +8,6 @@ use std::thread;
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
 
-use crate::responses::{Response, StatusLines};
 pub fn create_build_queue() {
     let output_raw = Command::new("curl")
         .arg("-H")
@@ -73,8 +72,9 @@ impl HttpServer {
         }
     }
 }
-// enum Paths {}
-mod paths {
+
+struct Path {}
+impl Path {
     pub const ROOT: &str = "";
     pub const PING: &str = "ping";
     pub const UPLOAD: &str = "upload";
@@ -86,53 +86,50 @@ mod paths {
     pub const RECENT: &str = "recent";
 }
 
-// enum Methods {}
-mod methods {
+struct Method {}
+impl Method {
     pub const POST: &str = "POST";
     pub const GET: &str = "GET";
 }
 
-mod content_types {
+struct ContentType {}
+impl ContentType {
     pub const JSON: &str = "application/json";
     pub const TEXT: &str = "text/plain";
 }
 
-// enum Responses {}
-mod responses {
-    type StatusLine<'a> = &'a str;
-
-    pub enum StatusLines {}
-
-    impl StatusLines {
-        pub const OK: StatusLine<'static> = "HTTP/1.1 200 OK";
-        pub const NOT_FOUND: StatusLine<'static> = "HTTP/1.1 404 NOT FOUND";
-    }
-    pub struct Response<'a> {
-        pub status_line: StatusLine<'a>,
-        pub content: &'a str,
-    }
+pub struct StatusLine {}
+impl StatusLine {
+    pub const OK: &str = "HTTP/1.1 200 OK";
+    pub const NOT_FOUND: &str = "HTTP/1.1 404 NOT FOUND";
+}
+pub struct Response<'a> {
+    pub status_line: &'a str,
+    pub content: &'a str,
+}
+impl Response<'_> {
     pub const ROOT_RESPONSE: Response<'static> = Response {
-        status_line: StatusLines::OK,
+        status_line: StatusLine::OK,
         content: "\"hello\"",
     };
 
     pub const PING_RESPONSE: Response<'static> = Response {
-        status_line: StatusLines::OK,
+        status_line: StatusLine::OK,
         content: "\"pong\"",
     };
 
     pub const NOT_FOUND_RESPONSE: Response<'static> = Response {
-        status_line: StatusLines::NOT_FOUND,
+        status_line: StatusLine::NOT_FOUND,
         content: "\"404\"",
     };
 
     pub const ERROR_TOO_LARGE: Response<'static> = Response {
-        status_line: StatusLines::NOT_FOUND,
+        status_line: StatusLine::NOT_FOUND,
         content: "\"FILE TOO LARGE\"",
     };
 
     pub const ERROR_TOO_MANY_PLAYERS: Response<'static> = Response {
-        status_line: StatusLines::NOT_FOUND,
+        status_line: StatusLine::NOT_FOUND,
         content: "\"TOO MANY PLAYERS\"",
     };
 }
@@ -165,19 +162,19 @@ fn handle_connection(
     let res_log: String;
     let mut string_build = "could not run simulation\n".to_string();
 
-    let mut content_type = content_types::JSON;
+    let mut content_type = ContentType::JSON;
 
     let response: Response = match (method, path) {
-        (methods::GET, paths::ROOT) => responses::ROOT_RESPONSE,
-        (methods::GET, paths::PING) => responses::PING_RESPONSE,
-        (methods::POST, paths::UPLOAD) => {
+        (Method::GET, Path::ROOT) => Response::ROOT_RESPONSE,
+        (Method::GET, Path::PING) => Response::PING_RESPONSE,
+        (Method::POST, Path::UPLOAD) => {
             let uploaded_code = get_data_from_request(&request);
 
             let code_bytes_len = uploaded_code.bytes().len();
             println!("code size {}", code_bytes_len);
 
             if code_bytes_len > MAX_BYTES_READ {
-                responses::ERROR_TOO_LARGE
+                Response::ERROR_TOO_LARGE
             } else {
                 const POST_FIX_CHAR: &str = "0";
                 let mut post_fix_count = 0;
@@ -222,13 +219,13 @@ fn handle_connection(
                 }
 
                 Response {
-                    status_line: StatusLines::OK,
+                    status_line: StatusLine::OK,
                     content: &url,
                 }
             }
         }
-        (methods::GET, paths::LOG) => {
-            let mut res = responses::NOT_FOUND_RESPONSE;
+        (Method::GET, Path::LOG) => {
+            let mut res = Response::NOT_FOUND_RESPONSE;
 
             // handle error
 
@@ -237,14 +234,14 @@ fn handle_connection(
             if !matches.is_empty() {
                 res_log = matches[0].get(3);
                 res = Response {
-                    status_line: StatusLines::OK,
+                    status_line: StatusLine::OK,
                     content: &res_log,
                 };
             }
             res
         }
-        (methods::GET, paths::RAW) => {
-            let mut res = responses::NOT_FOUND_RESPONSE;
+        (Method::GET, Path::RAW) => {
+            let mut res = Response::NOT_FOUND_RESPONSE;
 
             // handle error
 
@@ -254,20 +251,20 @@ fn handle_connection(
                 res_code = matches[0].get(2);
 
                 res = Response {
-                    status_line: StatusLines::OK,
+                    status_line: StatusLine::OK,
                     content: &res_code,
                 };
             }
             res
         }
-        (methods::POST, paths::RUN) => {
-            let mut res = responses::NOT_FOUND_RESPONSE;
+        (Method::POST, Path::RUN) => {
+            let mut res = Response::NOT_FOUND_RESPONSE;
 
             let data = get_data_from_request(&request);
             let tank_urls = data.split(' ').collect::<Vec<&str>>();
 
             if tank_urls.len() > MAX_NUMBER_PLAYERS {
-                res = responses::ERROR_TOO_MANY_PLAYERS
+                res = Response::ERROR_TOO_MANY_PLAYERS
             } else {
                 let invalid_tanks = tank_urls
                     .iter()
@@ -286,7 +283,7 @@ fn handle_connection(
                         string_build = string_build + &tank_url + " -> " + status_str + "\n";
                     }
                     res = Response {
-                        status_line: StatusLines::OK,
+                        status_line: StatusLine::OK,
                         content: &string_build,
                     };
                 } else {
@@ -305,7 +302,7 @@ fn handle_connection(
                         res_code = matches[0].get(1);
 
                         res = Response {
-                            status_line: StatusLines::OK,
+                            status_line: StatusLine::OK,
                             content: &res_code,
                         };
                     }
@@ -314,8 +311,8 @@ fn handle_connection(
 
             res
         }
-        (methods::GET, paths::SIM) => {
-            let mut res = responses::NOT_FOUND_RESPONSE;
+        (Method::GET, Path::SIM) => {
+            let mut res = Response::NOT_FOUND_RESPONSE;
 
             println!("get sim: {:?}", args);
 
@@ -327,14 +324,14 @@ fn handle_connection(
                 res_code = matches[0].get(1);
 
                 res = Response {
-                    status_line: StatusLines::OK,
+                    status_line: StatusLine::OK,
                     content: &res_code,
                 };
             }
             res
         }
-        (methods::GET, paths::SIM_LOG) => {
-            let mut res = responses::NOT_FOUND_RESPONSE;
+        (Method::GET, Path::SIM_LOG) => {
+            let mut res = Response::NOT_FOUND_RESPONSE;
 
             println!("get sim_log: {:?}", args);
 
@@ -347,18 +344,18 @@ fn handle_connection(
                 let err: String = matches[0].get(2);
                 res_code = format!("{}\n{}", out, err);
 
-                content_type = content_types::TEXT;
+                content_type = ContentType::TEXT;
 
                 res = Response {
-                    status_line: StatusLines::OK,
+                    status_line: StatusLine::OK,
                     content: &res_code,
                 };
             }
 
             res
         }
-        (methods::GET, paths::RECENT) => {
-            let mut res = responses::NOT_FOUND_RESPONSE;
+        (Method::GET, Path::RECENT) => {
+            let mut res = Response::NOT_FOUND_RESPONSE;
 
             println!("get recent: {:?}", args);
 
@@ -368,14 +365,14 @@ fn handle_connection(
                 res_code = recent[0].get(0);
                 println!("recent: {}", res_code);
                 res = Response {
-                    status_line: StatusLines::OK,
+                    status_line: StatusLine::OK,
                     content: &res_code,
                 };
             }
 
             res
         }
-        _ => responses::NOT_FOUND_RESPONSE,
+        _ => Response::NOT_FOUND_RESPONSE,
     };
 
     let response_string = format!(

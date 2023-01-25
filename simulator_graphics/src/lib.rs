@@ -13,13 +13,20 @@ use bevy_prototype_lyon::{
 };
 use c_healthbar::HealthBar;
 use c_nametag::NameTag;
+use c_tracks::Tracks;
 use ctsimlib::c_tank::Tank;
 use s_request_debug_commands::request_debug_commands;
+use s_spawn_tracks::spawn_tracks;
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
 pub mod c_nametag;
+pub mod c_tracks;
+pub mod s_spawn_tracks;
+pub mod s_update_tracks;
+pub mod c_particle;
 use ctsimlib::game;
 use s_on_added_bullet::on_added_bullet;
+use s_update_tracks::update_tracks;
 pub mod s_on_added_bullet;
 pub mod s_setup_graphics;
 pub mod s_update_healthbar;
@@ -83,6 +90,10 @@ pub fn create_graphics_tank(
     let tank = create_base_tank(commands, gun, radar, x, y, client);
     let tank = commands
         .entity(tank)
+        .insert(Tracks {
+            current_distant: 0.,
+            last_pos: t,
+        })
         .with_children(|parent| {
             parent.spawn(SpriteBundle {
                 transform: Transform::from_rotation(Quat::from_rotation_z(0.0)),
@@ -193,6 +204,13 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_stage(
                 "on_added_bullet",
                 SystemStage::single_threaded().with_system(on_added_bullet),
+            )
+            .add_stage(
+                "spawn_tracks",
+                SystemStage::single_threaded().with_system(spawn_tracks),
+            ).add_stage(
+                "update_tracks",
+                SystemStage::single_threaded().with_system(update_tracks),
             );
     }
 }
