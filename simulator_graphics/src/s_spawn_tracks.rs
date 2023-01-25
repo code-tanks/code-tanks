@@ -51,7 +51,7 @@ pub fn spawn_tracks(
                 Track { left: true },
                 Particle {
                     progress: 0,
-                    max_life_in_ticks: 20,
+                    max_life_in_ticks: Track::MAX_LIFE_IN_TICKS,
                 },
                 GeometryBuilder::build_as(
                     &create_track(true),
@@ -63,7 +63,7 @@ pub fn spawn_tracks(
                 Track { left: false },
                 Particle {
                     progress: 0,
-                    max_life_in_ticks: 20,
+                    max_life_in_ticks: Track::MAX_LIFE_IN_TICKS,
                 },
                 GeometryBuilder::build_as(
                     &create_track(false),

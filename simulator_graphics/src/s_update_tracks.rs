@@ -1,14 +1,14 @@
 use bevy::prelude::*;
-use bevy_prototype_lyon::prelude::{DrawMode, FillMode, Path};
+use bevy_prototype_lyon::prelude::{DrawMode, FillMode};
 
 use crate::{c_particle::Particle, c_tracks::Track};
 
 pub fn update_tracks(
     mut commands: Commands,
 
-    mut query: Query<(Entity, &mut Path, &mut DrawMode, &Transform, &mut Particle, &Track)>,
+    mut query: Query<(Entity, &mut DrawMode, &mut Particle), With<Track>>,
 ) {
-    for (entity, mut path, mut draw_mode, transform, mut particle, track) in &mut query {
+    for (entity, mut draw_mode, mut particle) in &mut query {
         if particle.progress > particle.max_life_in_ticks {
             commands.entity(entity).despawn_recursive();
         }

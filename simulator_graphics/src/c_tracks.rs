@@ -14,3 +14,6 @@ impl Tracks {
 pub struct Track {
     pub left: bool,
 }
+impl Track {
+    pub const MAX_LIFE_IN_TICKS: usize = 100;
+}
