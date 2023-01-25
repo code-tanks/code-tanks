@@ -5,7 +5,34 @@ use bevy_prototype_lyon::{
 };
 use ctsimlib::c_tank::Tank;
 
-use crate::{c_particle::Particle, c_tracks::Tracks};
+use crate::{
+    c_particle::Particle,
+    c_tracks::{Track, Tracks},
+};
+
+pub fn create_track(left: bool) -> shapes::Polygon {
+    if left {
+        shapes::Polygon {
+            points: vec![
+                Vec2::new(-15., -5.),
+                Vec2::new(-15., 5.),
+                Vec2::new(-10., 5.),
+                Vec2::new(-10., -5.),
+            ],
+            closed: true,
+        }
+    } else {
+        shapes::Polygon {
+            points: vec![
+                Vec2::new(15., -5.),
+                Vec2::new(15., 5.),
+                Vec2::new(10., 5.),
+                Vec2::new(10., -5.),
+            ],
+            closed: true,
+        }
+    }
+}
 
 pub fn spawn_tracks(
     mut commands: Commands,
@@ -21,39 +48,25 @@ pub fn spawn_tracks(
             t.translation.z = 0.5;
 
             commands.spawn((
+                Track { left: true },
                 Particle {
                     progress: 0,
                     max_life_in_ticks: 20,
                 },
                 GeometryBuilder::build_as(
-                    &shapes::Polygon {
-                        points: vec![
-                            Vec2::new(-15., -5.),
-                            Vec2::new(-15., 5.),
-                            Vec2::new(-10., 5.),
-                            Vec2::new(-10., -5.),
-                        ],
-                        closed: true,
-                    },
+                    &create_track(true),
                     DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
                     t,
                 ),
             ));
             commands.spawn((
+                Track { left: false },
                 Particle {
                     progress: 0,
                     max_life_in_ticks: 20,
                 },
                 GeometryBuilder::build_as(
-                    &shapes::Polygon {
-                        points: vec![
-                            Vec2::new(15., -5.),
-                            Vec2::new(15., 5.),
-                            Vec2::new(10., 5.),
-                            Vec2::new(10., -5.),
-                        ],
-                        closed: true,
-                    },
+                    &create_track(false),
                     DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
                     t,
                 ),

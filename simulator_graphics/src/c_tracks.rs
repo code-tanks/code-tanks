@@ -10,4 +10,7 @@ impl Tracks {
     pub const MAX_DISTANCE: f32 = 20.0;
 }
 
-
+#[derive(Component, Default)]
+pub struct Track {
+    pub left: bool,
+}
