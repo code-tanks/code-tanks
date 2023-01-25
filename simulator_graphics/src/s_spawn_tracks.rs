@@ -17,6 +17,9 @@ pub fn spawn_tracks(
         if tracks.current_distant > Tracks::MAX_DISTANCE {
             tracks.current_distant = 0.;
 
+            let mut t = *transform;
+            t.translation.z = -1.0;
+
             commands.spawn((
                 Particle {
                     progress: 0,
@@ -33,7 +36,7 @@ pub fn spawn_tracks(
                         closed: true,
                     },
                     DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
-                    *transform,
+                    t,
                 ),
             ));
             commands.spawn((
@@ -52,7 +55,7 @@ pub fn spawn_tracks(
                         closed: true,
                     },
                     DrawMode::Fill(FillMode::color(Color::rgba(1., 0., 0., 1.))),
-                    *transform,
+                    t,
                 ),
             ));
         }
