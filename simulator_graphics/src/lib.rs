@@ -94,7 +94,7 @@ pub fn create_graphics_tank(
     let tank = commands
         .entity(tank)
         .insert(Tracks {
-            current_distant: 0.,
+            current_distant: Tracks::MAX_DISTANCE / 2.,
             last_pos: t,
         })
         .with_children(|parent| {
