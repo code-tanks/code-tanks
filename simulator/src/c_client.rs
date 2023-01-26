@@ -37,7 +37,7 @@ impl ClientTrait for DockerClient {
 
         
         let _err_raw = String::from_utf8_lossy(&output.stderr);
-        println!("SELF_DESTRUCT {:?} empty request_commands", entity);
+        println!("SELF_DESTRUCT {:?} empty request_commands", self.tank_id);
         vec![Commands::SELF_DESTRUCT]
     }
 
