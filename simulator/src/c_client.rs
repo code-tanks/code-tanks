@@ -32,7 +32,7 @@ impl ClientTrait for DockerClient {
 
         if output.status.success() {
             let result_raw = String::from_utf8_lossy(&output.stdout);
-            parse_commands(result_raw.to_string())
+            return parse_commands(result_raw.to_string());
         }
 
         
@@ -54,7 +54,7 @@ impl ClientTrait for DockerClient {
 
         if output.status.success() {
             let result_raw = String::from_utf8_lossy(&output.stdout);
-            parse_commands(result_raw.to_string())
+            return parse_commands(result_raw.to_string());
         }
         let _err_raw = String::from_utf8_lossy(&output.stderr);
         vec![]
