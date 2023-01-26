@@ -30,7 +30,10 @@ pub fn request_commands_by_event(
             }
         }
         event_sender.queue.clear();
-        command_receiver.queue.splice(0..0, queue);
+
+        if !queue.is_empty() {
+            command_receiver.queue.splice(0..0, queue);
+        }
         // println!("commands {:?} {:?}", entity, command_receiver.queue);
     }
 }

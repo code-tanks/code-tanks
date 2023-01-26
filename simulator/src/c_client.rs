@@ -30,10 +30,15 @@ impl ClientTrait for DockerClient {
             .output()
             .expect("failed to communicate with tank");
 
-        let result_raw = String::from_utf8_lossy(&output.stdout);
-        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        if output.status.success() {
+            let result_raw = String::from_utf8_lossy(&output.stdout);
+            parse_commands(result_raw.to_string())
+        }
 
-        parse_commands(result_raw.to_string())
+        
+        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        println!("SELF_DESTRUCT {:?} empty request_commands", entity);
+        vec![Commands::SELF_DESTRUCT]
     }
 
     fn request_commands_by_event(&mut self, event: &Event) -> Vec<Command> {
@@ -47,10 +52,12 @@ impl ClientTrait for DockerClient {
             .output()
             .expect("failed to communicate with ocypod");
 
-        let result_raw = String::from_utf8_lossy(&output.stdout);
+        if output.status.success() {
+            let result_raw = String::from_utf8_lossy(&output.stdout);
+            parse_commands(result_raw.to_string())
+        }
         let _err_raw = String::from_utf8_lossy(&output.stderr);
-
-        parse_commands(result_raw.to_string())
+        vec![]
     }
 }
 
