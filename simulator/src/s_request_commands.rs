@@ -12,13 +12,7 @@ pub fn request_commands(mut query: Query<(Entity, &mut CommandSource, &mut Clien
             }
 
             let mut new_commands = client_connection.client.request_commands();
-            // println!("request_commands {:?} {:?}", entity, new_commands);
-            if new_commands.is_empty() {
-                println!("SELF_DESTRUCT {:?} empty request_commands", entity);
-                command_receiver.queue.push(Commands::SELF_DESTRUCT);
-            } else {
-                command_receiver.queue.append(&mut new_commands);
-            }
+            command_receiver.queue.append(&mut new_commands);
         }
         // println!("commands {:?} {:?}", entity, command_receiver.queue);
     }
