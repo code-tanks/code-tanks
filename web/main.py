@@ -16,6 +16,12 @@ def raw(tank_id: str):
 def log(tank_id: str):
     r = requests.get(f'http://server:8088/log/{tank_id}')
 
+    return Response(content=r.text, media_type="text/plain")
+
+@app.get("/sim_log/{tank_id}")
+def log(tank_id: str):
+    r = requests.get(f'http://server:8088/sim_log/{tank_id}')
+
     return Response(content=r.text, media_type="text/plain")    
 
 @app.get("/recent")
@@ -103,7 +109,7 @@ def index(game_id: str):
                         out.innerHTML = xmlHttp.responseText;
                     }}
                 }};
-                xmlHttp.open("GET", "http://localhost:8089/sim_log/" + select.value, true); // true for asynchronous 
+                xmlHttp.open("GET", "/sim_log/" + select.value, true); // true for asynchronous 
                 xmlHttp.send(null);
             }}
 

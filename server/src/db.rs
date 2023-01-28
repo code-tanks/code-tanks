@@ -194,7 +194,7 @@ pub fn get_simulation_log_by_id(
                 SELECT * FROM runs
                 WHERE id = $1
             ",
-            &[&id],
+            &[&format!("web-{}", id)],
         )
         .unwrap()
 }
