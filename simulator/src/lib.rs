@@ -119,7 +119,7 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize, local: bool) -> Stri
         .arg(&tank_id)
         .arg("--label")
         .arg("com.docker.compose.project=code-tanks")
-        .arg(format!("localhost:5001/{}", url))
+        .arg(format!("registry:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
