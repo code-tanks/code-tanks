@@ -161,7 +161,7 @@ pub fn create_graphics_tank(
     commands.spawn((
         Text2dBundle {
             text: Text::from_section(
-                &tank_id[tank_id.find('-').unwrap() + 1..],
+                &tank_id[tank_id.rfind('-').unwrap() - 7..],
                 TextStyle {
                     font: asset_server.load("fonts/Roboto-Regular.ttf"),
                     font_size: 12.0,

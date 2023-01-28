@@ -102,8 +102,12 @@ pub fn remove_tank(tank_id: &str) {
         .expect("failed to communicate with docker");
 }
 
-pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
+pub fn run_tank(url: &str, game_url: &str, post_fix: usize, local: bool) -> String {
+    let tank_id = if local {
+        format!("local-{}-{}-{}", game_url, url, post_fix)
+    } else {
+        format!("web-{}-{}-{}", game_url, url, post_fix)
+    };
     remove_tank(&tank_id);
     let output_raw = Command::new("docker")
         .arg("run")
