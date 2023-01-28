@@ -43,14 +43,14 @@ pub mod s_request_debug_commands;
 
 use ctsimlib::s_setup_sim_tanks::{create_base_tank, create_gun, create_radar};
 
-const TANK_BODY_IMAGES: &'static [&'static str] = &[
+const TANK_BODY_IMAGES: &[&str] = &[
     "tankBody_red.png",
     "tankBody_green.png",
     "tankBody_blue.png",
     "tankBody_dark.png",
 ];
 
-const TANK_BARREL_IMAGES: &'static [&'static str] = &[
+const TANK_BARREL_IMAGES: &[&str] = &[
     "tankRed_barrel1.png",
     "tankGreen_barrel1.png",
     "tankBlue_barrel1.png",
@@ -75,7 +75,7 @@ pub fn create_graphics_tank(
     // let mut t2 = t.clone();
     gun.insert(SpriteBundle {
         transform: {
-            let mut j = t.clone();
+            let mut j = t;
             j.translation.z = 1.1;
             j
         },
@@ -108,7 +108,7 @@ pub fn create_graphics_tank(
     let mut k = Transform::from_rotation(Quat::from_rotation_z(0.0));
     k.translation.z = 1.;
 
-    let tank = create_base_tank(commands, gun, radar, x, y, client);
+    let tank = create_base_tank(i, commands, gun, radar, x, y, client);
     let tank = commands
         .entity(tank)
         .insert(Tracks {
