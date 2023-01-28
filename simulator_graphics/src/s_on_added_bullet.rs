@@ -2,11 +2,11 @@ use bevy::prelude::*;
 use bevy_prototype_lyon::prelude::*;
 use ctsimlib::c_tank::{Bullet, Tank};
 
-const COLORS: &[Color] = &[
-    Color::RED,
-    Color::GREEN,
-    Color::BLUE,
-    Color::GRAY,
+const COLORS: &[&Color] = &[
+    &Color::RED,
+    &Color::GREEN,
+    &Color::BLUE,
+    &Color::GRAY,
 ];
 
 pub fn on_added_bullet(
@@ -24,7 +24,7 @@ pub fn on_added_bullet(
                 },
                 DrawMode::Outlined {
                     fill_mode: FillMode::color(
-                        COLORS[query_tank
+                        *COLORS[query_tank
                             .get(query_bullet.get(e).unwrap().tank)
                             .unwrap()
                             .index
