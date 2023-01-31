@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 
 ARG url
 
-COPY url tanks/my_tank.py
+COPY $url tanks/my_tank.py
 
 # RUN curl server:8088/raw/$url > tanks/my_tank.py
 

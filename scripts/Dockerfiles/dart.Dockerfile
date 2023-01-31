@@ -12,7 +12,7 @@ RUN dart pub get
 
 ARG url
 
-COPY url tanks/my_tank.dart
+COPY $url tanks/my_tank.dart
 
 # RUN curl server:8088/raw/$url > tanks/my_tank.dart
 
