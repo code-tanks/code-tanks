@@ -33,5 +33,5 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+      - run: for i in examples/*/**; do ./scripts/build.sh $i; done
       - run: ./scripts/build.sh examples/dart/spin_bot.dart
