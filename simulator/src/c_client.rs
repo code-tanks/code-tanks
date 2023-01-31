@@ -35,7 +35,6 @@ impl ClientTrait for DockerClient {
             return parse_commands(result_raw.to_string());
         }
 
-        
         let _err_raw = String::from_utf8_lossy(&output.stderr);
         println!("SELF_DESTRUCT {:?} empty request_commands", self.tank_id);
         vec![Commands::SELF_DESTRUCT]
@@ -86,4 +85,50 @@ fn parse_commands(commands_string: String) -> Vec<Command> {
         .filter(|f| !f.is_empty())
         .filter_map(|f| f.parse::<Command>().ok())
         .collect::<Vec<Command>>()
+}
+
+pub struct DesktopClient {
+    pub tank_id: String,
+    pub port: usize,
+}
+
+impl ClientTrait for DesktopClient {
+    fn request_commands(&mut self) -> Vec<Command> {
+        let output = ProcessCommand::new("bash")
+            .arg("-c")
+            .arg(format!(
+                r#"curl localhost:{}/request_commands | jq --raw-output '.[]'"#,
+                self.port,
+            ))
+            .output()
+            .expect("failed to communicate with tank");
+
+        if output.status.success() {
+            let result_raw = String::from_utf8_lossy(&output.stdout);
+            return parse_commands(result_raw.to_string());
+        }
+
+        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        println!("SELF_DESTRUCT {:?} empty request_commands", self.tank_id);
+        vec![Commands::SELF_DESTRUCT]
+    }
+
+    fn request_commands_by_event(&mut self, event: &Event) -> Vec<Command> {
+        let output = ProcessCommand::new("bash")
+            .arg("-c")
+            .arg(format!(
+                r#"curl -d '{}' -X POST localhost:{}/request_commands_by_event | jq --raw-output '.[]'"#,
+                serde_json::to_string(event).unwrap(),
+                self.port,
+            ))
+            .output()
+            .expect("failed to communicate with ocypod");
+
+        if output.status.success() {
+            let result_raw = String::from_utf8_lossy(&output.stdout);
+            return parse_commands(result_raw.to_string());
+        }
+        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        vec![]
+    }
 }

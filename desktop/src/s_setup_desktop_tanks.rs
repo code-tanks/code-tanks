@@ -1,7 +1,9 @@
 use bevy::prelude::{AssetServer, Commands, Res, ResMut};
-use ctsimlib::c_client::DockerClient;
+use ctsimlib::c_client::DesktopClient;
 use ctsimlib::{c_client::Client, *};
 use ctsimlibgraphics::*;
+
+use crate::PORTS;
 
 pub fn setup_desktop_tanks(
     mut state: ResMut<TickState>,
@@ -19,8 +21,9 @@ pub fn setup_desktop_tanks(
             &mut commands,
             i,
             Client {
-                client: Box::new(DockerClient {
+                client: Box::new(DesktopClient {
                     tank_id: tank_id.to_string(),
+                    port: PORTS[i],
                 }),
             },
             &asset_server,

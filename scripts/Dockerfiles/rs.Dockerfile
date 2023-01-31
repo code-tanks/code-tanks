@@ -16,7 +16,9 @@ RUN cargo build --bin ctrunner
 
 ARG url
 
-RUN curl server:8088/raw/$url > runner/src/my_tank.rs
+COPY url runner/src/my_tank.rs
+
+# RUN curl server:8088/raw/$url > runner/src/my_tank.rs
 
 RUN cargo install --path runner
 

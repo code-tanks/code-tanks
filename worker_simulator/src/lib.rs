@@ -47,12 +47,7 @@ pub fn upload_log(tank_id: &str, client: &mut Client) {
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    upload_log_to_db(
-        client,
-        tank_id,
-        &result_raw,
-        &err_raw,
-    );
+    upload_log_to_db(client, tank_id, &result_raw, &err_raw);
 }
 
 pub fn run_docker_game(args: &[String]) -> Vec<String> {
@@ -60,7 +55,7 @@ pub fn run_docker_game(args: &[String]) -> Vec<String> {
     let tank_ids = args
         .iter()
         .enumerate()
-        .map(|(i, url)| run_tank(url, &game_url, i, false))
+        .map(|(i, url)| run_tank(url, &game_url, i))
         .collect::<Vec<String>>();
     thread::sleep(time::Duration::from_millis(5000));
 

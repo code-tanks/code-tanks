@@ -100,16 +100,6 @@ services:
     networks:
       - no-internet
 
-  hoster:
-    container_name: hoster
-    image: dvdarias/docker-hoster
-    restart: unless-stopped
-    volumes:
-      - /etc/hosts:/tmp/hosts
-      - /var/run/docker.sock:/tmp/docker.sock
-    networks:
-      - no-internet
-
   pgAdmin:
     container_name: pgAdmin
     image: dpage/pgadmin4
