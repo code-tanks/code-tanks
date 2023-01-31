@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main 
-    paths:
-      - /**
+    # paths:
+    #   - /**
     # tags:
     #   - "v[0-9]+.[0-9]+.[0-9]+*"
 
