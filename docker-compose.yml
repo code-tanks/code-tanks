@@ -120,6 +120,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin
     networks:
       - no-internet
+      - internet
 
 networks:
   no-internet:

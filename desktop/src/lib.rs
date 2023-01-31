@@ -13,7 +13,7 @@ pub fn run_game(args: &[String]) {
     let tank_ids = args
         .iter()
         .enumerate()
-        .map(|(i, url)| run_tank(url, &game_url, i))
+        .map(|(i, url)| run_tank(url, &game_url, i, true))
         .collect::<Vec<String>>();
 
     thread::sleep(time::Duration::from_millis(1000));

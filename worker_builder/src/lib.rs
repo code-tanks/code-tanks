@@ -51,7 +51,7 @@ pub fn build(url: &str, lang: &str) -> String {
     let output_raw = Command::new("docker")
         .arg("build")
         .arg("-t")
-        .arg(format!("localhost:5001/{}", url))
+        .arg(format!("registry:5001/{}", url))
         .arg("--network")
         .arg("host")
         .arg("--build-arg")
@@ -96,7 +96,7 @@ pub fn update_build_job(id: &str, successful: bool) {
 pub fn push_to_registry(url: &str) -> bool {
     let output_raw = Command::new("docker")
         .arg("push")
-        .arg(format!("localhost:5001/{}", url))
+        .arg(format!("registry:5001/{}", url))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -118,7 +118,7 @@ pub fn remove_image(url: &str) -> bool {
     let output_raw = Command::new("docker")
         .arg("image")
         .arg("remove")
-        .arg(format!("localhost:5001/{}", url))
+        .arg(format!("registry:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");
 

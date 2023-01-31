@@ -60,7 +60,7 @@ pub fn run_docker_game(args: &[String]) -> Vec<String> {
     let tank_ids = args
         .iter()
         .enumerate()
-        .map(|(i, url)| run_tank(url, &game_url, i))
+        .map(|(i, url)| run_tank(url, &game_url, i, false))
         .collect::<Vec<String>>();
     thread::sleep(time::Duration::from_millis(5000));
 

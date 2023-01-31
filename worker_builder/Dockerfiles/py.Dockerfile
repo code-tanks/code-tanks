@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 
 ARG url
 
-RUN curl http://localhost:8089/raw/$url > tanks/my_tank.py
+RUN curl server:8088/raw/$url > tanks/my_tank.py
 
 EXPOSE 8080
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

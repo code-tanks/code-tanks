@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Tank {
+    pub index: usize,
     pub cooldown: u32,
     pub gun: Entity,
     pub radar: Entity,

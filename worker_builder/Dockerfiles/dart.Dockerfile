@@ -12,7 +12,7 @@ RUN dart pub get
 
 ARG url
 
-RUN curl http://localhost:8089/raw/$url > tanks/my_tank.dart
+RUN curl server:8088/raw/$url > tanks/my_tank.dart
 
 RUN dart compile exe bin/server.dart -o bin/server
 

@@ -91,6 +91,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
 }
 
 pub fn create_base_tank(
+    i: usize,
     commands: &mut Commands,
     gun: Entity,
     radar: Entity,
@@ -111,6 +112,7 @@ pub fn create_base_tank(
             // Sleeping::disabled(),
             // Ccd::enabled(),
             Tank {
+                index: i,
                 cooldown: 0,
                 gun,
                 radar,
@@ -170,7 +172,7 @@ pub fn create_basic_tank(i: usize, client: impl Component, commands: &mut Comman
 
     let radar = create_radar(commands, x, y);
 
-    create_base_tank(commands, gun, radar, x, y, client);
+    create_base_tank(i, commands, gun, radar, x, y, client);
 }
 
 pub fn setup_sim_tanks(state: Res<TankIds>, mut commands: Commands) {

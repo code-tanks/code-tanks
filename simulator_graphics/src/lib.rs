@@ -20,10 +20,10 @@ use s_spawn_tracks::spawn_tracks;
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
 pub mod c_nametag;
+pub mod c_particle;
 pub mod c_tracks;
 pub mod s_spawn_tracks;
 pub mod s_update_tracks;
-pub mod c_particle;
 use ctsimlib::game;
 use s_on_added_bullet::on_added_bullet;
 use s_update_tracks::update_tracks;
@@ -43,6 +43,20 @@ pub mod s_request_debug_commands;
 
 use ctsimlib::s_setup_sim_tanks::{create_base_tank, create_gun, create_radar};
 
+const TANK_BODY_IMAGES: &[&str] = &[
+    "tankBody_red.png",
+    "tankBody_green.png",
+    "tankBody_blue.png",
+    "tankBody_dark.png",
+];
+
+const TANK_BARREL_IMAGES: &[&str] = &[
+    "tankRed_barrel1.png",
+    "tankGreen_barrel1.png",
+    "tankBlue_barrel1.png",
+    "tankDark_barrel1.png",
+];
+
 pub fn create_graphics_tank(
     commands: &mut Commands,
     i: usize,
@@ -60,8 +74,12 @@ pub fn create_graphics_tank(
 
     // let mut t2 = t.clone();
     gun.insert(SpriteBundle {
-        transform: t,
-        texture: asset_server.load("tankRed_barrel1.png"),
+        transform: {
+            let mut j = t;
+            j.translation.z = 1.1;
+            j
+        },
+        texture: asset_server.load(TANK_BARREL_IMAGES[i % TANK_BARREL_IMAGES.len()]),
         sprite: Sprite {
             anchor: Anchor::Custom(Vec2::new(0.0, -0.35)),
             flip_y: true,
@@ -90,7 +108,7 @@ pub fn create_graphics_tank(
     let mut k = Transform::from_rotation(Quat::from_rotation_z(0.0));
     k.translation.z = 1.;
 
-    let tank = create_base_tank(commands, gun, radar, x, y, client);
+    let tank = create_base_tank(i, commands, gun, radar, x, y, client);
     let tank = commands
         .entity(tank)
         .insert(Tracks {
@@ -100,7 +118,7 @@ pub fn create_graphics_tank(
         .with_children(|parent| {
             parent.spawn(SpriteBundle {
                 transform: k,
-                texture: asset_server.load("tankBody_red.png"),
+                texture: asset_server.load(TANK_BODY_IMAGES[i % TANK_BODY_IMAGES.len()]),
                 ..default()
             });
         })
@@ -143,7 +161,7 @@ pub fn create_graphics_tank(
     commands.spawn((
         Text2dBundle {
             text: Text::from_section(
-                &tank_id[tank_id.find('-').unwrap() + 1..],
+                &tank_id[tank_id.rfind('-').unwrap() - 7..],
                 TextStyle {
                     font: asset_server.load("fonts/Roboto-Regular.ttf"),
                     font_size: 12.0,
@@ -211,7 +229,8 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_stage(
                 "spawn_tracks",
                 SystemStage::single_threaded().with_system(spawn_tracks),
-            ).add_stage(
+            )
+            .add_stage(
                 "update_tracks",
                 SystemStage::single_threaded().with_system(update_tracks),
             );
