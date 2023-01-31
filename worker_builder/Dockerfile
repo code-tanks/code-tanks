@@ -23,7 +23,7 @@ RUN rm get-docker.sh
 
 COPY scripts/Dockerfiles Dockerfiles
 
-RUN sed -i 's#COPY url#RUN curl server:8088/raw/$url >#' Dockerfiles/*.Dockerfile
+RUN sed -i 's#COPY $url#RUN curl server:8088/raw/$url >#' Dockerfiles/*.Dockerfile
 
 COPY --from=builder_builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
 
