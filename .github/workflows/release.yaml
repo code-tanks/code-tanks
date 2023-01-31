@@ -138,52 +138,52 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
 
-  build-web:
-    runs-on: ubuntu-latest
+  # build-web:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Get tag
-        id: tag
-        uses: dawidd6/action-get-tag@v1
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Install rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - name: Install Dependencies
-        run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
-      - name: Install trunk
-        uses: jetli/trunk-action@v0.1.0
-        with:
-          version: latest
-      - name: Add wasm target
-        run: |
-          rustup target add wasm32-unknown-unknown
-      - name: Build Release
-        run: |
-          trunk build --release
-      - name: optimize Wasm
-        uses: NiklasEi/wasm-opt-action@v2
-        with:
-          file: dist/*.wasm
-        # Trunk cannot import assets from relative paths (see e.g. https://github.com/thedodd/trunk/issues/395)
-        # On sites like itch.io, we don't know on which base path the game gets served, so we need to rewrite all links to be relative
-      - name: Make paths relative
-        run: |
-          sed -i 's/\/index/.\/index/g' dist/index.html
-          sed -i 's/\/${{ env.GAME_EXECUTABLE_NAME }}/.\/${{ env.GAME_EXECUTABLE_NAME }}/g' dist/index.html
-      - name: Zip release
-        uses: vimtor/action-zip@v1
-        with:
-          files: dist/
-          dest: ${{ env.GAME_EXECUTABLE_NAME }}_web.zip
-      - name: Upload release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.GAME_EXECUTABLE_NAME }}_web.zip
-          asset_name: ${{ env.GAME_EXECUTABLE_NAME }}_${{ steps.tag.outputs.tag }}_web.zip
-          tag: ${{ github.ref }}
-          overwrite: true
+  #   steps:
+  #     - name: Get tag
+  #       id: tag
+  #       uses: dawidd6/action-get-tag@v1
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     - name: Install rust toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #         override: true
+  #     - name: Install Dependencies
+  #       run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
+  #     - name: Install trunk
+  #       uses: jetli/trunk-action@v0.1.0
+  #       with:
+  #         version: latest
+  #     - name: Add wasm target
+  #       run: |
+  #         rustup target add wasm32-unknown-unknown
+  #     - name: Build Release
+  #       run: |
+  #         trunk build --release
+  #     - name: optimize Wasm
+  #       uses: NiklasEi/wasm-opt-action@v2
+  #       with:
+  #         file: dist/*.wasm
+  #       # Trunk cannot import assets from relative paths (see e.g. https://github.com/thedodd/trunk/issues/395)
+  #       # On sites like itch.io, we don't know on which base path the game gets served, so we need to rewrite all links to be relative
+  #     - name: Make paths relative
+  #       run: |
+  #         sed -i 's/\/index/.\/index/g' dist/index.html
+  #         sed -i 's/\/${{ env.GAME_EXECUTABLE_NAME }}/.\/${{ env.GAME_EXECUTABLE_NAME }}/g' dist/index.html
+  #     - name: Zip release
+  #       uses: vimtor/action-zip@v1
+  #       with:
+  #         files: dist/
+  #         dest: ${{ env.GAME_EXECUTABLE_NAME }}_web.zip
+  #     - name: Upload release
+  #       uses: svenstaro/upload-release-action@v2
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: ${{ env.GAME_EXECUTABLE_NAME }}_web.zip
+  #         asset_name: ${{ env.GAME_EXECUTABLE_NAME }}_${{ steps.tag.outputs.tag }}_web.zip
+  #         tag: ${{ github.ref }}
+  #         overwrite: true
