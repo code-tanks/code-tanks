@@ -14,7 +14,6 @@ Cargo.lock
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
 
-build/
 .dart_tool/
 .git/
 .packages
@@ -30,9 +29,6 @@ frames.json
 # Omit commiting pubspec.lock for library packages:
 # https://dart.dev/guides/libraries/private-files#pubspeclock
 pubspec.lock
-
-# Conventional directory for build outputs
-build/
 
 # Directory created by dartdoc
 doc/api/

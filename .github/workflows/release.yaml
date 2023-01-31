@@ -2,8 +2,12 @@ name: release-flow
 
 on:
   push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+*"
+    branches:
+      - main
+    paths:
+      - .github/workflows/release.yml
+    # tags:
+    #   - "v[0-9]+.[0-9]+.[0-9]+*"
 
 # ToDo: adapt names
 env:
