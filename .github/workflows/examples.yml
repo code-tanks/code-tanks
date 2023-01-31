@@ -34,4 +34,3 @@ jobs:
         with:
           toolchain: stable
       - run: for i in examples/*/**; do ./scripts/build.sh $i; done
-      - run: ./scripts/build.sh examples/dart/spin_bot.dart
