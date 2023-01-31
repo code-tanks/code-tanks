@@ -3,7 +3,7 @@ name: release-flow
 on:
   push:
     branches:
-      - main
+      - main 
     paths:
       - .github/workflows/release.yml
     # tags:
