@@ -35,7 +35,7 @@ jobs:
           override: true
       - name: Build release for Apple Silicon
         run: |
-          SDKROOT=$(xcrun -sdk macosx --show-sdk-path) MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx --show-sdk-platform-version) cargo build --release --target=aarch64-apple-darwin
+          SDKROOT=$(xcrun -sdk macosx --show-sdk-path) MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx --show-sdk-platform-version) cargo build --bin ctdesktop --release --target=aarch64-apple-darwin
       - name: Install rust toolchain for Apple x86
         uses: actions-rs/toolchain@v1
         with:
@@ -44,7 +44,7 @@ jobs:
           override: true
       - name: Build release for x86 Apple
         run: |
-          SDKROOT=$(xcrun -sdk macosx --show-sdk-path) MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx --show-sdk-platform-version) cargo build --release --target=x86_64-apple-darwin
+          SDKROOT=$(xcrun -sdk macosx --show-sdk-path) MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx --show-sdk-platform-version) cargo build --bin ctdesktop --release --target=x86_64-apple-darwin
       - name: Create Universal Binary
         run: |
           lipo -create -output target/release/${{ env.GAME_EXECUTABLE_NAME }} target/aarch64-apple-darwin/release/${{ env.GAME_EXECUTABLE_NAME }} target/x86_64-apple-darwin/release/${{ env.GAME_EXECUTABLE_NAME }}
@@ -85,7 +85,7 @@ jobs:
         run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
       - name: Build release
         run: |
-          cargo build --release
+          cargo build --bin ctdesktop --release
       - name: Prepare release
         run: |
           strip target/release/${{ env.GAME_EXECUTABLE_NAME }}
@@ -119,7 +119,7 @@ jobs:
           override: true
       - name: Build release
         run: |
-          cargo build --release
+          cargo build --bin ctdesktop --release
       - name: Prepare release
         run: |
           mkdir target/release/assets && cp -r assets target/release/assets
