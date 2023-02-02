@@ -1,9 +1,10 @@
 pub mod db;
 
-use std::io::{Read, Write};
-use std::net::{TcpListener, TcpStream};
+use async_std::net::TcpListener;
+use async_std::net::TcpStream;
+use async_std::prelude::*;
+use futures::stream::StreamExt;
 use std::process::Command;
-use std::thread;
 
 use db::*;
 use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionManager};
@@ -52,24 +53,36 @@ pub struct HttpServer {
 }
 
 impl HttpServer {
-    pub fn run(&mut self) {
-        let pool = get_db_pool();
+    pub async fn run(&mut self) {
 
-        for stream in TcpListener::bind(format!("0.0.0.0:{}", self.port))
-            .unwrap()
+        let listener = TcpListener::bind(format!("0.0.0.0:{}", self.port))
+            .await
+            .unwrap();
+
+        listener
             .incoming()
-        {
-            let stream = stream.unwrap();
+            .for_each_concurrent(/* limit */ None, |tcpstream| async move {
+                let tcpstream = tcpstream.unwrap();
+                // let pool = pool.clone();
+                let pool = get_db_pool();
 
-            let pool = pool.clone();
+                let mut db = pool.get().unwrap();
 
-            thread::scope(|s| {
-                s.spawn(|| {
-                    let mut db = pool.get().unwrap();
-                    handle_connection(stream, &mut db);
-                });
-            });
-        }
+                handle_connection(tcpstream, &mut db).await;
+            })
+            .await;
+        // {
+        //     let stream = stream.unwrap();
+
+        //     let pool = pool.clone();
+
+        //     thread::scope(|s| {
+        //         s.spawn(|| {
+        //             let mut db = pool.get().unwrap();
+        //             handle_connection(stream, &mut db);
+        //         });
+        //     });
+        // }
     }
 }
 
@@ -139,12 +152,12 @@ const MAX_BYTES_READ: usize = 1000000;
 const BUFFER_SIZE_BYTES: usize = MAX_BYTES_READ + HEADER_PADDING;
 const MAX_NUMBER_PLAYERS: usize = 4;
 
-fn handle_connection(
+async fn handle_connection(
     mut stream: TcpStream,
     db: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
 ) {
     let mut buffer = [0; BUFFER_SIZE_BYTES];
-    let bytes_read = stream.read(&mut buffer).unwrap();
+    let bytes_read = stream.read(&mut buffer).await.unwrap();
 
     println!("bytes read: {}", bytes_read);
 
@@ -383,8 +396,8 @@ fn handle_connection(
         response.content
     );
 
-    stream.write_all(response_string.as_bytes()).unwrap();
-    stream.flush().unwrap();
+    stream.write_all(response_string.as_bytes()).await.unwrap();
+    stream.flush().await.unwrap();
 }
 
 fn get_header_from_request(request: &str) -> &str {
