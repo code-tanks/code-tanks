@@ -22,7 +22,7 @@ pub fn run_local_tank(url: &str, game_url: &str, post_fix: usize, port: usize) -
         .arg(&tank_id)
         .arg("--label")
         .arg("code-tanks")
-        .arg(format!("localhost:5001/{}", url))
+        .arg(url)
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
