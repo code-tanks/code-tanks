@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir linux
           cp target/x86_64-unknown-linux-gnu/release/${{ env.binary }} linux/
-          cp -r assets linux/
+          cp -r desktop/assets linux/
 
       - name: Package as a zip
         working-directory: ./linux
@@ -82,7 +82,7 @@ jobs:
         run: |
           mkdir windows
           cp target/x86_64-pc-windows-msvc/release/${{ env.binary }}.exe windows/
-          cp -r assets windows/
+          cp -r desktop/assets windows/
 
       - name: Package as a zip
         run: |
@@ -130,7 +130,7 @@ jobs:
         run: |
           mkdir -p ${{ env.binary }}.app/Contents/MacOS
           cp target/x86_64-apple-darwin/release/${{ env.binary }} ${{ env.binary }}.app/Contents/MacOS/
-          cp -r assets ${{ env.binary }}.app/Contents/MacOS/
+          cp -r desktop/assets ${{ env.binary }}.app/Contents/MacOS/
           hdiutil create -fs HFS+ -volname "${{ env.binary }}" -srcfolder ${{ env.binary }}.app ${{ env.binary }}.dmg
 
       - name: Upload binaries to artifacts
