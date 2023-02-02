@@ -24,7 +24,7 @@ pub mod c_particle;
 pub mod c_tracks;
 pub mod s_spawn_tracks;
 pub mod s_update_tracks;
-use ctsimlib::game;
+use ctsimlib::Game;
 use s_on_added_bullet::on_added_bullet;
 use s_update_tracks::update_tracks;
 pub mod s_on_added_bullet;
@@ -56,6 +56,26 @@ const TANK_BARREL_IMAGES: &[&str] = &[
     "tankBlue_barrel1.png",
     "tankDark_barrel1.png",
 ];
+
+pub fn create_environment(commands: &mut Commands, asset_server: &Res<AssetServer>) {
+    for x in 0..(Game::WIDTH as i32 / 64) + 1 {
+        for y in 0..(Game::HEIGHT as i32 / 64) + 1 {
+            commands.spawn(SpriteBundle {
+                transform: Transform::from_xyz(
+                    -(Game::WIDTH / 2.) + x as f32 * 64.,
+                    (Game::HEIGHT / 2.) - y as f32 * 64.,
+                    0.,
+                ),
+                sprite: Sprite {
+                    anchor: Anchor::TopLeft,
+                    ..default()
+                },
+                texture: asset_server.load("tileSand1.png"),
+                ..default()
+            });
+        }
+    }
+}
 
 pub fn create_graphics_tank(
     commands: &mut Commands,
@@ -95,8 +115,8 @@ pub fn create_graphics_tank(
         &shapes::Polygon {
             points: vec![
                 Vec2::new(0.0, 0.0),
-                Vec2::new(25.0, game::WIDTH + game::HEIGHT),
-                Vec2::new(-25.0, game::WIDTH + game::HEIGHT),
+                Vec2::new(25.0, Game::WIDTH + Game::HEIGHT),
+                Vec2::new(-25.0, Game::WIDTH + Game::HEIGHT),
             ],
             closed: true,
         },
@@ -198,8 +218,8 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_plugins(DefaultPlugins.set(WindowPlugin {
                 window: WindowDescriptor {
                     title: "Code Tanks".to_string(),
-                    width: 1000.,
-                    height: 600.,
+                    width: Game::WIDTH,
+                    height: Game::HEIGHT,
                     resizable: false,
                     present_mode: PresentMode::AutoVsync,
                     ..default()

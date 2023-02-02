@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::{game, CCollider, CollisionMask, CollisionType};
+use crate::{Game, CCollider, CollisionMask, CollisionType};
 
 pub fn setup_walls(mut commands: Commands) {
     /* Create the ground. */
@@ -14,7 +14,7 @@ pub fn setup_walls(mut commands: Commands) {
         },
         ActiveEvents::COLLISION_EVENTS,
         RigidBody::Fixed,
-        Collider::cuboid(game::WIDTH / 2., WALL_THICKNESS),
+        Collider::cuboid(Game::WIDTH / 2., WALL_THICKNESS),
         CollisionGroups::new(
             Group::from_bits_truncate(CollisionMask::WALL),
             Group::from_bits_truncate(
@@ -29,7 +29,7 @@ pub fn setup_walls(mut commands: Commands) {
         },
         ActiveEvents::COLLISION_EVENTS,
         RigidBody::Fixed,
-        Collider::cuboid(game::WIDTH / 2., WALL_THICKNESS),
+        Collider::cuboid(Game::WIDTH / 2., WALL_THICKNESS),
         CollisionGroups::new(
             Group::from_bits_truncate(CollisionMask::WALL),
             Group::from_bits_truncate(
@@ -45,7 +45,7 @@ pub fn setup_walls(mut commands: Commands) {
         },
         ActiveEvents::COLLISION_EVENTS,
         RigidBody::Fixed,
-        Collider::cuboid(WALL_THICKNESS, game::HEIGHT / 2.),
+        Collider::cuboid(WALL_THICKNESS, Game::HEIGHT / 2.),
         CollisionGroups::new(
             Group::from_bits_truncate(CollisionMask::WALL),
             Group::from_bits_truncate(
@@ -60,7 +60,7 @@ pub fn setup_walls(mut commands: Commands) {
         },
         ActiveEvents::COLLISION_EVENTS,
         RigidBody::Fixed,
-        Collider::cuboid(WALL_THICKNESS, game::HEIGHT / 2.),
+        Collider::cuboid(WALL_THICKNESS, Game::HEIGHT / 2.),
         CollisionGroups::new(
             Group::from_bits_truncate(CollisionMask::WALL),
             Group::from_bits_truncate(

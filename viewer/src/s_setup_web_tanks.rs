@@ -29,6 +29,8 @@ pub fn setup_web_tanks(
 
     let mut n_commands = 0;
 
+    create_environment(&mut commands, &asset_server);
+
     for n in 0..tank_ids.len() {
         let c_lines: Vec<Command> = lines[(1 + n)..]
             .iter()

@@ -16,6 +16,8 @@ pub fn setup_desktop_tanks(
         return;
     }
 
+    create_environment(&mut commands, &asset_server);
+
     for (i, tank_id) in tank_state.tank_ids.iter().enumerate() {
         create_graphics_tank(
             &mut commands,

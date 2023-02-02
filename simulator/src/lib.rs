@@ -44,7 +44,9 @@ pub struct TankIds {
     pub tank_ids: Vec<String>,
 }
 
-pub mod game {
+pub struct Game {}
+
+impl Game {
     pub const WIDTH: f32 = 1000.0;
     pub const HEIGHT: f32 = 600.0;
 }
