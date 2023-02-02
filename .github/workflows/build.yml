@@ -98,6 +98,7 @@ jobs:
           context: .
           file: worker_builder/Dockerfile
           push: true
+          platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-builder:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache,mode=max
@@ -123,6 +124,7 @@ jobs:
           context: .
           file: worker_simulator/Dockerfile
           push: true
+          platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-simulator:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache,mode=max
@@ -148,6 +150,7 @@ jobs:
           context: .
           file: server/Dockerfile
           push: true
+          platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-server:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache,mode=max
@@ -173,6 +176,7 @@ jobs:
           context: .
           file: web/Dockerfile
           push: true
+          platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-web:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache,mode=max
