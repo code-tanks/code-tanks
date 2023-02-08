@@ -16,7 +16,7 @@ pub trait ClientTrait {
 }
 
 pub struct DockerClient {
-    pub tank_id: String,
+    pub tank_nametag: String,
 }
 
 impl ClientTrait for DockerClient {
@@ -25,7 +25,7 @@ impl ClientTrait for DockerClient {
             .arg("-c")
             .arg(format!(
                 r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
-                self.tank_id,
+                self.tank_nametag,
             ))
             .output()
             .expect("failed to communicate with tank");
@@ -36,7 +36,10 @@ impl ClientTrait for DockerClient {
         }
 
         let _err_raw = String::from_utf8_lossy(&output.stderr);
-        println!("SELF_DESTRUCT {:?} empty request_commands", self.tank_id);
+        println!(
+            "SELF_DESTRUCT {:?} empty request_commands",
+            self.tank_nametag
+        );
         vec![Commands::SELF_DESTRUCT]
     }
 
@@ -46,7 +49,7 @@ impl ClientTrait for DockerClient {
             .arg(format!(
                 r#"curl -d '{}' -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
                 serde_json::to_string(event).unwrap(),
-                self.tank_id,
+                self.tank_nametag,
             ))
             .output()
             .expect("failed to communicate with ocypod");
@@ -88,7 +91,7 @@ fn parse_commands(commands_string: String) -> Vec<Command> {
 }
 
 pub struct DesktopClient {
-    pub tank_id: String,
+    pub tank_nametag: String,
     pub port: usize,
 }
 
@@ -109,7 +112,10 @@ impl ClientTrait for DesktopClient {
         }
 
         let _err_raw = String::from_utf8_lossy(&output.stderr);
-        println!("SELF_DESTRUCT {:?} empty request_commands", self.tank_id);
+        println!(
+            "SELF_DESTRUCT {:?} empty request_commands",
+            self.tank_nametag
+        );
         vec![Commands::SELF_DESTRUCT]
     }
 

@@ -32,9 +32,9 @@ pub fn run_local_tank(url: &str, game_url: &str, post_fix: usize, port: usize) -
     tank_id
 }
 
-pub fn run_game(args: &[String]) {
-    let game_url = args.join("");
-    let tank_ids = args
+pub fn run_game(tank_ids: &[String]) {
+    let game_url = tank_ids.join("");
+    let tank_nametags = tank_ids
         .iter()
         .enumerate()
         .map(|(i, url)| run_local_tank(url, &game_url, i, PORTS[i]))
@@ -49,14 +49,15 @@ pub fn run_game(args: &[String]) {
         })
         .add_plugin(CoreCTPlugin)
         .add_plugin(CoreCTGraphicsPlugin)
-        .insert_resource(TankIds {
+        .insert_resource(TankInfo {
             tank_ids: tank_ids.to_vec(),
+            tank_nametags: tank_nametags.to_vec(),
         })
         .add_system(setup_desktop_tanks)
         .add_startup_system(setup_walls)
         .run();
 
-    for tank_id in tank_ids {
+    for tank_id in tank_nametags {
         remove_tank(&tank_id);
         println!("removed {}", &tank_id);
     }

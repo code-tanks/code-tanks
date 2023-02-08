@@ -50,17 +50,17 @@ pub fn upload_log(tank_id: &str, client: &mut Client) {
     upload_log_to_db(client, tank_id, &result_raw, &err_raw);
 }
 
-pub fn run_docker_game(args: &[String]) -> Vec<String> {
-    let game_url = args.join("");
-    let tank_ids = args
+pub fn run_docker_game(tank_ids: &[String]) -> Vec<String> {
+    let game_url = tank_ids.join("");
+    let tank_nametags = tank_ids
         .iter()
         .enumerate()
         .map(|(i, url)| run_tank(url, &game_url, i))
         .collect::<Vec<String>>();
     thread::sleep(time::Duration::from_millis(5000));
 
-    run_game(&tank_ids);
-    tank_ids
+    run_game(tank_ids, &tank_nametags);
+    tank_nametags
 }
 
 pub fn update_sim_job(id: &str, successful: bool) {
