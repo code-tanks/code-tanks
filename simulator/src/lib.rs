@@ -107,7 +107,7 @@ pub fn remove_tank(tank_id: &str) {
 }
 
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-    let tank_id = format!("web-{}-{}-{}", game_url, url, post_fix);
+    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
     remove_tank(&tank_id);
     let output_raw = Command::new("docker")
         .arg("run")

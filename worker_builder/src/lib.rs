@@ -48,7 +48,7 @@ pub fn get_build_job() -> Vec<String> {
 }
 
 pub fn build(url: &str, lang: &str) -> String {
-    let output_raw = Command::new("docker")
+    let output = Command::new("docker")
         .arg("build")
         .arg("-t")
         .arg(format!("registry:5001/{}", url))
@@ -64,8 +64,8 @@ pub fn build(url: &str, lang: &str) -> String {
 
     // docker build -t test --network host --build-arg url=ping -f dart.Dockerfile .
 
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    let result_raw = String::from_utf8_lossy(&output.stdout);
+    let err_raw = String::from_utf8_lossy(&output.stderr);
 
     println!("build, url={}", url);
     println!("stdout:");
@@ -94,44 +94,49 @@ pub fn update_build_job(id: &str, successful: bool) {
 }
 
 pub fn push_to_registry(url: &str) -> bool {
-    let output_raw = Command::new("docker")
+    let output = Command::new("docker")
         .arg("push")
         .arg(format!("registry:5001/{}", url))
         .output()
         .expect("failed to communicate with ocypod");
 
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    let result_raw = String::from_utf8_lossy(&output.stdout);
+    let err_raw = String::from_utf8_lossy(&output.stderr);
 
-    let successful = err_raw.is_empty();
+    let successful = output.status.success();
 
     println!("push_to_registry, url={}, successful={}", url, successful);
+    if successful {
     println!("stdout:");
     println!("{}\n", result_raw);
+    } else {
     println!("stderr:");
     println!("{}\n", err_raw);
-
+    }
     successful
 }
 
 pub fn remove_image(url: &str) -> bool {
-    let output_raw = Command::new("docker")
+    let output = Command::new("docker")
         .arg("image")
         .arg("remove")
         .arg(format!("registry:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");
 
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-    let err_raw = String::from_utf8_lossy(&output_raw.stderr);
+    let result_raw = String::from_utf8_lossy(&output.stdout);
+    let err_raw = String::from_utf8_lossy(&output.stderr);
 
-    let successful = err_raw.is_empty();
+    let successful = output.status.success();
 
     println!("remove_image, url={}, successful={}", url, successful);
+    if successful {
     println!("stdout:");
     println!("{}\n", result_raw);
+    } else {
     println!("stderr:");
     println!("{}\n", err_raw);
+    }
 
     successful
 }
