@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 ctsimlib = { path = "../simulator" }
 bevy = "0.9.1"
-bevy_rapier2d = { version = "0.20.0", features = [ "debug-render-2d", "enhanced-determinism", "wasm-bindgen" ] }
+bevy_rapier2d = { version = "0.21.0", features = [ "debug-render-2d", "enhanced-determinism", "wasm-bindgen" ] }
 bevy_prototype_lyon = "0.7.2"
 ct-api = { path = "../api" }
 
