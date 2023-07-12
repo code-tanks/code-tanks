@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 ctsimlib = { path = "../simulator" }
 ctsimlibgraphics = { path = "../simulator_graphics" }
-bevy = "0.9.1"
+bevy = "0.10.1"
 
 [[bin]]
 name = "ctdesktop"
