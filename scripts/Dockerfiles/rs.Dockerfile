@@ -6,7 +6,7 @@ RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
     curl git build-essential pkg-config libssl-dev
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.66.0 -y
+RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.70.0 -y
 
 WORKDIR /app
 

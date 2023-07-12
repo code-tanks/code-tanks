@@ -1,4 +1,4 @@
-FROM rust:1.66.0 AS server_builder
+FROM rust:1.70.0 AS server_builder
 WORKDIR /ctserver
 
 COPY server/dummy.rs .
