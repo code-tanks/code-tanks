@@ -80,7 +80,7 @@ pub fn save_commands(
         let mut best_idx: usize = 0;
         let mut dup: bool = false;
         for (i, tank_id) in tank_ids_state.tank_ids.iter().enumerate() {
-            let ti = &tank_id[tank_id.find('-').unwrap() + 1..];
+            let ti = &tank_id[tank_id.rfind('-').unwrap() - 7..];
             let dmg = damages_dealt[i].damage_dealt;
 
             j[ti] = json!({
