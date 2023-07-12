@@ -24,11 +24,11 @@ fn main() {
                 .split(' ')
                 .map(|f| f.to_string())
                 .collect::<Vec<String>>();
-            let tank_ids = run_docker_game(args);
+            let tank_nametags = run_docker_game(args);
             let game_id = &args.join("-");
-            for tank_id in tank_ids.iter() {
-                upload_log(tank_id, &mut client);
-                remove_tank(tank_id);
+            for tank_nametag in tank_nametags.iter() {
+                upload_log(tank_nametag, &mut client);
+                remove_tank(tank_nametag);
             }
             let sim = fs::read_to_string("./sim.txt").expect("Unable to read file");
             let uploaded_sim = upload_sim(&mut client, game_id, &sim, true);

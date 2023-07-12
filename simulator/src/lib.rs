@@ -40,8 +40,9 @@ impl TickState {
 }
 
 #[derive(Default, Resource)]
-pub struct TankIds {
+pub struct TankInfo {
     pub tank_ids: Vec<String>,
+    pub tank_nametags: Vec<String>,
 }
 
 pub struct Game {}
@@ -51,15 +52,16 @@ impl Game {
     pub const HEIGHT: f32 = 600.0;
 }
 
-pub fn run_game(tank_ids: &[String]) {
+pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
     let mut f = File::create("./sim.txt").expect("Unable to create file");
     f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
         .expect("Unable to write data");
 
     App::new()
         .add_plugins(MinimalPlugins)
-        .insert_resource(TankIds {
+        .insert_resource(TankInfo {
             tank_ids: tank_ids.to_vec(),
+            tank_nametags: tank_nametags.to_vec(),
         })
         .add_startup_system(setup_walls)
         .add_startup_system(setup_sim_tanks)
@@ -105,7 +107,7 @@ pub fn remove_tank(tank_id: &str) {
 }
 
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-    let tank_id = format!("web-{}-{}-{}", game_url, url, post_fix);
+    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
     remove_tank(&tank_id);
     let output_raw = Command::new("docker")
         .arg("run")

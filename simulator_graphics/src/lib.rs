@@ -79,12 +79,12 @@ pub fn create_environment(commands: &mut Commands, asset_server: &Res<AssetServe
 
 pub fn create_graphics_tank(
     commands: &mut Commands,
-    i: usize,
+    tank_index: usize,
     client: impl Component,
     asset_server: &Res<AssetServer>,
     tank_id: String,
 ) -> Entity {
-    let x = 150.0 * (i as f32) + 10.0;
+    let x = 150.0 * (tank_index as f32) + 10.0;
     let y = 0.0;
 
     let gun = create_gun(commands, x, y);
@@ -99,7 +99,7 @@ pub fn create_graphics_tank(
             j.translation.z = 1.1;
             j
         },
-        texture: asset_server.load(TANK_BARREL_IMAGES[i % TANK_BARREL_IMAGES.len()]),
+        texture: asset_server.load(TANK_BARREL_IMAGES[tank_index % TANK_BARREL_IMAGES.len()]),
         sprite: Sprite {
             anchor: Anchor::Custom(Vec2::new(0.0, -0.35)),
             flip_y: true,
@@ -128,7 +128,16 @@ pub fn create_graphics_tank(
     let mut k = Transform::from_rotation(Quat::from_rotation_z(0.0));
     k.translation.z = 1.;
 
-    let tank = create_base_tank(i, commands, gun, radar, x, y, client);
+    let tank = create_base_tank(
+        tank_id.to_string(),
+        tank_index,
+        commands,
+        gun,
+        radar,
+        x,
+        y,
+        client,
+    );
     let tank = commands
         .entity(tank)
         .insert(Tracks {
@@ -138,7 +147,7 @@ pub fn create_graphics_tank(
         .with_children(|parent| {
             parent.spawn(SpriteBundle {
                 transform: k,
-                texture: asset_server.load(TANK_BODY_IMAGES[i % TANK_BODY_IMAGES.len()]),
+                texture: asset_server.load(TANK_BODY_IMAGES[tank_index % TANK_BODY_IMAGES.len()]),
                 ..default()
             });
         })
@@ -181,7 +190,7 @@ pub fn create_graphics_tank(
     commands.spawn((
         Text2dBundle {
             text: Text::from_section(
-                &tank_id[tank_id.rfind('-').unwrap() - 7..],
+                format!("{}-{}", tank_id, tank_index),
                 TextStyle {
                     font: asset_server.load("fonts/Roboto-Regular.ttf"),
                     font_size: 12.0,

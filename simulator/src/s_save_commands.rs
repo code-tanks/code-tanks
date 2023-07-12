@@ -3,12 +3,12 @@ use ct_api::Commands;
 use serde_json::{json, to_value};
 use std::{fs::OpenOptions, io::Write};
 
-use crate::{c_command::CommandSource, c_health::Health, c_tank::*, TankIds, TickState};
+use crate::{c_command::CommandSource, c_health::Health, c_tank::*, TankInfo, TickState};
 use bevy::app::AppExit;
 
 pub fn save_commands(
     state: Res<TickState>,
-    tank_ids_state: Res<TankIds>,
+    tank_ids_state: Res<TankInfo>,
     mut exit: EventWriter<AppExit>,
     query: Query<&CommandSource>,
     tanks: Query<(&Transform, &Tank)>,
@@ -83,6 +83,8 @@ pub fn save_commands(
             let ti = &tank_id[tank_id.rfind('-').unwrap() - 7..];
             let dmg = damages_dealt[i].damage_dealt;
 
+            let ti = format!("{}-{}", tank_id, i);
+
             j[ti] = json!({
                 "tank_id": ti,
                 "index": i,
@@ -90,9 +92,7 @@ pub fn save_commands(
                 "damage_given": dmg,
             });
 
-            let t = &ti[..ti.find('-').unwrap()];
-
-            all_tank_ids.push(t);
+            all_tank_ids.push(tank_id);
 
             if dmg == damages_dealt[best_idx].damage_dealt && i != 0 {
                 dup = true;
