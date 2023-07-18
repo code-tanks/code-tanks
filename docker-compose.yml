@@ -8,6 +8,8 @@ services:
       - 8089:8088
     environment:
       - DB_URL=postgres://postgres:example@db:5432
+      - ROCKET_PORT=8088
+      - ROCKET_ADDRESS=0.0.0.0
     command: ctserver
     networks:
       - no-internet
