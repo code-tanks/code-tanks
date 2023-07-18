@@ -9,6 +9,8 @@ pub fn setup_web_tanks(
     mut commands: Commands,
     custom_assets: ResMut<Assets<CustomAsset>>,
     asset_server: Res<AssetServer>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,        
 ) {
     let custom_asset = custom_assets.get(&state.handle);
     if state.printed || custom_asset.is_none() {
@@ -66,6 +68,8 @@ pub fn setup_web_tanks(
             },
             &asset_server,
             tank_ids[n].to_string(),
+            &mut meshes,
+            &mut materials
         );
         let mut tank = commands.entity(tank);
         tank.insert(HistoryTransforms { transforms });

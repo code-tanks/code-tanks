@@ -27,6 +27,10 @@ pub fn request_debug_commands(
         debug_toggle.index = 3;
     }
 
+    if keys.just_pressed(KeyCode::Grave) && debug_toggle.is_on {
+        println!("debug target {}", debug_toggle.index);
+    }
+
     let mut command_sources = query.iter_mut().collect::<Vec<_>>();
 
     if debug_toggle.index >= command_sources.len() {

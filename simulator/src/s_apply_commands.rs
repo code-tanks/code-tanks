@@ -177,7 +177,7 @@ pub fn apply_commands(
                         t.translation.z = 1.0;
                         t
                     },
-                    visibility: Visibility { is_visible: true },
+                    visibility: Visibility::Visible,
                     ..default()
                 },
             ));

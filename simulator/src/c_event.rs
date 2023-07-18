@@ -7,11 +7,11 @@ use crate::CollisionType;
 
 #[derive(Component, Default)]
 pub struct EventSink {
-    pub queue: Vec<Event>,
+    pub queue: Vec<CTEvent>,
 }
 
 #[derive(Debug, Serialize)]
-pub struct Event {
+pub struct CTEvent {
     pub event_type: String,
     pub info: Value,
 }
@@ -31,7 +31,7 @@ pub fn generate_event(
         None => &zero,
     };
     let v = transform_of_interest.rotation * Vec3::Y;
-    event_sink.queue.push(Event {
+    event_sink.queue.push(CTEvent {
         event_type,
         info: json!({
             "collision_type": format!("{:?}", collision_type),
