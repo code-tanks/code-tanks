@@ -12,7 +12,7 @@ pub struct Client {
 
 pub trait ClientTrait {
     fn request_commands(&mut self) -> Vec<Command>;
-    fn request_commands_by_event(&mut self, event: &Event) -> Vec<Command>;
+    fn request_commands_by_event(&mut self, event: &CTEvent) -> Vec<Command>;
 }
 
 pub struct DockerClient {
@@ -43,7 +43,7 @@ impl ClientTrait for DockerClient {
         vec![Commands::SELF_DESTRUCT]
     }
 
-    fn request_commands_by_event(&mut self, event: &Event) -> Vec<Command> {
+    fn request_commands_by_event(&mut self, event: &CTEvent) -> Vec<Command> {
         let output = ProcessCommand::new("bash")
             .arg("-c")
             .arg(format!(
@@ -76,7 +76,7 @@ impl ClientTrait for ReaderClient {
         }
     }
 
-    fn request_commands_by_event(&mut self, _event: &Event) -> Vec<Command> {
+    fn request_commands_by_event(&mut self, _event: &CTEvent) -> Vec<Command> {
         self.request_commands()
     }
 }
@@ -119,7 +119,7 @@ impl ClientTrait for DesktopClient {
         vec![Commands::SELF_DESTRUCT]
     }
 
-    fn request_commands_by_event(&mut self, event: &Event) -> Vec<Command> {
+    fn request_commands_by_event(&mut self, event: &CTEvent) -> Vec<Command> {
         let output = ProcessCommand::new("bash")
             .arg("-c")
             .arg(format!(
@@ -136,5 +136,17 @@ impl ClientTrait for DesktopClient {
         }
         let _err_raw = String::from_utf8_lossy(&output.stderr);
         vec![]
+    }
+}
+
+pub struct DummyClient {}
+
+impl ClientTrait for DummyClient {
+    fn request_commands(&mut self) -> Vec<Command> {
+        vec![Commands::NONE]
+    }
+
+    fn request_commands_by_event(&mut self, _event: &CTEvent) -> Vec<Command> {
+        self.request_commands()
     }
 }

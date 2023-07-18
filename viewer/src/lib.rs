@@ -5,13 +5,13 @@ pub mod s_setup_web_tanks;
 use bevy::{
     asset::{AssetLoader, LoadContext, LoadedAsset},
     prelude::*,
-    reflect::TypeUuid,
+    reflect::{TypeUuid, TypePath},
     utils::BoxedFuture,
 };
 
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize, TypeUuid)]
+#[derive(Debug, Deserialize, TypeUuid, TypePath)]
 #[uuid = "39cadc56-aa9c-4543-8640-a018b74b5052"]
 pub struct CustomAsset(String);
 

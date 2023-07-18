@@ -22,7 +22,7 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
             Gun { locked: true },
             SpatialBundle {
                 transform: t,
-                visibility: Visibility { is_visible: true },
+                visibility: Visibility::Visible,
                 ..default()
             },
             Sensor,
@@ -60,7 +60,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             Radar { locked: true },
             SpatialBundle {
                 transform: t,
-                visibility: Visibility { is_visible: true },
+                visibility: Visibility::Visible,
                 ..default()
             },
             Sensor,
@@ -161,7 +161,7 @@ pub fn create_base_tank(
             client,
             SpatialBundle {
                 transform: t,
-                visibility: Visibility { is_visible: true },
+                visibility: Visibility::Visible,
                 ..default()
             },
         ))

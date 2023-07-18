@@ -21,10 +21,11 @@ use std::io::Write;
 use std::process::Command;
 
 use bevy::app::App;
-use bevy::ecs::schedule::SystemStage;
-use bevy::prelude::{Component, Resource};
+use bevy::ecs::schedule::ScheduleLabel;
+use bevy::prelude::{Component, Resource, Startup, IntoSystemConfigs, Update};
 use bevy::MinimalPlugins;
 use core_plugin::*;
+use s_request_commands::request_commands;
 use s_save_commands::*;
 use s_setup_sim_tanks::*;
 use s_setup_walls::*;
@@ -52,6 +53,10 @@ impl Game {
     pub const HEIGHT: f32 = 600.0;
 }
 
+#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+pub struct SaveCommands;
+
+
 pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
     let mut f = File::create("./sim.txt").expect("Unable to create file");
     f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
@@ -63,13 +68,15 @@ pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
             tank_ids: tank_ids.to_vec(),
             tank_nametags: tank_nametags.to_vec(),
         })
-        .add_startup_system(setup_walls)
-        .add_startup_system(setup_sim_tanks)
-        .add_plugin(CoreCTPlugin)
-        .add_stage_after(
-            "request_commands",
-            "save_commands",
-            SystemStage::single_threaded().with_system(save_commands),
+        .add_systems(Startup, setup_walls)
+        .add_systems(Startup, setup_sim_tanks)
+        .add_plugins(CoreCTPlugin)
+        .add_systems(
+            Update,
+            save_commands.after(request_commands)
+            // "request_commands",
+            // "save_commands",
+            // SystemStage::single_threaded().with_system(save_commands),
         )
         .run();
 }
