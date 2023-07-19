@@ -99,6 +99,7 @@ services:
       - ./test/registry/:/var/lib/registry
     networks:
       - no-internet
+      - internet
 
   pgAdmin:
     container_name: pgAdmin
