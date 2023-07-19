@@ -29,4 +29,8 @@ jobs:
         run: ./scripts/dev/build_all.sh
       - name: "Set up environment"
         run: docker compose up -d
+      - name: "Setup Env"
+        run: echo "HOST=http://localhost:8089" > ./scripts/.env
+      - name: "Test Upload Examples"
+        run: ./scripts/official/upload_tanks.sh examples/
       
