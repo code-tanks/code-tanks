@@ -24,5 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: "Set up environment"
-        run: docker compose -f docker-compose.yml up -d
+        run: ./scripts/dev/build_all.sh
+        run: docker compose up -d
       
