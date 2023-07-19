@@ -3,6 +3,7 @@ use std::{process::Command, thread, time};
 use bevy::{ecs::schedule::ScheduleLabel, prelude::*, winit::WinitSettings};
 use ctsimlib::{s_setup_walls::setup_walls, *};
 use s_setup_desktop_tanks::setup_desktop_tanks;
+use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 
 pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
@@ -58,6 +59,7 @@ pub fn run_game(tank_ids: &[String]) {
         })
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
+        .add_plugins(RapierDebugRenderPlugin::default())
         .add_systems(Startup, setup_desktop_tanks)
         .add_systems(Startup, setup_walls)
         .insert_resource(UseDummy {

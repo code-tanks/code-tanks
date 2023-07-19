@@ -21,7 +21,7 @@ pub fn setup_walls(mut commands: Commands) {
                 CollisionMask::TANK | CollisionMask::BULLET | CollisionMask::RADAR,
             ),
         ),
-        TransformBundle::from(Transform::from_xyz(0.0, -300.0 - WALL_THICKNESS, 0.0)),
+        TransformBundle::from(Transform::from_xyz(0.0, -Game::HEIGHT / 2. - WALL_THICKNESS, 0.0)),
     ));
     commands.spawn((
         CCollider {
@@ -36,7 +36,7 @@ pub fn setup_walls(mut commands: Commands) {
                 CollisionMask::TANK | CollisionMask::BULLET | CollisionMask::RADAR,
             ),
         ),
-        TransformBundle::from(Transform::from_xyz(0.0, 300.0 + WALL_THICKNESS, 0.0)),
+        TransformBundle::from(Transform::from_xyz(0.0, Game::HEIGHT / 2. + WALL_THICKNESS, 0.0)),
     ));
 
     commands.spawn((
@@ -52,7 +52,7 @@ pub fn setup_walls(mut commands: Commands) {
                 CollisionMask::TANK | CollisionMask::BULLET | CollisionMask::RADAR,
             ),
         ),
-        TransformBundle::from(Transform::from_xyz(500.0 + WALL_THICKNESS, 0.0, 0.0)),
+        TransformBundle::from(Transform::from_xyz(Game::WIDTH / 2. + WALL_THICKNESS, 0.0, 0.0)),
     ));
     commands.spawn((
         CCollider {
@@ -67,6 +67,6 @@ pub fn setup_walls(mut commands: Commands) {
                 CollisionMask::TANK | CollisionMask::BULLET | CollisionMask::RADAR,
             ),
         ),
-        TransformBundle::from(Transform::from_xyz(-500.0 - WALL_THICKNESS, 0.0, 0.0)),
+        TransformBundle::from(Transform::from_xyz(-Game::WIDTH / 2. - WALL_THICKNESS, 0.0, 0.0)),
     ));
 }

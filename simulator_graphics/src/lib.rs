@@ -63,8 +63,8 @@ const TANK_BARREL_IMAGES: &[&str] = &[
 ];
 
 pub fn create_environment(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    for x in 0..(Game::WIDTH as i32 / 64) + 1 {
-        for y in 0..(Game::HEIGHT as i32 / 64) + 1 {
+    for x in 0..(Game::WIDTH as i32 / 64) {
+        for y in 0..(Game::HEIGHT as i32 / 64) {
             commands.spawn(SpriteBundle {
                 transform: Transform::from_xyz(
                     -(Game::WIDTH / 2.) + x as f32 * 64.,

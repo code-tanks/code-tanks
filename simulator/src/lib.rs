@@ -49,8 +49,8 @@ pub struct TankInfo {
 pub struct Game {}
 
 impl Game {
-    pub const WIDTH: f32 = 1000.0;
-    pub const HEIGHT: f32 = 600.0;
+    pub const WIDTH: f32 = 1024.;
+    pub const HEIGHT: f32 = 640.0;
 }
 
 #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]

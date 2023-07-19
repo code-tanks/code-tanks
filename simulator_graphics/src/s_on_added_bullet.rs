@@ -40,7 +40,6 @@ pub fn on_added_bullet(
                         .index
                         % COLORS.len()],
                 )),
-                transform: Transform::from_translation(Vec3::new(-150., 0., 0.)),
                 ..default()
             });
         });

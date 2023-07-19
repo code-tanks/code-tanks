@@ -172,7 +172,7 @@ pub fn apply_commands(
                 SpatialBundle {
                     transform: {
                         let mut t = Transform::from_translation(
-                            transform.translation + t * Vec3::new(35.0, 35.0, 35.0),
+                            transform.translation + t * Vec3::new(35.0, 35.0, 1.0),
                         );
                         t.translation.z = 1.0;
                         t
