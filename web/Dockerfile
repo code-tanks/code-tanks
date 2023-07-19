@@ -2,7 +2,7 @@ FROM rust:1.70.0 AS viewer_builder
 WORKDIR /ctviewer
 
 RUN rustup target install wasm32-unknown-unknown
-RUN cargo install -f wasm-bindgen-cli --version 0.2.84
+RUN cargo install -f wasm-bindgen-cli --version 0.2.87
 
 COPY server/dummy.rs .
 COPY api api
