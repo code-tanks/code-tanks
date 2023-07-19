@@ -6,17 +6,6 @@ on:
       - main
     paths:
       - .github/workflows/examples.yml
-      - api/**
-      - cli/**
-      - desktop/**
-      - runner/**
-      - server/**
-      - simulator/**
-      - simulator_graphics/**
-      - viewer/**
-      - web/**
-      - worker_builder/**
-      - worker_simulator/**
       - examples/**
       - scripts/build.sh
       - scripts/Dockerfiles/**
