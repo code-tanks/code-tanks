@@ -25,6 +25,7 @@ use bevy::ecs::schedule::ScheduleLabel;
 use bevy::prelude::{Component, Resource, Startup, IntoSystemConfigs, Update};
 use bevy::MinimalPlugins;
 use core_plugin::*;
+use s_apply_commands::apply_commands;
 use s_request_commands::request_commands;
 use s_save_commands::*;
 use s_setup_sim_tanks::*;
@@ -73,7 +74,7 @@ pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
         .add_plugins(CoreCTPlugin)
         .add_systems(
             Update,
-            save_commands.after(request_commands)
+            save_commands.after(request_commands).before(apply_commands)
             // "request_commands",
             // "save_commands",
             // SystemStage::single_threaded().with_system(save_commands),
