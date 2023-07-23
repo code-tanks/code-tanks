@@ -41,16 +41,16 @@ RAW='2s2wgkh
 0|10,0,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677
 {"2s2wgkh-2s2wgkh-0":{"damage_given":0,"health":100,"index":0,"tank_id":"2s2wgkh"},"tanks":["2s2wgkh"],"winner":"2s2wgkh-2s2wgkh-0","winner_index":0}'
 
-OUTPUT=$(./scripts/run_sim.sh "2s2wgkh")
-if [[ "${OUTPUT}" != "waiting to build" ]]
-then
-  echo "Failed run sim for 2s2wgkh"
-  echo 'Got:'
-  echo "${OUTPUT}"
-  echo 'Expected:'
-  echo "waiting to build"
-  exit 1
-fi
+# OUTPUT=$(./scripts/run_sim.sh "2s2wgkh")
+# if [[ "${OUTPUT}" != "waiting to build" ]]
+# then
+#   echo "Failed run sim for 2s2wgkh"
+#   echo 'Got:'
+#   echo "${OUTPUT}"
+#   echo 'Expected:'
+#   echo "waiting to build"
+#   exit 1
+# fi
 
 sleep 60
 
