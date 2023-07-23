@@ -52,7 +52,7 @@ RAW='2s2wgkh
 #   exit 1
 # fi
 
-sleep 180
+sleep 300
 
 
 OUTPUT=$(./scripts/run_sim.sh "2s2wgkh")
@@ -74,5 +74,6 @@ else
   echo "${OUTPUT}"
   echo 'Expected:'
   echo "${RAW}"
+  docker compose logs simulator
   exit 1
 fi
