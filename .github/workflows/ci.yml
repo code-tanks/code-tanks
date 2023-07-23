@@ -35,5 +35,5 @@ jobs:
       - name: "Test Upload Examples"
         run: ./scripts/upload_tanks.sh examples/
       - name: "Test do_nothing"
-        run: ./scripts/test/test_do_nothing.sh
+        run: script -e -c "./scripts/test/test_do_nothing.sh"
       
