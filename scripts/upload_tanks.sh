@@ -7,5 +7,5 @@
 # and perform the command on it
 find "$1" -type f | while read -r file; do
     # replace 'echo' with the command you want to perform on each file
-    ./scripts/official/upload_tank.sh "$file"
+    ./scripts/upload_tank.sh "$file"
 done
