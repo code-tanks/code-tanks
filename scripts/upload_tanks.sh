@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export $(xargs < ./scripts/.env)
+. ./scripts/helper/setup_host.sh
 
 # use the find command to recursively find all files from the starting directory
 # then use a while-read loop to read each line (file path) from the find command
