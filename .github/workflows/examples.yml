@@ -24,4 +24,4 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: for i in examples/*/**; do ./scripts/build.sh $i; done
+      - run: for i in examples/*/**; do ./scripts/build_local.sh $i; done
