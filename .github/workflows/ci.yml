@@ -17,6 +17,7 @@ on:
       - web/**
       - worker_builder/**
       - worker_simulator/**
+      - scripts/test/**
 
 jobs:
   test:
@@ -33,4 +34,6 @@ jobs:
         run: echo "HOST=http://localhost:8089" > ./scripts/.env
       - name: "Test Upload Examples"
         run: ./scripts/official/upload_tanks.sh examples/
+      - name: "Test do_nothing"
+        run: ./scripts/test/test_do_nothing.sh
       

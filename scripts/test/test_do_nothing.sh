@@ -10,6 +10,7 @@ then
   echo "Failed to upload examples/dart/do_nothing.dart"
   echo "Expected: 2s2wgkh"
   echo "Got: $OUTPUT"
+  exit 1
 fi
 
 OUTPUT=$(./scripts/get_build_log.sh "2s2wgkh")
@@ -20,6 +21,7 @@ if [[ "${OUTPUT}" == '"404"' ]]
 then
   echo "Failed to get build log for 2s2wgkh"
   echo 'Got: "404"'
+  exit 1
 fi
 
 OUTPUT=$(./scripts/get_raw.sh "2s2wgkh")
@@ -32,6 +34,7 @@ then
   echo "${OUTPUT}"
   echo 'Expected:'
   echo "${RAW}"
+  exit 1
 fi
 
 RAW='2s2wgkh
@@ -46,6 +49,7 @@ then
   echo "${OUTPUT}"
   echo 'Expected:'
   echo "waiting to build"
+  exit 1
 fi
 
 sleep 60
@@ -70,4 +74,5 @@ else
   echo "${OUTPUT}"
   echo 'Expected:'
   echo "${RAW}"
+  exit 1
 fi
