@@ -1,26 +1,24 @@
-use bevy::{app::RunFixedUpdateLoop, ecs::schedule::ScheduleLabel, prelude::*};
+use bevy::{ecs::schedule::ScheduleLabel, prelude::*};
 use bevy::{
     prelude::{
-        default, shape, App, AssetServer, Assets, BuildChildren, Color, Commands, Component,
-        IntoSystemConfigs, Mesh, Msaa, Plugin, PluginGroup, Quat, Res, ResMut, Resource, Startup,
-        Transform, Vec2, Vec3,
+        default, App, AssetServer, Assets, BuildChildren, Color, Commands, Component,
+        IntoSystemConfigs, Mesh, Plugin, Quat, Res, ResMut, Resource, Startup,
+        Transform, Vec2,
     },
     render::render_resource::PrimitiveTopology,
     sprite::{Anchor, ColorMaterial, MaterialMesh2dBundle, Sprite, SpriteBundle},
     text::{Text, Text2dBundle, TextAlignment, TextStyle},
-    window::{PresentMode, Window, WindowPlugin},
 };
 // use bevy_prototype_lyon::{
 //     prelude::{DrawMode, FillMode, GeometryBuilder, StrokeMode},
 //     shapes::{self, RectangleOrigin},
 // };
-use c_healthbar::HealthBar;
 use c_nametag::NameTag;
 use c_tracks::Tracks;
-use ctsimlib::{c_tank::Tank, s_request_commands::request_commands};
+use ctsimlib::{c_tank::Tank, s_request_commands::request_commands, s_apply_commands::apply_commands};
 use s_request_debug_commands::request_debug_commands;
 use s_spawn_tracks::spawn_tracks;
-// use s_update_healthbar::update_healthbar;
+use s_update_healthbar::update_healthbar;
 // use s_spawn_tracks::spawn_tracks;
 use s_update_nametag::update_nametag;
 pub mod c_healthbar;
@@ -266,7 +264,7 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_systems(Startup, setup_graphics)
             .add_systems(
                 Update,
-                request_debug_commands.after(request_commands), // "request_commands",
+                request_debug_commands.after(request_commands).before(apply_commands), // "request_commands",
                                                                 // "request_debug_commands",
                                                                 // SystemStage::single_threaded().with_system(request_debug_commands),
             )
@@ -279,7 +277,7 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_systems(
                 Update,
                 // update_healthbar,
-                (update_nametag, on_added_bullet, spawn_tracks, update_tracks).chain(), // "on_added_bullet",
+                (update_nametag, on_added_bullet, spawn_tracks, update_tracks, update_healthbar), // "on_added_bullet",
                                                                                         // SystemStage::single_threaded().with_system(on_added_bullet),
             );
         // .add_systems(

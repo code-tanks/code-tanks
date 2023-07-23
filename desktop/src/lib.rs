@@ -1,4 +1,4 @@
-use std::{process::Command, thread, time};
+use std::process::Command;
 
 use bevy::{ecs::schedule::ScheduleLabel, prelude::*, winit::WinitSettings};
 use ctsimlib::{s_setup_walls::setup_walls, *};
