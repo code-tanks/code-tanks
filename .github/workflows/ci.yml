@@ -18,6 +18,8 @@ on:
       - worker_builder/**
       - worker_simulator/**
       - scripts/**
+      - docker-compose.yml
+      - ocypod.toml
 
 jobs:
   test:
