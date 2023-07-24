@@ -49,7 +49,7 @@ jobs:
 
       builder:
         image: ghcr.io/code-tanks/code-tanks-builder:latest
-        command: ctbuilder
+        # command: ctbuilder
         # restart: unless-stopped
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
@@ -67,7 +67,7 @@ jobs:
 
       simulator:
         image: ghcr.io/code-tanks/code-tanks-simulator:latest
-        command: ctsim
+        # command: ctsim
         # restart: unless-stopped
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock    
@@ -110,7 +110,7 @@ jobs:
         image: davechallis/ocypod:latest
         volumes:
           - ./ocypod.toml:/etc/ocypod.toml:ro
-        command: /etc/ocypod.toml
+        options: /etc/ocypod.toml
         ports:
           - 8023
         # restart: unless-stopped
