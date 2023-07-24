@@ -30,6 +30,10 @@ jobs:
       #   run: ./scripts/dev/build_all.sh
       - name: "Set up environment"
         run: docker compose up -d
+      - name: "Set up environment 2"
+        run: sleep 60
+      - name: "Set up environment 3"
+        run: docker compose ps
       # - name: "Setup Env"
       #   run: echo "HOST=http://localhost:8089" > ./scripts/.env
       - name: "Test Upload Examples"
