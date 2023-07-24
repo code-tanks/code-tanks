@@ -38,7 +38,7 @@ jobs:
         ports:
           - 8089:8088
         env:
-          - DB_URL=postgres://postgres:example@db:5432
+          DB_URL: postgres://postgres:example@db:5432
         command: ctserver
         networks:
           - no-internet
@@ -54,7 +54,7 @@ jobs:
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
         env:
-          - DB_URL=postgres://postgres:example@db:5432
+          DB_URL: postgres://postgres:example@db:5432
         deploy:
           replicas: 2
         networks:
@@ -72,7 +72,7 @@ jobs:
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock    
         env:
-          - DB_URL=postgres://postgres:example@db:5432
+          DB_URL: postgres://postgres:example@db:5432
         deploy:
           replicas: 2
         networks:
@@ -97,8 +97,8 @@ jobs:
         image: postgres
         # restart: unless-stopped
         env:
-          - POSTGRES_PASSWORD=example
-          - PGDATA=/var/lib/postgresql/data/pgdata
+          POSTGRES_PASSWORD: example
+          PGDATA: /var/lib/postgresql/data/pgdata
         ports:
           - 5432
         # volumes:
