@@ -33,7 +33,6 @@ jobs:
           - REGISTRY_HTTP_ADDR=0.0.0.0:5001
 
       server:
-        container_name: server
         image: ghcr.io/code-tanks/code-tanks-server:latest
         restart: unless-stopped
         ports:
@@ -84,7 +83,6 @@ jobs:
           # - registry
       
       web:
-        container_name: web
         image: ghcr.io/code-tanks/code-tanks-web:latest
         restart: unless-stopped
         ports:
@@ -96,7 +94,6 @@ jobs:
         #   - server
 
       db:
-        container_name: db
         image: postgres
         restart: unless-stopped
         env:
@@ -110,7 +107,6 @@ jobs:
           - no-internet
 
       ocypod:
-        container_name: ocypod
         image: davechallis/ocypod:latest
         volumes:
           - ./ocypod.toml:/etc/ocypod.toml:ro
@@ -124,7 +120,6 @@ jobs:
         #   - ocypod-redis
 
       ocypod-redis:
-        container_name: ocypod-redis
         image: redis:6
         ports:
           - 6379
