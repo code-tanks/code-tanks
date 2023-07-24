@@ -52,7 +52,7 @@ RAW='2s2wgkh
 #   exit 1
 # fi
 
-sleep 10
+sleep 60
 
 
 OUTPUT=$(./scripts/run_sim.sh "2s2wgkh")
