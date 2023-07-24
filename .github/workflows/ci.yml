@@ -34,10 +34,10 @@ jobs:
 
       server:
         image: ghcr.io/code-tanks/code-tanks-server:latest
-        restart: unless-stopped
+        # restart: unless-stopped
         ports:
           - 8089:8088
-        wnv:
+        env:
           - DB_URL=postgres://postgres:example@db:5432
         command: ctserver
         networks:
@@ -50,7 +50,7 @@ jobs:
       builder:
         image: ghcr.io/code-tanks/code-tanks-builder:latest
         command: ctbuilder
-        restart: unless-stopped
+        # restart: unless-stopped
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
         env:
@@ -68,7 +68,7 @@ jobs:
       simulator:
         image: ghcr.io/code-tanks/code-tanks-simulator:latest
         command: ctsim
-        restart: unless-stopped
+        # restart: unless-stopped
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock    
         env:
@@ -84,7 +84,7 @@ jobs:
       
       web:
         image: ghcr.io/code-tanks/code-tanks-web:latest
-        restart: unless-stopped
+        # restart: unless-stopped
         ports:
           - 8098:8080
         networks:
@@ -95,7 +95,7 @@ jobs:
 
       db:
         image: postgres
-        restart: unless-stopped
+        # restart: unless-stopped
         env:
           - POSTGRES_PASSWORD=example
           - PGDATA=/var/lib/postgresql/data/pgdata
@@ -113,7 +113,7 @@ jobs:
         command: /etc/ocypod.toml
         ports:
           - 8023
-        restart: unless-stopped
+        # restart: unless-stopped
         networks:
           - no-internet
         # depends_on:
@@ -125,7 +125,7 @@ jobs:
           - 6379
         # volumes:
         #   - ./test/redis:/data
-        restart: unless-stopped
+        # restart: unless-stopped
         networks:
           - no-internet
 
