@@ -108,9 +108,9 @@ jobs:
 
       ocypod:
         image: davechallis/ocypod:latest
-        volumes:
-          - ./ocypod.toml:/etc/ocypod.toml:ro
-        options: /etc/ocypod.toml
+        # volumes:
+        #   - ./ocypod.toml:/etc/ocypod.toml:ro
+        # options: /etc/ocypod.toml
         ports:
           - 8023
         # restart: unless-stopped
@@ -119,7 +119,7 @@ jobs:
         # depends_on:
         #   - ocypod-redis
 
-      ocypod-redis:
+      redis:
         image: redis:6
         ports:
           - 6379
