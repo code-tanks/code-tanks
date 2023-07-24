@@ -15,7 +15,7 @@ fi
 
 OUTPUT=$(./scripts/get_build_log.sh "2s2wgkh")
 
-sleep 60
+sleep 10
 
 if [[ "${OUTPUT}" == '"404"' ]]
 then
@@ -52,7 +52,7 @@ RAW='2s2wgkh
 #   exit 1
 # fi
 
-sleep 600
+sleep 10
 
 
 OUTPUT=$(./scripts/run_sim.sh "2s2wgkh")
@@ -75,5 +75,6 @@ else
   echo 'Expected:'
   echo "${RAW}"
   docker compose logs simulator
+  docker ps
   exit 1
 fi
