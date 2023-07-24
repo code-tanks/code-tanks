@@ -30,7 +30,7 @@ jobs:
         ports:
           - 5001
         env:
-          - REGISTRY_HTTP_ADDR=0.0.0.0:5001
+          REGISTRY_HTTP_ADDR: 0.0.0.0:5001
 
       server:
         image: ghcr.io/code-tanks/code-tanks-server:latest
