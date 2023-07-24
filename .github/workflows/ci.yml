@@ -55,8 +55,8 @@ jobs:
           - /var/run/docker.sock:/var/run/docker.sock
         env:
           DB_URL: postgres://postgres:example@db:5432
-        deploy:
-          replicas: 2
+        # deploy:
+        #   replicas: 2
         # networks:
         #   - no-internet
         #   - internet
@@ -73,8 +73,8 @@ jobs:
           - /var/run/docker.sock:/var/run/docker.sock    
         env:
           DB_URL: postgres://postgres:example@db:5432
-        deploy:
-          replicas: 2
+        # deploy:
+        #   replicas: 2
         # networks:
         #   - no-internet
         # depends_on:
