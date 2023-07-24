@@ -12,6 +12,15 @@ services:
     networks:
       - no-internet
       - internet
+    depends_on:
+      - builder
+      - simulator
+      - web
+      - db
+      - ocypod
+      - ocypod-redis
+      - registry
+
 
   builder:
     image: ghcr.io/code-tanks/code-tanks-builder:latest
@@ -101,17 +110,17 @@ services:
       - no-internet
       - internet
 
-  pgAdmin:
-    container_name: pgAdmin
-    image: dpage/pgadmin4
-    ports:
-      - 8081:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-    networks:
-      - no-internet
-      - internet
+  # pgAdmin:
+  #   container_name: pgAdmin
+  #   image: dpage/pgadmin4
+  #   ports:
+  #     - 8081:80
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+  #     - PGADMIN_DEFAULT_PASSWORD=admin
+  #   networks:
+  #     - no-internet
+  #     - internet
 
 networks:
   no-internet:
