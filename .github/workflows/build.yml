@@ -124,7 +124,7 @@ jobs:
           context: .
           file: worker_simulator/Dockerfile
           push: true
-          platforms: linux/arm64 #, linux/amd64
+          platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-simulator:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache,mode=max
