@@ -74,7 +74,8 @@ else
   echo "${OUTPUT}"
   echo 'Expected:'
   echo "${RAW}"
-  docker compose logs simulator
-  docker ps
+#   docker compose logs simulator
+#   docker ps
+  docker compose logs
   exit 1
 fi
