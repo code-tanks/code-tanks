@@ -12,9 +12,9 @@ services:
     networks:
       - no-internet
       - internet
-    depends_on:
-      - builder
-      - simulator
+    # depends_on:
+    #   - builder
+    #   - simulator
 
   builder:
     image: ghcr.io/code-tanks/code-tanks-builder:latest
@@ -29,9 +29,9 @@ services:
     networks:
       - no-internet
       - internet
-    depends_on:
-      - db
-      - ocypod
+    # depends_on:
+    #   - db
+    #   - ocypod
       # - registry
 
   simulator:
@@ -46,9 +46,9 @@ services:
       replicas: 2
     networks:
       - no-internet
-    depends_on:
-      - db
-      - ocypod
+    # depends_on:
+    #   - db
+    #   - ocypod
       # - registry
   
   web:
@@ -60,8 +60,8 @@ services:
     networks:
       - no-internet
       - internet
-    depends_on:
-      - server
+    # depends_on:
+    #   - server
 
   db:
     container_name: db
@@ -88,8 +88,8 @@ services:
     restart: unless-stopped
     networks:
       - no-internet
-    depends_on:
-      - ocypod-redis
+    # depends_on:
+    #   - ocypod-redis
 
   ocypod-redis:
     container_name: ocypod-redis
@@ -110,8 +110,8 @@ services:
       - 5001
     environment:
       - REGISTRY_HTTP_ADDR=0.0.0.0:5001
-    volumes:
-      - ./test/registry/:/var/lib/registry
+    # volumes:
+    #   - ./test/registry/:/var/lib/registry
     networks:
       - no-internet
       - internet

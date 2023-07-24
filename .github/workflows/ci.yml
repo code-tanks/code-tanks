@@ -28,21 +28,132 @@ jobs:
       registry:
         image: registry
         ports:
-          - 5001:5000
+          - 5001
+        environment:
+          - REGISTRY_HTTP_ADDR=0.0.0.0:5001
+
+      server:
+        container_name: server
+        image: ghcr.io/code-tanks/code-tanks-server:latest
+        restart: unless-stopped
+        ports:
+          - 8089:8088
+        environment:
+          - DB_URL=postgres://postgres:example@db:5432
+        command: ctserver
+        networks:
+          - no-internet
+          - internet
+        # depends_on:
+        #   - builder
+        #   - simulator
+
+      builder:
+        image: ghcr.io/code-tanks/code-tanks-builder:latest
+        command: ctbuilder
+        restart: unless-stopped
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+          - DB_URL=postgres://postgres:example@db:5432
+        deploy:
+          replicas: 2
+        networks:
+          - no-internet
+          - internet
+        # depends_on:
+        #   - db
+        #   - ocypod
+          # - registry
+
+      simulator:
+        image: ghcr.io/code-tanks/code-tanks-simulator:latest
+        command: ctsim
+        restart: unless-stopped
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock    
+        environment:
+          - DB_URL=postgres://postgres:example@db:5432
+        deploy:
+          replicas: 2
+        networks:
+          - no-internet
+        # depends_on:
+        #   - db
+        #   - ocypod
+          # - registry
+      
+      web:
+        container_name: web
+        image: ghcr.io/code-tanks/code-tanks-web:latest
+        restart: unless-stopped
+        ports:
+          - 8098:8080
+        networks:
+          - no-internet
+          - internet
+        # depends_on:
+        #   - server
+
+      db:
+        container_name: db
+        image: postgres
+        restart: unless-stopped
+        environment:
+          - POSTGRES_PASSWORD=example
+          - PGDATA=/var/lib/postgresql/data/pgdata
+        ports:
+          - 5432
+        # volumes:
+        #   - ./test/postgres:/var/lib/postgresql/data
+        networks:
+          - no-internet
+
+      ocypod:
+        container_name: ocypod
+        image: davechallis/ocypod:latest
+        volumes:
+          - ./ocypod.toml:/etc/ocypod.toml:ro
+        command: /etc/ocypod.toml
+        ports:
+          - 8023
+        restart: unless-stopped
+        networks:
+          - no-internet
+        # depends_on:
+        #   - ocypod-redis
+
+      ocypod-redis:
+        container_name: ocypod-redis
+        image: redis:6
+        ports:
+          - 6379
+        # volumes:
+        #   - ./test/redis:/data
+        restart: unless-stopped
+        networks:
+          - no-internet
+
+        networks:
+          no-internet:
+            driver: bridge
+            internal: true
+          internet:
+            driver: bridge
     steps:
       - uses: actions/checkout@v3
-      - name: "Pull images"
-        run: docker compose pull     
+      # - name: "Pull images"
+      #   run: docker compose pull     
       - name: "Pull curl"
         run: docker pull curlimages/curl:7.80.0
       - name: "Pull dart"
         run: docker pull dart:stable
-      - name: "Set up environment"
-        run: docker compose up -d server
-      - name: "Set up environment 2"
-        run: sleep 10
-      - name: "Set up environment 3"
-        run: docker compose ps
+      # - name: "Set up environment"
+      #   run: docker compose up -d server
+      # - name: "Set up environment 2"
+      #   run: sleep 10
+      # - name: "Set up environment 3"
+      #   run: docker compose ps
       # - name: "Setup Env"
       #   run: echo "HOST=http://localhost:8089" > ./scripts/.env
       # - name: "Test Upload Examples"
