@@ -15,10 +15,12 @@ then
   exit 1
 fi
 
+sleep 60
+
 OUTPUT=$(./scripts/get_build_log.sh "2s2wgkh")
 
-sleep 10
 
+# this code needs fixing
 if [[ "${OUTPUT}" == '"404"' ]]
 then
   echo "Failed to get build log for 2s2wgkh"
