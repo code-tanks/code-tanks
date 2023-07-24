@@ -75,6 +75,7 @@ else
   echo 'Expected:'
   echo "${RAW}"
   docker compose logs simulator
+  docker compose logs server
 #   docker ps
   # docker compose logs
   exit 1
