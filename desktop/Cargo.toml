@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 ctsimlib = { path = "../simulator" }
 ctsimlibgraphics = { path = "../simulator_graphics" }
-bevy = "0.11.0"
+bevy = { version = "0.11.0", default-features = false }
 bevy_rapier2d = { version = "*", features = [ "debug-render-2d" ] }
 
 [[bin]]
