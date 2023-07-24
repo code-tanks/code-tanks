@@ -15,11 +15,6 @@ services:
     depends_on:
       - builder
       - simulator
-      - web
-      - db
-      - ocypod
-      - ocypod-redis
-      - registry
 
 
   builder:
@@ -35,6 +30,10 @@ services:
     networks:
       - no-internet
       - internet
+    depends_on:
+      - db
+      - ocypod
+      - registry
 
   simulator:
     image: ghcr.io/code-tanks/code-tanks-simulator:latest
@@ -48,7 +47,11 @@ services:
       replicas: 2
     networks:
       - no-internet
-
+    depends_on:
+      - db
+      - ocypod
+      - registry
+  
   web:
     container_name: web
     image: ghcr.io/code-tanks/code-tanks-web:latest
@@ -58,6 +61,8 @@ services:
     networks:
       - no-internet
       - internet
+    depends_on:
+      - server
 
   db:
     container_name: db
@@ -67,9 +72,9 @@ services:
       - POSTGRES_PASSWORD=example
       - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
-      - 5432:5432
-    volumes:
-      - ./test/postgres:/var/lib/postgresql/data
+      - 5432
+    # volumes:
+    #   - ./test/postgres:/var/lib/postgresql/data
     networks:
       - no-internet
 
@@ -80,16 +85,18 @@ services:
       - ./ocypod.toml:/etc/ocypod.toml:ro
     command: /etc/ocypod.toml
     ports:
-      - 8023:8023
+      - 8023
     restart: unless-stopped
     networks:
       - no-internet
+    depends_on:
+      - ocypod-redis
 
   ocypod-redis:
     container_name: ocypod-redis
     image: redis:6
     ports:
-      - 6379:6379
+      - 6379
     # volumes:
     #   - ./test/redis:/data
     restart: unless-stopped
@@ -101,7 +108,7 @@ services:
     image: registry
     restart: unless-stopped
     ports:
-      - 5001:5001
+      - 5001
     environment:
       - REGISTRY_HTTP_ADDR=0.0.0.0:5001
     volumes:

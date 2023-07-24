@@ -2,6 +2,8 @@
 
 . ./scripts/helper/setup_host.sh
 
+# ./scripts/dev/reset_db.sh
+
 OUTPUT=$(./scripts/upload_tank.sh examples/dart/do_nothing.dart)
 
 
@@ -23,6 +25,8 @@ then
   echo 'Got: "404"'
   exit 1
 fi
+
+echo $OUTPUT
 
 OUTPUT=$(./scripts/get_raw.sh "2s2wgkh")
 RAW="$(<examples/dart/do_nothing.dart)"
