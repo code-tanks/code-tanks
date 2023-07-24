@@ -28,6 +28,8 @@ fi
 
 echo $OUTPUT
 
+docker compose logs builder
+
 OUTPUT=$(./scripts/get_raw.sh "2s2wgkh")
 RAW="$(<examples/dart/do_nothing.dart)"
 
