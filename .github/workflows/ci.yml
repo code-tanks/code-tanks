@@ -29,7 +29,7 @@ jobs:
         image: registry
         ports:
           - 5001
-        environment:
+        env:
           - REGISTRY_HTTP_ADDR=0.0.0.0:5001
 
       server:
@@ -38,7 +38,7 @@ jobs:
         restart: unless-stopped
         ports:
           - 8089:8088
-        environment:
+        wnv:
           - DB_URL=postgres://postgres:example@db:5432
         command: ctserver
         networks:
@@ -54,7 +54,7 @@ jobs:
         restart: unless-stopped
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
-        environment:
+        env:
           - DB_URL=postgres://postgres:example@db:5432
         deploy:
           replicas: 2
@@ -72,7 +72,7 @@ jobs:
         restart: unless-stopped
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock    
-        environment:
+        env:
           - DB_URL=postgres://postgres:example@db:5432
         deploy:
           replicas: 2
@@ -99,7 +99,7 @@ jobs:
         container_name: db
         image: postgres
         restart: unless-stopped
-        environment:
+        env:
           - POSTGRES_PASSWORD=example
           - PGDATA=/var/lib/postgresql/data/pgdata
         ports:
