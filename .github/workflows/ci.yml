@@ -40,9 +40,9 @@ jobs:
         env:
           DB_URL: postgres://postgres:example@db:5432
         command: ctserver
-        networks:
-          - no-internet
-          - internet
+        # networks:
+        #   - no-internet
+        #   - internet
         # depends_on:
         #   - builder
         #   - simulator
@@ -57,9 +57,9 @@ jobs:
           DB_URL: postgres://postgres:example@db:5432
         deploy:
           replicas: 2
-        networks:
-          - no-internet
-          - internet
+        # networks:
+        #   - no-internet
+        #   - internet
         # depends_on:
         #   - db
         #   - ocypod
@@ -75,8 +75,8 @@ jobs:
           DB_URL: postgres://postgres:example@db:5432
         deploy:
           replicas: 2
-        networks:
-          - no-internet
+        # networks:
+        #   - no-internet
         # depends_on:
         #   - db
         #   - ocypod
@@ -87,9 +87,9 @@ jobs:
         # restart: unless-stopped
         ports:
           - 8098:8080
-        networks:
-          - no-internet
-          - internet
+        # networks:
+        #   - no-internet
+        #   - internet
         # depends_on:
         #   - server
 
@@ -103,8 +103,8 @@ jobs:
           - 5432
         # volumes:
         #   - ./test/postgres:/var/lib/postgresql/data
-        networks:
-          - no-internet
+        # networks:
+        #   - no-internet
 
       ocypod:
         image: davechallis/ocypod:latest
@@ -114,8 +114,8 @@ jobs:
         ports:
           - 8023
         # restart: unless-stopped
-        networks:
-          - no-internet
+        # networks:
+        #   - no-internet
         # depends_on:
         #   - ocypod-redis
 
@@ -126,15 +126,15 @@ jobs:
         # volumes:
         #   - ./test/redis:/data
         # restart: unless-stopped
-        networks:
-          - no-internet
+        # networks:
+        #   - no-internet
 
-        networks:
-          no-internet:
-            driver: bridge
-            internal: true
-          internet:
-            driver: bridge
+    # networks:
+    #   no-internet:
+    #     driver: bridge
+    #     internal: true
+    #   internet:
+    #     driver: bridge
     steps:
       - uses: actions/checkout@v3
       # - name: "Pull images"
