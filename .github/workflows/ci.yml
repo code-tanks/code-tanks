@@ -24,6 +24,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry
+        ports:
+          - 5001:5000
     steps:
       - uses: actions/checkout@v3
       - name: "Pull images"
@@ -33,7 +38,7 @@ jobs:
       - name: "Pull dart"
         run: docker pull dart:stable
       - name: "Set up environment"
-        run: docker compose up -d
+        run: docker compose up -d server
       - name: "Set up environment 2"
         run: sleep 10
       - name: "Set up environment 3"
