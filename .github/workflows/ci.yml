@@ -48,7 +48,7 @@ jobs:
         run: curl localhost:8089/ping
       - name: "Test do_nothing"
         run: |
-          echo "HOST=server:8088" > ./scripts/.env
+          echo "HOST=localhost:8089" > ./scripts/.env
           ./scripts/test/test_do_nothing.sh
 
         # run: script -e -c "./scripts/test/test_do_nothing.sh"
