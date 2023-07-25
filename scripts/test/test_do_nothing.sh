@@ -28,7 +28,8 @@ then
   exit 1
 fi
 
-echo $OUTPUT
+echo "build log:"
+echo "${OUTPUT}"
 
 # docker compose logs builder
 
@@ -83,3 +84,6 @@ else
   # docker compose logs
   exit 1
 fi
+
+echo "sim:"
+echo "${OUTPUT}"
