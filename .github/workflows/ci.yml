@@ -141,10 +141,10 @@ jobs:
     # #     driver: bridge
     steps:
       - uses: actions/checkout@v3
-      # - name: "install docker"
-      #   run: |
-      #     apt update
-      #     DEBIAN_FRONTEND=noninteractive apt install -y curl jq
+      - name: "install curl"
+        run: |
+          apt update
+          DEBIAN_FRONTEND=noninteractive apt install -y curl
       #     curl -fsSL https://get.docker.com -o get-docker.sh
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v2
