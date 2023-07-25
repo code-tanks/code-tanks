@@ -144,8 +144,8 @@ jobs:
       - name: "install docker"
         run: |
           apt update
-          && DEBIAN_FRONTEND=noninteractive apt install -y
-          curl jq && curl -fsSL https://get.docker.com -o get-docker.sh
+          DEBIAN_FRONTEND=noninteractive apt install -y curl jq
+          curl -fsSL https://get.docker.com -o get-docker.sh
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v2
       # - name: Set up Docker Buildx
