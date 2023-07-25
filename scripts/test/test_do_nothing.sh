@@ -30,7 +30,7 @@ fi
 
 echo $OUTPUT
 
-docker compose logs builder
+# docker compose logs builder
 
 OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "2s2wgkh")
 RAW="$(<examples/dart/do_nothing.dart)"
@@ -82,8 +82,8 @@ else
   echo "${OUTPUT}"
   echo 'Expected:'
   echo "${RAW}"
-  docker compose logs simulator
-  docker compose logs server
+  # docker compose logs simulator
+  # docker compose logs server
 #   docker ps
   # docker compose logs
   exit 1
