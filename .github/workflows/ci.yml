@@ -43,6 +43,8 @@ jobs:
       #     apt update
       #     DEBIAN_FRONTEND=noninteractive apt install -y curl
       - name: "test server"
+        run: sleep 60
+      - name: "test server"
         run: curl localhost:8089/ping
       - name: "Test do_nothing"
         run: |
