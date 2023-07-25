@@ -176,5 +176,6 @@ jobs:
         run: |
           echo "HOST=server:8088" > ./scripts/.env
           ./scripts/test/test_do_nothing.sh
+          
         # run: script -e -c "./scripts/test/test_do_nothing.sh"
       
