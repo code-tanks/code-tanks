@@ -142,7 +142,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: "install docker"
-        run: curl -fsSL https://get.docker.com -o get-docker.sh
+        run: |
+        RUN apt update \
+          && DEBIAN_FRONTEND=noninteractive apt install -y \
+          curl jq && curl -fsSL https://get.docker.com -o get-docker.sh
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v2
       # - name: Set up Docker Buildx
