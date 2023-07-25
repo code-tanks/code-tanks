@@ -17,9 +17,8 @@ RUN apt update \
 
 WORKDIR /ctbuilder
 
-RUN curl -fsSL https://get.docker.com -o get-docker.sh
-RUN sh get-docker.sh
-RUN rm get-docker.sh
+RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
+    sh get-docker.sh && rm get-docker.sh
 
 COPY scripts/Dockerfiles Dockerfiles
 

@@ -56,13 +56,13 @@ FROM ubuntu:focal AS runner
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    curl git build-essential pkg-config libssl-dev jq \
-    g++ pkg-config libx11-dev libasound2-dev libudev-dev \
+    curl git jq \
     sudo postgresql redis-server
+    # build-essential pkg-config libssl-dev jq \
+    # g++ pkg-config libx11-dev libasound2-dev libudev-dev \
 
-RUN curl -fsSL https://get.docker.com -o get-docker.sh
-RUN sh get-docker.sh
-RUN rm get-docker.sh
+RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
+    sh get-docker.sh && rm get-docker.sh
 
 WORKDIR /ctall
 
