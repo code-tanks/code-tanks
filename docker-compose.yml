@@ -8,6 +8,7 @@ services:
       - 8089:8088
     environment:
       - DB_URL=postgres://postgres:example@db:5432
+      - OCYPOD_URL=ocypod:8023
     command: ctserver
     networks:
       - no-internet

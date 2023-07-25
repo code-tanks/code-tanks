@@ -43,13 +43,14 @@ jobs:
           - 8088:8088
         env:
           DB_URL: postgres://postgres:example@db:5432
+          OCYPOD_URL: ocypod:8023
         # cmd: ctserver
         # networks:
         #   - no-internet
         #   - internet
-        # depends_on:
-        #   - builder
-        #   - simulator
+        depends_on:
+          - builder
+          - simulator
 
       builder:
         image: ghcr.io/code-tanks/code-tanks-builder:latest
@@ -64,10 +65,10 @@ jobs:
         # networks:
         #   - no-internet
         #   - internet
-        # depends_on:
-        #   - db
-        #   - ocypod
-          # - registry
+        depends_on:
+          - db
+          - ocypod
+          - registry
 
       simulator:
         image: ghcr.io/code-tanks/code-tanks-simulator:latest
@@ -81,10 +82,10 @@ jobs:
         #   replicas: 2
         # networks:
         #   - no-internet
-        # depends_on:
-        #   - db
-        #   - ocypod
-          # - registry
+        depends_on:
+          - db
+          - ocypod
+          - registry
       
       # web:
       #   image: ghcr.io/code-tanks/code-tanks-web:latest
@@ -125,8 +126,8 @@ jobs:
         # restart: unless-stopped
         # networks:
         #   - no-internet
-        # depends_on:
-        #   - ocypod-redis
+        depends_on:
+          - redis
 
       redis:
         image: redis:6
