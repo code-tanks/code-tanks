@@ -1,7 +1,5 @@
 #!/bin/bash
 
-git pull
-
 docker cp ./scripts/dev/sql/reset.sql db:/
 docker exec db /bin/sh -c 'psql -h localhost -d postgres -U postgres -p 5432 -a -q -f /reset.sql'
 

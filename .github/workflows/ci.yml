@@ -29,20 +29,20 @@ jobs:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     services:
-      # registry:
-      #   image: registry
-      #   # ports:
-      #   #   - 5001
-      #   env:
-      #     REGISTRY_HTTP_ADDR: 0.0.0.0:5001
+      registry:
+        image: registry
+        ports:
+          - 5001:5001
+        env:
+          REGISTRY_HTTP_ADDR: 0.0.0.0:5001
 
-      # server:
-      #   image: ghcr.io/code-tanks/code-tanks-server:latest
-      #   # restart: unless-stopped
-      #   # ports:
-      #   #   - 8089:8088
-      #   env:
-      #     DB_URL: postgres://postgres:example@db:5432
+      server:
+        image: ghcr.io/code-tanks/code-tanks-server:latest
+        # restart: unless-stopped
+        ports:
+          - 8088:8088
+        env:
+          DB_URL: postgres://postgres:example@db:5432
         # cmd: ctserver
         # networks:
         #   - no-internet
@@ -51,14 +51,14 @@ jobs:
         #   - builder
         #   - simulator
 
-      # builder:
-      #   image: ghcr.io/code-tanks/code-tanks-builder:latest
-      #   # command: ctbuilder
-      #   # restart: unless-stopped
-      #   volumes:
-      #     - /var/run/docker.sock:/var/run/docker.sock
-      #   env:
-      #     DB_URL: postgres://postgres:example@db:5432
+      builder:
+        image: ghcr.io/code-tanks/code-tanks-builder:latest
+        # command: ctbuilder
+        # restart: unless-stopped
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+        env:
+          DB_URL: postgres://postgres:example@db:5432
         # deploy:
         #   replicas: 2
         # networks:
@@ -69,14 +69,14 @@ jobs:
         #   - ocypod
           # - registry
 
-      # simulator:
-      #   image: ghcr.io/code-tanks/code-tanks-simulator:latest
-      #   # command: ctsim
-      #   # restart: unless-stopped
-      #   volumes:
-      #     - /var/run/docker.sock:/var/run/docker.sock    
-      #   env:
-      #     DB_URL: postgres://postgres:example@db:5432
+      simulator:
+        image: ghcr.io/code-tanks/code-tanks-simulator:latest
+        # command: ctsim
+        # restart: unless-stopped
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock    
+        env:
+          DB_URL: postgres://postgres:example@db:5432
         # deploy:
         #   replicas: 2
         # networks:
@@ -103,30 +103,30 @@ jobs:
         env:
           POSTGRES_PASSWORD: example
           PGDATA: /var/lib/postgresql/data/pgdata
-        # ports:
-        #   - 5432
+        ports:
+          - 5432:5432
         # volumes:
         #   - ./test/postgres:/var/lib/postgresql/data
         # networks:
         #   - no-internet
 
-      # ocypod:
-      #   image: davechallis/ocypod:latest
-      #   # volumes:
-      #   #   - ./ocypod.toml:/etc/ocypod.toml:ro
-      #   # options: /etc/ocypod.toml
-      #   # ports:
-      #   #   - 8023
-      #   # restart: unless-stopped
-      #   # networks:
-      #   #   - no-internet
-      #   # depends_on:
-      #   #   - ocypod-redis
+      ocypod:
+        image: davechallis/ocypod:latest
+        # volumes:
+        #   - ./ocypod.toml:/etc/ocypod.toml:ro
+        # options: /etc/ocypod.toml
+        ports:
+          - 8023:8023
+        # restart: unless-stopped
+        # networks:
+        #   - no-internet
+        # depends_on:
+        #   - ocypod-redis
 
-      # redis:
-      #   image: redis:6
-        # ports:
-        #   - 6379
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
         # volumes:
         #   - ./test/redis:/data
         # restart: unless-stopped
@@ -175,7 +175,6 @@ jobs:
       - name: "Test do_nothing"
         run: |
           echo "HOST=server:8088" > ./scripts/.env
-          ./scripts/dev/reset_db.sh
           ./scripts/test/test_do_nothing.sh
         # run: script -e -c "./scripts/test/test_do_nothing.sh"
       
