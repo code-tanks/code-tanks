@@ -29,6 +29,11 @@ jobs:
         image: ghcr.io/code-tanks/code-tanks-all:latest
         ports:
           - 8089:8088
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+        env:
+          DB_URL: postgres://postgres:postgres@localhost:5432
+          OCYPOD_URL: localhost:8023 ctall
       registry:
         image: registry
         ports:
