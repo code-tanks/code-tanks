@@ -16,14 +16,17 @@ fn main() {
     let mut client = get_client();
 
     loop {
+        println!("getting sim job");
         let job = get_sim_job();
 
         if !job.is_empty() {
+            println!("got {:?}", job);
             let id = &job[0];
             let args = &job[1]
                 .split(' ')
                 .map(|f| f.to_string())
                 .collect::<Vec<String>>();
+            
             let tank_nametags = run_docker_game(args);
             let game_id = &args.join("-");
             for tank_nametag in tank_nametags.iter() {
@@ -34,6 +37,7 @@ fn main() {
             let uploaded_sim = upload_sim(&mut client, game_id, &sim, true);
             update_sim_job(id, uploaded_sim);
         }
+        println!("no jobs found. sleeping for 1 second");
 
         thread::sleep(time::Duration::from_millis(1000));
     }

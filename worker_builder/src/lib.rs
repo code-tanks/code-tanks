@@ -1,4 +1,5 @@
 use std::process::Command;
+use std::env;
 
 pub mod db;
 
@@ -19,7 +20,7 @@ pub fn create_build_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{"timeout": "10m"}"#)
-        .arg("ocypod:8023/queue/build")
+        .arg(format!("{}/queue/build", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -32,8 +33,8 @@ pub struct Job {
 pub fn get_build_job() -> Vec<String> {
     let output_raw = Command::new("bash")
         .arg("-c")
-        .arg(r#"curl ocypod:8023/queue/build/job | jq --raw-output '.id,.input'"#)
-        .arg("ocypod:8023/queue/build/job")
+        .arg(format!(r#"curl {}/queue/build/job | jq --raw-output '.id,.input'"#, env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
+        .arg(format!("{}/queue/build/job", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -86,7 +87,7 @@ pub fn update_build_job(id: &str, successful: bool) {
             r#"{{"status": "{}"}}"#,
             if successful { "completed" } else { "failed" }
         ))
-        .arg(format!("ocypod:8023/job/{}", id))
+        .arg(format!("{}/job/{}", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap(), id))
         .output()
         .expect("failed to communicate with ocypod");
 

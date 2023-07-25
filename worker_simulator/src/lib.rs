@@ -1,5 +1,6 @@
 use core::time;
 use std::{process::Command, thread};
+use std::env;
 
 use ctsimlib::{run_game, run_tank};
 use db::upload_log_to_db;
@@ -14,7 +15,7 @@ pub fn create_sim_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{"timeout": "10m"}"#)
-        .arg("ocypod:8023/queue/simulator")
+        .arg(format!("{}/queue/simulator", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -22,8 +23,8 @@ pub fn create_sim_queue() {
 pub fn get_sim_job() -> Vec<String> {
     let output_raw = Command::new("bash")
         .arg("-c")
-        .arg(r#"curl ocypod:8023/queue/simulator/job | jq --raw-output '.id,.input'"#)
-        .arg("ocypod:8023/queue/build/job")
+        .arg(format!(r#"curl {}/queue/simulator/job | jq --raw-output '.id,.input'"#, env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
+        .arg(format!("{}/queue/build/job", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -73,7 +74,7 @@ pub fn update_sim_job(id: &str, successful: bool) {
             r#"{{"status": "{}"}}"#,
             if successful { "completed" } else { "failed" }
         ))
-        .arg(format!("ocypod:8023/job/{}", id))
+        .arg(format!("{}/job/{}", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap(), id))
         .output()
         .expect("failed to communicate with ocypod");
 

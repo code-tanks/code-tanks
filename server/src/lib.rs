@@ -437,7 +437,7 @@ pub fn add_build_job(input: &str) {
         .arg("-XPOST")
         .arg("-d")
         .arg(format!(r#"{{"input": "{}"}}"#, input))
-        .arg("ocypod:8023/queue/build/job")
+        .arg(format!("{}/queue/build/job", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -458,7 +458,7 @@ pub fn add_sim_job(url: &str) {
         .arg("-XPOST")
         .arg("-d")
         .arg(format!(r#"{{"input": "{}"}}"#, url))
-        .arg("ocypod:8023/queue/simulator/job")
+        .arg(format!("{}/queue/simulator/job", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
 

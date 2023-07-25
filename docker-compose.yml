@@ -25,6 +25,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - DB_URL=postgres://postgres:example@db:5432
+      - OCYPOD_URL=ocypod:8023
     deploy:
       replicas: 2
     networks:
@@ -43,6 +44,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock    
     environment:
       - DB_URL=postgres://postgres:example@db:5432
+      - OCYPOD_URL=ocypod:8023
     deploy:
       replicas: 2
     networks:

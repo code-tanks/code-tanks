@@ -60,10 +60,10 @@ RAW='2s2wgkh
 #   exit 1
 # fi
 
-sleep 60
-
-
 OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
+sleep 600
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
+
 # OUTPUT="$(echo $OUTPUT | xargs)"
 # RAW="$(echo $RAW | xargs)"
 

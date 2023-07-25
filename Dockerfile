@@ -63,6 +63,9 @@ RUN apt-get install -y redis-server
 COPY init.sh .
 RUN chmod 777 init.sh
 
+COPY scripts/Dockerfiles Dockerfiles
+RUN sed -i 's#COPY $url#RUN curl localhost:8089/raw/$url >#' Dockerfiles/*.Dockerfile
+
 CMD [ "./init.sh" ]
 
 

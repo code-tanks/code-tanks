@@ -14,9 +14,11 @@ fn main() {
     let mut client = get_client();
 
     loop {
+        println!("getting build job");
         let job = get_build_job();
 
         if !job.is_empty() {
+            println!("got {:?}", job);
             let id = &job[0];
             let input = &job[1]
                 .split(',')
@@ -34,6 +36,7 @@ fn main() {
 
             update_build_job(id, uploaded_log && pushed_to_registry);
         }
+        println!("no jobs found. sleeping for 1 second");
 
         thread::sleep(time::Duration::from_millis(1000));
     }
