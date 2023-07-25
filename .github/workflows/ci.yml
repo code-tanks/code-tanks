@@ -38,10 +38,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: "install curl"
-        run: |
-          apt update
-          DEBIAN_FRONTEND=noninteractive apt install -y curl
+      # - name: "install curl"
+      #   run: |
+      #     apt update
+      #     DEBIAN_FRONTEND=noninteractive apt install -y curl
       - name: "test server"
         run: curl localhost:8089/ping
       - name: "Test do_nothing"
