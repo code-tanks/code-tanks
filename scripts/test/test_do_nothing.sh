@@ -15,7 +15,7 @@ then
   exit 1
 fi
 
-sleep 600
+sleep 180
 
 OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "2s2wgkh")
 
@@ -49,26 +49,21 @@ RAW='2s2wgkh
 0|10,0,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677
 {"2s2wgkh-2s2wgkh-0":{"damage_given":0,"health":100,"index":0,"tank_id":"2s2wgkh"},"tanks":["2s2wgkh"],"winner":"2s2wgkh-2s2wgkh-0","winner_index":0}'
 
-# OUTPUT=$(./scripts/run_sim.sh "2s2wgkh")
-# if [[ "${OUTPUT}" != "waiting to build" ]]
-# then
-#   echo "Failed run sim for 2s2wgkh"
-#   echo 'Got:'
-#   echo "${OUTPUT}"
-#   echo 'Expected:'
-#   echo "waiting to build"
-#   exit 1
-# fi
-
 OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
-sleep 600
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
+if [[ "${OUTPUT}" != "waiting to build" ]]
+then
+  echo "Failed run sim for 2s2wgkh"
+  echo 'Got:'
+  echo "${OUTPUT}"
+  echo 'Expected:'
+  echo "waiting to build"
+  exit 1
+fi
 
-# OUTPUT="$(echo $OUTPUT | xargs)"
-# RAW="$(echo $RAW | xargs)"
+sleep 180
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
-# sed 's/^M//' ./scripts/test/output.txt > ./scripts/test/output.txt
 tr -d '\r'  < ./scripts/test/output.txt > ./scripts/test/output1.txt
 
 echo "${RAW}" > ./scripts/test/raw.txt
