@@ -1,11 +1,11 @@
-name: ci
+name: ci-dev
 
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/ci.yml
+      - .github/workflows/ci-dev.yml
       - api/**
       - cli/**
       # - desktop/**
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       all:
-        image: ghcr.io/code-tanks/code-tanks-all:latest
+        image: ghcr.io/code-tanks/code-tanks-all-dev:latest
         ports:
           - 8089:8088
         volumes:
