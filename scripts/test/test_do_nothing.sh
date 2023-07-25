@@ -15,7 +15,7 @@ then
   exit 1
 fi
 
-sleep 180
+sleep 30
 
 OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "2s2wgkh")
 
@@ -60,7 +60,7 @@ then
   exit 1
 fi
 
-sleep 180
+sleep 30
 OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
