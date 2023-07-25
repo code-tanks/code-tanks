@@ -49,6 +49,8 @@ jobs:
       #     DEBIAN_FRONTEND=noninteractive apt install -y curl
       - name: "pull dart"
         run: docker pull dart:stable
+      - name: "sleep"
+        run: sleep 30
       - name: "test server"
         run: curl -s localhost:8089/ping
       - name: "Test do_nothing"
