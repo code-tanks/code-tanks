@@ -1,25 +1,29 @@
 name: ci-dev
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/ci-dev.yml
-      - api/**
-      - cli/**
-      # - desktop/**
-      - runner/**
-      - server/**
-      - simulator/**
-      - simulator_graphics/**
-      - viewer/**
-      - web/**
-      - worker_builder/**
-      - worker_simulator/**
-      - scripts/**
-      - docker-compose.yml
-      - ocypod.toml
+  workflow_run:
+    workflows: ["build-dev"]
+    types:
+      - completed
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - .github/workflows/ci-dev.yml
+  #     - api/**
+  #     - cli/**
+  #     # - desktop/**
+  #     - runner/**
+  #     - server/**
+  #     - simulator/**
+  #     - simulator_graphics/**
+  #     - viewer/**
+  #     - web/**
+  #     - worker_builder/**
+  #     - worker_simulator/**
+  #     - scripts/**
+  #     - docker-compose.yml
+  #     - ocypod.toml
 
 jobs:
   test:

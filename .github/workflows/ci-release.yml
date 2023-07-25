@@ -1,25 +1,29 @@
 name: ci-release
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/ci-release.yml
-      - api/**
-      - cli/**
-      # - desktop/**
-      - runner/**
-      - server/**
-      - simulator/**
-      - simulator_graphics/**
-      - viewer/**
-      - web/**
-      - worker_builder/**
-      - worker_simulator/**
-      - scripts/**
-      - docker-compose.yml
-      - ocypod.toml
+  workflow_run:
+    workflows: ["build-release"]
+    types:
+      - completed
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - .github/workflows/ci-release.yml
+  #     - api/**
+  #     - cli/**
+  #     # - desktop/**
+  #     - runner/**
+  #     - server/**
+  #     - simulator/**
+  #     - simulator_graphics/**
+  #     - viewer/**
+  #     - web/**
+  #     - worker_builder/**
+  #     - worker_simulator/**
+  #     - scripts/**
+  #     - docker-compose.yml
+  #     - ocypod.toml
 
 jobs:
   test:
