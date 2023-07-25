@@ -24,11 +24,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    container: ubuntu:latest
     services:
       registry:
         image: registry
-        ports:
-          - 5001
+        # ports:
+        #   - 5001
         env:
           REGISTRY_HTTP_ADDR: 0.0.0.0:5001
 
@@ -99,8 +100,8 @@ jobs:
         env:
           POSTGRES_PASSWORD: example
           PGDATA: /var/lib/postgresql/data/pgdata
-        ports:
-          - 5432
+        # ports:
+        #   - 5432
         # volumes:
         #   - ./test/postgres:/var/lib/postgresql/data
         # networks:
@@ -111,8 +112,8 @@ jobs:
         # volumes:
         #   - ./ocypod.toml:/etc/ocypod.toml:ro
         # options: /etc/ocypod.toml
-        ports:
-          - 8023
+        # ports:
+        #   - 8023
         # restart: unless-stopped
         # networks:
         #   - no-internet
@@ -121,8 +122,8 @@ jobs:
 
       redis:
         image: redis:6
-        ports:
-          - 6379
+        # ports:
+        #   - 6379
         # volumes:
         #   - ./test/redis:/data
         # restart: unless-stopped
