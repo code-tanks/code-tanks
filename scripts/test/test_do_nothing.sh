@@ -15,7 +15,7 @@ then
   exit 1
 fi
 
-sleep 60
+sleep 600
 
 OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "2s2wgkh")
 
