@@ -24,11 +24,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: 
-      image: ubuntu:latest
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
     services:
+      registry:
+        image: ghcr.io/code-tanks/code-tanks-all:latest
+        ports:
+          - 8089:8088
       registry:
         image: registry
         ports:
@@ -36,153 +36,14 @@ jobs:
         env:
           REGISTRY_HTTP_ADDR: 0.0.0.0:5001
 
-      server:
-        image: ghcr.io/code-tanks/code-tanks-server:latest
-        # restart: unless-stopped
-        ports:
-          - 8088:8088
-        env:
-          DB_URL: postgres://postgres:example@db:5432
-          OCYPOD_URL: ocypod:8023
-        # cmd: ctserver
-        # networks:
-        #   - no-internet
-        #   - internet
-        depends_on:
-          - builder
-          - simulator
-
-      builder:
-        image: ghcr.io/code-tanks/code-tanks-builder:latest
-        # command: ctbuilder
-        # restart: unless-stopped
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-        env:
-          DB_URL: postgres://postgres:example@db:5432
-        # deploy:
-        #   replicas: 2
-        # networks:
-        #   - no-internet
-        #   - internet
-        depends_on:
-          - db
-          - ocypod
-          - registry
-
-      simulator:
-        image: ghcr.io/code-tanks/code-tanks-simulator:latest
-        # command: ctsim
-        # restart: unless-stopped
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock    
-        env:
-          DB_URL: postgres://postgres:example@db:5432
-        # deploy:
-        #   replicas: 2
-        # networks:
-        #   - no-internet
-        depends_on:
-          - db
-          - ocypod
-          - registry
-      
-      # web:
-      #   image: ghcr.io/code-tanks/code-tanks-web:latest
-        # restart: unless-stopped
-        # ports:
-        #   - 8098:8080
-        # networks:
-        #   - no-internet
-        #   - internet
-        # depends_on:
-        #   - server
-
-      db:
-        image: postgres
-        # restart: unless-stopped
-        env:
-          POSTGRES_PASSWORD: example
-          PGDATA: /var/lib/postgresql/data/pgdata
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        # volumes:
-        #   - ./test/postgres:/var/lib/postgresql/data
-        # networks:
-        #   - no-internet
-
-      ocypod:
-        image: davechallis/ocypod:latest
-        # volumes:
-        #   - ./ocypod.toml:/etc/ocypod.toml:ro
-        # options: /etc/ocypod.toml
-        ports:
-          - 8023:8023
-        # restart: unless-stopped
-        # networks:
-        #   - no-internet
-        depends_on:
-          - redis
-
-      redis:
-        image: redis:6
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        # volumes:
-        #   - ./test/redis:/data
-        # restart: unless-stopped
-        # networks:
-        #   - no-internet
-
-    # networks:
-    #   no-internet:
-    #     driver: bridge
-    #     internal: true
-    #   internet:
-    #     driver: bridge
     steps:
       - uses: actions/checkout@v3
       - name: "install curl"
         run: |
           apt update
           DEBIAN_FRONTEND=noninteractive apt install -y curl
-      #     curl -fsSL https://get.docker.com -o get-docker.sh
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v2
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
-      # - name: Log in to the Container registry
-      #   uses: docker/login-action@v2
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
-      # - name: "Pull images"
-      #   run: docker compose pull     
-      # - name: "Pull curl"
-      #   run: docker pull curlimages/curl:7.80.0
-      # - name: "Pull dart"
-      #   run: docker pull dart:stable
-      # - name: "Set up environment"
-      #   run: docker compose up -d server
-      # - name: "Set up environment 2"
-      #   run: sleep 10
-      # - name: "Set up environment 3"
-      #   run: docker compose ps
-      # - name: "Setup Env"
-      #   run: echo "HOST=http://localhost:8089" > ./scripts/.env
-      # - name: "Test Upload Examples"
-      #   run: ./scripts/upload_tanks.sh examples/
+      - name: "test server"
+        run: curl localhost:8089/ping
       - name: "Test do_nothing"
         run: |
           echo "HOST=server:8088" > ./scripts/.env
