@@ -168,7 +168,7 @@ async fn handle_connection(
     let path = args[0];
     let args = &args[1..];
 
-    println!("{} {} {} {:?}", request, method, path, args);
+    // println!("{} {} {} {:?}", request, method, path, args);
 
     let url: String;
     let res_code: String;
