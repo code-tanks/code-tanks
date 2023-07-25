@@ -8,7 +8,7 @@ use crate::{c_command::CommandSource, c_health::Health, c_tank::*, TankInfo, Tic
 use bevy::app::AppExit;
 
 pub fn save_commands(
-    state: Res<TickState>,
+    mut state: ResMut<TickState>,
     tank_ids_state: Res<TankInfo>,
     mut exit: EventWriter<AppExit>,
     query: Query<&CommandSource>,
@@ -73,7 +73,8 @@ pub fn save_commands(
 
     let early_stop = dead_count >= tanks.len() - 1;
 
-    if state.tick > TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
+    if state.tick >= TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
+        state.tick = TickState::MAXIMUM_SIMULATION_TICKS;
         println!("early_stop: {}", early_stop);
         // TODO save results of the simulation (winner, damage given, damage taken, time alive)
         let mut j = json!({});
