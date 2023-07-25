@@ -4,7 +4,7 @@
 
 # ./scripts/dev/reset_db.sh
 
-OUTPUT=$(./scripts/upload_tank.sh examples/dart/do_nothing.dart)
+OUTPUT=$(./scripts/dev/no-docker/upload_tank.sh examples/dart/do_nothing.dart)
 
 
 if [[ $OUTPUT != "2s2wgkh" ]]
@@ -17,7 +17,7 @@ fi
 
 sleep 60
 
-OUTPUT=$(./scripts/get_build_log.sh "2s2wgkh")
+OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "2s2wgkh")
 
 
 # this code needs fixing
@@ -32,7 +32,7 @@ echo $OUTPUT
 
 docker compose logs builder
 
-OUTPUT=$(./scripts/get_raw.sh "2s2wgkh")
+OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "2s2wgkh")
 RAW="$(<examples/dart/do_nothing.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
@@ -63,7 +63,7 @@ RAW='2s2wgkh
 sleep 60
 
 
-OUTPUT=$(./scripts/run_sim.sh "2s2wgkh")
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
 # OUTPUT="$(echo $OUTPUT | xargs)"
 # RAW="$(echo $RAW | xargs)"
 
