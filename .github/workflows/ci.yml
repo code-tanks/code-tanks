@@ -42,7 +42,7 @@ jobs:
         ports:
           - 8088:8088
         env:
-          DB_URL: postgres://postgres:example@db:5432
+          DB_URL: postgres://postgres:example@localhost:5432
         # cmd: ctserver
         # networks:
         #   - no-internet
@@ -176,6 +176,6 @@ jobs:
         run: |
           echo "HOST=server:8088" > ./scripts/.env
           ./scripts/test/test_do_nothing.sh
-          
+
         # run: script -e -c "./scripts/test/test_do_nothing.sh"
       
