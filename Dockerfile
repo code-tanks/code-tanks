@@ -35,11 +35,13 @@ COPY runner runner
 COPY server server
 COPY Cargo.toml .
 
-RUN cargo build --profile dev
+ARG profile=dev
 
-RUN cargo install --bin ctserver --path server --profile dev
-RUN cargo install --bin ctsim --path worker_simulator --profile dev
-RUN cargo install --bin ctbuilder --path worker_builder --profile dev
+RUN cargo build --profile $profile
+
+RUN cargo install --bin ctserver --path server --profile $profile
+RUN cargo install --bin ctsim --path worker_simulator --profile $profile
+RUN cargo install --bin ctbuilder --path worker_builder --profile $profile
 
 # COPY scripts scripts
 # COPY ocypod.toml .

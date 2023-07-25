@@ -15,10 +15,13 @@ COPY simulator simulator
 COPY worker_simulator/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
-RUN cargo install --bin ctsim --path . --profile dev
+
+ARG profile=dev
+
+RUN cargo install --bin ctsim --path . --profile $profile
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY worker_simulator/src src
-RUN cargo install --bin ctsim --path . --profile dev
+RUN cargo install --bin ctsim --path . --profile $profile
 
 FROM ubuntu:focal AS runner
 

@@ -1,4 +1,4 @@
-name: build
+name: build-release
 
 on:
   push:
@@ -42,8 +42,10 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          platforms: linux/amd64
+          platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-all:latest
+          build-args: |
+            profile=release
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache,mode=max
 
@@ -88,7 +90,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+      - run: sudo apt-get install -y g++ pkg-config libx11 libasound2 libudev
       - run: cargo build --bin ctdesktop
   build_builder_image:
     runs-on: ubuntu-latest
@@ -113,6 +115,8 @@ jobs:
           push: true
           platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-builder:latest
+          build-args: |
+            profile=release
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder:buildcache,mode=max
 
@@ -139,6 +143,8 @@ jobs:
           push: true
           platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-simulator:latest
+          build-args: |
+            profile=release
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator:buildcache,mode=max
 
@@ -165,6 +171,8 @@ jobs:
           push: true
           platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-server:latest
+          build-args: |
+            profile=release
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-server:buildcache,mode=max
 
@@ -191,5 +199,7 @@ jobs:
           push: true
           platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-web:latest
+          build-args: |
+            profile=release
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-web:buildcache,mode=max

@@ -4,10 +4,12 @@ COPY worker_builder/dummy.rs .
 COPY worker_builder/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 
-RUN cargo install --bin ctbuilder --path . --debug
+ARG profile=dev
+
+RUN cargo install --bin ctbuilder --path . --profile $profile
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY worker_builder/src src
-RUN cargo install --bin ctbuilder --path . --debug
+RUN cargo install --bin ctbuilder --path . --profile $profile
 
 FROM ubuntu:focal AS runner
 

@@ -3,11 +3,14 @@ WORKDIR /ctserver
 
 COPY server/dummy.rs .
 COPY server/Cargo.toml .
+
+ARG profile=dev
+
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-    && cargo install --bin ctserver --path . --debug \
+    && cargo install --bin ctserver --path . --profile $profile \
     && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY server/src src
-RUN cargo install --bin ctserver --path . --debug
+RUN cargo install --bin ctserver --path . --profile $profile
 
 FROM ubuntu:focal AS runner
 
