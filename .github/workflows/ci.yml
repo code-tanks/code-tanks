@@ -42,7 +42,7 @@ jobs:
         ports:
           - 8088:8088
         env:
-          DB_URL: postgres://postgres:example@localhost:5432
+          DB_URL: postgres://postgres:example@db:5432
         # cmd: ctserver
         # networks:
         #   - no-internet
@@ -105,6 +105,11 @@ jobs:
           PGDATA: /var/lib/postgresql/data/pgdata
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         # volumes:
         #   - ./test/postgres:/var/lib/postgresql/data
         # networks:
@@ -127,6 +132,11 @@ jobs:
         image: redis:6
         ports:
           - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         # volumes:
         #   - ./test/redis:/data
         # restart: unless-stopped
