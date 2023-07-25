@@ -24,7 +24,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: ubuntu:latest
+    container: 
+      image: ubuntu:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     services:
       registry:
         image: registry
