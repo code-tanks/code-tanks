@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/build.yml
+      - .github/workflows/build-dev.yml
       - api/**
       - cli/**
       - desktop/**
