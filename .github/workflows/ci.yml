@@ -39,8 +39,8 @@ jobs:
       server:
         image: ghcr.io/code-tanks/code-tanks-server:latest
         # restart: unless-stopped
-        ports:
-          - 8089:8088
+        # ports:
+        #   - 8089:8088
         env:
           DB_URL: postgres://postgres:example@db:5432
         # cmd: ctserver
@@ -86,11 +86,11 @@ jobs:
         #   - ocypod
           # - registry
       
-      web:
-        image: ghcr.io/code-tanks/code-tanks-web:latest
+      # web:
+      #   image: ghcr.io/code-tanks/code-tanks-web:latest
         # restart: unless-stopped
-        ports:
-          - 8098:8080
+        # ports:
+        #   - 8098:8080
         # networks:
         #   - no-internet
         #   - internet
@@ -174,7 +174,7 @@ jobs:
       #   run: ./scripts/upload_tanks.sh examples/
       - name: "Test do_nothing"
         run: |
-          echo "HOST=server:8089" > ./scripts/.env
+          echo "HOST=server:8088" > ./scripts/.env
           ./scripts/test/test_do_nothing.sh
         # run: script -e -c "./scripts/test/test_do_nothing.sh"
       
