@@ -16,7 +16,7 @@ pub fn create_build_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{"timeout": "10m"}"#)
-        .arg("ocypod:8023/queue/build")
+        .arg(format!("{}/queue/build", env::var("OCYPOD_URL").unwrap().parse().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -37,7 +37,7 @@ pub fn create_sim_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{"timeout": "10m"}"#)
-        .arg("ocypod:8023/queue/simulator")
+        .arg(format!("{}/queue/simulator", env::var("OCYPOD_URL").unwrap().parse().unwrap()))
         .output()
         .expect("failed to communicate with ocypod");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
