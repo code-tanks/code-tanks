@@ -28,7 +28,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
+    # services:
       # ctall:
       #   image: ghcr.io/code-tanks/code-tanks-all-dev:latest
       #   ports:
