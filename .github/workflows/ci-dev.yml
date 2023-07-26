@@ -11,6 +11,7 @@ on:
     paths:
       - .github/workflows/ci-dev.yml
       - scripts/test/**
+      - up.sh
   #     - api/**
   #     - cli/**
   #     # - desktop/**
