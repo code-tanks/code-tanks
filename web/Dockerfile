@@ -1,4 +1,4 @@
-FROM rust:1.70.0 AS viewer_builder
+FROM --platform=linux/amd64  rust:1.70.0 AS viewer_builder
 WORKDIR /ctviewer
 
 RUN rustup target install wasm32-unknown-unknown
@@ -12,13 +12,18 @@ COPY viewer/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
 RUN sed -i 's#../api#api#' Cargo.toml
-RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --release
+
+ARG profile=dev
+
+RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
 RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY viewer/src src
-RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --release
+RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
+# RUN echo "hi"
+# RUN file="$(ls -1 target/wasm32-unknown-unknown/)" && echo $file
 RUN wasm-bindgen --out-name ctviewer \
     --out-dir target/release/web \
-    --target web target/wasm32-unknown-unknown/release/ctviewer.wasm
+    --target web target/wasm32-unknown-unknown/debug/ctviewer.wasm
 
 FROM python:3.10
 
