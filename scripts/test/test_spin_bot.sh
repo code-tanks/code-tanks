@@ -61,7 +61,7 @@ then
   exit 1
 fi
 
-sleep 30
+sleep 60
 OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev" "1wexiev")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt

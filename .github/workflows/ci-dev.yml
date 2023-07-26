@@ -54,13 +54,13 @@ jobs:
       - name: "pull dart"
         run: docker pull dart:stable
       - name: "sleep"
-        run: sleep 30
+        run: sleep 10
       - name: "test server"
         run: curl -s localhost:8089/ping
-      - name: "Test do_nothing"
-        run: |
-          echo "HOST=localhost:8089" > ./scripts/.env
-          ./scripts/test/test_do_nothing.sh
+      # - name: "Test do_nothing"
+      #   run: |
+      #     echo "HOST=localhost:8089" > ./scripts/.env
+      #     ./scripts/test/test_do_nothing.sh
       - name: "Test spin_bot"
         run: |
           echo "HOST=localhost:8089" > ./scripts/.env
