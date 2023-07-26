@@ -61,7 +61,7 @@ then
   exit 1
 fi
 
-sleep 60
+sleep 120
 OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev" "1wexiev")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
@@ -78,7 +78,7 @@ else
   echo "${OUTPUT}"
   echo 'Expected:'
   echo "${RAW}"
-  # docker compose logs simulator
+  docker compose logs simulator
   # docker compose logs server
 #   docker ps
   # docker compose logs
