@@ -135,10 +135,10 @@ services:
 networks:
   no-internet:
     name: no-internet
-    external: true
-    # driver: bridge
-    # internal: true
+    # external: true
+    driver: bridge
+    internal: true
   internet:
     name: internet
-    external: true
-    # driver: bridge
+    # external: true
+    driver: bridge

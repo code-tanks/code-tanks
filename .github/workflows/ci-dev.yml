@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: "up"
-        run: ./up.sh
+        run: docker compose up -d
       - name: "pull dart"
         run: docker pull dart:stable
       - name: "sleep"
