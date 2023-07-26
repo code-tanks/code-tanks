@@ -21,63 +21,34 @@ on:
       - init.sh
 
 jobs:
-  build_all_image:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          platforms: linux/amd64, linux/arm64
-          tags: ghcr.io/code-tanks/code-tanks-all:latest
-          build-args: |
-            profile=release
-          cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache
-          cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache,mode=max
-  cargo_build_all:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/
-            target/
-          key: ${{ runner.os }}-cargo-runner-${{ hashFiles('runner/Cargo.toml') }}
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - run: cargo build
-  cargo_build_all_mold:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/
-            target/
-          key: ${{ runner.os }}-cargo-runner-${{ hashFiles('runner/Cargo.toml') }}
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: rui314/setup-mold@v1
-      - run: cargo build
-  # build_rust_runner:
+  # build_all_image:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v2
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #     - name: Log in to the Container registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Build and push
+  #       uses: docker/build-push-action@v3
+  #       with:
+  #         context: .
+  #         file: Dockerfile
+  #         push: true
+  #         platforms: linux/amd64, linux/arm64
+  #         tags: ghcr.io/code-tanks/code-tanks-all:latest
+  #         build-args: |
+  #           profile=release
+  #         cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache
+  #         cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache,mode=max
+  # cargo_build_all:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v3
@@ -90,8 +61,8 @@ jobs:
   #     - uses: actions-rs/toolchain@v1
   #       with:
   #         toolchain: stable
-  #     - run: cargo build --bin ctrunner
-  # build_cli:
+  #     - run: cargo build
+  # cargo_build_all_mold:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - uses: actions/checkout@v3
@@ -100,26 +71,55 @@ jobs:
   #         path: |
   #           ~/.cargo/
   #           target/
-  #         key: ${{ runner.os }}-cargo-cli-${{ hashFiles('cli/Cargo.lock') }}
+  #         key: ${{ runner.os }}-cargo-runner-${{ hashFiles('runner/Cargo.toml') }}
   #     - uses: actions-rs/toolchain@v1
   #       with:
   #         toolchain: stable
-  #     - run: cargo build --bin ctcli
-  # build_desktop:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/cache@v3
-  #       with:
-  #         path: |
-  #           ~/.cargo/
-  #           target/
-  #         key: ${{ runner.os }}-cargo-desktop-${{ hashFiles('desktop/Cargo.toml') }}
-  #     - uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: stable
-  #     - run: sudo apt-get install -y g++ pkg-config libx11 libasound2 libudev
-  #     - run: cargo build --bin ctdesktop
+  #     - uses: rui314/setup-mold@v1
+  #     - run: cargo build
+  build_rust_runner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/
+            target/
+          key: ${{ runner.os }}-cargo-runner-${{ hashFiles('runner/Cargo.toml') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --bin ctrunner
+  build_cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/
+            target/
+          key: ${{ runner.os }}-cargo-cli-${{ hashFiles('cli/Cargo.lock') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo build --bin ctcli
+  build_desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/
+            target/
+          key: ${{ runner.os }}-cargo-desktop-${{ hashFiles('desktop/Cargo.toml') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: sudo apt-get install -y g++ pkg-config libx11 libasound2 libudev
+      - run: cargo build --bin ctdesktop
   build_builder_image:
     runs-on: ubuntu-latest
     steps:
