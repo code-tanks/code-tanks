@@ -51,8 +51,8 @@ jobs:
       #   run: |
       #     apt update
       #     DEBIAN_FRONTEND=noninteractive apt install -y curl
-      - name: "test"
-        run: docker network create --driver bridge --internal no-internet
+      # - name: "test"
+      #   run: docker network create --driver bridge --internal no-internet
       - name: "test"
         run: docker network create --driver bridge internet
       - name: "test"
