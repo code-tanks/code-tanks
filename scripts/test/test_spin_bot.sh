@@ -50,7 +50,7 @@ RAW='1wexiev
 0|10,0,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677
 {"1wexiev-1wexiev-0":{"damage_given":0,"health":100,"index":0,"tank_id":"1wexiev"},"tanks":["1wexiev"],"winner":"1wexiev-1wexiev-0","winner_index":0}'
 
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev")
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev" "1wexiev")
 if [[ "${OUTPUT}" != "waiting to build" ]]
 then
   echo "Failed run sim for 1wexiev"
@@ -62,7 +62,7 @@ then
 fi
 
 sleep 30
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev")
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev" "1wexiev")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
 tr -d '\r'  < ./scripts/test/output.txt > ./scripts/test/output1.txt
