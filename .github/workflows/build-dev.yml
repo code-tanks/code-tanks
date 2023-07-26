@@ -75,21 +75,21 @@ jobs:
         with:
           toolchain: stable
       - run: cargo build --bin ctcli
-  build_desktop:
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/
-            target/
-          key: ${{ runner.os }}-cargo-desktop-${{ hashFiles('desktop/Cargo.toml') }}
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
-      - run: cargo build --bin ctdesktop
+  # build_desktop:
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           ~/.cargo/
+  #           target/
+  #         key: ${{ runner.os }}-cargo-desktop-${{ hashFiles('desktop/Cargo.toml') }}
+  #     - uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #     - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
+  #     - run: cargo build --bin ctdesktop
   build_builder_image:
     runs-on: self-hosted
     steps:
