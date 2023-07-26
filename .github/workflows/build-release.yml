@@ -116,7 +116,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: sudo apt-get install -y g++ pkg-config libx11 libasound2 libudev
+      - run: apt-get update && apt-get install -y g++ pkg-config libx11 libasound2 libudev
       - run: cargo build --bin ctdesktop
   build_builder_image:
     runs-on: ubuntu-latest
