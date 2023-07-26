@@ -2,7 +2,7 @@ version: "3.9"
 services:
   server:
     container_name: server
-    image: ghcr.io/code-tanks/code-tanks-server:latest
+    image: ghcr.io/code-tanks/code-tanks-server-dev:latest
     restart: unless-stopped
     ports:
       - 8089:8088
@@ -18,7 +18,7 @@ services:
     #   - simulator
 
   builder:
-    image: ghcr.io/code-tanks/code-tanks-builder:latest
+    image: ghcr.io/code-tanks/code-tanks-builder-dev:latest
     command: ctbuilder
     restart: unless-stopped
     volumes:
@@ -37,7 +37,7 @@ services:
       # - registry
 
   simulator:
-    image: ghcr.io/code-tanks/code-tanks-simulator:latest
+    image: ghcr.io/code-tanks/code-tanks-simulator-dev:latest
     command: ctsim
     restart: unless-stopped
     volumes:
@@ -56,7 +56,7 @@ services:
   
   web:
     container_name: web
-    image: ghcr.io/code-tanks/code-tanks-web:latest
+    image: ghcr.io/code-tanks/code-tanks-web-dev:latest
     restart: unless-stopped
     ports:
       - 8098:8080

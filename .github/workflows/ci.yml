@@ -2,7 +2,7 @@ name: ci
 
 on:
   workflow_run:
-    workflows: ["build-release"]
+    workflows: ["build-dev"]
     types:
       - completed
   push:
