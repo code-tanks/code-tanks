@@ -27,7 +27,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     services:
       all:
         image: ghcr.io/code-tanks/code-tanks-all:latest

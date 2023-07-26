@@ -22,7 +22,7 @@ on:
 
 jobs:
   build_all:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -48,7 +48,7 @@ jobs:
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all-dev:buildcache,mode=max
 
   build_rust_runner:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -62,7 +62,7 @@ jobs:
           toolchain: stable
       - run: cargo build --bin ctrunner
   build_cli:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -76,7 +76,7 @@ jobs:
           toolchain: stable
       - run: cargo build --bin ctcli
   build_desktop:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -91,7 +91,7 @@ jobs:
       - run: sudo apt-get install -y g++ pkg-config libx11-dev libasound2-dev libudev-dev
       - run: cargo build --bin ctdesktop
   build_builder_image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -117,7 +117,7 @@ jobs:
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder-dev:buildcache,mode=max
 
   build_simulator_image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -143,7 +143,7 @@ jobs:
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator-dev:buildcache,mode=max
 
   build_server_image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -169,7 +169,7 @@ jobs:
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-server-dev:buildcache,mode=max
 
   build_web_image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3

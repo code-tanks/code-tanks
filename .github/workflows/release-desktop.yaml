@@ -14,7 +14,7 @@ env:
 jobs:
   # Build for Linux
   release-linux:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - uses: little-core-labs/get-git-tag@v3.0.1
