@@ -1,5 +1,3 @@
-use std::f32::consts::PI;
-
 use bevy::prelude::{
     default, Commands as BevyCommands, Entity, Query, ResMut, SpatialBundle, Transform, Vec2, Vec3,
     Visibility, Without,
@@ -70,18 +68,16 @@ pub fn apply_commands(
             continue;
         }
 
-        let rot = PI;
-
         if Commands::MOVE_FORWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
 
-            vel.x += 100.0 * dir.x;
-            vel.y += 100.0 * dir.y;
+            vel.x += Tank::MOVEMENT_SPEED * dir.x;
+            vel.y += Tank::MOVEMENT_SPEED * dir.y;
         }
         if Commands::MOVE_BACKWARD & grouped_commands != 0 {
             let dir = transform.rotation * Vec3::Y;
-            vel.x -= 100.0 * dir.x;
-            vel.y -= 100.0 * dir.y;
+            vel.x -= Tank::MOVEMENT_SPEED * dir.x;
+            vel.y -= Tank::MOVEMENT_SPEED * dir.y;
         }
         if Commands::LOCK_GUN & grouped_commands != 0 {
             gun.locked = true;
@@ -96,46 +92,46 @@ pub fn apply_commands(
             radar.locked = false;
         }
         if Commands::ROTATE_TANK_CLOCKWISE & grouped_commands != 0 {
-            ang -= 0.3 * rot;
+            ang -= Tank::ROTATION_SPEED;
 
             if gun.locked {
-                gun_ang -= 0.3 * rot;
+                gun_ang -= Tank::ROTATION_SPEED;
 
                 if radar.locked {
-                    radar_ang -= 0.3 * rot;
+                    radar_ang -= Tank::ROTATION_SPEED;
                 }
             }
         }
         if Commands::ROTATE_TANK_COUNTER_CLOCKWISE & grouped_commands != 0 {
-            ang += 0.3 * rot;
+            ang += Tank::ROTATION_SPEED;
 
             if gun.locked {
-                gun_ang += 0.3 * rot;
+                gun_ang += Tank::ROTATION_SPEED;
 
                 if radar.locked {
-                    radar_ang += 0.3 * rot;
+                    radar_ang += Tank::ROTATION_SPEED;
                 }
             }
         }
         if Commands::ROTATE_GUN_CLOCKWISE & grouped_commands != 0 {
-            gun_ang -= 0.3 * rot;
+            gun_ang -= Tank::ROTATION_SPEED;
 
             if radar.locked {
-                radar_ang -= 0.3 * rot;
+                radar_ang -= Tank::ROTATION_SPEED;
             }
         }
         if Commands::ROTATE_GUN_COUNTER_CLOCKWISE & grouped_commands != 0 {
-            gun_ang += 0.3 * rot;
+            gun_ang += Tank::ROTATION_SPEED;
 
             if radar.locked {
-                radar_ang += 0.3 * rot;
+                radar_ang += Tank::ROTATION_SPEED;
             }
         }
         if Commands::ROTATE_RADAR_CLOCKWISE & grouped_commands != 0 {
-            radar_ang -= 0.3 * rot;
+            radar_ang -= Tank::ROTATION_SPEED;
         }
         if Commands::ROTATE_RADAR_COUNTER_CLOCKWISE & grouped_commands != 0 {
-            radar_ang += 0.3 * rot;
+            radar_ang += Tank::ROTATION_SPEED;
         }
         if Commands::FIRE & grouped_commands != 0 && tank.cooldown == 0 {
             let t = gun_transform.rotation * Vec3::Y;
@@ -166,13 +162,13 @@ pub fn apply_commands(
                     angular_damping: 0.0,
                 },
                 Velocity {
-                    linvel: Vec2::new(t.x * 200.0, t.y * 200.0),
+                    linvel: Vec2::new(t.x * Bullet::SPEED, t.y * Bullet::SPEED),
                     angvel: 0.0,
                 },
                 SpatialBundle {
                     transform: {
                         let mut t = Transform::from_translation(
-                            transform.translation + t * Vec3::new(35.0, 35.0, 1.0),
+                            transform.translation + t * Vec3::new(Tank::RADIUS + Bullet::RADIUS * 2., Tank::RADIUS + Bullet::RADIUS * 2., 1.0),
                         );
                         t.translation.z = 1.0;
                         t

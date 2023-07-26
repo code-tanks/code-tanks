@@ -17,8 +17,8 @@ on:
       - web/**
       - worker_builder/**
       - worker_simulator/**
-      - Dockerfile
-      - init.sh
+      # - Dockerfile
+      # - init.sh
 
 jobs:
   # build_all_image:

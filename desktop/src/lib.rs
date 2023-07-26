@@ -8,11 +8,14 @@ use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
 use ctsimlibgraphics::CoreCTGraphicsPlugin;
+use regex::Regex;
 
 const PORTS: [usize; 4] = [8061, 8062, 8063, 8064];
 
 pub fn run_local_tank(url: &str, game_url: &str, post_fix: usize, port: usize) -> String {
-    let tank_id = format!("local-{}-{}-{}", game_url, url, post_fix);
+    let re = Regex::new(r"[^a-zA-Z0-9_.-]").unwrap();
+    
+    let tank_id = re.replace_all(&format!("local-{}-{}-{}", game_url, url, post_fix), "").to_string();
     remove_tank(&tank_id);
     let output_raw = Command::new("docker")
         .arg("run")

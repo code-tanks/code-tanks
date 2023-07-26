@@ -9,7 +9,7 @@ use ctsimlibgraphics::*;
 use crate::{PORTS, UseDummy};
 
 pub fn setup_desktop_tanks(
-    mut state: ResMut<TickState>,
+    // mut state: ResMut<TickState>,
     tank_state: Res<TankInfo>,
     mut commands: Commands,
     asset_server: Res<AssetServer>,

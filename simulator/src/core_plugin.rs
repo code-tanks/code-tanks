@@ -1,4 +1,4 @@
-use bevy::{ecs::schedule::ScheduleLabel, prelude::*, app::RunFixedUpdateLoop};
+use bevy::{ecs::schedule::ScheduleLabel, prelude::*};
 use bevy_rapier2d::prelude::*;
 
 use crate::{
@@ -44,7 +44,7 @@ impl Plugin for CoreCTPlugin {
             // })
             .add_systems(Startup, setup_physics)
             .add_systems(Update, (
-                request_commands, apply_commands, tank_physics, radar_physics, bullet_physics).chain()
+                request_commands, apply_commands, tank_physics, radar_physics, bullet_physics, request_commands_by_event).chain()
             );
             // .add_systems(
             //     // "request_commands",

@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use std::f32::consts::PI;
 
 #[derive(Component)]
 pub struct Tank {
@@ -13,6 +14,8 @@ impl Tank {
     pub const MAX_COOLDOWN: u32 = 60;
     pub const RADIUS: f32 = 19.0;
     pub const INITIAL_ROTATION: f32 = -90.0;
+    pub const ROTATION_SPEED: f32 = PI * 0.3;
+    pub const MOVEMENT_SPEED: f32 = 100.;
 }
 
 #[derive(Component)]
@@ -22,6 +25,7 @@ pub struct Bullet {
 
 impl Bullet {
     pub const RADIUS: f32 = 5.0;
+    pub const SPEED: f32 = 200.0;
 }
 
 #[derive(Component)]

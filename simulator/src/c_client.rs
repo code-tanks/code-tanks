@@ -82,7 +82,7 @@ impl ClientTrait for ReaderClient {
 }
 
 fn parse_commands(commands_string: String) -> Vec<Command> {
-    println!("parsing commands {}", commands_string);
+    // println!("parsing commands {}", commands_string);
     
     commands_string
         .split('\n')

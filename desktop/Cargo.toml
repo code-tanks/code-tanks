@@ -8,6 +8,7 @@ ctsimlib = { path = "../simulator" }
 ctsimlibgraphics = { path = "../simulator_graphics" }
 bevy = { version = "0.11.0", default-features = false, features = [ "x11" ] }
 bevy_rapier2d = { version = "*", features = [ "debug-render-2d" ] }
+regex = { version = "1.3", default-features = false, features = [ "std" ] }
 
 [[bin]]
 name = "ctdesktop"
