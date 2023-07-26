@@ -10,6 +10,7 @@ on:
       - main
     paths:
       - .github/workflows/ci-dev.yml
+      - scripts/test/**
   #     - api/**
   #     - cli/**
   #     # - desktop/**
@@ -21,7 +22,6 @@ on:
   #     - web/**
   #     - worker_builder/**
   #     - worker_simulator/**
-  #     - scripts/**
   #     - docker-compose.yml
   #     - ocypod.toml
 
