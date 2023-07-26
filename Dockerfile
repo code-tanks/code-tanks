@@ -6,14 +6,11 @@ ARG profile=dev
 
 RUN cd ocypod && cargo install --path . --profile $profile
 
-FROM ubuntu:focal AS ctsim_builder
-ENV PATH "/root/.cargo/bin:$PATH"
+FROM rust:1.70.0 AS ctsim_builder
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
     curl g++ pkg-config libx11-dev libasound2-dev libudev-dev
-
-RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.70.0 -y
 
 WORKDIR /ctsim
 
@@ -71,7 +68,7 @@ RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
 WORKDIR /ctall
 
 COPY --from=ocypod_builder /usr/local/cargo/bin/ocypod-server /usr/local/bin/ocypod-server
-COPY --from=ctsim_builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
+COPY --from=ctsim_builder /usr/local/cargo/bin/ctsim /usr/local/bin/ctsim
 COPY --from=ctserver_builder /usr/local/cargo/bin/ctserver /usr/local/bin/ctserver
 COPY --from=ctbuilder_builder /usr/local/cargo/bin/ctbuilder /usr/local/bin/ctbuilder
 

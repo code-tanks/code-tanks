@@ -1,11 +1,8 @@
-FROM ubuntu:focal AS builder
-ENV PATH "/root/.cargo/bin:$PATH"
+FROM rust:1.70.0 AS builder
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
     curl g++ pkg-config libx11-dev libasound2-dev libudev-dev
-
-RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.70.0 -y
 
 WORKDIR /ctsim
 
@@ -36,6 +33,6 @@ RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
 
 WORKDIR /ctsim
 
-COPY --from=builder /root/.cargo/bin/ctsim /usr/local/bin/ctsim
+COPY --from=builder /usr/local/cargo/bin/ctsim /usr/local/bin/ctsim
 
 CMD ["ctsim"]
