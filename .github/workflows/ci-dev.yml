@@ -29,7 +29,7 @@ jobs:
   test:
     runs-on: self-hosted
     services:
-      all:
+     ctall:
         image: ghcr.io/code-tanks/code-tanks-all-dev:latest
         ports:
           - 8089:8088
