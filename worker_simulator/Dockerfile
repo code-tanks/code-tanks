@@ -2,7 +2,7 @@ FROM rust:1.70.0 AS builder
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
-    curl g++ pkg-config libx11-dev libasound2-dev libudev-dev
+    g++ pkg-config libx11-dev libasound2-dev libudev-dev
 
 WORKDIR /ctsim
 
