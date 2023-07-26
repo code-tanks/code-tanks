@@ -69,8 +69,7 @@ pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
             tank_ids: tank_ids.to_vec(),
             tank_nametags: tank_nametags.to_vec(),
         })
-        .add_systems(Startup, setup_walls)
-        .add_systems(Startup, setup_sim_tanks)
+        .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
         .add_plugins(CoreCTPlugin)
         .add_systems(
             Update,
@@ -120,13 +119,14 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     let output_raw = Command::new("docker")
         .arg("run")
         .arg("-d")
-        .arg("--network=code-tanks_no-internet")
+        .arg("--network=no-internet")
+        // .arg("--network=code-tanks_no-internet")
         .arg("-p")
         .arg("8080")
         .arg("--name")
         .arg(&tank_id)
-        .arg("--label")
-        .arg("com.docker.compose.project=code-tanks")
+        // .arg("--label")
+        // .arg("com.docker.compose.project=code-tanks")
         .arg(format!("localhost:5001/{}", url))
         .output()
         .expect("failed to communicate with docker");

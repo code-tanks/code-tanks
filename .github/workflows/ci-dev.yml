@@ -27,17 +27,17 @@ on:
 
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     services:
-      ctall:
-        image: ghcr.io/code-tanks/code-tanks-all-dev:latest
-        ports:
-          - 8089:8088
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-        env:
-          DB_URL: postgres://postgres:postgres@localhost:5432
-          OCYPOD_URL: localhost:8023
+      # ctall:
+      #   image: ghcr.io/code-tanks/code-tanks-all-dev:latest
+      #   ports:
+      #     - 8089:8088
+      #   volumes:
+      #     - /var/run/docker.sock:/var/run/docker.sock
+      #   env:
+      #     DB_URL: postgres://postgres:postgres@localhost:5432
+      #     OCYPOD_URL: localhost:8023
       registry:
         image: registry
         ports:
@@ -54,9 +54,16 @@ jobs:
       # - name: "test"
       #   run: docker network create --driver bridge --internal no-internet
       - name: "test"
-        run: docker ps
+        run: docker network create --driver bridge --internal no-internet
+      - name: "test"
+        run: docker network create --driver bridge internet
+      - name: "test"
+        run: docker run -d --network=host -e REGISTRY_HTTP_ADDR=0.0.0.0:5001 registry
+      - name: "test"
+        run: docker run --network=code-tanks -p 8089:8088 -v /var/run/docker.sock:/var/run/docker.sock -e DB_URL=postgres://postgres:postgres@localhost:5432 -e OCYPOD_URL=localhost:8023 --name ctall -d ghcr.io/code-tanks/code-tanks-all-dev:latest
       - name: "test"
         run: docker network connect no-internet ctall
+
       - name: "pull dart"
         run: docker pull dart:stable
       - name: "sleep"

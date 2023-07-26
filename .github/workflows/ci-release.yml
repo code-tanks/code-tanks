@@ -10,6 +10,7 @@ on:
       - main
     paths:
       - .github/workflows/ci-release.yml
+      - scripts/test/**
   #     - api/**
   #     - cli/**
   #     # - desktop/**
@@ -27,7 +28,7 @@ on:
 
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     services:
       all:
         image: ghcr.io/code-tanks/code-tanks-all:latest

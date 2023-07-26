@@ -109,15 +109,16 @@ services:
     container_name: registry
     image: registry
     restart: unless-stopped
-    ports:
-      - 5001
+    # ports:
+    #   - 5001
     environment:
       - REGISTRY_HTTP_ADDR=0.0.0.0:5001
     # volumes:
     #   - ./test/registry/:/var/lib/registry
-    networks:
-      - no-internet
-      - internet
+    network_mode: "host"
+    # networks:
+    #   - no-internet
+    #   - internet
 
   # pgAdmin:
   #   container_name: pgAdmin
@@ -133,7 +134,11 @@ services:
 
 networks:
   no-internet:
-    driver: bridge
-    internal: true
+    name: no-internet
+    external: true
+    # driver: bridge
+    # internal: true
   internet:
-    driver: bridge
+    name: internet
+    external: true
+    # driver: bridge
