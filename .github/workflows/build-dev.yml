@@ -42,7 +42,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          platforms: linux/arm64, linux/amd64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-all-dev:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-all-dev:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all-dev:buildcache,mode=max
@@ -111,7 +111,7 @@ jobs:
           context: .
           file: worker_builder/Dockerfile
           push: true
-          platforms: linux/arm64, linux/amd64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-builder-dev:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder-dev:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-builder-dev:buildcache,mode=max
@@ -137,7 +137,7 @@ jobs:
           context: .
           file: worker_simulator/Dockerfile
           push: true
-          platforms: linux/arm64, linux/amd64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-simulator-dev:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator-dev:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-simulator-dev:buildcache,mode=max
@@ -163,7 +163,7 @@ jobs:
           context: .
           file: server/Dockerfile
           push: true
-          platforms: linux/arm64, linux/amd64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-server-dev:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-server-dev:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-server-dev:buildcache,mode=max
@@ -189,7 +189,7 @@ jobs:
           context: .
           file: web/Dockerfile
           push: true
-          platforms: linux/arm64, linux/amd64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-web-dev:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-web-dev:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-web-dev:buildcache,mode=max
