@@ -2,14 +2,14 @@ name: ci
 
 on:
   workflow_run:
-    workflows: ["build-dev"]
+    workflows: ["build-release"]
     types:
       - completed
   push:
     branches:
       - main
     paths:
-      - .github/workflows/ci-dev.yml
+      - .github/workflows/ci.yml
       - scripts/test/**
       - docker-compose.yml
       - ocypod.toml
