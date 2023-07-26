@@ -30,7 +30,7 @@ jobs:
           context: .devcontainer/
           file: .devcontainer/rust.Dockerfile
           push: true
-          platforms: linux/arm64, linux/amd64, arm64
+          platforms: linux/arm64, linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-rust-devcontainer:latest
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-rust-devcontainer:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-rust-devcontainer:buildcache,mode=max
