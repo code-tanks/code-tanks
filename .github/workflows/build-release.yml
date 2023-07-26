@@ -21,7 +21,7 @@ on:
       - init.sh
 
 jobs:
-  build_all:
+  build_all_image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,8 +48,7 @@ jobs:
             profile=release
           cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache
           cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all:buildcache,mode=max
-
-  build_rust_runner:
+  cargo_build_all:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -62,8 +61,8 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: cargo build --bin ctrunner
-  build_cli:
+      - run: cargo build
+  cargo_build_all_mold:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -72,11 +71,40 @@ jobs:
           path: |
             ~/.cargo/
             target/
-          key: ${{ runner.os }}-cargo-cli-${{ hashFiles('cli/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-runner-${{ hashFiles('runner/Cargo.toml') }}
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: cargo build --bin ctcli
+      - uses: rui314/setup-mold@v1
+      - run: cargo build
+  # build_rust_runner:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           ~/.cargo/
+  #           target/
+  #         key: ${{ runner.os }}-cargo-runner-${{ hashFiles('runner/Cargo.toml') }}
+  #     - uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #     - run: cargo build --bin ctrunner
+  # build_cli:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/cache@v3
+  #       with:
+  #         path: |
+  #           ~/.cargo/
+  #           target/
+  #         key: ${{ runner.os }}-cargo-cli-${{ hashFiles('cli/Cargo.lock') }}
+  #     - uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #     - run: cargo build --bin ctcli
   # build_desktop:
   #   runs-on: ubuntu-latest
   #   steps:
