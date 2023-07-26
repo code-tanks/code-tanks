@@ -64,15 +64,7 @@ pub fn apply_commands(
         if health.val == 0 {
             continue;
         }
-        let grouped_commands = if state.tick >= TickState::MAXIMUM_SIMULATION_TICKS {
-            if command_receiver.queue.is_empty() {
-                Commands::NONE
-            } else {
-                command_receiver.queue.remove(0)
-            }
-        } else {
-            command_receiver.queue.remove(0)
-        };
+        let grouped_commands = command_receiver.queue.remove(0);
         if Commands::SELF_DESTRUCT & grouped_commands != 0 {
             health.val = 0;
             continue;
