@@ -103,7 +103,7 @@ jobs:
         with:
           toolchain: stable
       - run: cargo build --bin ctcli --profile dev
-  # build_desktop:
+  build_desktop:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
