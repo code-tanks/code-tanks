@@ -14,22 +14,12 @@ pub mod s_save_commands;
 pub mod s_setup_physics;
 pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;
-pub mod s_tank_physics;
+pub mod s_tank_physics; 
 
-use std::fs::File;
-use std::io::Write;
 use std::process::Command;
 
-use bevy::app::App;
 use bevy::ecs::schedule::ScheduleLabel;
-use bevy::prelude::{Component, Resource, Startup, IntoSystemConfigs, Update};
-use bevy::MinimalPlugins;
-use core_plugin::*;
-use s_apply_commands::apply_commands;
-use s_request_commands::request_commands;
-use s_save_commands::*;
-use s_setup_sim_tanks::*;
-use s_setup_walls::*;
+use bevy::prelude::{Component, Resource};
 
 #[derive(Default, Resource)]
 pub struct TickState {
@@ -58,28 +48,7 @@ impl Game {
 pub struct SaveCommands;
 
 
-pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
-    let mut f = File::create("./sim.txt").expect("Unable to create file");
-    f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
-        .expect("Unable to write data");
 
-    App::new()
-        .add_plugins(MinimalPlugins)
-        .insert_resource(TankInfo {
-            tank_ids: tank_ids.to_vec(),
-            tank_nametags: tank_nametags.to_vec(),
-        })
-        .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
-        .add_plugins(CoreCTPlugin)
-        .add_systems(
-            Update,
-            save_commands.after(request_commands).before(apply_commands)
-            // "request_commands",
-            // "save_commands",
-            // SystemStage::single_threaded().with_system(save_commands),
-        )
-        .run();
-}
 
 pub enum CollisionMask {}
 
@@ -111,28 +80,4 @@ pub fn remove_tank(tank_id: &str) {
         .arg(tank_id)
         .output()
         .expect("failed to communicate with docker");
-}
-
-pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
-    remove_tank(&tank_id);
-    let output_raw = Command::new("docker")
-        .arg("run")
-        .arg("-d")
-        .arg("--network=no-internet")
-        // .arg("--network=code-tanks_no-internet")
-        .arg("-p")
-        .arg("8080")
-        .arg("--name")
-        .arg(&tank_id)
-        // .arg("--label")
-        // .arg("com.docker.compose.project=code-tanks")
-        .arg(format!("localhost:5001/{}", url))
-        .output()
-        .expect("failed to communicate with docker");
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-
-    println!("run stdout:");
-    println!("{}", result_raw);
-    tank_id
 }

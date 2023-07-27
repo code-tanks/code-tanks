@@ -1,4 +1,4 @@
-use bevy::{prelude::*, ecs::schedule::ScheduleLabel};
+use bevy::prelude::*;
 use ctsimlib::{s_setup_walls::setup_walls, s_request_commands::request_commands, s_apply_commands::apply_commands};
 
 use ctviewer::{s_setup_web_tanks::setup_web_tanks, *};
@@ -9,11 +9,11 @@ use ctsimlibgraphics::CoreCTGraphicsPlugin;
 
 use s_apply_history_transforms::*; 
 
-#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct SetupWebTanks;
+// #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+// pub struct SetupWebTanks;
 
-#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct ApplyHistoryTransforms;
+// #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+// pub struct ApplyHistoryTransforms;
 
 fn main() {
     // When building for WASM, print panics to the browser console
@@ -23,7 +23,6 @@ fn main() {
     App::new()
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
-        .add_systems(Startup, (setup_walls))
         .init_resource::<CustomAssetState>()
         .add_asset::<CustomAsset>()
         .init_asset_loader::<CustomAssetLoader>()
