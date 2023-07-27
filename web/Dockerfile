@@ -23,7 +23,7 @@ RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profil
 # RUN file="$(ls -1 target/wasm32-unknown-unknown/)" && echo $file
 RUN wasm-bindgen --out-name ctviewer \
     --out-dir target/release/web \
-    --target web target/wasm32-unknown-unknown/debug/ctviewer.wasm
+    --target web target/wasm32-unknown-unknown/$profile/ctviewer.wasm
 
 FROM python:3.10
 
