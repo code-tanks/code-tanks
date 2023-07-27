@@ -4,7 +4,7 @@ WORKDIR /ctviewer
 RUN rustup target install wasm32-unknown-unknown
 RUN cargo install -f wasm-bindgen-cli --version 0.2.87
 
-COPY server/dummy.rs .
+COPY worker_simulator/dummy.rs .
 COPY viewer/Cargo.toml .
 RUN sed -i '/ctsimlib/d' Cargo.toml
 RUN sed -i '/ctsimlibgraphics/d' Cargo.toml
