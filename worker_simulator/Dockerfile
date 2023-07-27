@@ -7,16 +7,27 @@ RUN apt update \
 WORKDIR /ctsim
 
 COPY worker_simulator/dummy.rs .
-COPY api api
-COPY simulator simulator
 COPY worker_simulator/Cargo.toml .
+RUN sed -i '/ctsimlib/d' Cargo.toml
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-RUN sed -i 's#../simulator#simulator#' Cargo.toml
 
 ARG profile=dev
 
 RUN cargo install --bin ctsim --path . --profile $profile
-RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+
+####
+
+# COPY worker_simulator/dummy.rs .
+COPY worker_simulator/Cargo.toml .
+# RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN sed -i 's#../simulator#simulator#' Cargo.toml
+COPY api api
+COPY simulator simulator
+
+# ARG profile=dev
+
+# RUN cargo install --bin ctsim --path . --profile $profile
+# RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY worker_simulator/src src
 RUN cargo install --bin ctsim --path . --profile $profile
 

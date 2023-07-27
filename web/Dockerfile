@@ -5,18 +5,33 @@ RUN rustup target install wasm32-unknown-unknown
 RUN cargo install -f wasm-bindgen-cli --version 0.2.87
 
 COPY server/dummy.rs .
-COPY api api
-COPY simulator_graphics simulator_graphics
-COPY simulator simulator
 COPY viewer/Cargo.toml .
+RUN sed -i '/ctsimlib/d' Cargo.toml
+RUN sed -i '/ctsimlibgraphics/d' Cargo.toml
+RUN sed -i '/ct-api/d' Cargo.toml
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-RUN sed -i 's#../simulator#simulator#' Cargo.toml
-RUN sed -i 's#../api#api#' Cargo.toml
 
 ARG profile=dev
 
 RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
-RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+
+####
+
+# COPY server/dummy.rs .
+COPY viewer/Cargo.toml .
+
+# RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN sed -i 's#../simulator#simulator#' Cargo.toml
+RUN sed -i 's#../api#api#' Cargo.toml
+COPY api api
+COPY simulator_graphics simulator_graphics
+COPY simulator simulator
+
+
+# ARG profile=dev
+
+# RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
+# RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY viewer/src src
 RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
 # RUN echo "hi"
