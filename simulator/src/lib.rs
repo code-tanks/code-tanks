@@ -12,7 +12,6 @@ pub mod s_request_commands;
 pub mod s_request_commands_by_event;
 pub mod s_save_commands;
 pub mod s_setup_physics;
-pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;
 pub mod s_tank_physics; 
 
@@ -20,6 +19,19 @@ use std::process::Command;
 
 use bevy::ecs::schedule::ScheduleLabel;
 use bevy::prelude::{Component, Resource};
+
+use bevy::prelude::*;
+
+use crate::{
+    // c_client::{Client, DockerClient},
+    c_tank::Gun,
+    c_tank::Radar,
+    c_tank::Tank,
+    c_tank::{DamageDealer, TankInfo},
+};
+use bevy_rapier2d::prelude::*;
+
+use crate::{c_command_source::CommandSource, c_event::EventSink, c_health::Health};
 
 
 #[derive(Default, Resource)]
@@ -130,4 +142,158 @@ pub fn run_tank(tank_container_name: &str, tank_image_name: &str, port: &str, no
     println!("run stdout:");
     println!("{}", result_raw);
     // tank_container_name
+}
+
+pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+    commands
+        .spawn((
+            Gun { locked: true },
+            SpatialBundle {
+                transform: t,
+                visibility: Visibility::Visible,
+                ..default()
+            },
+            Sensor,
+            GravityScale(0.0),
+            RigidBody::Dynamic,
+            ColliderMassProperties::Mass(0.0),
+            // ColliderMassProperties::Density(1.0),
+            Collider::ball(5.0),
+            Restitution::coefficient(0.0),
+            CollisionGroups::new(
+                Group::from_bits_truncate(CollisionMask::NONE),
+                Group::from_bits_truncate(CollisionMask::NONE),
+            ),
+            Damping {
+                linear_damping: 0.0,
+                angular_damping: 0.0,
+            },
+            Velocity {
+                linvel: Vec2::new(0.0, 0.0),
+                angvel: 0.0,
+            },
+        ))
+        .id()
+}
+
+pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+
+    commands
+        .spawn((
+            CCollider {
+                collision_type: CollisionType::Radar,
+            },
+            Radar { locked: true },
+            SpatialBundle {
+                transform: t,
+                visibility: Visibility::Visible,
+                ..default()
+            },
+            Sensor,
+            GravityScale(0.0),
+            RigidBody::Dynamic,
+            ColliderMassProperties::Mass(0.0),
+            // ColliderMassProperties::Density(1.0),
+            Collider::triangle(
+                Vec2::new(0.0, 0.0),
+                Vec2::new(-25.0, Game::WIDTH + Game::HEIGHT),
+                Vec2::new(25.0, Game::WIDTH + Game::HEIGHT),
+            ),
+            Restitution::coefficient(0.0),
+            CollisionGroups::new(
+                Group::from_bits_truncate(CollisionMask::RADAR),
+                Group::from_bits_truncate(
+                    CollisionMask::TANK | CollisionMask::BULLET | CollisionMask::WALL,
+                ),
+            ),
+            Damping {
+                linear_damping: 0.0,
+                angular_damping: 0.0,
+            },
+            Velocity {
+                linvel: Vec2::new(0.0, 0.0),
+                angvel: 0.0,
+            },
+        ))
+        .id()
+}
+
+pub fn create_base_tank(
+    tank_info: &TankInfo,
+    commands: &mut Commands,
+    gun: Entity,
+    radar: Entity,
+    x: f32,
+    y: f32,
+    client: impl Component,
+) -> Entity {
+    let mut t = Transform::from_xyz(x, y, 0.0);
+    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+    commands
+        .spawn((
+            (
+                ActiveEvents::COLLISION_EVENTS,
+                CCollider {
+                    collision_type: CollisionType::Tank,
+                },
+            ),
+            // Sleeping::disabled(),
+            // Ccd::enabled(),
+            Tank {
+                // id: tank_id,
+                // hash: tank_hash,
+                info: tank_info.clone(),
+                cooldown: 0,
+                gun,
+                radar,
+            },
+            Health {
+                val: Health::MAX_HEALTH,
+            },
+            DamageDealer { damage_dealt: 0 },
+            CommandSource::default(),
+            EventSink::default(),
+            GravityScale(0.0),
+            RigidBody::Dynamic,
+            // ColliderMassProperties::Mass(1.0),
+            ColliderMassProperties::Density(1.0),
+            Collider::ball(Tank::RADIUS),
+            (
+                Restitution::coefficient(0.0),
+                Friction {
+                    coefficient: 0.,
+                    combine_rule: CoefficientCombineRule::Min,
+                },
+            ),
+            CollisionGroups::new(
+                Group::from_bits_truncate(CollisionMask::TANK),
+                Group::from_bits_truncate(
+                    CollisionMask::TANK
+                        | CollisionMask::BULLET
+                        | CollisionMask::WALL
+                        | CollisionMask::RADAR,
+                ),
+            ),
+            (
+                Damping {
+                    linear_damping: 0.0,
+                    angular_damping: 0.0,
+                },
+                Velocity {
+                    linvel: Vec2::new(0.0, 0.0),
+                    angvel: 0.0,
+                },
+            ),
+            client,
+            SpatialBundle {
+                transform: t,
+                visibility: Visibility::Visible,
+                ..default()
+            },
+        ))
+        .id()
 }

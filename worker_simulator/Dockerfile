@@ -9,6 +9,7 @@ WORKDIR /ctsim
 COPY worker_simulator/dummy.rs .
 COPY worker_simulator/Cargo.toml .
 RUN sed -i '/ctsimlib/d' Cargo.toml
+RUN sed -i '/ct-api/d' Cargo.toml
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 
 ARG profile=dev
@@ -21,6 +22,7 @@ RUN cargo install --bin ctsim --path . --profile $profile
 COPY worker_simulator/Cargo.toml .
 # RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
+RUN sed -i 's#../api#api#' Cargo.toml
 COPY api api
 COPY simulator simulator
 

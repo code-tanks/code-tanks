@@ -16,6 +16,7 @@ pub struct CTEvent {
     pub info: Value,
 }
 
+// TODO make into static function for CTEvent
 pub fn generate_event(
     event_type: String,
     event_sink: &mut EventSink,

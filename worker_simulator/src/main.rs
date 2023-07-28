@@ -5,7 +5,7 @@ use ctsimlib::{remove_tank, c_tank::{TankInfo, AllTankInfo}};
 use worker_simulator::{
     create_sim_queue,
     db::{get_client, upload_sim},
-    get_sim_job, update_sim_job, upload_log,
+    get_sim_job, update_sim_job, upload_log, s_setup_sim_tanks::setup_sim_tanks,
 };
 use bevy::MinimalPlugins;
 use bevy::prelude::{App, Startup, Update, IntoSystemConfigs};
@@ -15,7 +15,7 @@ use ctsimlib::*;
 use ctsimlib::s_apply_commands::apply_commands;
 use ctsimlib::s_request_commands::request_commands;
 use ctsimlib::s_save_commands::save_commands;
-use ctsimlib::s_setup_sim_tanks::setup_sim_tanks;
+// use ctsimlib::s_setup_sim_tanks::setup_sim_tanks;
 use ctsimlib::s_setup_walls::setup_walls;
 
 fn main() {

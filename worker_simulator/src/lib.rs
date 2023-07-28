@@ -1,14 +1,17 @@
 use std::env;
-use std::process::Command;
+use std::process::Command as ProcessCommand;
 
-use ctsimlib::remove_tank;
+use ct_api::{Commands, Command};
+use ctsimlib::c_client::{ClientTrait, parse_commands};
+use ctsimlib::c_event::CTEvent;
 use db::upload_log_to_db;
 use postgres::Client;
 
 pub mod db;
+pub mod s_setup_sim_tanks;
 
 pub fn create_sim_queue() {
-    Command::new("curl")
+    ProcessCommand::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPUT")
@@ -23,7 +26,7 @@ pub fn create_sim_queue() {
 }
 
 pub fn get_sim_job() -> Vec<String> {
-    let output_raw = Command::new("bash")
+    let output_raw = ProcessCommand::new("bash")
         .arg("-c")
         .arg(format!(
             r#"curl {}/queue/simulator/job | jq --raw-output '.id,.input'"#,
@@ -47,7 +50,7 @@ pub fn get_sim_job() -> Vec<String> {
 }
 
 pub fn upload_log(tank_id: &str, client: &mut Client) {
-    let output_raw = Command::new("docker")
+    let output_raw = ProcessCommand::new("docker")
         .arg("logs")
         .arg("--timestamps")
         .arg(tank_id)
@@ -104,7 +107,7 @@ pub fn upload_log(tank_id: &str, client: &mut Client) {
 // }
 
 pub fn update_sim_job(id: &str, successful: bool) {
-    Command::new("curl")
+    ProcessCommand::new("curl")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPATCH")
@@ -147,26 +150,75 @@ pub fn update_sim_job(id: &str, successful: bool) {
 //         .run();
 // }
 
-pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
-    remove_tank(&tank_id);
-    let output_raw = Command::new("docker")
-        .arg("run")
-        .arg("-d")
-        .arg("--network=no-internet")
-        // .arg("--network=code-tanks_no-internet")
-        .arg("-p")
-        .arg("8080")
-        .arg("--name")
-        .arg(&tank_id)
-        // .arg("--label")
-        // .arg("com.docker.compose.project=code-tanks")
-        .arg(format!("localhost:5001/{}", url))
-        .output()
-        .expect("failed to communicate with docker");
-    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+// pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
+//     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
+//     remove_tank(&tank_id);
+//     let output_raw = Command::new("docker")
+//         .arg("run")
+//         .arg("-d")
+//         .arg("--network=no-internet")
+//         // .arg("--network=code-tanks_no-internet")
+//         .arg("-p")
+//         .arg("8080")
+//         .arg("--name")
+//         .arg(&tank_id)
+//         // .arg("--label")
+//         // .arg("com.docker.compose.project=code-tanks")
+//         .arg(format!("localhost:5001/{}", url))
+//         .output()
+//         .expect("failed to communicate with docker");
+//     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
 
-    println!("run stdout:");
-    println!("{}", result_raw);
-    tank_id
+//     println!("run stdout:");
+//     println!("{}", result_raw);
+//     tank_id
+// }
+
+
+pub struct DockerClient {
+    pub tank_container_name: String,
+}
+
+impl ClientTrait for DockerClient {
+    fn request_commands(&mut self) -> Vec<Command> {
+        let output = ProcessCommand::new("bash")
+            .arg("-c")
+            .arg(format!(
+                r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
+                self.tank_container_name,
+            ))
+            .output()
+            .expect("failed to communicate with tank");
+
+        if output.status.success() {
+            let result_raw = String::from_utf8_lossy(&output.stdout);
+            return parse_commands(result_raw.to_string());
+        }
+
+        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        println!(
+            "SELF_DESTRUCT {:?} empty request_commands",
+            self.tank_container_name
+        );
+        vec![Commands::SELF_DESTRUCT]
+    }
+
+    fn request_commands_by_event(&mut self, event: &CTEvent) -> Vec<Command> {
+        let output = ProcessCommand::new("bash")
+            .arg("-c")
+            .arg(format!(
+                r#"curl -d '{}' -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
+                serde_json::to_string(event).unwrap(),
+                self.tank_container_name,
+            ))
+            .output()
+            .expect("failed to communicate with ocypod");
+
+        if output.status.success() {
+            let result_raw = String::from_utf8_lossy(&output.stdout);
+            return parse_commands(result_raw.to_string());
+        }
+        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        vec![]
+    }
 }
