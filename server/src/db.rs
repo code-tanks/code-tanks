@@ -15,50 +15,6 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
         /* https://gist.github.com/david-sanabria/0d3ff67eb56d2750502aed4186d6a4a7 */
         CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-        CREATE OR REPLACE FUNCTION base36_encode( long_number bigint ) 
-        RETURNS text
-        AS $BODY$
-        /*
-        * base36_encode()
-        *
-        * This function accepts a small or big number (base 10) and reduces its length into a string
-        * that is URI-safe using the lower case 26-letter English alphabet 
-        * as well as the numbers 0 - 9. The result is returned as a text string.
-        *
-        */
-        declare
-            k_base        constant integer := 36;
-            k_alphabet    constant text[] := string_to_array( '0123456789abcdefghijklmnopqrstuvwxyz'::text, null);
-            
-            v_return_text text := '';
-            v_remainder   integer;
-            v_interim	  bigint;
-        begin
-        
-            v_interim := abs( long_number );  -- Negative Numbers (sign) are ignored
-        
-            --Conversion Loop
-            loop
-        
-                v_remainder     := v_interim % k_base;
-            v_interim       := v_interim / k_base;
-            v_return_text   := ''|| k_alphabet[ (v_remainder + 1) ] || v_return_text ;
-        
-            exit when v_interim <= 0;
-        
-            end loop ;
-        
-        
-            return v_return_text;
-        
-        end;$BODY$
-        LANGUAGE plpgsql
-        immutable		    /* Makes no changes to data in tables */
-        returns null ON NULL INPUT  /* Don't bother to call if the value is NULL */
-        SECURITY INVOKER            /* No reason to use DEFINER for security */
-        cost 5                      /* A made up number. Any advice? */
-        ;
-
         /* completed|cancelled|timed_out|queued|running|failed */
 
         CREATE TABLE IF NOT EXISTS tanks (
@@ -104,7 +60,7 @@ pub fn insert_tank(
                 INSERT INTO tanks (id, url, code, log, successful, language)
                 SELECT 
                     id, 
-                    SUBSTRING(base36_encode(('x'||lpad(id,16,'0'))::bit(64)::bigint), 0, 8), 
+                    SUBSTRING(id, 0, 8), 
                     $1, 
                     'waiting to build',
                     false,
