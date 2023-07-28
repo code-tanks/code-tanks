@@ -18,7 +18,7 @@ use s_setup_desktop_tanks::setup_desktop_tanks;
 
 pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlibgraphics::{CoreCTGraphicsPlugin, s_setup_ground::setup_ground, s_setup_graphics::setup_graphics};
+use ctsimlibgraphics::{CoreCTGraphicsPlugin, s_setup_graphics::setup_graphics, s_setup_ground::setup_ground};
 
 const PORTS: [usize; 4] = [8061, 8062, 8063, 8064];
 
