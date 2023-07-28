@@ -6,7 +6,7 @@ use s_load_tanks::*;
 use s_setup_ground::*;
 
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlibgraphics::CoreCTGraphicsPlugin;
+use ctsimlibgraphics::{CoreCTGraphicsPlugin, s_setup_graphics::setup_graphics};
 
 use s_apply_history_transforms::*; 
 
@@ -24,7 +24,7 @@ fn main() {
         .init_resource::<CustomAssetState>()
         .add_asset::<CustomAsset>()
         .init_asset_loader::<CustomAssetLoader>()
-        .add_systems(Startup, (load_tanks, setup_walls, setup_ground).chain())
+        .add_systems(Startup, (load_tanks, setup_walls, setup_ground, setup_graphics).chain())
         .add_systems(
             Update,
             (setup_web_tanks, apply_history_transforms.after(request_commands).before(apply_commands))

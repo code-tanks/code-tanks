@@ -37,6 +37,8 @@ pub mod s_on_added_bullet;
 pub mod s_setup_graphics;
 pub mod s_update_healthbar;
 pub mod s_update_nametag;
+pub mod s_setup_ground;
+
 use crate::s_setup_graphics::setup_graphics;
 // use crate::s_update_healthbar::update_healthbar;
 use bevy::ecs::entity::Entity;
@@ -62,25 +64,25 @@ const TANK_BARREL_IMAGES: &[&str] = &[
     "tankDark_barrel1.png",
 ];
 
-pub fn create_environment(commands: &mut Commands, asset_server: &Res<AssetServer>) {
-    for x in 0..(Game::WIDTH as i32 / 64) {
-        for y in 0..(Game::HEIGHT as i32 / 64) {
-            commands.spawn(SpriteBundle {
-                transform: Transform::from_xyz(
-                    -(Game::WIDTH / 2.) + x as f32 * 64.,
-                    (Game::HEIGHT / 2.) - y as f32 * 64.,
-                    0.,
-                ),
-                sprite: Sprite {
-                    anchor: Anchor::TopLeft,
-                    ..default()
-                },
-                texture: asset_server.load("tileSand1.png"),
-                ..default()
-            });
-        }
-    }
-}
+// pub fn create_environment(commands: &mut Commands, asset_server: &Res<AssetServer>) {
+//     for x in 0..(Game::WIDTH as i32 / 64) {
+//         for y in 0..(Game::HEIGHT as i32 / 64) {
+//             commands.spawn(SpriteBundle {
+//                 transform: Transform::from_xyz(
+//                     -(Game::WIDTH / 2.) + x as f32 * 64.,
+//                     (Game::HEIGHT / 2.) - y as f32 * 64.,
+//                     0.,
+//                 ),
+//                 sprite: Sprite {
+//                     anchor: Anchor::TopLeft,
+//                     ..default()
+//                 },
+//                 texture: asset_server.load("tileSand1.png"),
+//                 ..default()
+//             });
+//         }
+//     }
+// }
 
 pub fn create_graphics_tank(
     commands: &mut Commands,
@@ -254,7 +256,7 @@ impl Plugin for CoreCTGraphicsPlugin {
             // }))
             // .add_plugins(ShapePlugin)
             // .add_plugin(RapierDebugRenderPlugin::default())
-            .add_systems(Startup, setup_graphics)
+            // .add_systems(Startup, setup_graphics)
             .add_systems(
                 Update,
                 request_debug_commands.after(request_commands).before(apply_commands), // "request_commands",

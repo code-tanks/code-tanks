@@ -16,7 +16,7 @@ pub fn setup_desktop_tanks(
     mut materials: ResMut<Assets<ColorMaterial>>,    
     // use_dummy: Res<UseDummy>  
 ) {
-    create_environment(&mut commands, &asset_server);
+    // create_environment(&mut commands, &asset_server);
 
     if state.all.is_empty() {
         create_graphics_tank(

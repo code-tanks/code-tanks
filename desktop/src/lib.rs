@@ -18,7 +18,7 @@ use s_setup_desktop_tanks::setup_desktop_tanks;
 
 pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlibgraphics::CoreCTGraphicsPlugin;
+use ctsimlibgraphics::{CoreCTGraphicsPlugin, s_setup_ground::setup_ground, s_setup_graphics::setup_graphics};
 
 const PORTS: [usize; 4] = [8061, 8062, 8063, 8064];
 
@@ -66,7 +66,7 @@ pub fn run_game(tank_hashes: &[String]) {
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
         .add_plugins(RapierDebugRenderPlugin::default())
-        .add_systems(Startup, (setup_desktop_tanks, setup_walls))
+        .add_systems(Startup, (setup_desktop_tanks, setup_walls, setup_ground, setup_graphics).chain())
         // .insert_resource(UseDummy {
         //     use_dummy: tank_hashes.is_empty(),
         // })
