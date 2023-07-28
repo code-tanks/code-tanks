@@ -1,7 +1,7 @@
 use std::{process::Command as ProcessCommand, thread, time};
 
 use bevy::{
-    prelude::{default, App, Resource, Startup},
+    prelude::{default, App, Resource, Startup, IntoSystemConfigs},
     winit::WinitSettings,
 };
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
@@ -66,9 +66,9 @@ pub fn run_game(tank_hashes: &[String]) {
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
         .add_plugins(RapierDebugRenderPlugin::default())
-        .add_systems(Startup, (setup_desktop_tanks, setup_walls, setup_ground, setup_graphics).chain())
+        .add_systems(Startup, ((setup_desktop_tanks, setup_walls, setup_ground), setup_graphics).chain())
         // .insert_resource(UseDummy {
-        //     use_dummy: tank_hashes.is_empty(),
+        //     use_dummy: tank_hashes.is_empty(), 
         // })
         .insert_resource(AllTankInfo {
             all: tank_infos.to_vec(),
