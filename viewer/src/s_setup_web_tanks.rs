@@ -27,7 +27,7 @@ pub fn setup_web_tanks(
         .split(',')
         .map(|f| f.to_string())
         .collect::<Vec<String>>();
-    let game_url: String = tank_hashes.join("");
+    let game_url: String = tank_hashes.join("-");
 
     info!("players: {:?}", tank_hashes);
 

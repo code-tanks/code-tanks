@@ -26,7 +26,7 @@ fn main() {
     let mut client = get_client();
 
     loop {
-        println!("getting sim job");
+        // println!("getting sim job");
         let job = get_sim_job();
 
         if !job.is_empty() {
@@ -39,7 +39,7 @@ fn main() {
 
             // let tank_container_names = run_docker_game(args);
             // TODO common
-            let game_url: String = tank_hashes.join("");
+            let game_url: String = tank_hashes.join("-");
             let tank_infos = &tank_hashes.iter().enumerate().map(|(i, f)| TankInfo{
                 hash: f.to_string(),
                 id: format!("{}-{}", f, i),
@@ -82,11 +82,12 @@ fn main() {
                 upload_log(&tank_info.container_name, &mut client);
                 remove_tank(&tank_info.container_name);
             }
+            // println!("hello");
             let sim = fs::read_to_string("./sim.txt").expect("Unable to read file");
             let uploaded_sim = upload_sim(&mut client, &game_url, &sim, true);
             update_sim_job(id, uploaded_sim);
         }
-        println!("no jobs found. sleeping for 1 second");
+        // println!("no jobs found. sleeping for 1 second");
 
         thread::sleep(time::Duration::from_millis(1000));
     }

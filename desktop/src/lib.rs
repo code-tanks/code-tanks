@@ -28,7 +28,7 @@ pub struct UseDummy {
 }
 
 pub fn run_game(tank_hashes: &[String]) {
-    let game_url: String = tank_hashes.join("");
+    let game_url: String = tank_hashes.join("-");
     let tank_infos = &tank_hashes
         .iter()
         .enumerate()
