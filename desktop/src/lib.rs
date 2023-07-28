@@ -1,7 +1,7 @@
 use std::{process::Command as ProcessCommand, thread, time};
 
 use bevy::{
-    prelude::{default, App, Resource, Startup, IntoSystemConfigs},
+    prelude::{default, App, IntoSystemConfigs, Resource, Startup},
     winit::WinitSettings,
 };
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
@@ -18,9 +18,11 @@ use s_setup_desktop_tanks::setup_desktop_tanks;
 
 pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlibgraphics::{CoreCTGraphicsPlugin, s_setup_graphics::setup_graphics, s_setup_ground::setup_ground};
+use ctsimlibgraphics::{
+    s_setup_graphics::setup_graphics, s_setup_ground::setup_ground, CoreCTGraphicsPlugin,
+};
 
-const PORTS: [usize; 4] = [8061, 8062, 8063, 8064];
+// const PORTS: [usize; 4] = [8062, 8063, 8064, 8065];
 
 #[derive(Default, Resource)]
 pub struct UseDummy {
@@ -46,17 +48,17 @@ pub fn run_game(tank_hashes: &[String]) {
     //     .map(|(i, url)| run_local_tank(url, &game_url, i, PORTS[i]))
     //     .collect::<Vec<String>>();
 
-    for tank_info in tank_infos {
-        // TODO fix
-        let tank_image_name = &tank_info.hash;
-        run_tank(
-            &tank_info.container_name,
-            tank_image_name,
-            &format!("{}:8080", PORTS[tank_info.index]),
-            false
-        );
-    }
-    thread::sleep(time::Duration::from_millis(1000));
+    // for tank_info in tank_infos {
+    //     // TODO fix
+    //     let tank_image_name = &tank_info.hash;
+    //     run_tank(
+    //         &tank_info.container_name,
+    //         tank_image_name,
+    //         &format!("{}:8080", PORTS[tank_info.index]),
+    //         false
+    //     );
+    // }
+    // thread::sleep(time::Duration::from_millis(1000));
 
     App::new()
         .insert_resource(WinitSettings {
@@ -66,9 +68,16 @@ pub fn run_game(tank_hashes: &[String]) {
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
         .add_plugins(RapierDebugRenderPlugin::default())
-        .add_systems(Startup, ((setup_desktop_tanks, setup_walls, setup_ground), setup_graphics).chain())
+        .add_systems(
+            Startup,
+            (
+                (setup_desktop_tanks, setup_walls, setup_ground),
+                setup_graphics,
+            )
+                .chain(),
+        )
         // .insert_resource(UseDummy {
-        //     use_dummy: tank_hashes.is_empty(), 
+        //     use_dummy: tank_hashes.is_empty(),
         // })
         .insert_resource(AllTankInfo {
             all: tank_infos.to_vec(),
@@ -95,8 +104,21 @@ impl ClientTrait for DummyClient {
     }
 }
 
+fn get_free_port() -> String {
+    let output = ProcessCommand::new("bash")
+        .arg("-c")
+        .arg(r#"comm -23 <(seq 8000 9000 | sort) <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) | shuf | head -n 1"#,
+        )
+        .output()
+        .expect("failed to communicate with tank");
+
+    let result_raw = String::from_utf8_lossy(&output.stdout);
+    result_raw.trim().to_string()
+}
+
 pub struct DesktopClient {
     pub info: TankInfo,
+    pub port: String,
 }
 
 impl ClientTrait for DesktopClient {
@@ -105,7 +127,7 @@ impl ClientTrait for DesktopClient {
             .arg("-c")
             .arg(format!(
                 r#"curl localhost:{}/request_commands | jq --raw-output '.[]'"#,
-                PORTS[self.info.index],
+                self.port,
             ))
             .output()
             .expect("failed to communicate with tank");
@@ -129,7 +151,7 @@ impl ClientTrait for DesktopClient {
             .arg(format!(
                 r#"curl -d '{}' -X POST localhost:{}/request_commands_by_event | jq --raw-output '.[]'"#,
                 serde_json::to_string(event).unwrap(),
-                PORTS[self.info.index],
+                self.port,
             ))
             .output()
             .expect("failed to communicate with ocypod");

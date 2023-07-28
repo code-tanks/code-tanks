@@ -1,11 +1,14 @@
 
+use std::{thread, time};
+
 use bevy::prelude::{AssetServer, Commands, Res, ResMut, Assets, Mesh};
 use bevy::sprite::ColorMaterial;
 use ctsimlib::c_tank::{AllTankInfo, TankInfo};
 use ctsimlib::c_client::Client;
+use ctsimlib::run_tank;
 use ctsimlibgraphics::*;
 
-use crate::{DummyClient, DesktopClient};
+use crate::{DummyClient, DesktopClient, get_free_port};
 
 pub fn setup_desktop_tanks(
     // mut state: ResMut<TickState>,
@@ -38,12 +41,22 @@ pub fn setup_desktop_tanks(
     }
 
     for tank_info in state.all.iter() {
+        let tank_image_name = &tank_info.hash;
+        let port = get_free_port();
+        println!("got free port: {}", port);
+        run_tank(
+            &tank_info.container_name,
+            tank_image_name,
+            &format!("{}:8080", port),
+            false
+        );        
         create_graphics_tank(
             &mut commands,
             tank_info,
             Client {
                 client: Box::new(DesktopClient {
                     info: tank_info.clone(),
+                    port: port,
                 }),
             },
             &asset_server,
@@ -51,5 +64,8 @@ pub fn setup_desktop_tanks(
             &mut materials,
         );
     }
+
+    thread::sleep(time::Duration::from_millis(1000));
+
 }
 
