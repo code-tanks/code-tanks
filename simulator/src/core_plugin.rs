@@ -29,7 +29,7 @@ pub struct RequestCommandsByEvent;
 
 impl Plugin for CoreCTPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(TickState { tick: 0 })
+        app.insert_resource(TickState { count: 0 })
             .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
             // .edit_schedule(RunFixedUpdateLoop, |schedule| {
             //     schedule.configure_sets(

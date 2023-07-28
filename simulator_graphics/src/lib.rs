@@ -1,4 +1,4 @@
-use bevy::{ecs::schedule::ScheduleLabel, prelude::*};
+use bevy::prelude::*;
 use bevy::{
     prelude::{
         default, App, AssetServer, Assets, BuildChildren, Color, Commands, Component,
@@ -85,10 +85,8 @@ pub fn create_environment(commands: &mut Commands, asset_server: &Res<AssetServe
 pub fn create_graphics_tank(
     commands: &mut Commands,
     tank_info: &TankInfo,
-    // tank_index: usize,
     client: impl Component,
     asset_server: &Res<AssetServer>,
-    // tank_id: String,
     meshes: &mut ResMut<Assets<Mesh>>,
     materials: &mut ResMut<Assets<ColorMaterial>>,
 ) -> Entity {
@@ -152,16 +150,6 @@ pub fn create_graphics_tank(
     let mut k = Transform::from_rotation(Quat::from_rotation_z(0.0));
     k.translation.z = 1.;
 
-    // let tank = create_base_tank(
-    //     tank_id.to_string(),
-    //     tank_index,
-    //     commands,
-    //     gun,
-    //     radar,
-    //     x,
-    //     y,
-    //     client,
-    // );
     let tank = create_base_tank(tank_info, commands, gun, radar, x, y, client);
 
     let tank = commands

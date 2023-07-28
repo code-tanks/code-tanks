@@ -36,7 +36,7 @@ use crate::{c_command_source::CommandSource, c_event::EventSink, c_health::Healt
 
 #[derive(Default, Resource)]
 pub struct TickState {
-    pub tick: u32,
+    pub count: u32,
 }
 
 impl TickState {
@@ -44,11 +44,6 @@ impl TickState {
     pub const DT: f32 = 1.0 / 60.0;
 }
 
-// #[derive(Default, Resource)]
-// pub struct TankInfo {
-//     pub tank_ids: Vec<String>,
-//     pub tank_container_name: Vec<String>,
-// }
 
 pub struct Game {}
 
@@ -60,28 +55,6 @@ impl Game {
 #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct SaveCommands;
 
-// pub fn run_game(tank_ids: &[String], tank_container_names: &[String]) {
-//     let mut f = File::create("./sim.txt").expect("Unable to create file");
-//     f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
-//         .expect("Unable to write data");
-
-//     App::new()
-//         .add_plugins(MinimalPlugins)
-//         .insert_resource(TankInfo {
-//             tank_ids: tank_ids.to_vec(),
-//             tank_container_name: tank_container_names.to_vec(),
-//         })
-//         .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
-//         .add_plugins(CoreCTPlugin)
-//         .add_systems(
-//             Update,
-//             save_commands.after(request_commands).before(apply_commands)
-//             // "request_commands",
-//             // "save_commands",
-//             // SystemStage::single_threaded().with_system(save_commands),
-//         )
-//         .run();
-// }
 pub enum CollisionMask {}
 
 impl CollisionMask {
@@ -244,8 +217,6 @@ pub fn create_base_tank(
             // Sleeping::disabled(),
             // Ccd::enabled(),
             Tank {
-                // id: tank_id,
-                // hash: tank_hash,
                 info: tank_info.clone(),
                 cooldown: 0,
                 gun,

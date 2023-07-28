@@ -38,7 +38,6 @@ pub fn setup_desktop_tanks(
     }
 
     for tank_info in state.all.iter() {
-        // println!("{} {}", tank_id, tank_container_name);
         create_graphics_tank(
             &mut commands,
             tank_info,
@@ -48,7 +47,6 @@ pub fn setup_desktop_tanks(
                 }),
             },
             &asset_server,
-            // tank_id.to_string(),
             &mut meshes,
             &mut materials,
         );

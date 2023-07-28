@@ -1,7 +1,6 @@
 use bevy::{prelude::*, utils::HashSet};
 use ct_api::Commands;
 use serde_json::{json, to_value};
-use std::iter::zip;
 use std::{fs::OpenOptions, io::Write};
 
 use crate::{c_command_source::CommandSource, c_health::Health, c_tank::*, TickState};
@@ -9,7 +8,7 @@ use bevy::app::AppExit;
 
 pub fn save_commands(
     mut state: ResMut<TickState>,
-    // tank_ids_state: Res<TankInfo>,
+    tank_state: Res<AllTankInfo>,
     mut exit: EventWriter<AppExit>,
     query: Query<&CommandSource>,
     tanks: Query<(&Transform, &Tank)>,
@@ -73,48 +72,43 @@ pub fn save_commands(
 
     let early_stop = dead_count >= tanks.len() - 1;
 
-    // if state.tick >= TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
-    //     state.tick = TickState::MAXIMUM_SIMULATION_TICKS;
-    //     println!("early_stop: {}", early_stop);
-    //     // TODO save results of the simulation (winner, damage given, damage taken, time alive)
-    //     let mut j = json!({});
-    //     let mut best_idx: usize = 0;
-    //     let mut dup: bool = false;
-    //     for (i, (tank_id, tank_container_name)) in
-    //         zip(&tank_ids_state.tank_ids, &tank_ids_state.tank_container_name).enumerate()
-    //     {
-    //         println!("{:?}", tank_id);
-    //         // let ti = &tank_id[tank_id.rfind('-').unwrap() - 7..];
-    //         let dmg = damages_dealt[i].damage_dealt;
+    if state.count >= TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
+        state.count = TickState::MAXIMUM_SIMULATION_TICKS;
+        println!("early_stop: {}", early_stop);
+        // TODO save results of the simulation (winner, damage given, damage taken, time alive)
+        let mut j = json!({});
+        let mut best_idx: usize = 0;
+        let mut dup: bool = false;
+        for tank_info in &tank_state.all
+        {
+            let dmg = damages_dealt[tank_info.index].damage_dealt;
 
-    //         // let ti = format!("{}-{}", tank_id, i);
+            j[tank_info.id.to_string()] = json!({
+                "tank_hash": tank_info.hash,
+                "index": tank_info.index,
+                "health": healths[tank_info.index].val,
+                "damage_given": dmg,
+            });
 
-    //         j[tank_container_name] = json!({
-    //             "tank_id": tank_id,
-    //             "index": i,
-    //             "health": healths[i].val,
-    //             "damage_given": dmg,
-    //         });
+            if dmg == damages_dealt[best_idx].damage_dealt && tank_info.index != 0 {
+                dup = true;
+            }
+            if dmg > damages_dealt[best_idx].damage_dealt {
+                dup = false;
+                best_idx = tank_info.index;
+            }
+        }
+        j["tanks"] = to_value(HashSet::from_iter(tank_state.all.iter().map(|f| f.hash.to_string()))).unwrap();
+        j["winner"] = if dup {
+            "".into()
+        } else {
+            tank_state.all[best_idx].id.to_string().into()
+        };
+        j["winner_index"] = if dup { (-1i32).into() } else { best_idx.into() };
+        println!("{}", j);
 
-    //         if dmg == damages_dealt[best_idx].damage_dealt && i != 0 {
-    //             dup = true;
-    //         }
-    //         if dmg > damages_dealt[best_idx].damage_dealt {
-    //             dup = false;
-    //             best_idx = i;
-    //         }
-    //     }
-    //     j["tanks"] = to_value(HashSet::from_iter(&tank_ids_state.tank_ids)).unwrap();
-    //     j["winner"] = if dup {
-    //         "".into()
-    //     } else {
-    //         tank_ids_state.tank_container_name[best_idx].to_string().into()
-    //     };
-    //     j["winner_index"] = if dup { (-1i32).into() } else { best_idx.into() };
-    //     println!("{}", j);
-
-    //     f.write_all(j.to_string().as_bytes())
-    //         .expect("Unable to write data");
-    //     exit.send(AppExit);
-    // }
+        f.write_all(j.to_string().as_bytes())
+            .expect("Unable to write data");
+        exit.send(AppExit);
+    }
 }

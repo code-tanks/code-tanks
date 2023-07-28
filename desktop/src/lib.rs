@@ -22,32 +22,6 @@ use ctsimlibgraphics::CoreCTGraphicsPlugin;
 
 const PORTS: [usize; 4] = [8061, 8062, 8063, 8064];
 
-// pub fn run_local_tank(url: &str, game_url: &str, post_fix: usize, port: usize) -> String {
-//     let re = Regex::new(r"[^a-zA-Z0-9_.-]").unwrap();
-
-//     let tank_id = re
-//         .replace_all(&format!("local-{}-{}-{}", game_url, url, post_fix), "")
-//         .to_string();
-//     remove_tank(&tank_id);
-//     let output_raw = ProcessCommand::new("docker")
-//         .arg("run")
-//         .arg("-d")
-//         .arg("-p")
-//         .arg(format!("{}:8080", port))
-//         .arg("--name")
-//         .arg(&tank_id)
-//         .arg("--label")
-//         .arg("code-tanks")
-//         .arg(url)
-//         .output()
-//         .expect("failed to communicate with docker");
-//     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-
-//     println!("run stdout:");
-//     println!("{}", result_raw);
-//     tank_id
-// }
-
 #[derive(Default, Resource)]
 pub struct UseDummy {
     pub use_dummy: bool,

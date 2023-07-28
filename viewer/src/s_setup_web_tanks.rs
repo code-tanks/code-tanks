@@ -23,20 +23,22 @@ pub fn setup_web_tanks(
     // remove results of simulation
     lines.pop();
 
-    let tank_ids = lines[0]
+    let tank_hashes = lines[0]
         .split(',')
         .map(|f| f.to_string())
         .collect::<Vec<String>>();
-    info!("players: {:?}", tank_ids);
+    let game_url: String = tank_hashes.join("");
+
+    info!("players: {:?}", tank_hashes);
 
     let mut n_commands = 0;
 
     create_environment(&mut commands, &asset_server);
 
-    for n in 0..tank_ids.len() {
+    for n in 0..tank_hashes.len() {
         let c_lines: Vec<Command> = lines[(1 + n)..]
             .iter()
-            .step_by(tank_ids.len())
+            .step_by(tank_hashes.len())
             .map(|f| {
                 f.split('|').collect::<Vec<&str>>()[0]
                     .to_string()
@@ -46,7 +48,7 @@ pub fn setup_web_tanks(
             .collect();
         let transforms: Vec<Vec<f32>> = lines[(1 + n)..]
             .iter()
-            .step_by(tank_ids.len())
+            .step_by(tank_hashes.len())
             .map(|f| {
                 f.split('|').collect::<Vec<&str>>()[1]
                     .split(',')
@@ -63,16 +65,15 @@ pub fn setup_web_tanks(
         let tank = create_graphics_tank(
             &mut commands,
             &TankInfo {
-                hash: tank_ids[n].to_string(),
-                id: format!("{}-{}", tank_ids[n], n),
+                hash: tank_hashes[n].to_string(),
+                id: format!("{}-{}", tank_hashes[n], n),
                 index: n,
-                container_name: format!("{}-{}", tank_ids[n], n), // TODO fix
+                container_name: format!("{}-{}-{}", game_url, tank_hashes[n], n), // TODO fix
             },
             Client {
                 client: Box::new(ReaderClient { lines: c_lines }),
             },
             &asset_server,
-            // tank_ids[n].to_string(),
             &mut meshes,
             &mut materials
         );

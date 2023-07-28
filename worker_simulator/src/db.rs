@@ -19,7 +19,7 @@ pub fn upload_sim(client: &mut Client, game_id: &str, sim: &str, successful: boo
         .is_ok()
 }
 
-pub fn upload_log_to_db(client: &mut Client, tank_id: &str, out: &str, err: &str) -> bool {
+pub fn upload_log_to_db(client: &mut Client, tank_hash: &str, out: &str, err: &str) -> bool {
     client
         .execute(
             r#"
@@ -27,7 +27,7 @@ pub fn upload_log_to_db(client: &mut Client, tank_id: &str, out: &str, err: &str
             VALUES($1, $2, $3)
             ON CONFLICT (id) DO NOTHING;        
         "#,
-            &[&tank_id, &out, &err],
+            &[&tank_hash, &out, &err],
         )
         .is_ok()
 }

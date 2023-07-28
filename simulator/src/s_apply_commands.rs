@@ -36,7 +36,7 @@ pub fn apply_commands(
     >,
     mut state: ResMut<TickState>,
 ) {
-    state.tick += 1;
+    state.count += 1;
 
     for (entity, mut command_receiver, transform, mut velocity, mut tank, mut health) in &mut query
     {

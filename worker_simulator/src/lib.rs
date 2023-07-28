@@ -49,62 +49,18 @@ pub fn get_sim_job() -> Vec<String> {
         .collect::<Vec<String>>()
 }
 
-pub fn upload_log(tank_id: &str, client: &mut Client) {
+pub fn upload_log(tank_hash: &str, client: &mut Client) {
     let output_raw = ProcessCommand::new("docker")
         .arg("logs")
         .arg("--timestamps")
-        .arg(tank_id)
+        .arg(tank_hash)
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    upload_log_to_db(client, tank_id, &result_raw, &err_raw);
+    upload_log_to_db(client, tank_hash, &result_raw, &err_raw);
 }
-
-// pub fn run_docker_game(tank_hashes: &[String]) {
-//     let game_url: String = tank_hashes.join("");
-
-//     let tank_infos = tank_hashes.iter().enumerate().map(|(i, f)| TankInfo{
-//         hash: f.to_string(),
-//         id: format!("{}-{}", f, i),
-//         index: i,
-//         container_name: format!("{}-{}-{}", game_url, f, i),
-//     }).collect::<Vec<TankInfo>>();
-//     // let tank_container_name = format!("{}-{}-{}", game_url, tank_info.hash, tank_info.index);
-
-//     for tank_info in tank_infos {
-//         run_tank(&tank_info.container_name, &tank_info.hash);
-//     }
-
-//     // let tank_container_names = tank_hashes
-//     //     .iter()
-//     //     .enumerate()
-//     //     .map(|(i, url)| run_tank(url, &game_url, i))
-//     //     .collect::<Vec<String>>();
-//     thread::sleep(time::Duration::from_millis(5000));
-
-//     let mut f = File::create("./sim.txt").expect("Unable to create file");
-//     f.write_all(format!("{}\n", tank_hashes.join(",")).as_bytes())
-//         .expect("Unable to write data");
-
-//     App::new()
-//         .add_plugins(MinimalPlugins)
-//         // .insert_resource(TankInfo { // TODO fix
-//         //     tank_ids: tank_hashes.to_vec(),
-//         //     tank_container_name: tank_container_names.to_vec(),
-//         // })
-//         .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
-//         .add_plugins(CoreCTPlugin)
-//         .add_systems(
-//             Update,
-//             save_commands.after(request_commands).before(apply_commands)
-//             // "request_commands",
-//             // "save_commands",
-//             // SystemStage::single_threaded().with_system(save_commands),
-//         )
-//         .run();
-// }
 
 pub fn update_sim_job(id: &str, successful: bool) {
     ProcessCommand::new("curl")
@@ -126,54 +82,6 @@ pub fn update_sim_job(id: &str, successful: bool) {
 
     println!("update job, id={}", id);
 }
-
-// pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
-//     let mut f = File::create("./sim.txt").expect("Unable to create file");
-//     f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
-//         .expect("Unable to write data");
-
-//     App::new()
-//         .add_plugins(MinimalPlugins)
-//         .insert_resource(TankInfo {
-//             tank_ids: tank_ids.to_vec(),
-//             tank_nametags: tank_nametags.to_vec(),
-//         })
-//         .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
-//         .add_plugins(CoreCTPlugin)
-//         .add_systems(
-//             Update,
-//             save_commands.after(request_commands).before(apply_commands)
-//             // "request_commands",
-//             // "save_commands",
-//             // SystemStage::single_threaded().with_system(save_commands),
-//         )
-//         .run();
-// }
-
-// pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
-//     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
-//     remove_tank(&tank_id);
-//     let output_raw = Command::new("docker")
-//         .arg("run")
-//         .arg("-d")
-//         .arg("--network=no-internet")
-//         // .arg("--network=code-tanks_no-internet")
-//         .arg("-p")
-//         .arg("8080")
-//         .arg("--name")
-//         .arg(&tank_id)
-//         // .arg("--label")
-//         // .arg("com.docker.compose.project=code-tanks")
-//         .arg(format!("localhost:5001/{}", url))
-//         .output()
-//         .expect("failed to communicate with docker");
-//     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
-
-//     println!("run stdout:");
-//     println!("{}", result_raw);
-//     tank_id
-// }
-
 
 pub struct DockerClient {
     pub tank_container_name: String,
