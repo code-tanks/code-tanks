@@ -7,23 +7,23 @@
 OUTPUT=$(./scripts/dev/no-docker/upload_tank.sh examples/dart/do_nothing.dart)
 
 
-if [[ $OUTPUT != "2s2wgkh" ]]
+if [[ $OUTPUT != "faec064" ]]
 then
   echo "Failed to upload examples/dart/do_nothing.dart"
-  echo "Expected: 2s2wgkh"
+  echo "Expected: faec064"
   echo "Got: $OUTPUT"
   exit 1
 fi
 
 sleep 30
 
-OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "2s2wgkh")
+OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "faec064")
 
 
 # this code needs fixing
 if [[ "${OUTPUT}" == '"404"' ]]
 then
-  echo "Failed to get build log for 2s2wgkh"
+  echo "Failed to get build log for faec064"
   echo 'Got: "404"'
   exit 1
 fi
@@ -33,12 +33,12 @@ echo "${OUTPUT}"
 
 # docker compose logs builder
 
-OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "2s2wgkh")
+OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "faec064")
 RAW="$(<examples/dart/do_nothing.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
 then
-  echo "Failed to get raw for 2s2wgkh"
+  echo "Failed to get raw for faec064"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
@@ -46,14 +46,14 @@ then
   exit 1
 fi
 
-RAW='2s2wgkh
+RAW='faec064
 0|10,0,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677
-{"2s2wgkh-2s2wgkh-0":{"damage_given":0,"health":100,"index":0,"tank_hash":"2s2wgkh"},"tanks":["2s2wgkh"],"winner":"2s2wgkh-2s2wgkh-0","winner_index":0}'
+{"faec064-faec064-0":{"damage_given":0,"health":100,"index":0,"tank_hash":"faec064"},"tanks":["faec064"],"winner":"faec064-faec064-0","winner_index":0}'
 
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "faec064")
 if [[ "${OUTPUT}" != "waiting to build" ]]
 then
-  echo "Failed run sim for 2s2wgkh"
+  echo "Failed run sim for faec064"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
@@ -62,7 +62,7 @@ then
 fi
 
 sleep 30
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "2s2wgkh")
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "faec064")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
 tr -d '\r'  < ./scripts/test/output.txt > ./scripts/test/output1.txt
@@ -73,7 +73,7 @@ if cmp ./scripts/test/output1.txt ./scripts/test/raw.txt;
 then
     echo "success"
 else
-  echo "Failed determinism for sim 2s2wgkh"
+  echo "Failed determinism for sim faec064"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'

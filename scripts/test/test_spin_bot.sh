@@ -7,23 +7,23 @@
 OUTPUT=$(./scripts/dev/no-docker/upload_tank.sh examples/dart/spin_bot.dart)
 
 
-if [[ $OUTPUT != "1wexiev" ]]
+if [[ $OUTPUT != "83084a8" ]]
 then
   echo "Failed to upload examples/dart/spin_bot.dart"
-  echo "Expected: 1wexiev"
+  echo "Expected: 83084a8"
   echo "Got: $OUTPUT"
   exit 1
 fi
 
 sleep 30
 
-OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "1wexiev")
+OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "83084a8")
 
 
 # this code needs fixing
 if [[ "${OUTPUT}" == '"404"' ]]
 then
-  echo "Failed to get build log for 1wexiev"
+  echo "Failed to get build log for 83084a8"
   echo 'Got: "404"'
   exit 1
 fi
@@ -33,12 +33,12 @@ echo "${OUTPUT}"
 
 # docker compose logs builder
 
-OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "1wexiev")
+OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "83084a8")
 RAW="$(<examples/dart/spin_bot.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
 then
-  echo "Failed to get raw for 1wexiev"
+  echo "Failed to get raw for 83084a8"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
@@ -46,7 +46,7 @@ then
   exit 1
 fi
 
-RAW='1wexiev,1wexiev
+RAW='83084a8,83084a8
 21|10,0,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677
 21|160,0,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677
 21|11.666667,0,0,0,-0.71263844,0.70153147,0,0,-0.71263844,0.70153147,0,0,-0.71263844,0.70153147
@@ -899,12 +899,12 @@ RAW='1wexiev,1wexiev
 21|163.33311,-212.17609,0,0,0.7126385,0.70153147,0,0,0.7126385,0.70153147,0,0,0.7126385,0.70153147
 21|11.666664,-212.20227,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068
 21|161.66666,-212.20227,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068
-{"1wexiev1wexiev-1wexiev-0":{"damage_given":10,"health":100,"index":0,"tank_hash":"1wexiev"},"1wexiev1wexiev-1wexiev-1":{"damage_given":0,"health":90,"index":1,"tank_hash":"1wexiev"},"tanks":["1wexiev"],"winner":"1wexiev1wexiev-1wexiev-0","winner_index":0}'
+{"83084a883084a8-83084a8-0":{"damage_given":10,"health":100,"index":0,"tank_hash":"83084a8"},"83084a883084a8-83084a8-1":{"damage_given":0,"health":90,"index":1,"tank_hash":"83084a8"},"tanks":["83084a8"],"winner":"83084a883084a8-83084a8-0","winner_index":0}'
 
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev" "1wexiev")
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "83084a8" "83084a8")
 if [[ "${OUTPUT}" != "waiting to build" ]]
 then
-  echo "Failed run sim for 1wexiev"
+  echo "Failed run sim for 83084a8"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
@@ -913,7 +913,7 @@ then
 fi
 
 sleep 120
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev" "1wexiev")
+OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "83084a8" "83084a8")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
 tr -d '\r'  < ./scripts/test/output.txt > ./scripts/test/output1.txt
@@ -924,7 +924,7 @@ if cmp ./scripts/test/output1.txt ./scripts/test/raw.txt;
 then
     echo "success"
 else
-  echo "Failed determinism for sim 1wexiev"
+  echo "Failed determinism for sim 83084a8"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
