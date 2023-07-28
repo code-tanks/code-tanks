@@ -4,11 +4,14 @@ use std::io::Write;
 use std::{process::Command, thread};
 use std::env;
 
+
 use bevy::MinimalPlugins;
 use bevy::prelude::{App, Startup, Update, IntoSystemConfigs};
 use ctsimlib::c_tank::TankInfo;
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlib::*;
+
+
+use ctsimlib::remove_tank;
 use ctsimlib::s_apply_commands::apply_commands;
 use ctsimlib::s_request_commands::request_commands;
 use ctsimlib::s_save_commands::save_commands;
@@ -122,3 +125,52 @@ pub fn update_sim_job(id: &str, successful: bool) {
 
     println!("update job, id={}", id);
 }
+
+// pub fn run_game(tank_ids: &[String], tank_nametags: &[String]) {
+//     let mut f = File::create("./sim.txt").expect("Unable to create file");
+//     f.write_all(format!("{}\n", tank_ids.join(",")).as_bytes())
+//         .expect("Unable to write data");
+
+//     App::new()
+//         .add_plugins(MinimalPlugins)
+//         .insert_resource(TankInfo {
+//             tank_ids: tank_ids.to_vec(),
+//             tank_nametags: tank_nametags.to_vec(),
+//         })
+//         .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
+//         .add_plugins(CoreCTPlugin)
+//         .add_systems(
+//             Update,
+//             save_commands.after(request_commands).before(apply_commands)
+//             // "request_commands",
+//             // "save_commands",
+//             // SystemStage::single_threaded().with_system(save_commands),
+//         )
+//         .run();
+// }
+
+
+pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
+    let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
+    remove_tank(&tank_id);
+    let output_raw = Command::new("docker")
+        .arg("run")
+        .arg("-d")
+        .arg("--network=no-internet")
+        // .arg("--network=code-tanks_no-internet")
+        .arg("-p")
+        .arg("8080")
+        .arg("--name")
+        .arg(&tank_id)
+        // .arg("--label")
+        // .arg("com.docker.compose.project=code-tanks")
+        .arg(format!("localhost:5001/{}", url))
+        .output()
+        .expect("failed to communicate with docker");
+    let result_raw = String::from_utf8_lossy(&output_raw.stdout);
+
+    println!("run stdout:");
+    println!("{}", result_raw);
+    tank_id
+}
+

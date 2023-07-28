@@ -50,7 +50,7 @@ fn main() {
             for tank_info in tank_infos {
                 // TODO fix
                 let tank_image_name = format!("localhost:5001/{}", &tank_info.hash);
-                run_tank(&tank_info.container_name, &tank_image_name, "8080");
+                run_tank(&tank_info.container_name, &tank_image_name, "8080", true);
             }
         
             // let tank_container_names = tank_hashes

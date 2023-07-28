@@ -14,13 +14,10 @@ pub mod s_save_commands;
 pub mod s_setup_physics;
 pub mod s_setup_sim_tanks;
 pub mod s_setup_walls;
-pub mod s_tank_physics;
+pub mod s_tank_physics; 
 
-use std::fs::File;
-use std::io::Write;
 use std::process::Command;
 
-use bevy::app::App;
 use bevy::ecs::schedule::ScheduleLabel;
 use bevy::prelude::{Component, IntoSystemConfigs, Resource, Startup, Update};
 use bevy::MinimalPlugins;
@@ -79,7 +76,6 @@ pub struct SaveCommands;
 //         )
 //         .run();
 // }
-
 pub enum CollisionMask {}
 
 impl CollisionMask {
