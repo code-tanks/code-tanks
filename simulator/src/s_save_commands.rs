@@ -83,7 +83,7 @@ pub fn save_commands(
         {
             let dmg = damages_dealt[tank_info.index].damage_dealt;
 
-            j[tank_info.id.to_string()] = json!({
+            j[tank_info.container_name.to_string()] = json!({
                 "tank_hash": tank_info.hash,
                 "index": tank_info.index,
                 "health": healths[tank_info.index].val,
@@ -102,7 +102,7 @@ pub fn save_commands(
         j["winner"] = if dup {
             "".into()
         } else {
-            tank_state.all[best_idx].id.to_string().into()
+            tank_state.all[best_idx].container_name.to_string().into()
         };
         j["winner_index"] = if dup { (-1i32).into() } else { best_idx.into() };
         println!("{}", j);

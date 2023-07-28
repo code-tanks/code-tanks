@@ -899,7 +899,7 @@ RAW='1wexiev,1wexiev
 21|163.33311,-212.17609,0,0,0.7126385,0.70153147,0,0,0.7126385,0.70153147,0,0,0.7126385,0.70153147
 21|11.666664,-212.20227,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068
 21|161.66666,-212.20227,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068
-{"1wexiev1wexiev-1wexiev-0":{"damage_given":10,"health":100,"index":0,"tank_id":"1wexiev"},"1wexiev1wexiev-1wexiev-1":{"damage_given":0,"health":90,"index":1,"tank_id":"1wexiev"},"tanks":["1wexiev"],"winner":"1wexiev1wexiev-1wexiev-0","winner_index":0}'
+{"1wexiev1wexiev-1wexiev-0":{"damage_given":10,"health":100,"index":0,"tank_hash":"1wexiev"},"1wexiev1wexiev-1wexiev-1":{"damage_given":0,"health":90,"index":1,"tank_hash":"1wexiev"},"tanks":["1wexiev"],"winner":"1wexiev1wexiev-1wexiev-0","winner_index":0}'
 
 OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "1wexiev" "1wexiev")
 if [[ "${OUTPUT}" != "waiting to build" ]]
