@@ -42,7 +42,7 @@ def root():
 @app.get('/{game_id}', response_class=HTMLResponse)
 def index(game_id: str):
     tank_ids = game_id.split("-")
-    game_id = "".join(tank_ids)
+    # game_id = "".join(tank_ids)
 
     return f"""
         <html>
@@ -142,10 +142,10 @@ def f3(game_id: str):
 
 @app.get('/assets/sim/{game_id}')
 def f4(game_id: str):
-    game_id = "/".join(game_id.split(".")[0].split("-"))
-
-    print(game_id)
+    game_id = game_id[:-4]
+    print(1, game_id)
     r = requests.get(f'http://server:8088/sim/{game_id}')
+    print(2, r.text)
 
     return Response(content=r.text, media_type="text/plain")
 

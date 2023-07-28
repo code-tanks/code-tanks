@@ -25,4 +25,6 @@ pub fn load_tanks(mut state: ResMut<CustomAssetState>, asset_server: Res<AssetSe
     info!("sim file: {}", file);
 
     state.handle = asset_server.load(&file);
+
+    info!("got file");
 }

@@ -336,6 +336,7 @@ async fn handle_connection(
 
             if !matches.is_empty() {
                 res_code = matches[0].get(1);
+                content_type = ContentType::TEXT;
 
                 res = Response {
                     status_line: StatusLine::OK,
