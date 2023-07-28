@@ -13,9 +13,9 @@ services:
     networks:
       - no-internet
       - internet
-    # depends_on:
-    #   - builder
-    #   - simulator
+    depends_on:
+      - builder
+      - simulator
 
   builder:
     image: ghcr.io/code-tanks/code-tanks-builder-dev:latest
@@ -31,10 +31,10 @@ services:
     networks:
       - no-internet
       - internet
-    # depends_on:
-    #   - db
-    #   - ocypod
-      # - registry
+    depends_on:
+      - db
+      - ocypod
+      - registry
 
   simulator:
     image: ghcr.io/code-tanks/code-tanks-simulator-dev:latest
@@ -49,10 +49,10 @@ services:
       replicas: 2
     networks:
       - no-internet
-    # depends_on:
-    #   - db
-    #   - ocypod
-      # - registry
+    depends_on:
+      - db
+      - ocypod
+      - registry
   
   web:
     container_name: web
@@ -63,8 +63,8 @@ services:
     networks:
       - no-internet
       - internet
-    # depends_on:
-    #   - server
+    depends_on:
+      - server
 
   db:
     container_name: db
@@ -91,8 +91,8 @@ services:
     restart: unless-stopped
     networks:
       - no-internet
-    # depends_on:
-    #   - ocypod-redis
+    depends_on:
+      - ocypod-redis
 
   ocypod-redis:
     container_name: ocypod-redis
@@ -120,17 +120,17 @@ services:
     #   - no-internet
     #   - internet
 
-  # pgAdmin:
-  #   container_name: pgAdmin
-  #   image: dpage/pgadmin4
-  #   ports:
-  #     - 8081:80
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-  #     - PGADMIN_DEFAULT_PASSWORD=admin
-  #   networks:
-  #     - no-internet
-  #     - internet
+  pgAdmin:
+    container_name: pgAdmin
+    image: dpage/pgadmin4
+    ports:
+      - 8081:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    networks:
+      - no-internet
+      - internet
 
 networks:
   no-internet:
