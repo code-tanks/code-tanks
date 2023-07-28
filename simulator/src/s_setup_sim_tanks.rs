@@ -4,15 +4,15 @@ use bevy::prelude::*;
 
 use crate::{
     c_client::{Client, DockerClient},
-    c_tank::DamageDealer,
     c_tank::Gun,
     c_tank::Radar,
     c_tank::Tank,
-    CCollider, CollisionType, Game, TankInfo,
+    c_tank::{AllTankInfo, DamageDealer, TankInfo},
+    CCollider, CollisionType, Game,
 };
 use bevy_rapier2d::prelude::*;
 
-use crate::{c_command::CommandSource, c_event::EventSink, c_health::Health, CollisionMask};
+use crate::{c_command_source::CommandSource, c_event::EventSink, c_health::Health, CollisionMask};
 
 pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
     let mut t = Transform::from_xyz(x, y, 0.0);
@@ -93,8 +93,7 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
 }
 
 pub fn create_base_tank(
-    id: String,
-    i: usize,
+    tank_info: &TankInfo,
     commands: &mut Commands,
     gun: Entity,
     radar: Entity,
@@ -115,8 +114,9 @@ pub fn create_base_tank(
             // Sleeping::disabled(),
             // Ccd::enabled(),
             Tank {
-                id: id,
-                index: i,
+                // id: tank_id,
+                // hash: tank_hash,
+                info: tank_info.clone(),
                 cooldown: 0,
                 gun,
                 radar,
@@ -168,30 +168,42 @@ pub fn create_base_tank(
         .id()
 }
 
-pub fn create_basic_tank(id: String, i: usize, client: impl Component, commands: &mut Commands) {
-    let x = 150.0 * (i as f32) + 10.0;
-    let y = 0.0;
+// pub fn create_basic_tank(id: String, i: usize, client: impl Component, commands: &mut Commands) {
+//     let x = 150.0 * (i as f32) + 10.0;
+//     let y = 0.0;
 
-    let gun = create_gun(commands, x, y);
+//     let gun = create_gun(commands, x, y);
 
-    let radar = create_radar(commands, x, y);
+//     let radar = create_radar(commands, x, y);
 
-    create_base_tank(id, i, commands, gun, radar, x, y, client);
-}
+//     create_base_tank(id, i, commands, gun, radar, x, y, client);
+// }
 
-pub fn setup_sim_tanks(state: Res<TankInfo>, mut commands: Commands) {
-    for (i, (tank_id, tank_nametag)) in
-        zip(state.tank_ids.clone(), state.tank_nametags.clone()).enumerate()
-    {
-        create_basic_tank(
-            tank_id.to_string(),
-            i,
-            Client {
-                client: Box::new(DockerClient {
-                    tank_nametag: tank_nametag.to_string(),
-                }),
-            },
-            &mut commands,
-        );
+pub fn setup_sim_tanks(state: Res<AllTankInfo>, mut commands: Commands) {
+    let game_url = state.all.iter().map(|f| f.hash.to_string()).collect::<Vec<String>>().join("");
+
+    for tank_info in state.all.iter() {
+        // create_basic_tank(
+        //     tank_id.to_string(),
+        //     i,
+        //     Client {
+        //         client: Box::new(DockerClient {
+        //             tank_container_name: tank_container_name.to_string(),
+        //         }),
+        //     },
+        //     &mut commands,
+        // );
+        let x = 150.0 * (tank_info.index as f32) + 10.0;
+        let y = 0.0;
+
+        let gun = create_gun(&mut commands, x, y);
+        let radar = create_radar(&mut commands, x, y);
+
+        let client = Client {
+            client: Box::new(DockerClient {
+                tank_container_name: tank_info.container_name.to_string(),
+            }),
+        };
+        create_base_tank(tank_info, &mut commands, gun, radar, x, y, client);
     }
 }

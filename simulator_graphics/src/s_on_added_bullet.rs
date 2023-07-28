@@ -37,7 +37,7 @@ pub fn on_added_bullet(
                     *COLORS[query_tank
                         .get(query_bullet.get(e).unwrap().tank)
                         .unwrap()
-                        .index
+                        .info.index
                         % COLORS.len()],
                 )),
                 ..default()

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use ct_api::Commands;
-use ctsimlib::c_command::CommandSource;
+use ctsimlib::c_command_source::CommandSource;
 
 use crate::DebugToggle;
 

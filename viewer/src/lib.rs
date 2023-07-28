@@ -4,11 +4,12 @@ pub mod s_setup_web_tanks;
 
 use bevy::{
     asset::{AssetLoader, LoadContext, LoadedAsset},
-    prelude::*,
     reflect::{TypeUuid, TypePath},
-    utils::BoxedFuture,
+    utils::BoxedFuture, prelude::{Resource, Handle, Component},
 };
 
+use ct_api::{Command, Commands};
+use ctsimlib::{c_client::ClientTrait, c_event::CTEvent};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize, TypeUuid, TypePath)]
@@ -45,4 +46,22 @@ pub struct CustomAssetState {
 #[derive(Component)]
 pub struct HistoryTransforms {
     pub transforms: Vec<Vec<f32>>,
+}
+
+pub struct ReaderClient {
+    pub lines: Vec<Command>,
+}
+
+impl ClientTrait for ReaderClient {
+    fn request_commands(&mut self) -> Vec<Command> {
+        if self.lines.is_empty() {
+            vec![Commands::NONE]
+        } else {
+            vec![self.lines.remove(0)]
+        }
+    }
+
+    fn request_commands_by_event(&mut self, _event: &CTEvent) -> Vec<Command> {
+        self.request_commands()
+    }
 }

@@ -7,7 +7,7 @@ use bevy_rapier2d::prelude::*;
 use ct_api::Commands;
 
 use crate::{
-    c_command::CommandSource,
+    c_command_source::CommandSource,
     c_health::Health,
     c_tank::{Bullet, Gun, Radar, Tank},
     CCollider, CollisionMask, CollisionType, TickState,

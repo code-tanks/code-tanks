@@ -1,7 +1,7 @@
 use crate::{CustomAsset, CustomAssetState, *};
-use bevy::prelude::{info, AssetServer, Assets, Commands, Res, ResMut};
+use bevy::{prelude::{info, AssetServer, Assets, Commands, Res, ResMut, Mesh}, sprite::ColorMaterial};
 use ct_api::Command;
-use ctsimlib::c_client::{Client, ReaderClient};
+use ctsimlib::{c_client::Client, c_tank::TankInfo};
 use ctsimlibgraphics::*;
 
 pub fn setup_web_tanks(
@@ -62,12 +62,17 @@ pub fn setup_web_tanks(
 
         let tank = create_graphics_tank(
             &mut commands,
-            n,
+            &TankInfo {
+                hash: tank_ids[n].to_string(),
+                id: format!("{}-{}", tank_ids[n], n),
+                index: n,
+                container_name: format!("{}-{}", tank_ids[n], n), // TODO fix
+            },
             Client {
                 client: Box::new(ReaderClient { lines: c_lines }),
             },
             &asset_server,
-            tank_ids[n].to_string(),
+            // tank_ids[n].to_string(),
             &mut meshes,
             &mut materials
         );

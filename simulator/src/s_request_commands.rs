@@ -1,7 +1,7 @@
 use bevy::prelude::Query;
 use ct_api::Commands;
 
-use crate::{c_client::Client, c_command::CommandSource, c_health::Health};
+use crate::{c_client::Client, c_command_source::CommandSource, c_health::Health};
 
 pub fn request_commands(mut query: Query<(&mut CommandSource, &mut Client, &Health)>) {
     // println!("request commands");

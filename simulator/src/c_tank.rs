@@ -3,11 +3,22 @@ use std::f32::consts::PI;
 
 #[derive(Component)]
 pub struct Tank {
-    pub id: String,
-    pub index: usize,
+    pub info: TankInfo,
     pub cooldown: u32,
     pub gun: Entity,
     pub radar: Entity,
+}
+#[derive(Resource)]
+pub struct AllTankInfo {
+    pub all: Vec<TankInfo>,
+}
+
+#[derive(Clone)]
+pub struct TankInfo {
+    pub hash: String,
+    pub id: String,
+    pub index: usize,
+    pub container_name: String,
 }
 
 impl Tank {

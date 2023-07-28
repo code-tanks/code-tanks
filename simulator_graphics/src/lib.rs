@@ -15,6 +15,7 @@ use bevy::{
 // };
 use c_nametag::NameTag;
 use c_tracks::Tracks;
+use ctsimlib::c_tank::TankInfo;
 use ctsimlib::{c_tank::Tank, s_request_commands::request_commands, s_apply_commands::apply_commands};
 use s_request_debug_commands::request_debug_commands;
 use s_spawn_tracks::spawn_tracks;
@@ -44,7 +45,7 @@ use bevy::DefaultPlugins;
 
 pub mod s_request_debug_commands;
 
-use ctsimlib::s_setup_sim_tanks::{create_base_tank, create_gun, create_radar};
+use ctsimlib::s_setup_sim_tanks::{create_gun, create_radar, create_base_tank};
 
 const TANK_BODY_IMAGES: &[&str] = &[
     "tankBody_red.png",
@@ -82,14 +83,15 @@ pub fn create_environment(commands: &mut Commands, asset_server: &Res<AssetServe
 
 pub fn create_graphics_tank(
     commands: &mut Commands,
-    tank_index: usize,
+    tank_info: &TankInfo,
+    // tank_index: usize,
     client: impl Component,
     asset_server: &Res<AssetServer>,
-    tank_id: String,
+    // tank_id: String,
     meshes: &mut ResMut<Assets<Mesh>>,
     materials: &mut ResMut<Assets<ColorMaterial>>,
 ) -> Entity {
-    let x = 150.0 * (tank_index as f32) + 10.0;
+    let x = 150.0 * (tank_info.index as f32) + 10.0;
     let y = 0.0;
 
     let gun = create_gun(commands, x, y);
@@ -104,7 +106,7 @@ pub fn create_graphics_tank(
             j.translation.z = 2.1;
             j
         },
-        texture: asset_server.load(TANK_BARREL_IMAGES[tank_index % TANK_BARREL_IMAGES.len()]),
+        texture: asset_server.load(TANK_BARREL_IMAGES[tank_info.index % TANK_BARREL_IMAGES.len()]),
         sprite: Sprite {
             anchor: Anchor::Custom(Vec2::new(0.0, -0.35)),
             flip_y: true,
@@ -149,16 +151,18 @@ pub fn create_graphics_tank(
     let mut k = Transform::from_rotation(Quat::from_rotation_z(0.0));
     k.translation.z = 1.;
 
-    let tank = create_base_tank(
-        tank_id.to_string(),
-        tank_index,
-        commands,
-        gun,
-        radar,
-        x,
-        y,
-        client,
-    );
+    // let tank = create_base_tank(
+    //     tank_id.to_string(),
+    //     tank_index,
+    //     commands,
+    //     gun,
+    //     radar,
+    //     x,
+    //     y,
+    //     client,
+    // );
+    let tank = create_base_tank(tank_info, commands, gun, radar, x, y, client);
+
     let tank = commands
         .entity(tank)
         .insert(Tracks {
@@ -168,7 +172,7 @@ pub fn create_graphics_tank(
         .with_children(|parent| {
             parent.spawn(SpriteBundle {
                 transform: k,
-                texture: asset_server.load(TANK_BODY_IMAGES[tank_index % TANK_BODY_IMAGES.len()]),
+                texture: asset_server.load(TANK_BODY_IMAGES[tank_info.index % TANK_BODY_IMAGES.len()]),
                 ..default()
             });
         })
@@ -211,7 +215,7 @@ pub fn create_graphics_tank(
     commands.spawn((
         Text2dBundle {
             text: Text::from_section(
-                format!("{}-{}", tank_id, tank_index),
+                tank_info.id.to_string(),
                 TextStyle {
                     font: asset_server.load("fonts/Roboto-Regular.ttf"),
                     font_size: 12.0,
@@ -295,17 +299,17 @@ impl Plugin for CoreCTGraphicsPlugin {
     }
 }
 
-#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct UpdateHealthbar;
+// #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+// pub struct UpdateHealthbar;
 
-#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct UpdateNametag;
+// #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+// pub struct UpdateNametag;
 
-#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct OnAddedBullet;
+// #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+// pub struct OnAddedBullet;
 
-#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct SpawnTracks;
+// #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+// pub struct SpawnTracks;
 
-#[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct UpdateTracks;
+// #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
+// pub struct UpdateTracks;
