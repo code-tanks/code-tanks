@@ -1,22 +1,7 @@
-use core::time;
-use std::fs::File;
-use std::io::Write;
-use std::{process::Command, thread};
 use std::env;
-
-
-use bevy::MinimalPlugins;
-use bevy::prelude::{App, Startup, Update, IntoSystemConfigs};
-use ctsimlib::c_tank::TankInfo;
-use ctsimlib::core_plugin::CoreCTPlugin;
-
+use std::process::Command;
 
 use ctsimlib::remove_tank;
-use ctsimlib::s_apply_commands::apply_commands;
-use ctsimlib::s_request_commands::request_commands;
-use ctsimlib::s_save_commands::save_commands;
-use ctsimlib::s_setup_sim_tanks::setup_sim_tanks;
-use ctsimlib::s_setup_walls::setup_walls;
 use db::upload_log_to_db;
 use postgres::Client;
 
@@ -29,7 +14,10 @@ pub fn create_sim_queue() {
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{"timeout": "10m"}"#)
-        .arg(format!("{}/queue/simulator", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
+        .arg(format!(
+            "{}/queue/simulator",
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()
+        ))
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -37,8 +25,14 @@ pub fn create_sim_queue() {
 pub fn get_sim_job() -> Vec<String> {
     let output_raw = Command::new("bash")
         .arg("-c")
-        .arg(format!(r#"curl {}/queue/simulator/job | jq --raw-output '.id,.input'"#, env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
-        .arg(format!("{}/queue/build/job", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
+        .arg(format!(
+            r#"curl {}/queue/simulator/job | jq --raw-output '.id,.input'"#,
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()
+        ))
+        .arg(format!(
+            "{}/queue/build/job",
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()
+        ))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -119,7 +113,11 @@ pub fn update_sim_job(id: &str, successful: bool) {
             r#"{{"status": "{}"}}"#,
             if successful { "completed" } else { "failed" }
         ))
-        .arg(format!("{}/job/{}", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap(), id))
+        .arg(format!(
+            "{}/job/{}",
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap(),
+            id
+        ))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -149,7 +147,6 @@ pub fn update_sim_job(id: &str, successful: bool) {
 //         .run();
 // }
 
-
 pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     let tank_id = format!("{}-{}-{}", game_url, url, post_fix);
     remove_tank(&tank_id);
@@ -173,4 +170,3 @@ pub fn run_tank(url: &str, game_url: &str, post_fix: usize) -> String {
     println!("{}", result_raw);
     tank_id
 }
-

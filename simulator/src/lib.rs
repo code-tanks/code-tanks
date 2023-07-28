@@ -19,14 +19,8 @@ pub mod s_tank_physics;
 use std::process::Command;
 
 use bevy::ecs::schedule::ScheduleLabel;
-use bevy::prelude::{Component, IntoSystemConfigs, Resource, Startup, Update};
-use bevy::MinimalPlugins;
-use core_plugin::*;
-use s_apply_commands::apply_commands;
-use s_request_commands::request_commands;
-use s_save_commands::*;
-use s_setup_sim_tanks::*;
-use s_setup_walls::*;
+use bevy::prelude::{Component, Resource};
+
 
 #[derive(Default, Resource)]
 pub struct TickState {

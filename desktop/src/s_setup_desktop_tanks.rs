@@ -1,12 +1,11 @@
-use std::iter::zip;
 
 use bevy::prelude::{AssetServer, Commands, Res, ResMut, Assets, Mesh};
 use bevy::sprite::ColorMaterial;
 use ctsimlib::c_tank::{AllTankInfo, TankInfo};
-use ctsimlib::{c_client::Client, *};
+use ctsimlib::c_client::Client;
 use ctsimlibgraphics::*;
 
-use crate::{PORTS, UseDummy, DummyClient, DesktopClient};
+use crate::{DummyClient, DesktopClient};
 
 pub fn setup_desktop_tanks(
     // mut state: ResMut<TickState>,

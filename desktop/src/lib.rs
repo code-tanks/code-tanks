@@ -1,7 +1,6 @@
 use std::{process::Command as ProcessCommand, thread, time};
 
 use bevy::{
-    ecs::schedule::ScheduleLabel,
     prelude::{default, App, Resource, Startup},
     winit::WinitSettings,
 };
@@ -20,7 +19,6 @@ use s_setup_desktop_tanks::setup_desktop_tanks;
 pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
 use ctsimlibgraphics::CoreCTGraphicsPlugin;
-use regex::Regex;
 
 const PORTS: [usize; 4] = [8061, 8062, 8063, 8064];
 

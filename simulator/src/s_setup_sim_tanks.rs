@@ -1,5 +1,3 @@
-use std::iter::zip;
-
 use bevy::prelude::*;
 
 use crate::{
@@ -180,7 +178,7 @@ pub fn create_base_tank(
 // }
 
 pub fn setup_sim_tanks(state: Res<AllTankInfo>, mut commands: Commands) {
-    let game_url = state.all.iter().map(|f| f.hash.to_string()).collect::<Vec<String>>().join("");
+    // let game_url = state.all.iter().map(|f| f.hash.to_string()).collect::<Vec<String>>().join("");
 
     for tank_info in state.all.iter() {
         // create_basic_tank(
