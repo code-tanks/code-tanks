@@ -1,4 +1,3 @@
 #!/bin/bash
 
-docker build -t ghcr.io/code-tanks/code-tanks-server:latest -f server/Dockerfile .
-docker compose up -d --force-recreate --remove-orphans server
+docker build -t ghcr.io/code-tanks/code-tanks-server-dev:latest -f server/Dockerfile .
