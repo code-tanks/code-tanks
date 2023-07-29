@@ -70,7 +70,7 @@ pub fn save_commands(
         // println!("commands remaining {:?}", command_receiver.queue);
     }
 
-    let early_stop = dead_count >= tanks.len() - 1;
+    let early_stop = dead_count >= tanks.len() - 1 && tanks.len() > 1;
 
     if state.count >= TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
         state.count = TickState::MAXIMUM_SIMULATION_TICKS;

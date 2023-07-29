@@ -92,18 +92,19 @@ impl ClientTrait for DockerClient {
         let output = ProcessCommand::new("bash")
             .arg("-c")
             .arg(format!(
-                r#"curl {}:8080/request_commands | jq --raw-output '.[]'"#,
+                r#"curl -sS -m 3 {}:8080/request_commands | jq --raw-output '.[]'"#,
                 self.tank_container_name,
             ))
             .output()
             .expect("failed to communicate with tank");
+        let err_raw = String::from_utf8_lossy(&output.stderr);
 
-        if output.status.success() {
+        if err_raw.is_empty() {
             let result_raw = String::from_utf8_lossy(&output.stdout);
             return parse_commands(result_raw.to_string());
         }
 
-        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        // let _err_raw = String::from_utf8_lossy(&output.stderr);
         println!(
             "SELF_DESTRUCT {:?} empty request_commands",
             self.tank_container_name
@@ -115,18 +116,19 @@ impl ClientTrait for DockerClient {
         let output = ProcessCommand::new("bash")
             .arg("-c")
             .arg(format!(
-                r#"curl -d '{}' -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
+                r#"curl -sS -m 3 -d '{}' -X POST {}:8080/request_commands_by_event | jq --raw-output '.[]'"#,
                 serde_json::to_string(event).unwrap(),
                 self.tank_container_name,
             ))
             .output()
             .expect("failed to communicate with ocypod");
+        let err_raw = String::from_utf8_lossy(&output.stderr);
 
-        if output.status.success() {
+        if err_raw.is_empty() {
             let result_raw = String::from_utf8_lossy(&output.stdout);
             return parse_commands(result_raw.to_string());
         }
-        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        // let _err_raw = String::from_utf8_lossy(&output.stderr);
         vec![]
     }
 }

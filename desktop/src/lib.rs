@@ -126,18 +126,23 @@ impl ClientTrait for DesktopClient {
         let output = ProcessCommand::new("bash")
             .arg("-c")
             .arg(format!(
-                r#"curl localhost:{}/request_commands | jq --raw-output '.[]'"#,
+                r#"curl -sS -m 3 localhost:{}/request_commands | jq --raw-output '.[]'"#,
                 self.port,
             ))
             .output()
             .expect("failed to communicate with tank");
 
-        if output.status.success() {
+        let err_raw = String::from_utf8_lossy(&output.stderr);
+
+
+        if err_raw.is_empty() {
+            println!("whaaat");
+
             let result_raw = String::from_utf8_lossy(&output.stdout);
             return parse_commands(result_raw.to_string());
         }
 
-        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        // let _err_raw = String::from_utf8_lossy(&output.stderr);
         println!(
             "SELF_DESTRUCT {:?} empty request_commands",
             self.info.container_name
@@ -149,18 +154,19 @@ impl ClientTrait for DesktopClient {
         let output = ProcessCommand::new("bash")
             .arg("-c")
             .arg(format!(
-                r#"curl -d '{}' -X POST localhost:{}/request_commands_by_event | jq --raw-output '.[]'"#,
+                r#"curl -sS -m 3 -d '{}' -X POST localhost:{}/request_commands_by_event | jq --raw-output '.[]'"#,
                 serde_json::to_string(event).unwrap(),
                 self.port,
             ))
             .output()
             .expect("failed to communicate with ocypod");
+        let err_raw = String::from_utf8_lossy(&output.stderr);
 
-        if output.status.success() {
-            let result_raw = String::from_utf8_lossy(&output.stdout);
+        if err_raw.is_empty() {
+                let result_raw = String::from_utf8_lossy(&output.stdout);
             return parse_commands(result_raw.to_string());
         }
-        let _err_raw = String::from_utf8_lossy(&output.stderr);
+        // let _err_raw = String::from_utf8_lossy(&output.stderr);
         vec![]
     }
 }
