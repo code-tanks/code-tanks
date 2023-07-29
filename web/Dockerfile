@@ -4,43 +4,26 @@ WORKDIR /ctviewer
 RUN rustup target install wasm32-unknown-unknown
 RUN cargo install -f wasm-bindgen-cli --version 0.2.87
 
-COPY worker_simulator/dummy.rs .
-COPY viewer/Cargo.toml .
-RUN sed -i '/ctsimlib/d' Cargo.toml
-RUN sed -i '/ctgraphics/d' Cargo.toml
-RUN sed -i '/ct-api/d' Cargo.toml
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-
 ARG profile=dev
 
-RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
-
-####
-
-# COPY server/dummy.rs .
 COPY viewer/Cargo.toml .
 
 # RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
 RUN sed -i 's#../api#api#' Cargo.toml
 RUN sed -i 's#../graphics#graphics#' Cargo.toml
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 
 COPY api api
 COPY graphics graphics
 COPY simulator simulator
-
-RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
-COPY viewer/Cargo.toml .
-RUN sed -i 's#../simulator#simulator#' Cargo.toml
-RUN sed -i 's#../api#api#' Cargo.toml
-RUN sed -i 's#../graphics#graphics#' Cargo.toml
 
 # ARG profile=dev
 
 # RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
 # RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY viewer/src src
+
+
 RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
 # RUN echo "hi"
 # RUN file="$(ls -1 target/wasm32-unknown-unknown/release/wasm32-unknown-unknown)" && echo $file
