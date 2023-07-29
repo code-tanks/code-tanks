@@ -4,7 +4,7 @@
 
 # ./scripts/dev/reset_db.sh
 
-OUTPUT=$(./scripts/dev/no-docker/upload_tank.sh examples/dart/do_nothing.dart)
+OUTPUT=$(./scripts/upload_tank.sh examples/dart/do_nothing.dart)
 
 
 if [[ $OUTPUT != "faec064" ]]
@@ -17,7 +17,7 @@ fi
 
 sleep 30
 
-OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "faec064")
+OUTPUT=$(./scripts/get_build_log.sh "faec064")
 
 
 # this code needs fixing
@@ -33,7 +33,7 @@ echo "${OUTPUT}"
 
 # docker compose logs builder
 
-OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "faec064")
+OUTPUT=$(./scripts/get_raw.sh "faec064")
 RAW="$(<examples/dart/do_nothing.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
@@ -50,7 +50,7 @@ RAW='faec064
 0|10,0,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677,0,0,-0.70710677,0.70710677
 {"faec064-faec064-0":{"damage_given":0,"health":100,"index":0,"tank_hash":"faec064"},"tanks":["faec064"],"winner":"faec064-faec064-0","winner_index":0}'
 
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "faec064")
+OUTPUT=$(./scripts/run_sim.sh "faec064")
 if [[ "${OUTPUT}" != "waiting to build" ]]
 then
   echo "Failed run sim for faec064"
@@ -62,7 +62,7 @@ then
 fi
 
 sleep 30
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "faec064")
+OUTPUT=$(./scripts/run_sim.sh "faec064")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
 tr -d '\r'  < ./scripts/test/output.txt > ./scripts/test/output1.txt

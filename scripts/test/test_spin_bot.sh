@@ -4,7 +4,7 @@
 
 # ./scripts/dev/reset_db.sh
 
-OUTPUT=$(./scripts/dev/no-docker/upload_tank.sh examples/dart/spin_bot.dart)
+OUTPUT=$(./scripts/upload_tank.sh examples/dart/spin_bot.dart)
 
 
 if [[ $OUTPUT != "83084a8" ]]
@@ -17,7 +17,7 @@ fi
 
 sleep 30
 
-OUTPUT=$(./scripts/dev/no-docker/get_build_log.sh "83084a8")
+OUTPUT=$(./scripts/get_build_log.sh "83084a8")
 
 
 # this code needs fixing
@@ -33,7 +33,7 @@ echo "${OUTPUT}"
 
 # docker compose logs builder
 
-OUTPUT=$(./scripts/dev/no-docker/get_raw.sh "83084a8")
+OUTPUT=$(./scripts/get_raw.sh "83084a8")
 RAW="$(<examples/dart/spin_bot.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
@@ -901,7 +901,7 @@ RAW='83084a8,83084a8
 21|161.66666,-212.20227,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068,0,0,0.70710677,0.7071068
 {"83084a883084a8-83084a8-0":{"damage_given":10,"health":100,"index":0,"tank_hash":"83084a8"},"83084a883084a8-83084a8-1":{"damage_given":0,"health":90,"index":1,"tank_hash":"83084a8"},"tanks":["83084a8"],"winner":"83084a883084a8-83084a8-0","winner_index":0}'
 
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "83084a8" "83084a8")
+OUTPUT=$(./scripts/run_sim.sh "83084a8" "83084a8")
 if [[ "${OUTPUT}" != "waiting to build" ]]
 then
   echo "Failed run sim for 83084a8"
@@ -913,7 +913,7 @@ then
 fi
 
 sleep 120
-OUTPUT=$(./scripts/dev/no-docker/run_sim.sh "83084a8" "83084a8")
+OUTPUT=$(./scripts/run_sim.sh "83084a8" "83084a8")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
 tr -d '\r'  < ./scripts/test/output.txt > ./scripts/test/output1.txt
