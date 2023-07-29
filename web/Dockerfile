@@ -24,10 +24,17 @@ COPY viewer/Cargo.toml .
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
 RUN sed -i 's#../api#api#' Cargo.toml
 RUN sed -i 's#../graphics#graphics#' Cargo.toml
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+
 COPY api api
 COPY graphics graphics
 COPY simulator simulator
 
+RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profile
+COPY viewer/Cargo.toml .
+RUN sed -i 's#../simulator#simulator#' Cargo.toml
+RUN sed -i 's#../api#api#' Cargo.toml
+RUN sed -i 's#../graphics#graphics#' Cargo.toml
 
 # ARG profile=dev
 
