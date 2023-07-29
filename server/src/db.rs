@@ -12,14 +12,10 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
     let pool = Pool::new(manager).unwrap();
     let mut client = pool.get().unwrap();
     client.batch_execute(r#"
-        /* https://gist.github.com/david-sanabria/0d3ff67eb56d2750502aed4186d6a4a7 */
         CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-        /* completed|cancelled|timed_out|queued|running|failed */
-
         CREATE TABLE IF NOT EXISTS tanks (
-            id          TEXT PRIMARY KEY,
-            url         VARCHAR NOT NULL,
+            hash        VARCHAR NOT NULL,
             code        VARCHAR NOT NULL,
             log         VARCHAR NOT NULL,
             successful  BOOL NOT NULL,
@@ -28,17 +24,17 @@ pub fn get_db_pool() -> Pool<PostgresConnectionManager<NoTls>> {
         );
 
         CREATE TABLE IF NOT EXISTS simulations (
-            id          VARCHAR PRIMARY KEY,
+            game_url    VARCHAR PRIMARY KEY,
             log         VARCHAR NOT NULL,
             successful  BOOL NOT NULL,
             timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
         );
 
         CREATE TABLE IF NOT EXISTS runs (
-            id          VARCHAR PRIMARY KEY,
-            out         VARCHAR NOT NULL,
-            err         VARCHAR NOT NULL,
-            timestamp   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
+            container_name  VARCHAR PRIMARY KEY,
+            out             VARCHAR NOT NULL,
+            err             VARCHAR NOT NULL,
+            timestamp       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(0)
         );
     "#).unwrap();
 
@@ -54,18 +50,14 @@ pub fn insert_tank(
     client
         .execute(
             r#"
-                WITH cte AS (
-                    SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
-                )
-                INSERT INTO tanks (id, url, code, log, successful, language)
-                SELECT 
-                    id, 
-                    SUBSTRING(id, 0, 8), 
+                INSERT INTO tanks (hash, code, log, successful, language)
+                VALUES (
+                    SUBSTRING(ENCODE(DIGEST($1 || $2,'sha256'), 'hex'), 0, 8), 
                     $1, 
                     'waiting to build',
                     false,
                     $3
-                FROM cte;
+                );
             "#,
             &[&code, &post_fix, &language],
         )
@@ -80,77 +72,72 @@ pub fn get_existing(
     client
         .query(
             "
-                WITH cte AS (
-                    SELECT ENCODE(DIGEST($1 || $2,'sha256'), 'hex') AS id
-                ), matches AS (
-                    SELECT * FROM tanks, cte
-                    WHERE tanks.id = cte.id
-                )
                 SELECT *
-                FROM matches;
+                FROM tanks
+                WHERE tanks.hash = SUBSTRING(ENCODE(DIGEST($1 || $2,'sha256'), 'hex'), 0, 8);
             ",
             &[&code, &post_fix],
         )
         .unwrap()
 }
 
-pub fn get_tank_by_url(
+pub fn get_tank_by_hash(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    url: &str,
+    tank_hash: &str,
 ) -> Vec<Row> {
     client
         .query(
             "
                 SELECT * FROM tanks
-                WHERE url = $1
+                WHERE hash = $1
             ",
-            &[&url],
+            &[&tank_hash],
         )
         .unwrap()
 }
 
 pub fn get_simulation_by_url(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    url: &str,
+    game_url: &str,
 ) -> Vec<Row> {
     client
         .query(
             "
                 SELECT * FROM simulations
-                WHERE id = $1
+                WHERE game_url = $1
             ",
-            &[&url],
+            &[&game_url],
         )
         .unwrap()
 }
 
 pub fn upsert_simulation_by_url(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    url: &str,
+    game_url: &str,
 ) {
     client
         .execute(
             "
-                INSERT INTO simulations (id, log, successful)
+                INSERT INTO simulations (game_url, log, successful)
                 VALUES ($1, 'waiting to build', false)
-                ON CONFLICT (id) DO NOTHING;
+                ON CONFLICT (game_url) DO NOTHING;
             ",
-            &[&url],
+            &[&game_url],
         )
         .unwrap();
 }
 
 pub fn get_simulation_log_by_id(
     client: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
-    id: &str,
+    tank_container_name: &str,
 ) -> Vec<Row> {
     client
         .query(
             "
                 SELECT * FROM runs
-                WHERE id = $1
+                WHERE container_name = $1
             ",
-            &[&id],
+            &[&tank_container_name],
         )
         .unwrap()
 }
@@ -164,7 +151,7 @@ pub fn get_recent_simulations(
                 SELECT json_agg(to_json(r))::varchar
                 FROM (
                     SELECT
-                        id,
+                        game_url,
                         timestamp,
                         SPLIT_PART(log, E'\n', -1)::json as results,
                         SPLIT_PART(log, E'\n', -1)::json->'tanks' as tanks,

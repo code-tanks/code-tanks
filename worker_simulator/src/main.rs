@@ -77,7 +77,7 @@ fn main() {
                 )
                 .run();
 
-            // let game_id = &tank_hashes.join("-");
+            // let game_url = &tank_hashes.join("-");
             for tank_info in tank_infos {
                 upload_log(&tank_info.container_name, &mut client);
                 remove_tank(&tank_info.container_name);

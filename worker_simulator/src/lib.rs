@@ -49,17 +49,17 @@ pub fn get_sim_job() -> Vec<String> {
         .collect::<Vec<String>>()
 }
 
-pub fn upload_log(tank_hash: &str, client: &mut Client) {
+pub fn upload_log(tank_container_name: &str, client: &mut Client) {
     let output_raw = ProcessCommand::new("docker")
         .arg("logs")
         .arg("--timestamps")
-        .arg(tank_hash)
+        .arg(tank_container_name)
         .output()
         .expect("failed to communicate with docker");
     let result_raw = String::from_utf8_lossy(&output_raw.stdout);
     let err_raw = String::from_utf8_lossy(&output_raw.stderr);
 
-    upload_log_to_db(client, tank_hash, &result_raw, &err_raw);
+    upload_log_to_db(client, tank_container_name, &result_raw, &err_raw);
 }
 
 pub fn update_sim_job(id: &str, successful: bool) {

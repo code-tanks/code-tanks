@@ -39,10 +39,10 @@ def recent():
 def root():
     return "pong"
 
-@app.get('/{game_id}', response_class=HTMLResponse)
-def index(game_id: str):
-    tank_ids = game_id.split("-")
-    # game_id = "".join(tank_ids)
+@app.get('/{game_url}', response_class=HTMLResponse)
+def index(game_url: str):
+    tank_ids = game_url.split("-")
+    # game_url = "".join(tank_ids)
 
     return f"""
         <html>
@@ -85,7 +85,7 @@ def index(game_id: str):
                 <select id="sel">
                     {
                         "".join([
-                            f"<option value='{game_id}-{t}-{i}'>{t}-{i}</option>"
+                            f"<option value='{game_url}-{t}-{i}'>{t}-{i}</option>"
                             for i, t in enumerate(tank_ids)
                         ])
                     }
@@ -96,7 +96,7 @@ def index(game_id: str):
         </body>
 
         <script type="module">
-            import init from './{game_id}/ctviewer.js';
+            import init from './{game_url}/ctviewer.js';
             init();
 
             var select = document.querySelector('#sel');
@@ -128,23 +128,23 @@ def index(game_id: str):
         </html>
     """
 
-@app.get('/{game_id}/ctviewer.js')
-def f1(game_id: str):
+@app.get('/{game_url}/ctviewer.js')
+def f1(game_url: str):
     return FileResponse('/ctweb/web/ctviewer.js')
 
-@app.get('/{game_id}/ctviewer_bg.wasm')
-def f2(game_id: str):
+@app.get('/{game_url}/ctviewer_bg.wasm')
+def f2(game_url: str):
   return FileResponse('/ctweb/web/ctviewer_bg.wasm')
 
-@app.get('/{game_id}/ctviewer_bg.wasm.d.ts')
-def f3(game_id: str):
+@app.get('/{game_url}/ctviewer_bg.wasm.d.ts')
+def f3(game_url: str):
   return FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
 
-@app.get('/assets/sim/{game_id}')
-def f4(game_id: str):
-    game_id = game_id[:-4]
-    print(1, game_id)
-    r = requests.get(f'http://server:8088/sim/{game_id}')
+@app.get('/assets/sim/{game_url}')
+def f4(game_url: str):
+    game_url = game_url[:-4]
+    print(1, game_url)
+    r = requests.get(f'http://server:8088/sim/{game_url}')
     print(2, r.text)
 
     return Response(content=r.text, media_type="text/plain")

@@ -209,7 +209,7 @@ async fn handle_connection(
                         );
                         needs_generation = true;
                     } else {
-                        let code: String = existing[0].get(2);
+                        let code: String = existing[0].get(1);
 
                         if code == uploaded_code {
                             break;
@@ -223,8 +223,8 @@ async fn handle_connection(
 
                 let existing = get_existing(db, uploaded_code, post_fix);
 
-                url = existing[0].get(1);
-                let language: String = existing[0].get(5);
+                url = existing[0].get(0);
+                let language: String = existing[0].get(4);
 
                 println!("found short url {}", url);
 
@@ -243,10 +243,10 @@ async fn handle_connection(
 
             // handle error
 
-            let matches = get_tank_by_url(db, args[0]);
+            let matches = get_tank_by_hash(db, args[0]);
 
             if !matches.is_empty() {
-                res_log = matches[0].get(3);
+                res_log = matches[0].get(2);
                 res = Response {
                     status_line: StatusLine::OK,
                     content: &res_log,
@@ -259,10 +259,10 @@ async fn handle_connection(
 
             // handle error
 
-            let matches = get_tank_by_url(db, args[0]);
+            let matches = get_tank_by_hash(db, args[0]);
 
             if !matches.is_empty() {
-                res_code = matches[0].get(2);
+                res_code = matches[0].get(1);
 
                 res = Response {
                     status_line: StatusLine::OK,
@@ -301,15 +301,15 @@ async fn handle_connection(
                         content: &string_build,
                     };
                 } else {
-                    let game_id = &tank_urls.join("-");
+                    let game_url = &tank_urls.join("-");
 
-                    println!("run: {}", game_id);
+                    println!("run: {}", game_url);
 
-                    let mut matches = get_simulation_by_url(db, game_id);
+                    let mut matches = get_simulation_by_url(db, game_url);
                     if matches.is_empty() {
                         add_sim_job(&data);
-                        upsert_simulation_by_url(db, game_id);
-                        matches = get_simulation_by_url(db, game_id);
+                        upsert_simulation_by_url(db, game_url);
+                        matches = get_simulation_by_url(db, game_url);
                     }
 
                     if !matches.is_empty() {
@@ -476,13 +476,13 @@ fn get_tank_build_status_by_url(
     db: &mut PooledConnection<PostgresConnectionManager<NoTls>>,
     url: &str,
 ) -> TankBuildStatus {
-    let matches = get_tank_by_url(db, url);
+    let matches = get_tank_by_hash(db, url);
 
     let mut status = TankBuildStatus::Invalid;
 
     if !matches.is_empty() {
-        let log: String = matches[0].get(3);
-        let successful: bool = matches[0].get(4);
+        let log: String = matches[0].get(2);
+        let successful: bool = matches[0].get(3);
 
         if log == "waiting to build" {
             status = TankBuildStatus::Building;
