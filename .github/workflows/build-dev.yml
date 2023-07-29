@@ -12,7 +12,7 @@ on:
       - runner/**
       - server/**
       - simulator/**
-      - simulator_graphics/**
+      - graphics/**
       - viewer/**
       - web/**
       - worker_builder/**

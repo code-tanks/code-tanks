@@ -2,7 +2,7 @@ use crate::{CustomAsset, CustomAssetState, *};
 use bevy::{prelude::{info, AssetServer, Assets, Commands, Res, ResMut, Mesh, Camera2dBundle}, sprite::ColorMaterial};
 use ct_api::Command;
 use ctsimlib::{c_client::Client, c_tank::TankInfo};
-use ctsimlibgraphics::*;
+use ctgraphics::*;
 
 pub fn setup_web_tanks(
     mut state: ResMut<CustomAssetState>,

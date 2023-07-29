@@ -18,7 +18,7 @@ use s_setup_desktop_tanks::setup_desktop_tanks;
 
 pub mod s_setup_desktop_tanks;
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlibgraphics::{
+use ctgraphics::{
     s_setup_graphics::setup_graphics, s_setup_ground::setup_ground, CoreCTGraphicsPlugin,
 };
 

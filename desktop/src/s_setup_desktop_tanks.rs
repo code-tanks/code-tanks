@@ -6,7 +6,7 @@ use bevy::sprite::ColorMaterial;
 use ctsimlib::c_tank::{AllTankInfo, TankInfo};
 use ctsimlib::c_client::Client;
 use ctsimlib::run_tank;
-use ctsimlibgraphics::*;
+use ctgraphics::*;
 
 use crate::{DummyClient, DesktopClient, get_free_port};
 

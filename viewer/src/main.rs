@@ -6,10 +6,10 @@ use s_load_tanks::*;
 // use s_setup_ground::*;
 
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlibgraphics::{CoreCTGraphicsPlugin, s_setup_graphics::setup_graphics};
+use ctgraphics::{CoreCTGraphicsPlugin, s_setup_graphics::setup_graphics};
 
 use s_apply_history_transforms::*; 
-use ctsimlibgraphics::s_setup_ground::setup_ground;
+use ctgraphics::s_setup_ground::setup_ground;
 // #[derive(ScheduleLabel, Clone, Debug, PartialEq, Eq, Hash)]
 // pub struct SetupWebTanks;
 

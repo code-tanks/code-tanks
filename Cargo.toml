@@ -7,7 +7,7 @@ members = [
     "runner",
     "server",
     "simulator",
-    "simulator_graphics",
+    "graphics",
     "viewer",
     "worker_builder",
     "worker_simulator"

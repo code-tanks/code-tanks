@@ -17,7 +17,7 @@ updates:
     schedule:
       interval: daily
   - package-ecosystem: cargo
-    directory: /simulator_graphics
+    directory: /graphics
     schedule:
       interval: daily
   - package-ecosystem: cargo
