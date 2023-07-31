@@ -28,7 +28,7 @@ on:
   #     - worker_simulator/**
 
 jobs:
-  test:
+  test_do_nothing:
     runs-on: ubuntu-latest
     # services:
       # ctall:
@@ -61,8 +61,31 @@ jobs:
       #   run: echo "HOST=localhost:8089" > ./scripts/.env
       - name: "test_do_nothing.sh"
         run: ./scripts/test/test_do_nothing.sh
+  test_spin_bot:
+    runs-on: ubuntu-latest
+      - uses: actions/checkout@v3
+      - name: "up"
+        run: docker compose up -d
+      - name: "pull dart image"
+        run: docker pull dart:stable
+      - name: "sleep"
+        run: sleep 10
+      - name: "ping"
+        run: curl -s localhost:8089/ping
       - name: "test_spin_bot.sh"
         run: ./scripts/test/test_spin_bot.sh
 
         # run: script -e -c "./scripts/test/test_do_nothing.sh"
-      
+  test_timeout:
+    runs-on: ubuntu-latest
+      - uses: actions/checkout@v3
+      - name: "up"
+        run: docker compose up -d
+      - name: "pull dart image"
+        run: docker pull dart:stable
+      - name: "sleep"
+        run: sleep 10
+      - name: "ping"
+        run: curl -s localhost:8089/ping
+      - name: "test_spin_bot.sh"
+        run: ./scripts/test/test_timeout.sh
