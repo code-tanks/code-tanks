@@ -30,23 +30,6 @@ on:
 jobs:
   test_do_nothing:
     runs-on: ubuntu-latest
-    # services:
-      # ctall:
-      #   image: ghcr.io/code-tanks/code-tanks-all-dev:latest
-      #   ports:
-      #     - 8089:8088
-      #   volumes:
-      #     - /var/run/docker.sock:/var/run/docker.sock
-      #   env:
-      #     DB_URL: postgres://postgres:postgres@localhost:5432
-      #     OCYPOD_URL: localhost:8023
-      # registry:
-      #   image: registry
-      #   ports:
-      #     - 5001:5001
-      #   env:
-      #     REGISTRY_HTTP_ADDR: 0.0.0.0:5001
-
     steps:
       - uses: actions/checkout@v3
       - name: "up"
@@ -63,6 +46,7 @@ jobs:
         run: ./scripts/test/test_do_nothing.sh
   test_spin_bot:
     runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       - name: "up"
         run: docker compose up -d
@@ -78,6 +62,7 @@ jobs:
         # run: script -e -c "./scripts/test/test_do_nothing.sh"
   test_timeout:
     runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       - name: "up"
         run: docker compose up -d
