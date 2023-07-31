@@ -661,7 +661,7 @@ then
   exit 1
 fi
 
-sleep 30
+sleep 120
 OUTPUT=$(./scripts/run_sim.sh "faec064")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt

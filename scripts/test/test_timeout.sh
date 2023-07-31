@@ -4,12 +4,12 @@
 
 # ./scripts/dev/reset_db.sh
 
-OUTPUT=$(./scripts/upload_tank.sh examples/dart/timeout.dart)
+OUTPUT=$(./scripts/upload_tank.sh examples/dart/time_out.dart)
 
 
 if [[ $OUTPUT != "cc62468" ]]
 then
-  echo "Failed to upload examples/dart/timeout.dart"
+  echo "Failed to upload examples/dart/time_out.dart"
   echo "Expected: cc62468"
   echo "Got: $OUTPUT"
   exit 1
@@ -34,7 +34,7 @@ echo "${OUTPUT}"
 # docker compose logs builder
 
 OUTPUT=$(./scripts/get_raw.sh "cc62468")
-RAW="$(<examples/dart/timeout.dart)"
+RAW="$(<examples/dart/time_out.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
 then
@@ -661,7 +661,7 @@ then
   exit 1
 fi
 
-sleep 30
+sleep 120
 OUTPUT=$(./scripts/run_sim.sh "cc62468")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
