@@ -67,7 +67,7 @@ pub fn run_game(tank_hashes: &[String]) {
         })
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
-        .add_plugins(RapierDebugRenderPlugin::default())
+        // .add_plugins(RapierDebugRenderPlugin::default())
         .add_systems(
             Startup,
             (
@@ -136,8 +136,6 @@ impl ClientTrait for DesktopClient {
 
 
         if err_raw.is_empty() {
-            println!("whaaat");
-
             let result_raw = String::from_utf8_lossy(&output.stdout);
             return parse_commands(result_raw.to_string());
         }

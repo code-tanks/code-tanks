@@ -2,7 +2,7 @@ use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
 // use bevy_prototype_lyon::prelude::*;
 use ctsimlib::c_tank::{Bullet, Tank};
 
-const COLORS: &[&Color] = &[&Color::RED, &Color::GREEN, &Color::BLUE, &Color::GRAY];
+pub const COLORS: &[&Color] = &[&Color::RED, &Color::GREEN, &Color::BLUE, &Color::GRAY];
 
 pub fn on_added_bullet(
     mut commands: Commands,

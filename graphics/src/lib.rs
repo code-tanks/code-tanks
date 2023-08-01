@@ -2,8 +2,7 @@ use bevy::prelude::*;
 use bevy::{
     prelude::{
         default, App, AssetServer, Assets, BuildChildren, Color, Commands, Component,
-        IntoSystemConfigs, Mesh, Plugin, Quat, Res, ResMut, Resource, Startup,
-        Transform, Vec2,
+        IntoSystemConfigs, Mesh, Plugin, Quat, Res, ResMut, Resource, Startup, Transform, Vec2,
     },
     render::render_resource::PrimitiveTopology,
     sprite::{Anchor, ColorMaterial, MaterialMesh2dBundle, Sprite, SpriteBundle},
@@ -17,7 +16,9 @@ use c_nametag::NameTag;
 use c_tracks::Tracks;
 use ctsimlib::c_tank::TankInfo;
 use ctsimlib::create_base_tank;
-use ctsimlib::{c_tank::Tank, s_request_commands::request_commands, s_apply_commands::apply_commands};
+use ctsimlib::{
+    c_tank::Tank, s_apply_commands::apply_commands, s_request_commands::request_commands,
+};
 use s_request_debug_commands::request_debug_commands;
 use s_spawn_tracks::spawn_tracks;
 use s_update_healthbar::update_healthbar;
@@ -29,15 +30,15 @@ pub mod c_particle;
 pub mod c_tracks;
 pub mod s_spawn_tracks;
 pub mod s_update_tracks;
-use ctsimlib::{Game, create_gun, create_radar};
-use s_on_added_bullet::on_added_bullet;
+use ctsimlib::{create_gun, create_radar, Game};
+use s_on_added_bullet::{on_added_bullet, COLORS};
 use s_update_tracks::update_tracks;
 // use s_update_tracks::update_tracks;
 pub mod s_on_added_bullet;
 pub mod s_setup_graphics;
+pub mod s_setup_ground;
 pub mod s_update_healthbar;
 pub mod s_update_nametag;
-pub mod s_setup_ground;
 
 use crate::s_setup_graphics::setup_graphics;
 // use crate::s_update_healthbar::update_healthbar;
@@ -143,7 +144,7 @@ pub fn create_graphics_tank(
     radar.insert(MaterialMesh2dBundle {
         // mesh: meshes.add(shape::Circle::new(50.).into()).into(),
         mesh: meshes.add(mesh).into(),
-        material: materials.add(ColorMaterial::from(Color::PURPLE)),
+        material: materials.add(ColorMaterial::from(COLORS[tank_info.index % COLORS.len()].with_a(0.3))),
         transform: t,
         ..default()
     });
@@ -163,7 +164,8 @@ pub fn create_graphics_tank(
         .with_children(|parent| {
             parent.spawn(SpriteBundle {
                 transform: k,
-                texture: asset_server.load(TANK_BODY_IMAGES[tank_info.index % TANK_BODY_IMAGES.len()]),
+                texture: asset_server
+                    .load(TANK_BODY_IMAGES[tank_info.index % TANK_BODY_IMAGES.len()]),
                 ..default()
             });
         })
@@ -259,9 +261,11 @@ impl Plugin for CoreCTGraphicsPlugin {
             // .add_systems(Startup, setup_graphics)
             .add_systems(
                 Update,
-                request_debug_commands.after(request_commands).before(apply_commands), // "request_commands",
-                                                                // "request_debug_commands",
-                                                                // SystemStage::single_threaded().with_system(request_debug_commands),
+                request_debug_commands
+                    .after(request_commands)
+                    .before(apply_commands), // "request_commands",
+                                             // "request_debug_commands",
+                                             // SystemStage::single_threaded().with_system(request_debug_commands),
             )
             // .add_systems(
             //     UpdateHealthbar,
@@ -272,8 +276,14 @@ impl Plugin for CoreCTGraphicsPlugin {
             .add_systems(
                 Update,
                 // update_healthbar,
-                (update_nametag, on_added_bullet, spawn_tracks, update_tracks, update_healthbar), // "on_added_bullet",
-                                                                                        // SystemStage::single_threaded().with_system(on_added_bullet),
+                (
+                    update_nametag,
+                    on_added_bullet,
+                    spawn_tracks,
+                    update_tracks,
+                    update_healthbar,
+                ), // "on_added_bullet",
+                   // SystemStage::single_threaded().with_system(on_added_bullet),
             );
         // .add_systems(
         //     SpawnTracks,
