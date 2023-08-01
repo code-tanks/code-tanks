@@ -40,7 +40,7 @@ jobs:
   #         context: .
   #         file: Dockerfile
   #         push: true
-  #         platforms: linux/amd64, linux/arm64
+  #         platforms: linux/amd64
   #         tags: ghcr.io/code-tanks/code-tanks-all:latest
   #         build-args: |
   #           profile=release
@@ -139,7 +139,7 @@ jobs:
           context: .
           file: worker_builder/Dockerfile
           push: true
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-builder:latest
           build-args: |
             profile=release
@@ -167,7 +167,7 @@ jobs:
           context: .
           file: worker_simulator/Dockerfile
           push: true
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-simulator:latest
           build-args: |
             profile=release
@@ -195,7 +195,7 @@ jobs:
           context: .
           file: server/Dockerfile
           push: true
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-server:latest
           build-args: |
             profile=release
@@ -223,7 +223,7 @@ jobs:
           context: .
           file: web/Dockerfile
           push: true
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-web:latest
           build-args: |
             profile=release

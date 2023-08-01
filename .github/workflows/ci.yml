@@ -72,7 +72,7 @@ jobs:
         run: sleep 10
       - name: "ping"
         run: curl -s localhost:8089/ping
-      - name: "test_spin_bot.sh"
+      - name: "test_timeout.sh"
         run: ./scripts/test/test_timeout.sh
 
   test_forward_one:
@@ -87,7 +87,7 @@ jobs:
         run: sleep 10
       - name: "ping"
         run: curl -s localhost:8089/ping
-      - name: "test_spin_bot.sh"
+      - name: "test_forward_one.sh"
         run: ./scripts/test/test_forward_one.sh
 
   test_rotate_one:
@@ -102,5 +102,5 @@ jobs:
         run: sleep 10
       - name: "ping"
         run: curl -s localhost:8089/ping
-      - name: "test_spin_bot.sh"
+      - name: "test_rotate_one.sh"
         run: ./scripts/test/test_rotate_one.sh
