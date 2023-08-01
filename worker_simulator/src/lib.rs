@@ -6,6 +6,7 @@ use ctsimlib::c_client::{parse_commands, ClientTrait};
 use ctsimlib::c_event::CTEvent;
 use db::upload_log_to_db;
 use postgres::Client;
+pub mod s_save_commands;
 
 pub mod db;
 pub mod s_setup_sim_tanks;
