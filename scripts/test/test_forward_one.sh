@@ -4,12 +4,12 @@
 
 # ./scripts/dev/reset_db.sh
 
-OUTPUT=$(./scripts/upload_tank.sh examples/dart/do_nothing.dart)
+OUTPUT=$(./scripts/upload_tank.sh examples/dart/forward_one.dart)
 
 
 if [[ $OUTPUT != "11721e2" ]]
 then
-  echo "Failed to upload examples/dart/do_nothing.dart"
+  echo "Failed to upload examples/dart/forward_one.dart"
   echo "Expected: 11721e2"
   echo "Got: $OUTPUT"
   exit 1
@@ -34,7 +34,7 @@ echo "${OUTPUT}"
 # docker compose logs builder
 
 OUTPUT=$(./scripts/get_raw.sh "11721e2")
-RAW="$(<examples/dart/do_nothing.dart)"
+RAW="$(<examples/dart/forward_one.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
 then
