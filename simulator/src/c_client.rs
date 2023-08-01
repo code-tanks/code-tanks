@@ -1,6 +1,7 @@
 
-use bevy::prelude::*;
-use ct_api::Command;
+use bevy::prelude::Component;
+// use bevy::prelude::*;
+use ct_api::{Command, Commands};
 
 use crate::c_event::*;
 
@@ -17,10 +18,16 @@ pub trait ClientTrait {
 pub fn parse_commands(commands_string: String) -> Vec<Command> {
     // println!("parsing commands {}", commands_string);
 
-    commands_string
+    let commands = commands_string
         .split('\n')
         .map(|f| f.to_string())
         .filter(|f| !f.is_empty())
         .filter_map(|f| f.parse::<Command>().ok())
-        .collect::<Vec<Command>>()
+        .collect::<Vec<Command>>();
+
+    if commands.is_empty() {
+        vec![Commands::SELF_DESTRUCT]
+    } else {
+        commands
+    }
 }
