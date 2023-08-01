@@ -21,21 +21,21 @@ pub fn apply_history_transforms(
 
         t.translation.x = transforms[0];
         t.translation.y = transforms[1];
-        t.rotation.x = transforms[2]; // unused
-        t.rotation.y = transforms[3]; // unused
-        t.rotation.z = transforms[4];
-        t.rotation.w = transforms[5];
+        // t.rotation.x = transforms[2]; // unused
+        // t.rotation.y = transforms[3]; // unused
+        t.rotation.z = transforms[3];
+        t.rotation.w = transforms[4];
 
         let mut radar = query_t.get_mut(tank.radar).unwrap();
-        radar.rotation.x = transforms[6]; // unused
-        radar.rotation.y = transforms[7]; // unused
-        radar.rotation.z = transforms[8];
-        radar.rotation.w = transforms[9];
+        // radar.rotation.x = transforms[6]; // unused
+        // radar.rotation.y = transforms[7]; // unused
+        radar.rotation.z = transforms[5];
+        radar.rotation.w = transforms[6];
 
         let mut gun = query_t.get_mut(tank.gun).unwrap();
-        gun.rotation.x = transforms[10]; // unused
-        gun.rotation.y = transforms[11]; // unused
-        gun.rotation.z = transforms[12];
-        gun.rotation.w = transforms[13];
+        // gun.rotation.x = transforms[10]; // unused
+        // gun.rotation.y = transforms[11]; // unused
+        gun.rotation.z = transforms[7];
+        gun.rotation.w = transforms[8];
     }
 }

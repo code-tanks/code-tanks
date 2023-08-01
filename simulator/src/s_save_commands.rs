@@ -41,20 +41,20 @@ pub fn save_commands(
 
         f.write_all(
             format!(
-                "{}|{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n",
+                "{}|{},{},{},{},{},{},{},{}\n", // ,{},{},{},{},{},{}\n",
                 grouped_commands,
                 tanks[i].0.translation.x,
                 tanks[i].0.translation.y,
-                tanks[i].0.rotation.x, // unused
-                tanks[i].0.rotation.y, // unused
+                // tanks[i].0.rotation.x, // unused
+                // tanks[i].0.rotation.y, // unused
                 tanks[i].0.rotation.z,
                 tanks[i].0.rotation.w,
-                radars[i].rotation.x, // unused
-                radars[i].rotation.y, // unused
+                // radars[i].rotation.x, // unused
+                // radars[i].rotation.y, // unused
                 radars[i].rotation.z,
                 radars[i].rotation.w,
-                guns[i].rotation.x, // unused
-                guns[i].rotation.y, // unused
+                // guns[i].rotation.x, // unused
+                // guns[i].rotation.y, // unused
                 guns[i].rotation.z,
                 guns[i].rotation.w,
             )
