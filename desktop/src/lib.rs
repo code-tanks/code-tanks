@@ -137,7 +137,12 @@ impl ClientTrait for DesktopClient {
 
         if err_raw.is_empty() {
             let result_raw = String::from_utf8_lossy(&output.stdout);
-            return parse_commands(result_raw.to_string());
+            let commands = parse_commands(result_raw.to_string());
+            if commands.is_empty() {
+                return vec![Commands::SELF_DESTRUCT]
+            } else {
+                return commands;
+            }
         }
 
         // let _err_raw = String::from_utf8_lossy(&output.stderr);

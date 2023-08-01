@@ -18,16 +18,10 @@ pub trait ClientTrait {
 pub fn parse_commands(commands_string: String) -> Vec<Command> {
     // println!("parsing commands {}", commands_string);
 
-    let commands = commands_string
+    commands_string
         .split('\n')
         .map(|f| f.to_string())
         .filter(|f| !f.is_empty())
         .filter_map(|f| f.parse::<Command>().ok())
-        .collect::<Vec<Command>>();
-
-    if commands.is_empty() {
-        vec![Commands::SELF_DESTRUCT]
-    } else {
-        commands
-    }
+        .collect::<Vec<Command>>()
 }
