@@ -9,11 +9,11 @@ The game engine is responsible for handling the physics of the arena, the collis
 
 Code-Tanks is a game of strategy, and players must think about how their tank will move and fire in the arena to survive and cause damage to other tanks. They can also analyze the code of the winning tanks to learn from their strategies and improve their own tanks.
 
+Check out the [website](https://code-tanks.github.io/website) to get started!
+
 ## Supported Languages
 |  |
 | --- |
 | [Python](https://github.com/code-tanks/python-template) |
 | [Rust](https://github.com/code-tanks/rust-template) |
 | [Dart](https://github.com/code-tanks/dart-template) |
-
-Check out the [website](https://code-tanks.github.io/website) to get started!
