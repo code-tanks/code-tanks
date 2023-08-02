@@ -46,7 +46,7 @@ then
   exit 1
 fi
 
-RAW="${cat ./scripts/test/expected/test_forward_one.txt}"
+RAW="$(cat ./scripts/test/expected/test_forward_one.txt)"
 
 OUTPUT=$(./scripts/run_sim.sh "11721e2")
 if [[ "${OUTPUT}" != "waiting to build" ]]
