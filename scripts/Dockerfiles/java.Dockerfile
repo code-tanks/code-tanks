@@ -4,7 +4,7 @@ RUN apt update && apt install -y git maven
 
 WORKDIR /app
 
-RUN git clone -b 'v0.0.1' --single-branch --depth 1 https://github.com/code-tanks/java-api.git
+RUN git clone -b 'v0.0.2' --single-branch --depth 1 https://github.com/code-tanks/java-api.git
 # RUN git clone https://github.com/code-tanks/java-api.git
 
 WORKDIR /app/java-api
