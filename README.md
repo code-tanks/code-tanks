@@ -17,3 +17,5 @@ Check out the [website](https://code-tanks.github.io/website) to get started!
 | [Python](https://github.com/code-tanks/python-template) |
 | [Rust](https://github.com/code-tanks/rust-template) |
 | [Dart](https://github.com/code-tanks/dart-template) |
+| [Java](https://github.com/code-tanks/java-template) |
+| [Javascript](https://github.com/code-tanks/javascript-template) |
