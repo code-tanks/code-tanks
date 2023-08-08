@@ -96,7 +96,7 @@ def index(game_url: str):
         </body>
 
         <script type="module">
-            import init from '/ctviewer.js';
+            import init from '/view/assets/ctviewer.js';
             init();
 
             var select = document.querySelector('#sel');
@@ -128,22 +128,22 @@ def index(game_url: str):
         </html>
     """
 
-@app.get('/ctviewer.js')
-def f1():
-    res = FileResponse('/ctweb/web/ctviewer.js')
-    res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
-    return res
+# @app.get('/ctviewer.js')
+# def f1():
+#     res = FileResponse('/ctweb/web/ctviewer.js')
+#     res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
+#     return res
 
-@app.get('/ctviewer_bg.wasm')
-def f2():
-    res = FileResponse('/ctweb/web/ctviewer_bg.wasm')
-    res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
-    return res
-@app.get('/assets/ctviewer_bg.wasm.d.ts')
-def f3():
-    res = FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
-    res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
-    return res
+# @app.get('/ctviewer_bg.wasm')
+# def f2():
+#     res = FileResponse('/ctweb/web/ctviewer_bg.wasm')
+#     res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
+#     return res
+# @app.get('/assets/ctviewer_bg.wasm.d.ts')
+# def f3():
+#     res = FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
+#     res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
+#     return res
 
 @app.get('/sim/{game_url}')
 def f4(game_url: str):
