@@ -78,9 +78,15 @@ impl Response<'_> {
     };
 }
 
+const HEADER_PADDING: usize = 150;
+const MAX_BYTES_READ: usize = 1000000;
+const BUFFER_SIZE_BYTES: usize = MAX_BYTES_READ + HEADER_PADDING;
+
 fn handle_connection(mut stream: TcpStream, tank: &mut dyn Tank) {
-    let mut buffer = [0; 20000];
-    stream.read_exact(&mut buffer).unwrap();
+    let mut buffer = [0; BUFFER_SIZE_BYTES];
+    let bytes_read = stream.read(&mut buffer).unwrap();
+
+    println!("bytes read: {}", bytes_read);
 
     let request = String::from_utf8(buffer.to_vec()).unwrap();
     let method = get_header_from_request(&request);
