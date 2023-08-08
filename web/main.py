@@ -131,18 +131,18 @@ def index(game_url: str):
 @app.get('/ctviewer.js')
 def f1():
     res = FileResponse('/ctweb/web/ctviewer.js')
-    res.headers["Cache-Control"]  = "public, max-age=604800"
+    res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
     return res
 
 @app.get('/ctviewer_bg.wasm')
 def f2():
     res = FileResponse('/ctweb/web/ctviewer_bg.wasm')
-    res.headers["Cache-Control"]  = "public, max-age=604800"
+    res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
     return res
 @app.get('/assets/ctviewer_bg.wasm.d.ts')
 def f3():
     res = FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
-    res.headers["Cache-Control"]  = "public, max-age=604800"
+    res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
     return res
 
 @app.get('/sim/{game_url}')
@@ -153,7 +153,7 @@ def f4(game_url: str):
     print(2, r.text)
 
     res = Response(content=r.text, media_type="text/plain")
-    res.headers["Cache-Control"]  = "public, max-age=604800"
+    res.headers["Cache-Control"]  = "public, max-age=604800, immutable"
     return res
 
 app.mount("/view/assets", StaticFiles(directory="/ctweb/assets"), name="assets")
