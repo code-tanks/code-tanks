@@ -19,7 +19,7 @@ pub fn get_sim_file() -> String {
 
 pub fn load_tanks(mut state: ResMut<CustomAssetState>, asset_server: Res<AssetServer>) {
     // state.handle = asset_server.load("./sim.txt");
-    let file = format!("./sim/{}.txt", get_sim_file());
+    let file = format!("/sim/{}.txt", get_sim_file());
 
     println!("sim file: {}", file);
     info!("sim file: {}", file);
