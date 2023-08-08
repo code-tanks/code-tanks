@@ -12,6 +12,7 @@ use r2d2_postgres::{postgres::NoTls, r2d2::PooledConnection, PostgresConnectionM
 
 pub fn create_build_queue() {
     let output_raw = Command::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPUT")
@@ -33,6 +34,7 @@ pub fn create_build_queue() {
 pub fn create_sim_queue() {
     // curl -H "content-type: application/json" -XPUT -d '{"timeout": "10m"}' ocypod:8023/queue/simulator
     let output_raw = Command::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPUT")
