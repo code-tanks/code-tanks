@@ -29,5 +29,4 @@ for i in examples/*/**; do
     fi
 
     docker rm $out --force
-    break;
 done
