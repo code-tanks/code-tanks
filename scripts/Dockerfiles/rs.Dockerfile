@@ -10,7 +10,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=1.70.0 -y
 
 WORKDIR /app
 
-RUN git clone -b 'v0.1.1' --single-branch --depth 1 https://github.com/code-tanks/code-tanks.git /app
+RUN git clone -b 'v0.1.4' --single-branch --depth 1 https://github.com/code-tanks/code-tanks.git /app
 
 RUN cargo build --bin ctrunner
 
