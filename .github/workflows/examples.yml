@@ -9,6 +9,7 @@ on:
       - examples/**
       - scripts/build.sh
       - scripts/Dockerfiles/**
+      - scripts/test/test_examples.sh
 
 jobs:
   build_examples:
