@@ -96,7 +96,7 @@ def index(game_url: str):
         </body>
 
         <script type="module">
-            import init from '/assets/ctviewer.js';
+            import init from '/ctviewer.js';
             init();
 
             var select = document.querySelector('#sel');
@@ -128,16 +128,16 @@ def index(game_url: str):
         </html>
     """
 
-@app.get('/assets/ctviewer.js')
-def f1(game_url: str):
-    return FileResponse('/ctweb/web/ctviewer.js', media_type="text/javascript")
+@app.get('/ctviewer.js')
+def f1():
+    return FileResponse('/ctweb/web/ctviewer.js')
 
-@app.get('/assets/ctviewer_bg.wasm')
-def f2(game_url: str):
+@app.get('/ctviewer_bg.wasm')
+def f2():
   return FileResponse('/ctweb/web/ctviewer_bg.wasm')
 
 @app.get('/assets/ctviewer_bg.wasm.d.ts')
-def f3(game_url: str):
+def f3():
   return FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
 
 @app.get('/assets/sim/{game_url}')
