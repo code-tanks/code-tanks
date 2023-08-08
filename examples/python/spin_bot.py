@@ -1,5 +1,4 @@
-from codetanks import *
-
+from codetanks import BaseTank, commands
 
 class MyTank(BaseTank):
     def __init__(self):
