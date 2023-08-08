@@ -19,3 +19,4 @@ Check out the [website](https://code-tanks.github.io/website) to get started!
 | [Dart](https://github.com/code-tanks/dart-template) |
 | [Java](https://github.com/code-tanks/java-template) |
 | [Javascript](https://github.com/code-tanks/javascript-template) |
+| [Golang](https://github.com/code-tanks/golang-template) |
