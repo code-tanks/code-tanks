@@ -130,7 +130,7 @@ def index(game_url: str):
 
 @app.get('/assets/ctviewer.js')
 def f1(game_url: str):
-    return FileResponse('/ctweb/web/ctviewer.js')
+    return FileResponse('/ctweb/web/ctviewer.js', media_type="text/javascript")
 
 @app.get('/assets/ctviewer_bg.wasm')
 def f2(game_url: str):
