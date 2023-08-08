@@ -96,7 +96,7 @@ def index(game_url: str):
         </body>
 
         <script type="module">
-            import init from './{game_url}/ctviewer.js';
+            import init from '/ctviewer.js';
             init();
 
             var select = document.querySelector('#sel');
@@ -128,15 +128,15 @@ def index(game_url: str):
         </html>
     """
 
-@app.get('/{game_url}/ctviewer.js')
+@app.get('/ctviewer.js')
 def f1(game_url: str):
     return FileResponse('/ctweb/web/ctviewer.js')
 
-@app.get('/{game_url}/ctviewer_bg.wasm')
+@app.get('/ctviewer_bg.wasm')
 def f2(game_url: str):
   return FileResponse('/ctweb/web/ctviewer_bg.wasm')
 
-@app.get('/{game_url}/ctviewer_bg.wasm.d.ts')
+@app.get('/ctviewer_bg.wasm.d.ts')
 def f3(game_url: str):
   return FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
 
