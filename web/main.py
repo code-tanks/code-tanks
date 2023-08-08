@@ -39,7 +39,7 @@ def recent():
 def root():
     return "pong"
 
-@app.get('/{game_url}', response_class=HTMLResponse)
+@app.get('/view/{game_url}', response_class=HTMLResponse)
 def index(game_url: str):
     tank_ids = game_url.split("-")
     # game_url = "".join(tank_ids)
