@@ -1,6 +1,23 @@
 #!/bin/bash
 
+skip=("time_out.dart" "crash.py")
+
 for i in examples/*/**; do
+    found=false
+    for s in "${skip[@]}"; do
+        e=$(basename $i)
+        if [ "$s" == "$e" ]; then
+            found=true
+            break
+        fi
+    done
+
+    if [ "$found" = true ]; then
+        echo "skipping $i"
+        echo ""
+        continue
+    fi
+
     echo "Testing example: $i"
 
     out=$(./scripts/build.sh $i);
@@ -36,5 +53,4 @@ for i in examples/*/**; do
 
     docker rm $out --force
     echo ""
-    
 done
