@@ -24,7 +24,7 @@ pub struct TankInfo {
 impl Tank {
     pub const MAX_COOLDOWN: u32 = 60;
     pub const RADIUS: f32 = 19.0;
-    pub const INITIAL_ROTATION: f32 = -90.0;
+    pub const INITIAL_ROTATION: f32 = -PI/2.;
     pub const ROTATION_SPEED: f32 = PI * 0.3;
     pub const MOVEMENT_SPEED: f32 = 100.;
 }

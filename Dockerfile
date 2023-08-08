@@ -20,6 +20,7 @@ COPY simulator simulator
 COPY worker_simulator/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 RUN sed -i 's#../simulator#simulator#' Cargo.toml
+RUN sed -i 's#../api#api#' Cargo.toml
 
 ARG profile=dev
 
@@ -81,6 +82,6 @@ COPY init.sh .
 RUN chmod 777 init.sh
 
 COPY scripts/Dockerfiles Dockerfiles
-RUN sed -i 's#COPY $url#RUN curl localhost:8089/raw/$url >#' Dockerfiles/*.Dockerfile
+RUN sed -i 's#COPY $url#RUN curl -sS localhost:8089/raw/$url >#' Dockerfiles/*.Dockerfile
 
 CMD [ "./init.sh" ]

@@ -99,7 +99,7 @@ pub fn create_graphics_tank(
     let gun = create_gun(commands, x, y);
     let mut gun = commands.entity(gun);
     let mut t = Transform::from_xyz(x, y, 1.0);
-    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+    t.rotate_local_z(Tank::INITIAL_ROTATION);
 
     // let mut t2 = t.clone();
     gun.insert(SpriteBundle {

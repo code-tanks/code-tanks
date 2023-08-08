@@ -21,31 +21,31 @@ on:
       # - init.sh
 
 jobs:
-  # build_all_image:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v2
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v2
-  #     - name: Log in to the Container registry
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
-  #     - name: Build and push
-  #       uses: docker/build-push-action@v3
-  #       with:
-  #         context: .
-  #         file: Dockerfile
-  #         push: true
-  #         platforms: linux/amd64
-  #         tags: ghcr.io/code-tanks/code-tanks-all-dev:latest
-  #         cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-all-dev:buildcache
-  #         cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all-dev:buildcache,mode=max
+  build_all_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ghcr.io/code-tanks/code-tanks-all-dev:latest
+          cache-from: type=registry,ref=ghcr.io/code-tanks/code-tanks-all-dev:buildcache
+          cache-to: type=registry,ref=ghcr.io/code-tanks/code-tanks-all-dev:buildcache,mode=max
   # cargo_build_all:
   #   runs-on: ubuntu-latest
   #   steps:

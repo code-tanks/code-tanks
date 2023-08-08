@@ -118,7 +118,7 @@ pub fn run_tank(tank_container_name: &str, tank_image_name: &str, port: &str, no
 
 pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
     let mut t = Transform::from_xyz(x, y, 0.0);
-    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+    t.rotate_local_z(Tank::INITIAL_ROTATION);
     commands
         .spawn((
             Gun { locked: true },
@@ -152,7 +152,7 @@ pub fn create_gun(commands: &mut Commands, x: f32, y: f32) -> Entity {
 
 pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
     let mut t = Transform::from_xyz(x, y, 0.0);
-    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+    t.rotate_local_z(Tank::INITIAL_ROTATION);
 
     commands
         .spawn((
@@ -204,7 +204,7 @@ pub fn create_base_tank(
     client: impl Component,
 ) -> Entity {
     let mut t = Transform::from_xyz(x, y, 0.0);
-    t.rotate_local_z((Tank::INITIAL_ROTATION).to_radians());
+    t.rotate_local_z(Tank::INITIAL_ROTATION);
     commands
         .spawn((
             (

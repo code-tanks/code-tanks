@@ -99,15 +99,20 @@ fn on_tank_collision(
                 Some(tank_velocity),
                 &CollisionType::Tank,
             );
+            tank_health.val -= 10;
         }
-        _ => {}
+        CollisionType::Tank => {
+            tank_health.val -= 10;
+        }
+        CollisionType::Wall => {
+            tank_health.val -= 10;
+        }
     };
 
     println!(
         "HIT {:?}, by {:?} of type {:?}",
         tank_entity, collided_entity, collision_type
     );
-    tank_health.val -= 10;
 
     if tank_health.val < 0 {
         tank_health.val = 0;
