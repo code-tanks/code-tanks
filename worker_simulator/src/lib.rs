@@ -13,6 +13,7 @@ pub mod s_setup_sim_tanks;
 
 pub fn create_sim_queue() {
     ProcessCommand::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPUT")
@@ -30,7 +31,7 @@ pub fn get_sim_job() -> Vec<String> {
     let output_raw = ProcessCommand::new("bash")
         .arg("-c")
         .arg(format!(
-            r#"curl {}/queue/simulator/job | jq --raw-output '.id,.input'"#,
+            r#"curl -sS {}/queue/simulator/job | jq --raw-output '.id,.input'"#,
             env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()
         ))
         .arg(format!(
@@ -65,6 +66,7 @@ pub fn upload_log(tank_container_name: &str, client: &mut Client) {
 
 pub fn update_sim_job(id: &str, successful: bool) {
     ProcessCommand::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPATCH")

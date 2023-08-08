@@ -1,5 +1,5 @@
-use std::process::Command;
 use std::env;
+use std::process::Command;
 
 pub mod db;
 
@@ -15,12 +15,16 @@ pub mod db;
 
 pub fn create_build_queue() {
     Command::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPUT")
         .arg("-d")
         .arg(r#"{"timeout": "10m"}"#)
-        .arg(format!("{}/queue/build", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
+        .arg(format!(
+            "{}/queue/build",
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()
+        ))
         .output()
         .expect("failed to communicate with ocypod");
 }
@@ -33,8 +37,14 @@ pub struct Job {
 pub fn get_build_job() -> Vec<String> {
     let output_raw = Command::new("bash")
         .arg("-c")
-        .arg(format!(r#"curl {}/queue/build/job | jq --raw-output '.id,.input'"#, env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
-        .arg(format!("{}/queue/build/job", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()))
+        .arg(format!(
+            r#"curl -sS {}/queue/build/job | jq --raw-output '.id,.input'"#,
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()
+        ))
+        .arg(format!(
+            "{}/queue/build/job",
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap()
+        ))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -79,6 +89,7 @@ pub fn build(url: &str, lang: &str) -> String {
 
 pub fn update_build_job(id: &str, successful: bool) {
     Command::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPATCH")
@@ -87,7 +98,11 @@ pub fn update_build_job(id: &str, successful: bool) {
             r#"{{"status": "{}"}}"#,
             if successful { "completed" } else { "failed" }
         ))
-        .arg(format!("{}/job/{}", env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap(), id))
+        .arg(format!(
+            "{}/job/{}",
+            env::var("OCYPOD_URL").unwrap().parse::<String>().unwrap(),
+            id
+        ))
         .output()
         .expect("failed to communicate with ocypod");
 
@@ -108,11 +123,11 @@ pub fn push_to_registry(url: &str) -> bool {
 
     println!("push_to_registry, url={}, successful={}", url, successful);
     if successful {
-    println!("stdout:");
-    println!("{}\n", result_raw);
+        println!("stdout:");
+        println!("{}\n", result_raw);
     } else {
-    println!("stderr:");
-    println!("{}\n", err_raw);
+        println!("stderr:");
+        println!("{}\n", err_raw);
     }
     successful
 }
@@ -132,11 +147,11 @@ pub fn remove_image(url: &str) -> bool {
 
     println!("remove_image, url={}, successful={}", url, successful);
     if successful {
-    println!("stdout:");
-    println!("{}\n", result_raw);
+        println!("stdout:");
+        println!("{}\n", result_raw);
     } else {
-    println!("stderr:");
-    println!("{}\n", err_raw);
+        println!("stderr:");
+        println!("{}\n", err_raw);
     }
 
     successful
