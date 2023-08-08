@@ -433,6 +433,7 @@ fn get_data_from_request(request: &str) -> String {
 pub fn add_build_job(input: &str) {
     // curl -i -H 'content-type: application/json' -XPOST -d '{"input": [1,2,3]}' localhost:8023/queue/demo/job
     let output_raw = Command::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPOST")
@@ -454,6 +455,7 @@ pub fn add_build_job(input: &str) {
 pub fn add_sim_job(url: &str) {
     // curl -i -H 'content-type: application/json' -XPOST -d '{"input": [1,2,3]}' localhost:8023/queue/demo/job
     let output_raw = Command::new("curl")
+        .arg("-sS")
         .arg("-H")
         .arg("content-type: application/json")
         .arg("-XPOST")
