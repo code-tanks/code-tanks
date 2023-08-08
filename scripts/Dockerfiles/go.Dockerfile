@@ -1,5 +1,5 @@
 # Build stage
-FROM golang:1.16 AS build
+FROM golang:latest AS build
 
 WORKDIR /app
 
@@ -7,10 +7,10 @@ RUN git clone -b 'v0.0.1' --single-branch --depth 1 https://github.com/code-tank
 
 WORKDIR /app/golang-api
 
-RUN echo "" && echo $(ls -1 /app)
-
 # COPY go.mod go.sum .
 RUN go mod download
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o main web/main.go
 
 ARG url
 
