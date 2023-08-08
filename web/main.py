@@ -140,13 +140,13 @@ def f2():
 def f3():
   return FileResponse('/ctweb/web/ctviewer_bg.wasm.d.ts')
 
-@app.get('/assets/sim/{game_url}')
+@app.get('/sim/{game_url}')
 def f4(game_url: str):
-    game_url = game_url[:-4]
+    game_url = game_url[5:-4]
     print(1, game_url)
     r = requests.get(f'http://server:8088/sim/{game_url}')
     print(2, r.text)
 
     return Response(content=r.text, media_type="text/plain")
 
-app.mount("/assets", StaticFiles(directory="/ctweb/assets"), name="assets")
+app.mount("/view/assets", StaticFiles(directory="/ctweb/assets"), name="assets")
