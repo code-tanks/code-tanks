@@ -30,7 +30,7 @@ def recent():
     j = r.json()
     print(j)
     df = pd.DataFrame(j)
-    df['id'] = df['id'].apply(lambda x: f'<a href="/{x}">{x}</a>')
+    df['game_url'] = df['game_url'].apply(lambda x: f'<a href="/{x}">{x}</a>')
     df['tanks'] = df['tanks'].apply(lambda x: [f'<a href="/raw/{i}">{i}</a>' for i in x])
     
     return Response(content=df.to_html(escape=False), media_type="text/html")    
