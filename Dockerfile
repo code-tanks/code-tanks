@@ -82,6 +82,6 @@ COPY init.sh .
 RUN chmod 777 init.sh
 
 COPY scripts/Dockerfiles Dockerfiles
-RUN sed -i 's#COPY $url#RUN curl -sS localhost:8089/raw/$url >#' Dockerfiles/*.Dockerfile
+RUN sed -i 's#COPY $url#RUN curl -sS localhost:8089/raw/$url >#' Dockerfiles/*/**Dockerfile
 
 CMD [ "./init.sh" ]
