@@ -36,6 +36,7 @@ for i in examples/*/**; do
             echo "Valid JSON list from /request_commands"
         else
             echo "Not a valid JSON list from /request_commands"
+            docker logs $out
             exit 1
         fi
 
@@ -49,6 +50,7 @@ for i in examples/*/**; do
             echo "Valid JSON list from /request_commands_by_event"
         else
             echo "Not a valid JSON list from /request_commands_by_event"
+            docker logs $out
             exit 1
         fi
     done
