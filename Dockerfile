@@ -1,4 +1,4 @@
-FROM rust:1.70.0 AS ocypod_builder
+FROM rust:1.71.1 AS ocypod_builder
 
 RUN git clone https://github.com/davechallis/ocypod.git
 
@@ -6,7 +6,7 @@ ARG profile=dev
 
 RUN cd ocypod && cargo install --path . --profile $profile
 
-FROM rust:1.70.0 AS ctsim_builder
+FROM rust:1.71.1 AS ctsim_builder
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
@@ -29,7 +29,7 @@ RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 COPY worker_simulator/src src
 RUN cargo install --bin ctsim --path . --profile $profile
 
-FROM rust:1.70.0 AS ctserver_builder
+FROM rust:1.71.1 AS ctserver_builder
 WORKDIR /ctserver
 
 COPY server/dummy.rs .
@@ -43,7 +43,7 @@ RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
 COPY server/src src
 RUN cargo install --bin ctserver --path . --profile $profile
 
-FROM rust:1.70.0 AS ctbuilder_builder
+FROM rust:1.71.1 AS ctbuilder_builder
 
 COPY worker_builder/dummy.rs .
 COPY worker_builder/Cargo.toml .
