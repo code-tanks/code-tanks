@@ -47,7 +47,7 @@ RUN if [ "$profile" = "dev" ]; then \
         --out-dir target/release/web \
         --target web target/wasm32-unknown-unknown/$output/ctviewer.wasm
 
-FROM python:3.10
+FROM python:3.11
 
 WORKDIR /ctweb
 
