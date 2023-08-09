@@ -1,4 +1,4 @@
-FROM rust:1.70.0 AS viewer_builder
+FROM rust:1.71.1 AS viewer_builder
 WORKDIR /ctviewer
 
 RUN rustup target install wasm32-unknown-unknown
