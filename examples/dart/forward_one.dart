@@ -12,6 +12,7 @@ class MyTank extends BaseTank {
     if (i == 0) {
       commands.add(Command.MOVE_FORWARD);
     }
+    commands.add(Command.NONE);
     i = i + 1;
   }
   
