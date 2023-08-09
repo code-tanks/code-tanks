@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashMap;
 
 import api.BaseTank;
+import api.Command;
 
 public class MyTank extends BaseTank {
     public MyTank() {
@@ -16,7 +17,7 @@ public class MyTank extends BaseTank {
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'run'");
         System.out.println("Run1");
-
+        commands.add(Command.MOVE_FORWARD);
     }
 
     @Override
