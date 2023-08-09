@@ -8,7 +8,8 @@ class Tank extends BaseTank {
 
     run() {
         // Implement the parent's abstract run method
-        console.log('Tank is running');
+        console.log('Tank is running2');
+        this.commands.push(Command.MOVE_FORWARD);
     }
 
     onEvent(event) {
