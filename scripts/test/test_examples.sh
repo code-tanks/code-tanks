@@ -40,7 +40,7 @@ for i in examples/*/**; do
             exit 1
         fi
 
-        request_commands_by_event=$(curl -sS -m 3 -X POST -H "Content-Type: application/json" -d '{"key": "value"}' localhost:8080/request_commands_by_event)
+        request_commands_by_event=$(curl -sS -m 3 -X POST -H "Content-Type: application/json" -d '{"event_type": "radar_scan", "info": {"collision_type": "Tank", "entity": 167, "transform": {"rotation": -3.000221014022827, "x": 26.608129501342773, "y": -211.02635192871094}, "velocity": {"angvel": -0.9424778819084167, "linvel": {"x": -99.00237274169922, "y": -14.09011459350586}}}}' localhost:8080/request_commands_by_event)
         echo "request_commands_by_event: $request_commands_by_event"
         # Trim leading and trailing spaces using parameter expansion
         request_commands_by_event="${request_commands_by_event#"${request_commands_by_event%%[![:space:]]*}"}"
