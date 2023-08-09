@@ -37,6 +37,26 @@ updates:
     schedule:
       interval: daily            
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/scripts/Dockerfiles"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/server"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/web"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/worker_builder"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/worker_simulator"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/.devcontainer"
     schedule:
       interval: "daily"
