@@ -165,7 +165,7 @@ fn get_data_from_request(request: &str) -> String {
     response.trim_matches(char::from(0)).to_string()
 }
 
-pub type Command = u64;
+pub type Command = u32;
 
 pub enum Commands {}
 
@@ -184,5 +184,8 @@ impl Commands {
     pub const UNLOCK_GUN: Command = 0b1 << 10;
     pub const LOCK_RADAR: Command = 0b1 << 11;
     pub const UNLOCK_RADAR: Command = 0b1 << 12;
-    pub const SELF_DESTRUCT: Command = 0b1 << 13;
+    pub const REQUEST_INFO: Command = 0b1 << 13;
+    pub const CLEAR_COMMANDS: Command = 0b1 << 14;
+
+    pub const SELF_DESTRUCT: Command = 0b1 << 31;
 }

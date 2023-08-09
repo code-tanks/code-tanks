@@ -5,12 +5,13 @@ use bevy::prelude::{
 // use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use ct_api::Commands;
+use serde_json::json;
 
 use crate::{
     c_command_source::CommandSource,
     c_health::Health,
     c_tank::{Bullet, Gun, Radar, Tank},
-    CCollider, CollisionMask, CollisionType, TickState,
+    CCollider, CollisionMask, CollisionType, TickState, c_event::{EventSink, CTEvent},
 };
 
 pub fn apply_commands(
@@ -23,6 +24,7 @@ pub fn apply_commands(
             &mut Velocity,
             &mut Tank,
             &mut Health,
+            &mut EventSink,
         ),
         (Without<Radar>, Without<Gun>),
     >,
@@ -38,7 +40,7 @@ pub fn apply_commands(
 ) {
     state.count += 1;
 
-    for (entity, mut command_receiver, transform, mut velocity, mut tank, mut health) in &mut query
+    for (entity, mut command_receiver, transform, mut velocity, mut tank, mut health, mut event_sink) in &mut query
     {
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;
@@ -178,6 +180,25 @@ pub fn apply_commands(
                 },
             ));
             tank.cooldown = Tank::MAX_COOLDOWN;
+        }
+
+        if Commands::REQUEST_INFO & grouped_commands != 0 {
+            let v = transform.rotation * Vec3::Y;
+
+            event_sink.queue.push(CTEvent {
+                event_type: "request_info".to_string(),
+                info: json!({
+                    "transform": {
+                        "x": transform.translation.x,
+                        "y": transform.translation.y,
+                        "rotation": v.y.atan2(v.x),
+                    }
+                }),
+            });
+        }
+
+        if Commands::CLEAR_COMMANDS & grouped_commands != 0 {
+            command_receiver.queue.clear();
         }
 
         if tank.cooldown > 0 {
