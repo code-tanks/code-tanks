@@ -37,7 +37,27 @@ updates:
     schedule:
       interval: daily            
   - package-ecosystem: "docker"
-    directory: "/scripts/Dockerfiles"
+    directory: "/scripts/Dockerfiles/dart.Dockerfile"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/scripts/Dockerfiles/go.Dockerfile"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/scripts/Dockerfiles/java.Dockerfile"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/scripts/Dockerfiles/js.Dockerfile"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/scripts/Dockerfiles/py.Dockerfile"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/scripts/Dockerfiles/rs.Dockerfile"
     schedule:
       interval: "daily"
   - package-ecosystem: "docker"
