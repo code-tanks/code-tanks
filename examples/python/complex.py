@@ -11,7 +11,7 @@ class MyTank(BaseTank):
         self.y = 0
         self.gun_rotation = 0
         self.radar_rotation = 0
-        self.count = 0
+        # self.count = 0
 
         print('Running my spinning tank!')
 
@@ -19,15 +19,10 @@ class MyTank(BaseTank):
         self.commands.append(commands.REQUEST_INFO | commands.MOVE_FORWARD | commands.ROTATE_GUN_CLOCKWISE | commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_RADAR_CLOCKWISE | commands.FIRE)
 
     def on_event(self, event):
-        self.count = self.count + 1
-
         event_type = event["event_type"]
         if event_type == "tank_hit":
             pass
         if event_type == "radar_scan":
-            print(self.count)
-            if self.count < 100:
-                return
             # print(event)
             # {'event_type': 'radar_scan', 'info': {'collision_type': 'Tank', 'entity': 167, 'transform': {'rotation': -3.000221014022827, 'x': 26.608129501342773, 'y': -211.02635192871094}, 'velocity': {'angvel': -0.9424778819084167, 'linvel': {'x': -99.00237274169922, 'y': -14.09011459350586}}}}    
             info = event["info"]
@@ -49,11 +44,11 @@ class MyTank(BaseTank):
                 diff = abs(int(diff / (math.pi * 0.3 / 60.0)))
 
 
-                if diff < 0:
-                    # diff = 2 * math.pi - diff
-                    cmd = commands.ROTATE_GUN_CLOCKWISE
+                # if diff < 0:
+                    # # diff = 2 * math.pi - diff
+                    # cmd = commands.ROTATE_GUN_CLOCKWISE
 
-                print(diff)
+                # print(diff)
                 for i in range(diff):
                     self.commands.append(cmd)
 
