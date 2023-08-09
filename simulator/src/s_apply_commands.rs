@@ -9,9 +9,10 @@ use serde_json::json;
 
 use crate::{
     c_command_source::CommandSource,
+    c_event::{CTEvent, EventSink},
     c_health::Health,
     c_tank::{Bullet, Gun, Radar, Tank},
-    CCollider, CollisionMask, CollisionType, TickState, c_event::{EventSink, CTEvent},
+    CCollider, CollisionMask, CollisionType, TickState,
 };
 
 pub fn apply_commands(
@@ -40,7 +41,15 @@ pub fn apply_commands(
 ) {
     state.count += 1;
 
-    for (entity, mut command_receiver, transform, mut velocity, mut tank, mut health, mut event_sink) in &mut query
+    for (
+        entity,
+        mut command_receiver,
+        transform,
+        mut velocity,
+        mut tank,
+        mut health,
+        mut event_sink,
+    ) in &mut query
     {
         let mut vel = Vec2::ZERO;
         let mut ang = 0.0;
@@ -170,7 +179,12 @@ pub fn apply_commands(
                 SpatialBundle {
                     transform: {
                         let mut t = Transform::from_translation(
-                            transform.translation + t * Vec3::new(Tank::RADIUS + Bullet::RADIUS * 2., Tank::RADIUS + Bullet::RADIUS * 2., 1.0),
+                            transform.translation
+                                + t * Vec3::new(
+                                    Tank::RADIUS + Bullet::RADIUS * 2.,
+                                    Tank::RADIUS + Bullet::RADIUS * 2.,
+                                    1.0,
+                                ),
                         );
                         t.translation.z = 1.0;
                         t
@@ -184,14 +198,24 @@ pub fn apply_commands(
 
         if Commands::REQUEST_INFO & grouped_commands != 0 {
             let v = transform.rotation * Vec3::Y;
+            let v2 = gun_transform.rotation * Vec3::Y;
+            let v3 = radar_transform.rotation * Vec3::Y;
 
             event_sink.queue.push(CTEvent {
                 event_type: "request_info".to_string(),
                 info: json!({
-                    "transform": {
-                        "x": transform.translation.x,
-                        "y": transform.translation.y,
-                        "rotation": v.y.atan2(v.x),
+                    "tank": {
+                            "x": transform.translation.x,
+                            "y": transform.translation.y,
+                            "rotation": v.y.atan2(v.x),
+                    },
+                    "gun": {
+
+                            "rotation": v2.y.atan2(v2.x),
+                    },
+                    "radar": {
+
+                            "rotation": v3.y.atan2(v3.x),
                     }
                 }),
             });
