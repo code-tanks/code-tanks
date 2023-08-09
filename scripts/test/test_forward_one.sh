@@ -7,23 +7,23 @@
 OUTPUT=$(./scripts/upload_tank.sh examples/dart/forward_one.dart)
 
 
-if [[ $OUTPUT != "11721e2" ]]
+if [[ $OUTPUT != "78294c3" ]]
 then
   echo "Failed to upload examples/dart/forward_one.dart"
-  echo "Expected: 11721e2"
+  echo "Expected: 78294c3"
   echo "Got: $OUTPUT"
   exit 1
 fi
 
 sleep 30
 
-OUTPUT=$(./scripts/get_build_log.sh "11721e2")
+OUTPUT=$(./scripts/get_build_log.sh "78294c3")
 
 
 # this code needs fixing
 if [[ "${OUTPUT}" == '"404"' ]]
 then
-  echo "Failed to get build log for 11721e2"
+  echo "Failed to get build log for 78294c3"
   echo 'Got: "404"'
   exit 1
 fi
@@ -33,12 +33,12 @@ echo "${OUTPUT}"
 
 # docker compose logs builder
 
-OUTPUT=$(./scripts/get_raw.sh "11721e2")
+OUTPUT=$(./scripts/get_raw.sh "78294c3")
 RAW="$(<examples/dart/forward_one.dart)"
 
 if [[ "${OUTPUT}" != "${RAW}" ]]
 then
-  echo "Failed to get raw for 11721e2"
+  echo "Failed to get raw for 78294c3"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
@@ -48,10 +48,10 @@ fi
 
 RAW="$(cat ./scripts/test/expected/test_forward_one.txt)"
 
-OUTPUT=$(./scripts/run_sim.sh "11721e2")
+OUTPUT=$(./scripts/run_sim.sh "78294c3")
 if [[ "${OUTPUT}" != "waiting to build" ]]
 then
-  echo "Failed run sim for 11721e2"
+  echo "Failed run sim for 78294c3"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
@@ -60,7 +60,7 @@ then
 fi
 
 sleep 120
-OUTPUT=$(./scripts/run_sim.sh "11721e2")
+OUTPUT=$(./scripts/run_sim.sh "78294c3")
 
 echo "${OUTPUT}" > ./scripts/test/output.txt
 tr -d '\r'  < ./scripts/test/output.txt > ./scripts/test/output1.txt
@@ -71,7 +71,7 @@ if cmp ./scripts/test/output1.txt ./scripts/test/raw.txt;
 then
     echo "success"
 else
-  echo "Failed determinism for sim 11721e2"
+  echo "Failed determinism for sim 78294c3"
   echo 'Got:'
   echo "${OUTPUT}"
   echo 'Expected:'
