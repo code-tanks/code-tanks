@@ -12,7 +12,7 @@ class MyTank extends BaseTank {
     if (i == 0) {
       commands.add(Command.ROTATE_TANK_CLOCKWISE);
     } else {
-      commands.add(Command.NONE)
+      commands.add(Command.NONE);
     }
     i = i + 1;
   }

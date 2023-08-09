@@ -11,8 +11,9 @@ class MyTank extends BaseTank {
   void run() {
     if (i == 0) {
       commands.add(Command.MOVE_FORWARD);
+    } else {
+      commands.add(Command.NONE);
     }
-    commands.add(Command.NONE);
     i = i + 1;
   }
   
