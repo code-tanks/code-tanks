@@ -145,7 +145,7 @@ pub fn create_graphics_tank(
         // mesh: meshes.add(shape::Circle::new(50.).into()).into(),
         mesh: meshes.add(mesh).into(),
         material: materials.add(ColorMaterial::from(COLORS[tank_info.index % COLORS.len()].with_a(0.3))),
-        transform: t,
+        transform: t.with_translation(Vec3 { x: t.translation.x, y: t.translation.y, z: 3. }),
         ..default()
     });
     let radar = radar.id();
@@ -219,7 +219,7 @@ pub fn create_graphics_tank(
             // We align text to the top-left, so this transform is the top-left corner of our text. The
             // box is centered at box_position, so it is necessary to move by half of the box size to
             // keep the text in the box.
-            transform: Transform::from_xyz(x, y - Tank::RADIUS - 10.0, 1.0),
+            transform: Transform::from_xyz(x, y - Tank::RADIUS - 10.0, 4.0),
             ..default()
         },
         NameTag { tank },

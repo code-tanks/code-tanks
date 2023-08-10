@@ -186,7 +186,7 @@ pub fn apply_commands(
                                     1.0,
                                 ),
                         );
-                        t.translation.z = 1.0;
+                        t.translation.z = 2.5;
                         t
                     },
                     visibility: Visibility::Visible,

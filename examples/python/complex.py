@@ -35,10 +35,10 @@ class MyTank(BaseTank):
                 diff = self.radar_rotation - self.gun_rotation
                 diff = (diff + math.pi) % (2 * math.pi) - math.pi
 
-                cmd = commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_GUN_CLOCKWISE
+                cmd = commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_GUN_CLOCKWISE | commands.REQUEST_INFO
                 
                 if diff > 0:
-                    cmd = commands.ROTATE_TANK_COUNTER_CLOCKWISE | commands.ROTATE_GUN_COUNTER_CLOCKWISE
+                    cmd = commands.ROTATE_TANK_COUNTER_CLOCKWISE | commands.ROTATE_GUN_COUNTER_CLOCKWISE | commands.REQUEST_INFO
 
 
                 diff = abs(int(diff / (math.pi * 0.3 / 60.0) / 2.0)) + 1
@@ -54,7 +54,7 @@ class MyTank(BaseTank):
 
                 self.commands[0] = self.commands[0] | commands.UNLOCK_RADAR | commands.DISABLE_RADAR
 
-                self.commands.append(commands.FIRE | commands.LOCK_RADAR | commands.ENABLE_RADAR)
+                self.commands.append(commands.FIRE | commands.LOCK_RADAR | commands.ENABLE_RADAR | commands.REQUEST_INFO)
                     
                 # self.direction = 1
 
