@@ -16,7 +16,7 @@ class MyTank(BaseTank):
         print('Running my spinning tank!')
 
     def run(self):
-        self.commands.append(commands.REQUEST_INFO | commands.MOVE_FORWARD | commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_RADAR_CLOCKWISE)
+        self.commands.append(commands.REQUEST_INFO | commands.MOVE_FORWARD | commands.ROTATE_GUN_CLOCKWISE | commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_RADAR_CLOCKWISE)
 
     def on_event(self, event):
         event_type = event["event_type"]
