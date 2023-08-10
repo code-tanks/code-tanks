@@ -186,6 +186,8 @@ impl Commands {
     pub const UNLOCK_RADAR: Command = 0b1 << 12;
     pub const REQUEST_INFO: Command = 0b1 << 13;
     pub const CLEAR_COMMANDS: Command = 0b1 << 14;
+    pub const DISABLE_RADAR: Command = 0b1 << 15;
+    pub const ENABLE_RADAR: Command = 0b1 << 16;
 
     pub const SELF_DESTRUCT: Command = 0b1 << 31;
 }

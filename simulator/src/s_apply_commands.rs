@@ -221,6 +221,14 @@ pub fn apply_commands(
             });
         }
 
+        if Commands::DISABLE_RADAR & grouped_commands != 0 {
+            radar.disabled = true;
+        }
+
+        if Commands::ENABLE_RADAR & grouped_commands != 0 {
+            radar.disabled = false;
+        }
+
         if Commands::CLEAR_COMMANDS & grouped_commands != 0 {
             command_receiver.queue.clear();
         }

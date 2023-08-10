@@ -67,7 +67,7 @@ pub fn run_game(tank_hashes: &[String]) {
         })
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
-        .add_plugins(RapierDebugRenderPlugin::default())
+        // .add_plugins(RapierDebugRenderPlugin::default())
         .add_systems(
             Startup,
             (

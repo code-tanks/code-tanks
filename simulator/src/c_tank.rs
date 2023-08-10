@@ -42,6 +42,7 @@ impl Bullet {
 #[derive(Component)]
 pub struct Radar {
     pub locked: bool,
+    pub disabled: bool,
 }
 
 #[derive(Component)]

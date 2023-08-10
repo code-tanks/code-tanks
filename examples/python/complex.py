@@ -16,7 +16,7 @@ class MyTank(BaseTank):
         print('Running my spinning tank!')
 
     def run(self):
-        self.commands.append(commands.REQUEST_INFO | commands.MOVE_FORWARD | commands.ROTATE_GUN_CLOCKWISE | commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_RADAR_CLOCKWISE | commands.FIRE)
+        self.commands.append(commands.REQUEST_INFO | commands.MOVE_FORWARD | commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_RADAR_CLOCKWISE)
 
     def on_event(self, event):
         event_type = event["event_type"]
@@ -35,13 +35,13 @@ class MyTank(BaseTank):
                 diff = self.radar_rotation - self.gun_rotation
                 diff = (diff + math.pi) % (2 * math.pi) - math.pi
 
-                cmd = commands.ROTATE_GUN_CLOCKWISE
+                cmd = commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_GUN_CLOCKWISE
                 
                 if diff > 0:
-                    cmd = commands.ROTATE_GUN_COUNTER_CLOCKWISE
+                    cmd = commands.ROTATE_TANK_COUNTER_CLOCKWISE | commands.ROTATE_GUN_COUNTER_CLOCKWISE
 
 
-                diff = abs(int(diff / (math.pi * 0.3 / 60.0)))
+                diff = abs(int(diff / (math.pi * 0.3 / 60.0) / 2.0)) + 1
 
 
                 # if diff < 0:
@@ -52,7 +52,9 @@ class MyTank(BaseTank):
                 for i in range(diff):
                     self.commands.append(cmd)
 
-                self.commands.append(commands.FIRE)
+                self.commands[0] = self.commands[0] | commands.UNLOCK_RADAR | commands.DISABLE_RADAR
+
+                self.commands.append(commands.FIRE | commands.LOCK_RADAR | commands.ENABLE_RADAR)
                     
                 # self.direction = 1
 

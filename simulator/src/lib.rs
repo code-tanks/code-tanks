@@ -12,7 +12,7 @@ pub mod s_request_commands;
 pub mod s_request_commands_by_event;
 pub mod s_setup_physics;
 pub mod s_setup_walls;
-pub mod s_tank_physics; 
+pub mod s_tank_physics;
 
 use std::process::Command;
 
@@ -32,7 +32,6 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{c_command_source::CommandSource, c_event::EventSink, c_health::Health};
 
-
 #[derive(Default, Resource)]
 pub struct TickState {
     pub count: u32,
@@ -42,7 +41,6 @@ impl TickState {
     pub const MAXIMUM_SIMULATION_TICKS: u32 = 300 * 2; // 10 secs
     pub const DT: f32 = 1.0 / 60.0;
 }
-
 
 pub struct Game {}
 
@@ -159,7 +157,10 @@ pub fn create_radar(commands: &mut Commands, x: f32, y: f32) -> Entity {
             CCollider {
                 collision_type: CollisionType::Radar,
             },
-            Radar { locked: true },
+            Radar {
+                locked: true,
+                disabled: false,
+            },
             SpatialBundle {
                 transform: t,
                 visibility: Visibility::Visible,
