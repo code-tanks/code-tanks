@@ -1,75 +1,48 @@
 from codetanks import BaseTank, commands
 import math
 
+ROTATE_TOGETHER_CW = commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_GUN_CLOCKWISE
+ROTATE_TOGETHER_CCW = commands.ROTATE_TANK_COUNTER_CLOCKWISE | commands.ROTATE_GUN_COUNTER_CLOCKWISE
+
 class MyTank(BaseTank):
     def __init__(self):
         super().__init__()
-
-        self.direction = 0
-        self.rotation = 0
-        self.x = 0
-        self.y = 0
-        self.gun_rotation = 0
-        self.radar_rotation = 0
-        # self.count = 0
-
-        print('Running my spinning tank!')
+        print('Running my complex tank!')
 
     def run(self):
-        self.commands.append(commands.REQUEST_INFO | commands.MOVE_FORWARD | commands.ROTATE_GUN_CLOCKWISE | commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_RADAR_CLOCKWISE)
+        # default commands when tank has no target
+        self.commands = [
+            commands.REQUEST_INFO | 
+            commands.MOVE_FORWARD | 
+            commands.ROTATE_RADAR_CLOCKWISE |
+            ROTATE_TOGETHER_CW
+        ]
 
     def on_event(self, event):
-        event_type = event["event_type"]
-        if event_type == "tank_hit":
-            pass
-        if event_type == "radar_scan":
-            # print(event)
-            # {'event_type': 'radar_scan', 'info': {'collision_type': 'Tank', 'entity': 167, 'transform': {'rotation': -3.000221014022827, 'x': 26.608129501342773, 'y': -211.02635192871094}, 'velocity': {'angvel': -0.9424778819084167, 'linvel': {'x': -99.00237274169922, 'y': -14.09011459350586}}}}    
-            info = event["info"]
+        info = event["info"]
 
-            collision_type = info["collision_type"]
-
-            if collision_type == "Tank":
-                # targ = math.atan2(info["transform"]["x"] - self.x, info["transform"]["y"] - self.y)
-                # diff = abs(self.radar_rotation - self.gun_rotation)
-                diff = self.radar_rotation - self.gun_rotation
-                diff = (diff + math.pi) % (2 * math.pi) - math.pi
-
-                cmd = commands.ROTATE_TANK_CLOCKWISE | commands.ROTATE_GUN_CLOCKWISE | commands.REQUEST_INFO
-                
-                if diff > 0:
-                    cmd = commands.ROTATE_TANK_COUNTER_CLOCKWISE | commands.ROTATE_GUN_COUNTER_CLOCKWISE | commands.REQUEST_INFO
-
-
-                diff = abs(int(diff / (math.pi * 0.3 / 60.0) / 2.0)) + 1
-
-
-                # if diff < 0:
-                    # # diff = 2 * math.pi - diff
-                    # cmd = commands.ROTATE_GUN_CLOCKWISE
-
-                # print(diff)
-                for i in range(diff):
-                    self.commands.append(cmd)
-
-                self.commands[0] = self.commands[0] | commands.UNLOCK_RADAR | commands.DISABLE_RADAR
-
-                self.commands.append(commands.FIRE | commands.LOCK_RADAR | commands.ENABLE_RADAR | commands.REQUEST_INFO)
-                    
-                # self.direction = 1
-
-        if event_type == "bullet_hit":
-            pass
-        if event_type == "request_info":
-            # print(event)
-            # {'event_type': 'request_info', 'info': {'gun': {'rotation': -0.015707869082689285}, 'radar': {'rotation': -0.015707869082689285}, 'tank': {'rotation': -0.015707869082689285, 'x': 161.6666717529297, 'y': -1.862645149230957e-07}}}
-
-            info = event["info"]
-            self.rotation = info["tank"]["rotation"]
-            self.x = info["tank"]["x"]
-            self.y = info["tank"]["y"]
+        # save tank info for later
+        if event["event_type"] == "request_info":
             self.gun_rotation = info["gun"]["rotation"]
             self.radar_rotation = info["radar"]["rotation"]
+            return
+
+        # found target
+        if event["event_type"] == "radar_scan" and info["collision_type"] == "Tank":
+            # find minimum angle between radar and gun
+            diff = (self.radar_rotation - self.gun_rotation + math.pi) % (2 * math.pi) - math.pi
+
+            # convert angle to number of ticks
+            ticks = abs(int(diff / (math.pi * 0.3 / 60.0) / 2.0)) + 1
+
+            # commands to rotate gun to target
+            self.commands = [ROTATE_TOGETHER_CCW if diff > 0 else ROTATE_TOGETHER_CW for _ in range(ticks)]
+
+            # unlock (prevents rotation with gun) and disable radar (prevents more radar_scan events)
+            self.commands[0] |= commands.UNLOCK_RADAR | commands.DISABLE_RADAR
+
+            # fire gun on last command, lock and enable radar
+            self.commands.append(commands.FIRE | commands.LOCK_RADAR | commands.ENABLE_RADAR)
 
 
 def create_tank():
