@@ -8,6 +8,7 @@ class MyTank(BaseTank):
     def __init__(self):
         super().__init__()
         print('Running my complex tank!')
+        self.has_rotation_info = False
 
     def run(self):
         # default commands when tank has no target
@@ -25,10 +26,14 @@ class MyTank(BaseTank):
         if event["event_type"] == "request_info":
             self.gun_rotation = info["gun"]["rotation"]
             self.radar_rotation = info["radar"]["rotation"]
+            self.has_rotation_info = True
             return
 
         # found target
         if event["event_type"] == "radar_scan" and info["collision_type"] == "Tank":
+            if not self.has_rotation_info:
+                return
+
             # find minimum angle between radar and gun
             diff = (self.radar_rotation - self.gun_rotation + math.pi) % (2 * math.pi) - math.pi
 
