@@ -1,4 +1,4 @@
-use std::{process::Command as ProcessCommand, thread, time};
+use std::process::Command as ProcessCommand;
 
 use bevy::{
     prelude::{default, App, IntoSystemConfigs, Resource, Startup},

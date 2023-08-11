@@ -1,7 +1,6 @@
 // use crate::{CustomAsset, CustomAssetState, *};
 use bevy::{prelude::*, sprite::Anchor};
-use ct_api::Command;
-use ctsimlib::{c_client::Client, c_tank::TankInfo, Game};
+use ctsimlib::Game;
 // use ctgraphics::*;
 
 pub fn setup_ground(

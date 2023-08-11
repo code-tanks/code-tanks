@@ -12,6 +12,7 @@ use crate::{
     c_event::{CTEvent, EventSink},
     c_health::Health,
     c_tank::{Bullet, Gun, Radar, Tank},
+    c_radar_needs_update::RadarNeedsUpdate,
     CCollider, CollisionMask, CollisionType, TickState,
 };
 
@@ -223,10 +224,12 @@ pub fn apply_commands(
 
         if Commands::DISABLE_RADAR & grouped_commands != 0 {
             radar.disabled = true;
+            commands.entity(tank.radar).insert(RadarNeedsUpdate);
         }
 
         if Commands::ENABLE_RADAR & grouped_commands != 0 {
             radar.disabled = false;
+            commands.entity(tank.radar).insert(RadarNeedsUpdate);
         }
 
         if Commands::CLEAR_COMMANDS & grouped_commands != 0 {

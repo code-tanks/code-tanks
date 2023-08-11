@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy::{
     prelude::{
         default, App, AssetServer, Assets, BuildChildren, Color, Commands, Component,
-        IntoSystemConfigs, Mesh, Plugin, Quat, Res, ResMut, Resource, Startup, Transform, Vec2,
+        IntoSystemConfigs, Mesh, Plugin, Quat, Res, ResMut, Transform, Vec2,
     },
     render::render_resource::PrimitiveTopology,
     sprite::{Anchor, ColorMaterial, MaterialMesh2dBundle, Sprite, SpriteBundle},
@@ -32,6 +32,8 @@ pub mod s_spawn_tracks;
 pub mod s_update_tracks;
 use ctsimlib::{create_gun, create_radar, Game};
 use s_on_added_bullet::{on_added_bullet, COLORS};
+use s_update_radar::update_radar;
+use s_update_tank::update_tank;
 use s_update_tracks::update_tracks;
 // use s_update_tracks::update_tracks;
 pub mod s_on_added_bullet;
@@ -39,8 +41,9 @@ pub mod s_setup_graphics;
 pub mod s_setup_ground;
 pub mod s_update_healthbar;
 pub mod s_update_nametag;
+pub mod s_update_radar;
+pub mod s_update_tank;
 
-use crate::s_setup_graphics::setup_graphics;
 // use crate::s_update_healthbar::update_healthbar;
 use bevy::ecs::entity::Entity;
 use bevy::DefaultPlugins;
@@ -282,6 +285,8 @@ impl Plugin for CoreCTGraphicsPlugin {
                     spawn_tracks,
                     update_tracks,
                     update_healthbar,
+                    update_radar,
+                    update_tank,
                 ), // "on_added_bullet",
                    // SystemStage::single_threaded().with_system(on_added_bullet),
             );

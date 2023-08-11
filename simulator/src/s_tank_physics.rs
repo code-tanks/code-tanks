@@ -5,7 +5,7 @@ use crate::{
     c_event::{generate_event, EventSink},
     c_health::Health,
     c_tank::{Bullet, DamageDealer, Tank},
-    CCollider, CollisionType,
+    CCollider, CollisionType, c_radar_needs_update::RadarNeedsUpdate,
 };
 
 pub fn tank_physics(
@@ -15,6 +15,7 @@ pub fn tank_physics(
     mut query_damage_dealer: Query<&mut DamageDealer>,
     query_bullet: Query<&Bullet>,
     query_collidable: Query<(&CCollider, &Transform, Option<&Velocity>)>,
+    mut commands: Commands,
 ) {
     for contact_event in contact_events.iter() {
         for (tank_entity, tank, mut tank_health, tank_transform, tank_velocity) in
@@ -39,6 +40,7 @@ pub fn tank_physics(
                         &mut query_damage_dealer,
                         &query_bullet,
                         &mut query_event_sink,
+                        &mut commands,
                     );
                 } else if collision_entity_2 == &tank_entity {
                     let (collider, collided_entity_transform, collided_entity_velocity) =
@@ -56,6 +58,7 @@ pub fn tank_physics(
                         &mut query_damage_dealer,
                         &query_bullet,
                         &mut query_event_sink,
+                        &mut commands,
                     );
                 }
             }
@@ -65,7 +68,7 @@ pub fn tank_physics(
 
 fn on_tank_collision(
     tank_entity: &Entity,
-    _tank: &Tank,
+    tank: &Tank,
     tank_transform: &Transform,
     tank_velocity: &Velocity,
     tank_health: &mut Health,
@@ -76,6 +79,7 @@ fn on_tank_collision(
     query_damage_dealer: &mut Query<&mut DamageDealer>,
     query_bullet: &Query<&Bullet>,
     query_event_sink: &mut Query<&mut EventSink>,
+    commands: &mut Commands,
 ) {
     match *collision_type {
         CollisionType::Radar => {
@@ -116,6 +120,7 @@ fn on_tank_collision(
 
     if tank_health.val < 0 {
         tank_health.val = 0;
+        commands.entity(tank.radar).insert(RadarNeedsUpdate);
     }
 
     generate_event(

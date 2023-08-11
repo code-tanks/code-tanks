@@ -13,6 +13,7 @@ pub mod s_request_commands_by_event;
 pub mod s_setup_physics;
 pub mod s_setup_walls;
 pub mod s_tank_physics;
+pub mod c_radar_needs_update;
 
 use std::process::Command;
 

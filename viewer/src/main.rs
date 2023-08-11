@@ -6,7 +6,7 @@ use s_load_tanks::*;
 // use s_setup_ground::*;
 
 use ctsimlib::core_plugin::CoreCTPlugin;
-use ctgraphics::{CoreCTGraphicsPlugin, s_setup_graphics::setup_graphics};
+use ctgraphics::CoreCTGraphicsPlugin;
 
 use s_apply_history_transforms::*; 
 use ctgraphics::s_setup_ground::setup_ground;
