@@ -22,7 +22,7 @@ pub fn request_commands_by_event(
         let mut queue: Vec<Command> = Vec::new();
 
         for event in event_sender.queue.iter() {
-            println!("{:?} {:?}", entity, event);
+            // println!("{:?} {:?}", entity, event);
             let mut new_commands = client_connection.client.request_commands_by_event(event);
             // println!("request_commands_by_event {:?} {:?}", entity, new_commands);
             if !new_commands.is_empty() {

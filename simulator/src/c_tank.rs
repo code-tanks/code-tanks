@@ -13,7 +13,7 @@ pub struct AllTankInfo {
     pub all: Vec<TankInfo>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct TankInfo {
     pub hash: String,
     pub id: String,

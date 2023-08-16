@@ -99,6 +99,7 @@ pub fn run_game_and_save(tank_hashes: &[String], ticks: u32) {
             return_from_run: true,
             ..default()
         })
+        // .insert_resource(FixedTime::new_from_secs(TickState::DT))
         .insert_resource(MaxSimulationTicks(ticks))
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
@@ -156,6 +157,7 @@ pub fn read_game(file: &str) {
             return_from_run: true,
             ..default()
         })
+        // .insert_resource(FixedTime::new_from_secs(TickState::DT))
         .add_plugins(CoreCTPlugin)
         .add_plugins(CoreCTGraphicsPlugin)
         // .add_plugins(RapierDebugRenderPlugin::default())
@@ -166,7 +168,7 @@ pub fn read_game(file: &str) {
         .add_systems(Startup, (load_tanks_from_file, setup_walls, setup_ground))
         .add_systems(
             Update,
-            (setup_reader_tanks, apply_history_transforms.after(request_commands).before(apply_commands))
+            (setup_reader_tanks.before(apply_commands), apply_history_transforms.after(request_commands).before(apply_commands))
             // "request_commands",
             // "apply_history_transforms",
             // SystemStage::single_threaded().with_system(apply_history_transforms),
