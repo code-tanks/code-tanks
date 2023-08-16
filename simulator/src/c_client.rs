@@ -40,6 +40,7 @@ impl ClientTrait for ReaderClient {
     }
 
     fn request_commands_by_event(&mut self, _event: &CTEvent) -> Vec<Command> {
-        self.request_commands()
+        // self.request_commands()
+        vec![]
     }
 }
