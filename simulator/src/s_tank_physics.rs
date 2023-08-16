@@ -118,7 +118,7 @@ fn on_tank_collision(
         tank_entity, collided_entity, collision_type
     );
 
-    if tank_health.val < 0 {
+    if tank_health.val <= 0 {
         tank_health.val = 0;
         commands.entity(tank.radar).insert(RadarNeedsUpdate);
     }
