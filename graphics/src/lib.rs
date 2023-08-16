@@ -43,6 +43,8 @@ pub mod s_update_healthbar;
 pub mod s_update_nametag;
 pub mod s_update_radar;
 pub mod s_update_tank;
+pub mod s_setup_reader_tanks;
+
 
 // use crate::s_update_healthbar::update_healthbar;
 use bevy::ecs::entity::Entity;

@@ -1,6 +1,6 @@
 use bevy::{prelude::*, utils::HashSet};
 use ct_api::Commands;
-use ctsimlib::{TickState, c_tank::{AllTankInfo, Tank, Radar, Gun, DamageDealer}, c_command_source::CommandSource, c_health::Health};
+use crate::{TickState, c_tank::{AllTankInfo, Tank, Radar, Gun, DamageDealer}, c_command_source::CommandSource, c_health::Health, MaxSimulationTicks};
 use serde_json::{json, to_value};
 use std::{fs::OpenOptions, io::Write};
 
@@ -17,6 +17,7 @@ pub fn save_commands(
     guns: Query<&Transform, With<Gun>>,
     healths: Query<&Health, With<Tank>>,
     damage_dealt: Query<&DamageDealer, With<Tank>>,
+    max_ticks: Res<MaxSimulationTicks>,
 ) {
     let tanks: Vec<(&Transform, &Tank)> = tanks.iter().collect();
     let radars: Vec<&Transform> = radars.iter().collect();
@@ -73,8 +74,8 @@ pub fn save_commands(
 
     let early_stop = dead_count >= tanks.len() - 1 && tanks.len() > 1;
 
-    if state.count >= TickState::MAXIMUM_SIMULATION_TICKS || early_stop {
-        state.count = TickState::MAXIMUM_SIMULATION_TICKS;
+    if state.count >= max_ticks.0 || early_stop {
+        state.count = max_ticks.0;
         println!("early_stop: {}", early_stop);
         // TODO save results of the simulation (winner, damage given, damage taken, time alive)
         let mut j = json!({});

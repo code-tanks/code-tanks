@@ -1,8 +1,12 @@
 use bevy::prelude::*;
 
-use crate::*;
 
-use ctsimlib::c_tank::*;
+#[derive(Component)]
+pub struct HistoryTransforms {
+    pub transforms: Vec<Vec<f32>>,
+}
+
+use crate::c_tank::*;
 
 pub fn apply_history_transforms(
     // mut commands: Commands,

@@ -3,6 +3,7 @@ pub mod c_command_source;
 pub mod c_event;
 pub mod c_health;
 pub mod c_tank;
+pub mod c_radar_needs_update;
 pub mod core_plugin;
 
 pub mod s_apply_commands;
@@ -13,7 +14,8 @@ pub mod s_request_commands_by_event;
 pub mod s_setup_physics;
 pub mod s_setup_walls;
 pub mod s_tank_physics;
-pub mod c_radar_needs_update;
+pub mod s_apply_history_transforms;
+pub mod s_save_commands;
 
 use std::process::Command;
 
@@ -33,15 +35,59 @@ use bevy_rapier2d::prelude::*;
 
 use crate::{c_command_source::CommandSource, c_event::EventSink, c_health::Health};
 
+use bevy::{
+    asset::{AssetLoader, LoadContext, LoadedAsset},
+    reflect::{TypeUuid, TypePath},
+    utils::BoxedFuture, prelude::{Handle},
+};
+
+// use ct_api::{Commands};
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize, TypeUuid, TypePath)]
+#[uuid = "39cadc56-aa9c-4543-8640-a018b74b5052"]
+pub struct CustomAsset(pub String);
+
+#[derive(Default)]
+pub struct CustomAssetLoader;
+
+impl AssetLoader for CustomAssetLoader {
+    fn load<'a>(
+        &'a self,
+        bytes: &'a [u8],
+        load_context: &'a mut LoadContext,
+    ) -> BoxedFuture<'a, Result<(), bevy::asset::Error>> {
+        Box::pin(async move {
+            let custom_asset = CustomAsset(String::from_utf8(bytes.to_vec()).unwrap());
+            load_context.set_default_asset(LoadedAsset::new(custom_asset));
+            Ok(())
+        })
+    }
+
+    fn extensions(&self) -> &[&str] {
+        &["txt"]
+    }
+}
+
+#[derive(Default, Resource)]
+pub struct CustomAssetState {
+    pub handle: Handle<CustomAsset>,
+    pub printed: bool,
+}
+
+
 #[derive(Default, Resource)]
 pub struct TickState {
     pub count: u32,
 }
 
 impl TickState {
-    pub const MAXIMUM_SIMULATION_TICKS: u32 = 300 * 2; // 10 secs
+    // pub const MAXIMUM_SIMULATION_TICKS: u32 = 300 * 2; // 10 secs
     pub const DT: f32 = 1.0 / 60.0;
 }
+
+#[derive(Resource)]
+pub struct MaxSimulationTicks(pub u32);
 
 pub struct Game {}
 

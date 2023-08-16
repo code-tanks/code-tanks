@@ -1,7 +1,7 @@
-use std::process::Command as ProcessCommand;
+use std::{process::Command as ProcessCommand, fs::File, io::Write};
 
 use bevy::{
-    prelude::{default, App, IntoSystemConfigs, Resource, Startup},
+    prelude::*,
     winit::WinitSettings,
 };
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
@@ -11,16 +11,19 @@ use ctsimlib::{
     c_client::{parse_commands, ClientTrait},
     c_event::CTEvent,
     c_tank::{AllTankInfo, TankInfo},
+    s_apply_commands::apply_commands,
+    s_request_commands::request_commands,
+    s_save_commands::save_commands,
     s_setup_walls::setup_walls,
-    *,
+    *, s_apply_history_transforms::apply_history_transforms,
 };
 use s_setup_desktop_tanks::setup_desktop_tanks;
 
 pub mod s_setup_desktop_tanks;
-use ctsimlib::core_plugin::CoreCTPlugin;
 use ctgraphics::{
-    s_setup_graphics::setup_graphics, s_setup_ground::setup_ground, CoreCTGraphicsPlugin,
+    s_setup_graphics::setup_graphics, s_setup_ground::setup_ground, CoreCTGraphicsPlugin, s_setup_reader_tanks::setup_reader_tanks,
 };
+use ctsimlib::core_plugin::CoreCTPlugin;
 
 // const PORTS: [usize; 4] = [8062, 8063, 8064, 8065];
 
@@ -41,24 +44,6 @@ pub fn run_game(tank_hashes: &[String]) {
             container_name: format!("{}-{}-{}", game_url, f, i),
         })
         .collect::<Vec<TankInfo>>();
-
-    // let tank_container_names = tank_hashes
-    //     .iter()
-    //     .enumerate()
-    //     .map(|(i, url)| run_local_tank(url, &game_url, i, PORTS[i]))
-    //     .collect::<Vec<String>>();
-
-    // for tank_info in tank_infos {
-    //     // TODO fix
-    //     let tank_image_name = &tank_info.hash;
-    //     run_tank(
-    //         &tank_info.container_name,
-    //         tank_image_name,
-    //         &format!("{}:8080", PORTS[tank_info.index]),
-    //         false
-    //     );
-    // }
-    // thread::sleep(time::Duration::from_millis(1000));
 
     App::new()
         .insert_resource(WinitSettings {
@@ -88,6 +73,110 @@ pub fn run_game(tank_hashes: &[String]) {
         remove_tank(&tank_info.container_name);
         println!("removed {}", &tank_info.container_name);
     }
+
+    println!("finished");
+}
+
+pub fn run_game_and_save(tank_hashes: &[String], ticks: u32) {
+    let game_url: String = tank_hashes.join("-");
+    let tank_infos = &tank_hashes
+        .iter()
+        .enumerate()
+        .map(|(i, f)| TankInfo {
+            hash: f.to_string(),
+            id: format!("{}-{}", f, i),
+            index: i,
+            container_name: format!("{}-{}-{}", game_url, f, i),
+        })
+        .collect::<Vec<TankInfo>>();
+
+    let mut f = File::create("./sim.txt").expect("Unable to create file");
+    f.write_all(format!("{}\n", tank_hashes.join(",")).as_bytes())
+        .expect("Unable to write data");
+
+    App::new()
+        .insert_resource(WinitSettings {
+            return_from_run: true,
+            ..default()
+        })
+        .insert_resource(MaxSimulationTicks(ticks))
+        .add_plugins(CoreCTPlugin)
+        .add_plugins(CoreCTGraphicsPlugin)
+        // .add_plugins(RapierDebugRenderPlugin::default())
+        .add_systems(
+            Startup,
+            (
+                (setup_desktop_tanks, setup_walls, setup_ground),
+                setup_graphics,
+            )
+                .chain(),
+        )
+        .add_systems(
+            Update,
+            save_commands.after(request_commands).before(apply_commands),
+        )
+        // .insert_resource(UseDummy {
+        //     use_dummy: tank_hashes.is_empty(),
+        // })
+        .insert_resource(AllTankInfo {
+            all: tank_infos.to_vec(),
+        })
+        .run();
+
+    for tank_info in tank_infos {
+        remove_tank(&tank_info.container_name);
+        println!("removed {}", &tank_info.container_name);
+    }
+
+    println!("finished");
+}
+
+#[derive(Resource)]
+pub struct SimFilePath(pub String);
+
+pub fn load_tanks_from_file(mut state: ResMut<CustomAssetState>, asset_server: Res<AssetServer>, sim_file_path: Res<SimFilePath>) {
+    // state.handle = asset_server.load("./sim.txt");
+    let file = &sim_file_path.0;
+
+    println!("sim file: {}", file);
+    info!("sim file: {}", file);
+
+    state.handle = asset_server.load(file);
+
+    info!("got file");
+}
+
+
+
+pub fn read_game(file: &str) {
+
+
+    App::new()
+        .insert_resource(WinitSettings {
+            return_from_run: true,
+            ..default()
+        })
+        .add_plugins(CoreCTPlugin)
+        .add_plugins(CoreCTGraphicsPlugin)
+        // .add_plugins(RapierDebugRenderPlugin::default())
+        .init_resource::<CustomAssetState>()
+        .insert_resource(SimFilePath(file.to_string()))
+        .add_asset::<CustomAsset>()
+        .init_asset_loader::<CustomAssetLoader>()
+        .add_systems(Startup, (load_tanks_from_file, setup_walls, setup_ground))
+        .add_systems(
+            Update,
+            (setup_reader_tanks, apply_history_transforms.after(request_commands).before(apply_commands))
+            // "request_commands",
+            // "apply_history_transforms",
+            // SystemStage::single_threaded().with_system(apply_history_transforms),
+        )
+        .run();
+
+    // for tank_info in tank_infos {
+    //     remove_tank(&tank_info.container_name);
+    //     println!("removed {}", &tank_info.container_name);
+    // }
 
     println!("finished");
 }
@@ -134,12 +223,11 @@ impl ClientTrait for DesktopClient {
 
         let err_raw = String::from_utf8_lossy(&output.stderr);
 
-
         if err_raw.is_empty() {
             let result_raw = String::from_utf8_lossy(&output.stdout);
             let commands = parse_commands(result_raw.to_string());
             if commands.is_empty() {
-                return vec![Commands::SELF_DESTRUCT]
+                return vec![Commands::SELF_DESTRUCT];
             } else {
                 return commands;
             }
@@ -166,7 +254,7 @@ impl ClientTrait for DesktopClient {
         let err_raw = String::from_utf8_lossy(&output.stderr);
 
         if err_raw.is_empty() {
-                let result_raw = String::from_utf8_lossy(&output.stdout);
+            let result_raw = String::from_utf8_lossy(&output.stdout);
             return parse_commands(result_raw.to_string());
         }
         // let _err_raw = String::from_utf8_lossy(&output.stderr);

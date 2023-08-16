@@ -1,7 +1,8 @@
 use bevy::prelude::*;
+use ctsimlib::CustomAssetState;
 use wasm_bindgen::prelude::*;
 
-use crate::CustomAssetState;
+// use crate::CustomAssetState;
 
 #[wasm_bindgen]
 pub fn get_sim_file() -> String {
@@ -17,7 +18,7 @@ pub fn get_sim_file() -> String {
         .join("-")
 }
 
-pub fn load_tanks(mut state: ResMut<CustomAssetState>, asset_server: Res<AssetServer>) {
+pub fn load_tanks_from_file(mut state: ResMut<CustomAssetState>, asset_server: Res<AssetServer>) {
     // state.handle = asset_server.load("./sim.txt");
     let file = format!("/sim/{}.txt", get_sim_file());
 

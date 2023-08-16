@@ -1,10 +1,12 @@
-use crate::{CustomAsset, CustomAssetState, *};
+use ctsimlib::{CustomAsset, CustomAssetState, *, c_client::ReaderClient};
 use bevy::{prelude::{info, AssetServer, Assets, Commands, Res, ResMut, Mesh, Camera2dBundle}, sprite::ColorMaterial};
 use ct_api::Command;
-use ctsimlib::{c_client::Client, c_tank::TankInfo};
-use ctgraphics::*;
+use ctsimlib::{c_client::Client, c_tank::TankInfo, s_apply_history_transforms::HistoryTransforms};
 
-pub fn setup_web_tanks(
+use crate::create_graphics_tank;
+// use crate::ctgraphics::*;
+
+pub fn setup_reader_tanks(
     mut state: ResMut<CustomAssetState>,
     mut commands: Commands,
     custom_assets: ResMut<Assets<CustomAsset>>,

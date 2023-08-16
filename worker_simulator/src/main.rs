@@ -1,11 +1,11 @@
 use core::time;
 use std::{fs::{self, File}, thread, io::Write};
 
-use ctsimlib::{remove_tank, c_tank::{TankInfo, AllTankInfo}};
+use ctsimlib::{remove_tank, c_tank::{TankInfo, AllTankInfo}, s_save_commands::save_commands};
 use worker_simulator::{
     create_sim_queue,
     db::{get_client, upload_sim},
-    get_sim_job, update_sim_job, upload_log, s_setup_sim_tanks::setup_sim_tanks, s_save_commands::save_commands,
+    get_sim_job, update_sim_job, upload_log, s_setup_sim_tanks::setup_sim_tanks
 };
 use bevy::MinimalPlugins;
 use bevy::prelude::{App, Startup, Update, IntoSystemConfigs};
@@ -69,6 +69,7 @@ fn main() {
                 .insert_resource(AllTankInfo{
                     all: tank_infos.to_vec()
                 })
+                .insert_resource(MaxSimulationTicks(600))
                 .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
                 .add_plugins(CoreCTPlugin)
                 .add_systems(
