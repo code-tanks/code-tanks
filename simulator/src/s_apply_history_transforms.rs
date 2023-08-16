@@ -20,6 +20,7 @@ pub fn apply_history_transforms(
         if history_transforms.transforms.is_empty() {
             break;
         }
+        break;
 
         let transforms = history_transforms.transforms.pop().unwrap();
 
@@ -31,12 +32,16 @@ pub fn apply_history_transforms(
         t.rotation.w = transforms[3];
 
         let mut radar = query_t.get_mut(tank.radar).unwrap();
+        radar.translation.x = transforms[0];
+        radar.translation.y = transforms[1];
         // radar.rotation.x = transforms[6]; // unused
         // radar.rotation.y = transforms[7]; // unused
         radar.rotation.z = transforms[4];
         radar.rotation.w = transforms[5];
 
         let mut gun = query_t.get_mut(tank.gun).unwrap();
+        gun.translation.x = transforms[0];
+        gun.translation.y = transforms[1];
         // gun.rotation.x = transforms[10]; // unused
         // gun.rotation.y = transforms[11]; // unused
         gun.rotation.z = transforms[6];
