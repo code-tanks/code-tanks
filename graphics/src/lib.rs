@@ -14,9 +14,9 @@ use bevy::{
 // };
 use c_nametag::NameTag;
 use c_tracks::Tracks;
-use ctsimlib::c_tank::TankInfo;
-use ctsimlib::create_base_tank;
-use ctsimlib::{
+use ctengine::c_tank::TankInfo;
+use ctengine::create_base_tank;
+use ctengine::{
     c_tank::Tank, s_apply_commands::apply_commands, s_request_commands::request_commands,
 };
 use s_request_debug_commands::request_debug_commands;
@@ -30,7 +30,7 @@ pub mod c_particle;
 pub mod c_tracks;
 pub mod s_spawn_tracks;
 pub mod s_update_tracks;
-use ctsimlib::{create_gun, create_radar, Game};
+use ctengine::{create_gun, create_radar, Game};
 use s_on_added_bullet::{on_added_bullet, COLORS};
 use s_update_radar::update_radar;
 use s_update_tank::update_tank;
@@ -54,7 +54,7 @@ use bevy::DefaultPlugins;
 
 pub mod s_request_debug_commands;
 
-// use ctsimlib::s_setup_sim_tanks::{create_gun, create_radar, create_base_tank};
+// use ctengine::s_setup_sim_tanks::{create_gun, create_radar, create_base_tank};
 
 const TANK_BODY_IMAGES: &[&str] = &[
     "tankBody_red.png",

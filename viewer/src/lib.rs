@@ -8,7 +8,7 @@ pub mod s_load_tanks;
 // };
 
 // use ct_api::{Command, Commands};
-// use ctsimlib::{c_client::ClientTrait, c_event::CTEvent};
+// use ctengine::{c_client::ClientTrait, c_event::CTEvent};
 // use serde::Deserialize;
 
 // #[derive(Debug, Deserialize, TypeUuid, TypePath)]

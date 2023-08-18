@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use ctsimlib::CustomAssetState;
+use ctengine::CustomAssetState;
 use wasm_bindgen::prelude::*;
 
 // use crate::CustomAssetState;

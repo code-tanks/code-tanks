@@ -1,5 +1,5 @@
 use bevy::prelude::{Color, Gizmos, Query, Transform, Vec2, With, ResMut, GizmoConfig};
-use ctsimlib::{c_health::Health, c_tank::Tank};
+use ctengine::{c_health::Health, c_tank::Tank};
 
 use crate::c_healthbar::HealthBar;
 

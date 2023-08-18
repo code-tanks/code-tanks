@@ -1,7 +1,7 @@
 use core::time;
 use std::{fs::{self, File}, thread, io::Write};
 
-use ctsimlib::{remove_tank, c_tank::{TankInfo, AllTankInfo}, s_save_commands::save_commands};
+use ctengine::{remove_tank, c_tank::{TankInfo, AllTankInfo}, s_save_commands::save_commands};
 use worker_simulator::{
     create_sim_queue,
     db::{get_client, upload_sim},
@@ -9,14 +9,14 @@ use worker_simulator::{
 };
 use bevy::MinimalPlugins;
 use bevy::prelude::{App, Startup, Update, IntoSystemConfigs};
-// use ctsimlib::c_tank::TankInfo;
-use ctsimlib::core_plugin::CoreCTPlugin;
-use ctsimlib::*;
-use ctsimlib::s_apply_commands::apply_commands;
-use ctsimlib::s_request_commands::request_commands;
-// use ctsimlib::s_save_commands::save_commands;
-// use ctsimlib::s_setup_sim_tanks::setup_sim_tanks;
-use ctsimlib::s_setup_walls::setup_walls;
+// use ctengine::c_tank::TankInfo;
+use ctengine::core_plugin::CoreCTPlugin;
+use ctengine::*;
+use ctengine::s_apply_commands::apply_commands;
+use ctengine::s_request_commands::request_commands;
+// use ctengine::s_save_commands::save_commands;
+// use ctengine::s_setup_sim_tanks::setup_sim_tanks;
+use ctengine::s_setup_walls::setup_walls;
 
 fn main() {
     println!("Started ctsim");

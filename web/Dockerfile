@@ -6,7 +6,7 @@ RUN cargo install -f wasm-bindgen-cli --version 0.2.87
 
 COPY worker_simulator/dummy.rs .
 COPY viewer/Cargo.toml .
-RUN sed -i '/ctsimlib/d' Cargo.toml
+RUN sed -i '/ctengine/d' Cargo.toml
 RUN sed -i '/ctgraphics/d' Cargo.toml
 RUN sed -i '/ct-api/d' Cargo.toml
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
@@ -21,7 +21,7 @@ RUN cargo build --bin ctviewer --target wasm32-unknown-unknown --profile $profil
 COPY viewer/Cargo.toml .
 
 # RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-RUN sed -i 's#../simulator#simulator#' Cargo.toml
+RUN sed -i 's#../engine#engine#' Cargo.toml
 RUN sed -i 's#../api#api#' Cargo.toml
 RUN sed -i 's#../graphics#graphics#' Cargo.toml
 COPY api api

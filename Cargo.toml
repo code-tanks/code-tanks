@@ -6,7 +6,7 @@ members = [
     "desktop",
     "runner",
     "server",
-    "simulator",
+    "engine",
     "graphics",
     "viewer",
     "worker_builder",

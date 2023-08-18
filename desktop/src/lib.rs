@@ -7,7 +7,7 @@ use bevy::{
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 use ct_api::Command;
 use ct_api::Commands;
-use ctsimlib::{
+use ctengine::{
     c_client::{parse_commands, ClientTrait},
     c_event::CTEvent,
     c_tank::{AllTankInfo, TankInfo},
@@ -23,7 +23,7 @@ pub mod s_setup_desktop_tanks;
 use ctgraphics::{
     s_setup_graphics::setup_graphics, s_setup_ground::setup_ground, CoreCTGraphicsPlugin, s_setup_reader_tanks::setup_reader_tanks,
 };
-use ctsimlib::core_plugin::CoreCTPlugin;
+use ctengine::core_plugin::CoreCTPlugin;
 
 // const PORTS: [usize; 4] = [8062, 8063, 8064, 8065];
 

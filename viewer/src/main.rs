@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 use ctgraphics::s_setup_reader_tanks::setup_reader_tanks;
-use ctsimlib::{CustomAssetState, CustomAsset, CustomAssetLoader};
-use ctsimlib::s_apply_history_transforms::apply_history_transforms;
-use ctsimlib::{s_setup_walls::setup_walls, s_request_commands::request_commands, s_apply_commands::apply_commands};
+use ctengine::{CustomAssetState, CustomAsset, CustomAssetLoader};
+use ctengine::s_apply_history_transforms::apply_history_transforms;
+use ctengine::{s_setup_walls::setup_walls, s_request_commands::request_commands, s_apply_commands::apply_commands};
 
 // use ctviewer::s_load_tanks;
 // use ctviewer::s_load_tanks::{self, load_tanks_from_file};
@@ -10,7 +10,7 @@ use ctsimlib::{s_setup_walls::setup_walls, s_request_commands::request_commands,
 use ctviewer::s_load_tanks::load_tanks_from_file;
 // use s_setup_ground::*;
 
-use ctsimlib::core_plugin::CoreCTPlugin;
+use ctengine::core_plugin::CoreCTPlugin;
 use ctgraphics::CoreCTGraphicsPlugin;
 
 use ctgraphics::s_setup_ground::setup_ground;

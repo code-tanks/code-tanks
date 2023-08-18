@@ -19,7 +19,7 @@ COPY api api
 COPY simulator simulator
 COPY worker_simulator/Cargo.toml .
 RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
-RUN sed -i 's#../simulator#simulator#' Cargo.toml
+RUN sed -i 's#../engine#engine#' Cargo.toml
 RUN sed -i 's#../api#api#' Cargo.toml
 
 ARG profile=dev

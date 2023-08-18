@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use ctsimlib::c_tank::Tank;
+use ctengine::c_tank::Tank;
 
 use crate::c_nametag::NameTag;
 

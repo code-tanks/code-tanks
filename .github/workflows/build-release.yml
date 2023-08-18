@@ -11,7 +11,7 @@ on:
       - desktop/**
       - runner/**
       - server/**
-      - simulator/**
+      - engine/**
       - graphics/**
       - viewer/**
       - web/**

@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ctsimlib = { path = "../simulator" }
+ctengine = { path = "../engine" }
 ctgraphics = { path = "../graphics" }
 ct-api = { path = "../api" }
 bevy = { version = "0.11.1", default-features = false, features = [ "x11" ] }

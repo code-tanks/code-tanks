@@ -3,9 +3,9 @@ use std::{thread, time};
 
 use bevy::prelude::{AssetServer, Commands, Res, ResMut, Assets, Mesh};
 use bevy::sprite::ColorMaterial;
-use ctsimlib::c_tank::{AllTankInfo, TankInfo};
-use ctsimlib::c_client::Client;
-use ctsimlib::run_tank;
+use ctengine::c_tank::{AllTankInfo, TankInfo};
+use ctengine::c_client::Client;
+use ctengine::run_tank;
 use ctgraphics::*;
 
 use crate::{DummyClient, DesktopClient, get_free_port};

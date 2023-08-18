@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use ctsimlib::{c_tank::AllTankInfo, create_gun, create_radar, c_client::Client, create_base_tank};
+use ctengine::{c_tank::AllTankInfo, create_gun, create_radar, c_client::Client, create_base_tank};
 
 use crate::DockerClient;
 

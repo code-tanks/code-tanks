@@ -2,8 +2,8 @@ use std::env;
 use std::process::Command as ProcessCommand;
 
 use ct_api::{Command, Commands};
-use ctsimlib::c_client::{parse_commands, ClientTrait};
-use ctsimlib::c_event::CTEvent;
+use ctengine::c_client::{parse_commands, ClientTrait};
+use ctengine::c_event::CTEvent;
 use db::upload_log_to_db;
 use postgres::Client;
 

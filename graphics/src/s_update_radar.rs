@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use ctsimlib::{c_tank::{Tank, Radar}, c_health::Health, c_radar_needs_update::RadarNeedsUpdate};
+use ctengine::{c_tank::{Tank, Radar}, c_health::Health, c_radar_needs_update::RadarNeedsUpdate};
 
 use crate::s_on_added_bullet::{DISABLED_COLOR, COLORS};
 // use bevy_prototype_lyon::prelude::{DrawMode, FillMode};
