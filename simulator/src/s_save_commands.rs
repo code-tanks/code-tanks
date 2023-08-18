@@ -1,6 +1,6 @@
 use bevy::{prelude::*, utils::HashSet};
 use ct_api::Commands;
-use crate::{TickState, c_tank::{AllTankInfo, Tank, Radar, Gun, DamageDealer}, c_command_source::CommandSource, c_health::Health, MaxSimulationTicks};
+use crate::{TickState, c_tank::{AllTankInfo, Tank, Radar, Gun, DamageDealer}, c_command_source::CommandSource, c_health::Health, MaxSimulationTicks, ExitUponMaxTicks};
 use serde_json::{json, to_value};
 use std::{fs::OpenOptions, io::Write};
 
@@ -18,6 +18,7 @@ pub fn save_commands(
     healths: Query<&Health, With<Tank>>,
     damage_dealt: Query<&DamageDealer, With<Tank>>,
     max_ticks: Res<MaxSimulationTicks>,
+    exit_upon_max_ticks: Option<Res<ExitUponMaxTicks>>,
 ) {
     let tanks: Vec<(&Transform, &Tank)> = tanks.iter().collect();
     let radars: Vec<&Transform> = radars.iter().collect();
@@ -74,8 +75,9 @@ pub fn save_commands(
 
     let early_stop = dead_count >= tanks.len() - 1 && tanks.len() > 1;
 
-    if state.count >= max_ticks.0 || early_stop {
-        state.count = max_ticks.0;
+    if state.count == max_ticks.0 || (early_stop && state.count < max_ticks.0) {
+        state.count = max_ticks.0 + 1;
+        println!("{} {}", state.count, max_ticks.0);
         println!("early_stop: {}", early_stop);
         // TODO save results of the simulation (winner, damage given, damage taken, time alive)
         let mut j = json!({});
@@ -111,6 +113,10 @@ pub fn save_commands(
 
         f.write_all(j.to_string().as_bytes())
             .expect("Unable to write data");
-        exit.send(AppExit);
+
+        if exit_upon_max_ticks.is_some() {
+            exit.send(AppExit);
+        }
+
     }
 }

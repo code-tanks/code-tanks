@@ -69,6 +69,7 @@ fn main() {
                 .insert_resource(AllTankInfo{
                     all: tank_infos.to_vec()
                 })
+                .insert_resource(ExitUponMaxTicks)
                 .insert_resource(MaxSimulationTicks(600))
                 .add_systems(Startup, (setup_walls, setup_sim_tanks).chain())
                 .add_plugins(CoreCTPlugin)

@@ -1,9 +1,6 @@
-use std::{process::Command as ProcessCommand, fs::File, io::Write};
+use std::{fs::File, io::Write, process::Command as ProcessCommand};
 
-use bevy::{
-    prelude::*,
-    winit::WinitSettings,
-};
+use bevy::{prelude::*, winit::WinitSettings};
 use bevy_rapier2d::prelude::RapierDebugRenderPlugin;
 use ct_api::Command;
 use ct_api::Commands;
@@ -12,16 +9,20 @@ use ctsimlib::{
     c_event::CTEvent,
     c_tank::{AllTankInfo, TankInfo},
     s_apply_commands::apply_commands,
+    s_apply_history_transforms::apply_history_transforms,
     s_request_commands::request_commands,
     s_save_commands::save_commands,
     s_setup_walls::setup_walls,
-    *, s_apply_history_transforms::apply_history_transforms,
+    *,
 };
+use s_capture::s_capture;
 use s_setup_desktop_tanks::setup_desktop_tanks;
 
+pub mod s_capture;
 pub mod s_setup_desktop_tanks;
 use ctgraphics::{
-    s_setup_graphics::setup_graphics, s_setup_ground::setup_ground, CoreCTGraphicsPlugin, s_setup_reader_tanks::setup_reader_tanks,
+    s_setup_graphics::setup_graphics, s_setup_ground::setup_ground,
+    s_setup_reader_tanks::setup_reader_tanks, CoreCTGraphicsPlugin,
 };
 use ctsimlib::core_plugin::CoreCTPlugin;
 
@@ -114,7 +115,11 @@ pub fn run_game_and_save(tank_hashes: &[String], ticks: u32) {
         )
         .add_systems(
             Update,
-            save_commands.after(request_commands).before(apply_commands),
+            (
+                s_capture,
+                save_commands.after(request_commands).before(apply_commands),
+            )
+                .chain(),
         )
         // .insert_resource(UseDummy {
         //     use_dummy: tank_hashes.is_empty(),
@@ -135,7 +140,11 @@ pub fn run_game_and_save(tank_hashes: &[String], ticks: u32) {
 #[derive(Resource)]
 pub struct SimFilePath(pub String);
 
-pub fn load_tanks_from_file(mut state: ResMut<CustomAssetState>, asset_server: Res<AssetServer>, sim_file_path: Res<SimFilePath>) {
+pub fn load_tanks_from_file(
+    mut state: ResMut<CustomAssetState>,
+    asset_server: Res<AssetServer>,
+    sim_file_path: Res<SimFilePath>,
+) {
     // state.handle = asset_server.load("./sim.txt");
     let file = &sim_file_path.0;
 
@@ -147,11 +156,7 @@ pub fn load_tanks_from_file(mut state: ResMut<CustomAssetState>, asset_server: R
     info!("got file");
 }
 
-
-
 pub fn read_game(file: &str) {
-
-
     App::new()
         .insert_resource(WinitSettings {
             return_from_run: true,
@@ -168,10 +173,14 @@ pub fn read_game(file: &str) {
         .add_systems(Startup, (load_tanks_from_file, setup_walls, setup_ground))
         .add_systems(
             Update,
-            (setup_reader_tanks.before(apply_commands), apply_history_transforms.after(request_commands).before(apply_commands))
-            // "request_commands",
-            // "apply_history_transforms",
-            // SystemStage::single_threaded().with_system(apply_history_transforms),
+            (
+                setup_reader_tanks.before(apply_commands),
+                apply_history_transforms
+                    .after(request_commands)
+                    .before(apply_commands),
+            ), // "request_commands",
+               // "apply_history_transforms",
+               // SystemStage::single_threaded().with_system(apply_history_transforms),
         )
         .run();
 

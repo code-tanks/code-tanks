@@ -89,6 +89,9 @@ impl TickState {
 #[derive(Resource)]
 pub struct MaxSimulationTicks(pub u32);
 
+#[derive(Resource)]
+pub struct ExitUponMaxTicks;
+
 pub struct Game {}
 
 impl Game {

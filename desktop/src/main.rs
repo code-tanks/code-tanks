@@ -11,8 +11,8 @@ fn main() {
     println!("running game: {:?}", args);
     
     // run_game(args);
-    // run_game_and_save(args, 100);
-    read_game("/Users/ariannakan/Downloads/code-tanks/sim.txt");
+    run_game_and_save(args, 600);
+    // read_game("/Users/ariannakan/Downloads/code-tanks/sim.txt");
 
     // let _v = Quat::from_xyzw(0.,0.,-0.70710677,0.70710677) * Vec3::Y;
     // println!("angle: {}", _v.y.atan2(_v.x));
