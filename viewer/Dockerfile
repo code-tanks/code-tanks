@@ -44,10 +44,10 @@ RUN if [ "$profile" = "dev" ]; then \
     else \
         export output=release; \
     fi && \
-    wasm-opt -Oz --output target/wasm32-unknown-unknown/$output/ctviewero.wasm target/wasm32-unknown-unknown/$output/ctviewer.wasm && \
     wasm-bindgen --out-name ctviewer \
         --out-dir target/release/web \
-        --target web target/wasm32-unknown-unknown/$output/ctviewero.wasm
+        --target web target/wasm32-unknown-unknown/$output/ctviewer.wasm
+    # wasm-opt -Oz --output target/wasm32-unknown-unknown/$output/ctviewero.wasm target/wasm32-unknown-unknown/$output/ctviewer.wasm && \
 
 FROM python:3.11
 
