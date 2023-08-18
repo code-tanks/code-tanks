@@ -3,7 +3,7 @@ name: rust-devcontainer
 on:
   push:
     branches:
-      - main
+      - '**'
     paths:
       - .devcontainer/rust.Dockerfile
       - .github/workflows/rust-devcontainer.yml

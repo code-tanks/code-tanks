@@ -3,7 +3,7 @@ name: devcontainer
 on:
   push:
     branches:
-      - main
+      - '**'
     paths:
       - .devcontainer/Dockerfile
       - .github/workflows/devcontainer.yml

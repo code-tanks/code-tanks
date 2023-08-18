@@ -3,7 +3,7 @@ name: build-dev
 on:
   push:
     branches:
-      - main
+      - '**'
     paths:
       - .github/workflows/build-dev.yml
       - api/**
