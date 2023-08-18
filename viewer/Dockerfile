@@ -3,6 +3,7 @@ WORKDIR /ctviewer
 
 RUN rustup target install wasm32-unknown-unknown
 RUN cargo install -f wasm-bindgen-cli --version 0.2.87
+RUN cargo install -f wasm-opt
 
 COPY worker_simulator/dummy.rs .
 COPY viewer/Cargo.toml .
@@ -26,7 +27,7 @@ RUN sed -i 's#../api#api#' Cargo.toml
 RUN sed -i 's#../graphics#graphics#' Cargo.toml
 COPY api api
 COPY graphics graphics
-COPY simulator simulator
+COPY engine engine
 
 
 # ARG profile=dev
@@ -43,9 +44,10 @@ RUN if [ "$profile" = "dev" ]; then \
     else \
         export output=release; \
     fi && \
+    wasm-opt -Oz --output target/wasm32-unknown-unknown/$output/ctviewero.wasm target/wasm32-unknown-unknown/$output/ctviewer.wasm && \
     wasm-bindgen --out-name ctviewer \
         --out-dir target/release/web \
-        --target web target/wasm32-unknown-unknown/$output/ctviewer.wasm
+        --target web target/wasm32-unknown-unknown/$output/ctviewero.wasm
 
 FROM python:3.11
 
@@ -54,7 +56,7 @@ WORKDIR /ctweb
 RUN pip install fastapi "uvicorn[standard]" requests pandas
 
 COPY desktop/assets/ /ctweb/assets/
-COPY web/main.py .
+COPY viewer/main.py .
 # COPY --from=viewer_builder /ctviewer/target/release/web /ctweb/web
 COPY --from=viewer_builder /ctviewer/target/release/web /ctweb/assets
 

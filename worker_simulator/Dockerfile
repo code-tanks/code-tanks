@@ -26,7 +26,7 @@ RUN sed -i 's#../api#api#' Cargo.toml
 # RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
 
 COPY api api
-COPY simulator simulator
+COPY engine engine
 
 # RUN cargo install --bin ctsim --path . --profile $profile
 # COPY worker_simulator/Cargo.toml .

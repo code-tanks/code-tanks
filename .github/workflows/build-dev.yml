@@ -14,7 +14,6 @@ on:
       - engine/**
       - graphics/**
       - viewer/**
-      - web/**
       - worker_builder/**
       - worker_simulator/**
       # - Dockerfile
@@ -215,7 +214,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: web/Dockerfile
+          file: viewer/Dockerfile
           push: true
           platforms: linux/amd64
           tags: ghcr.io/code-tanks/code-tanks-web-dev:latest

@@ -14,7 +14,6 @@ on:
       - engine/**
       - graphics/**
       - viewer/**
-      - web/**
       - worker_builder/**
       - worker_simulator/**
 
