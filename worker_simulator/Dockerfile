@@ -1,4 +1,4 @@
-FROM rust:1.71.1 AS builder
+FROM rust:1.73.0 AS builder
 
 RUN apt update \
     && DEBIAN_FRONTEND=noninteractive apt install -y \
