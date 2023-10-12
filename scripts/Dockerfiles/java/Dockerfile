@@ -1,4 +1,4 @@
-FROM eclipse-temurin:20-jdk-jammy AS builder
+FROM eclipse-temurin:21-jdk-jammy AS builder
 
 RUN apt update && apt install -y git maven
 
@@ -15,7 +15,7 @@ COPY $url src/main/java/tanks/MyTank.java
 
 RUN mvn compile assembly:single
 
-FROM eclipse-temurin:20-jdk-jammy
+FROM eclipse-temurin:21-jdk-jammy
 
 WORKDIR /app
 
