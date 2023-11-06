@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 ctengine = { path = "../engine" }
-bevy = { version = "0.11.1", default-features = false, features = [ "png", "bevy_winit", "bevy_asset", "bevy_text", "bevy_render", "bevy_core_pipeline", "bevy_sprite" ] }
+bevy = { version = "0.12.0", default-features = false, features = [ "png", "bevy_winit", "bevy_asset", "bevy_text", "bevy_render", "bevy_core_pipeline", "bevy_sprite" ] }
 bevy_rapier2d = { version = "0.22.0", features = [ "enhanced-determinism" ] }
 # bevy_prototype_lyon = "0.9.0"
 ct-api = { path = "../api" }
